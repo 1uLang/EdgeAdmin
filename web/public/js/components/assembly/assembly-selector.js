@@ -8,15 +8,26 @@ Vue.component("assembly-selector", {
 				that.assemblys = resp.data.assemblys
 			})
 	},
-	props: ["v-cluster-id"],
+	props: ["v-assembly-id"],
 	data: function () {
+		let assemblyType = this.vAssemblyId
+		if (assemblyType == null) {
+			assemblyType = 0
+		}
 		return {
 			assemblys: [],
-			assemblyId: 0
+			assemblyType: assemblyType,
+		}
+	},
+	watch:{
+		assemblyType:function (){
+			if (Tea.Vue != null) {
+				Tea.Vue.showAPIAUTHVisible = this.assemblyType
+			}
 		}
 	},
 	template: `<div>
-	<select class="ui dropdown auto-width" name="assemblyId" v-model="assemblyId">
+	<select class="ui dropdown auto-width" name="assemblyType" v-model="assemblyType">
 		<option value="0">[选择节点类型]</option>
 		<option v-for="assembly in assemblys" :value="assembly.id">{{assembly.name}}</option>
 	</select>

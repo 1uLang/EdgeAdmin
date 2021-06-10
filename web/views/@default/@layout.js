@@ -1,6 +1,7 @@
 Tea.context(function () {
     this.moreOptionsVisible = false
     this.globalMessageBadge = 0
+    this.showAPIAUTHVisible = -1
 
     if (typeof this.leftMenuItemIsDisabled == "undefined") {
         this.leftMenuItemIsDisabled = false

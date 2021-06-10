@@ -8,11 +8,15 @@ Vue.component("idc-selector", {
 				that.idcs = resp.data.idcs
 			})
 	},
-	props: ["v-cluster-id"],
+	props: ["v-idc-id"],
 	data: function () {
+		let idcId = this.vIdcId
+		if (idcId == null) {
+			idcId = 0
+		}
 		return {
 			idcs: [],
-			idcId: 0
+			idcId: idcId
 		}
 	},
 	template: `<div>

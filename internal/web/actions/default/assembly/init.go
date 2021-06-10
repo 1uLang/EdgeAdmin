@@ -16,7 +16,9 @@ func init() {
 			GetPost("/createPopup", new(CreatePopupAction)).
 			Get("/user", new(UserAction)).
 			GetPost("/update", new(UpdateAction)).
-			Post("/idc/options", new(DeleteAction)).
+			Post("/idc/options", new(IDCOptionsAction)).
+			Post("/options", new(OptionsAction)).
+			Post("/delete", new(DeleteAction)).
 			GetPost("/features", new(FeaturesAction)).
 			EndAll()
 	})
