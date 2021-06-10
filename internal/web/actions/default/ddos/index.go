@@ -1,4 +1,4 @@
-package assembly
+package ddos
 
 import (
 	"github.com/1uLang/zhiannet-api/common/server/subassemblynode"
@@ -22,6 +22,6 @@ func (this *IndexAction) RunGet(params struct {
 		return
 	}
 	this.Data["list"] = list
-
-	this.Show()
+	//this.Show()
+	this.Success()
 }

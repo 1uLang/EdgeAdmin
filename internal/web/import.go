@@ -136,4 +136,7 @@ import (
 
 	// 组件管理
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/assembly"
+
+	//ddos
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/ddos"
 )

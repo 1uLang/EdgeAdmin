@@ -21,6 +21,7 @@ func NewUserMustAuth(module string) *userMustAuth {
 }
 
 func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramName string) (goNext bool) {
+
 	var action = actionPtr.Object()
 
 	// 安全相关
@@ -300,6 +301,12 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"code": "advanced",
 				},
 			},
+		},
+		{
+			"code":   "ddos",
+			"module": configloaders.AdminModuleCodeDdos,
+			"name":   "DDOS",
+			"icon":   "ddos",
 		},
 	}
 

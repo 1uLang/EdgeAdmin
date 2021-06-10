@@ -1,6 +1,8 @@
 package assembly
 
 import (
+	subassemblynode_model "github.com/1uLang/zhiannet-api/common/model/subassemblynode"
+	"github.com/1uLang/zhiannet-api/common/server/subassemblynode"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/actions"
 )
@@ -18,28 +20,29 @@ func (this *CreatePopupAction) RunGet(params struct{}) {
 }
 
 func (this *CreatePopupAction) RunPost(params struct {
-	Name       string
-	Addr       string
-	IdcId      int64
-	AssemblyId int64
+	Name   string
+	Addr   string
+	Port   int64
+	Idc    int
+	Key    string
+	Secret string
 
 	Must *actions.Must
 	CSRF *actionutils.CSRF
 }) {
-	params.Must.
-		Field("name", params.Name).
-		Require("请输入节点名称")
-	params.Must.
-		Field("addr", params.Addr).
-		Require("请输入节点地址")
-	params.Must.
-		Field("idcId", params.IdcId).
-		Require("请选择所属数据中心")
-	params.Must.
-		Field("assemblyType", params.AssemblyId).
-		Require("请选择节点类型")
-
-	defer this.CreateLogInfo("添加节点 %s 成功", params.Name)
+	req := &subassemblynode_model.Subassemblynode{
+		Name:   params.Name,
+		Addr:   params.Addr,
+		Port:   params.Port,
+		Idc:    params.Idc,
+		Secret: params.Secret,
+	}
+	id, err := subassemblynode.Add(req)
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	defer this.CreateLogInfo("创建节点 %d", id)
 
 	this.Success()
 }

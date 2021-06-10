@@ -23,6 +23,7 @@ const (
 	AdminModuleCodeSetting   AdminModuleCode = "setting"   // 设置
 	AdminModuleCodeAssembly  AdminModuleCode = "assembly"  // 只要登录就可以访问的模块
 	AdminModuleCodeCommon    AdminModuleCode = "common"    // 只要登录就可以访问的模块
+	AdminModuleCodeDdos      AdminModuleCode = "ddos"      // ddos
 )
 
 var sharedAdminModuleMapping = map[int64]*AdminModuleList{} // adminId => AdminModuleList
@@ -189,6 +190,11 @@ func AllModuleMaps() []maps.Map {
 			"name": "系统设置",
 			"code": AdminModuleCodeSetting,
 			"url":  "/settings",
+		},
+		{
+			"name": "ddos",
+			"code": AdminModuleCodeDdos,
+			"url":  "/ddos",
 		},
 	}...)
 	return m
