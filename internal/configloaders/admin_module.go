@@ -21,6 +21,7 @@ const (
 	AdminModuleCodeFinance   AdminModuleCode = "finance"   // 财务
 	AdminModuleCodeLog       AdminModuleCode = "log"       // 日志
 	AdminModuleCodeSetting   AdminModuleCode = "setting"   // 设置
+	AdminModuleCodeAssembly  AdminModuleCode = "assembly"  // 只要登录就可以访问的模块
 	AdminModuleCodeCommon    AdminModuleCode = "common"    // 只要登录就可以访问的模块
 )
 

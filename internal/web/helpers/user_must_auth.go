@@ -282,6 +282,12 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"icon":   "history",
 		},
 		{
+			"code":   "assembly",
+			"module": configloaders.AdminModuleCodeAssembly,
+			"name":   "组件管理",
+			"icon":   "history",
+		},
+		{
 			"code":     "settings",
 			"module":   configloaders.AdminModuleCodeSetting,
 			"name":     "系统设置",
