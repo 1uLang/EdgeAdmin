@@ -1,4 +1,65 @@
 {$layout}
-ddos
 
-{{users}}
+<first-menu>
+    <menu-item href="/ddos" code="index">主机列表</menu-item>
+    <span class="item">|</span>
+    <a href="" class="item" @click.prevent="createPolicy()">[添加高仿IP]</a>
+</first-menu>
+
+<!-- 搜索 -->
+<div class="margin"></div>
+<form class="ui form" method="get" action="/ddos">
+    <div class="ui fields inline">
+        <div class="ui field">
+            <input type="text" name="keyword" v-model="keyword" placeholder="ddos名称..."/>
+        </div>
+        <div class="ui field">
+            <button type="submit" class="ui button">搜索</button>
+        </div>
+    </div>
+</form>
+
+<!-- 列表 -->
+<p class="comment" v-if="list == null || list.length == 0">暂时还没有主机。</p>
+<table class="ui table selectable celled" v-if="list != null && list.length > 0">
+    <thead>
+    <tr>
+        <th>主机</th>
+        <th>IN</th>
+        <th>OUT</th>
+        <th class="center">SYN</th>
+        <th class="center">ACK</th>
+        <th class="center">UDP</th>
+        <th class="center">ICMP</th>
+        <th class="center">FRAG</th>
+        <th class="center">NonIP</th>
+        <th class="center">NewTCP</th>
+        <th class="center">NewUDP</th>
+        <th class="center">IN</th>
+        <th class="center">OUT</th>
+        <th class="center">UDP</th>
+        <th class="two op">操作</th>
+    </tr>
+    </thead>
+    <tr v-for="(policy, index) in list">
+        <td><keyword :v-word="keyword">{{policy.addr}}</keyword></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="center"></td>
+        <td class="center"><label-on :v-is-on="policy.isOn"></label-on></td>
+        <td>
+            <a :href="'/servers/components/cache/policy?cachePolicyId=' + policy.id">详情</a> &nbsp; <a href="" @click.prevent="deletePolicy(policy.id)">删除</a>
+        </td>
+    </tr>
+</table>
+
+<div class="page" v-html="page"></div>

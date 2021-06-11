@@ -1,7 +1,8 @@
 package ddos
 
 import (
-	"github.com/1uLang/zhiannet-api/common/server/subassemblynode"
+	"github.com/1uLang/zhiannet-api/ddos/model/ddos_host_ip"
+	host_status_server "github.com/1uLang/zhiannet-api/ddos/server/host_status"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 )
 
@@ -15,13 +16,17 @@ func (this *IndexAction) Init() {
 
 func (this *IndexAction) RunGet(params struct {
 	Keyword string
+	NodeId  uint64
 }) {
-	list, err := subassemblynode.GetNodeList()
+	list, err := host_status_server.GetHostList(&ddos_host_ip.HostReq{
+		NodeId: params.NodeId,
+		Addr:   params.Keyword,
+	})
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
 	this.Data["list"] = list
-	//this.Show()
-	this.Success()
+	this.Show()
+	//this.Success()
 }
