@@ -24,6 +24,7 @@ const (
 	AdminModuleCodeAssembly  AdminModuleCode = "assembly"  // 只要登录就可以访问的模块
 	AdminModuleCodeCommon    AdminModuleCode = "common"    // 只要登录就可以访问的模块
 	AdminModuleCodeDdos      AdminModuleCode = "ddos"      // ddos
+	AdminModuleCodeWebScan   AdminModuleCode = "webscan"   // webscan
 )
 
 var sharedAdminModuleMapping = map[int64]*AdminModuleList{} // adminId => AdminModuleList

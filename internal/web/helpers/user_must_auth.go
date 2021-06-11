@@ -308,6 +308,13 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"name":   "DDOS",
 			"icon":   "ddos",
 		},
+		{
+			"code":     "webscan",
+			"module":   configloaders.AdminModuleCodeWebScan,
+			"name":     "漏洞扫描",
+			"subtitle": "全局状态",
+			"icon":     "setting",
+		},
 	}
 
 	result := []maps.Map{}

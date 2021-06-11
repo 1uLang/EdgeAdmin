@@ -139,4 +139,7 @@ import (
 
 	//ddos
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/ddos"
+
+	// web漏洞扫描
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/webscan"
 )
