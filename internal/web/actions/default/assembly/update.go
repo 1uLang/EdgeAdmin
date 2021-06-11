@@ -1,6 +1,7 @@
 package assembly
 
 import (
+	"fmt"
 	"github.com/1uLang/zhiannet-api/common/model/subassemblynode"
 	subassemblynode_server "github.com/1uLang/zhiannet-api/common/server/subassemblynode"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
@@ -31,7 +32,7 @@ func (this *UpdateAction) RunGet(params struct {
 		return
 	}
 
-	this.Data["node_info"] = maps.Map{
+	this.Data["node"] = maps.Map{
 		"id":     info.Id,
 		"name":   info.Name,
 		"addr":   info.Addr,
@@ -44,20 +45,20 @@ func (this *UpdateAction) RunGet(params struct {
 		"secret": info.Secret,
 	}
 
-	this.Success()
+	this.Show()
 }
 
 func (this *UpdateAction) RunPost(params struct {
-	Id     uint64
-	Name   string
-	Addr   string
-	Port   int64
-	Type   int
-	Idc    int
-	Status int
-	State  int
-	Key    string
-	Secret string
+	Id           uint64
+	Name         string
+	Addr         string
+	Port         int64
+	AssemblyType int
+	IdcId        int
+	Status       int
+	State        int
+	Key          string
+	Secret       string
 
 	Must *actions.Must
 	CSRF *actionutils.CSRF
@@ -66,16 +67,25 @@ func (this *UpdateAction) RunPost(params struct {
 
 	params.Must.
 		Field("name", params.Name).
-		Require("请输入用户名")
+		Require("请输入节点名称")
+
+	params.Must.
+		Field("assemblyType", params.AssemblyType).
+		Require("请选择节点类型")
+
+	params.Must.
+		Field("idcId", params.IdcId).
+		Require("请选择数据中心")
+
+	fmt.Println(params)
 
 	_, err := subassemblynode_server.Edit(&subassemblynode.Subassemblynode{
 		Id:     params.Id,
 		Name:   params.Name,
 		Addr:   params.Addr,
 		Port:   params.Port,
-		Type:   params.Type,
-		Idc:    params.Idc,
-		Status: params.Status,
+		Type:   params.AssemblyType,
+		Idc:    params.IdcId,
 		State:  params.State,
 		Key:    params.Key,
 		Secret: params.Secret,

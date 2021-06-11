@@ -43,24 +43,24 @@
         </tr>
 
         <!--  DDoS防护      -->
-        <tbody v-show="showAPIAUTHVisible == 0">
+        <tbody v-if="showAPIAUTHVisible == 0">
         <tr>
             <td>username *</td>
             <td>
-                <input type="text" name="username" maxlength="100"/>
+                <input type="text" name="key" maxlength="100"/>
                 <p class="comment">登陆金盾管理中心所使用的账号</p>
             </td>
         </tr>
         <tr>
             <td>password *</td>
             <td>
-                <input type="text" name="password" maxlength="100"/>
+                <input type="text" name="secret" maxlength="100"/>
                 <p class="comment">登陆金盾管理中心所使用的密码</p>
             </td>
         </tr>
         </tbody>
         <!--  云防火墙      -->
-        <tbody v-show="showAPIAUTHVisible == 1">
+        <tbody v-if="showAPIAUTHVisible == 1">
         <tr>
             <td>key *</td>
             <td>
@@ -77,11 +77,11 @@
         </tr>
         </tbody>
         <!--  主机防护      -->
-        <tbody v-show="showAPIAUTHVisible == 2">
+        <tbody v-if="showAPIAUTHVisible == 2">
         <tr>
             <td>appid *</td>
             <td>
-                <input type="text" name="appid" maxlength="100"/>
+                <input type="text" name="key" maxlength="100"/>
                 <p class="comment">登录主机防护管理后台-API管理-新增</p>
             </td>
         </tr>
@@ -94,21 +94,21 @@
         </tr>
         </tbody>
         <!--  WEB漏洞扫描      -->
-        <tbody v-show="showAPIAUTHVisible == 3">
+        <tbody v-if="showAPIAUTHVisible == 3">
         <tr>
             <td>XAuth *</td>
             <td>
-                <input type="text" name="xauth" maxlength="100"/>
+                <input type="text" name="key" maxlength="100"/>
                 <p class="comment">登录Web漏洞扫描系统-右上角用户名-配置文件-API密钥</p>
             </td>
         </tr>
         </tbody>
         <!--  主机漏洞扫描      -->
-        <tbody v-show="showAPIAUTHVisible == 4">
+        <tbody v-if="showAPIAUTHVisible == 4">
         <tr>
             <td>accessKey *</td>
             <td>
-                <input type="text" name="access" maxlength="100"/>
+                <input type="text" name="key" maxlength="100"/>
                 <p class="comment">登录主机扫描组件-右上角用户名-我的账户-API密钥-产生</p>
             </td>
         </tr>

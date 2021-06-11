@@ -18,7 +18,7 @@ func (this *IndexAction) RunGet(params struct {
 	Keyword string
 	NodeId  uint64
 }) {
-	list, err := host_status_server.GetHostList(&ddos_host_ip.HostReq{
+	list, _, err := host_status_server.GetHostList(&ddos_host_ip.HostReq{
 		NodeId: params.NodeId,
 		Addr:   params.Keyword,
 	})

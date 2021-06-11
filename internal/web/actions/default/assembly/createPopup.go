@@ -20,13 +20,13 @@ func (this *CreatePopupAction) RunGet(params struct{}) {
 }
 
 func (this *CreatePopupAction) RunPost(params struct {
-	Name   string
-	Addr   string
-	Port   int64
-	Idc    int
-	Key    string
-	Secret string
-	Type   int
+	Name         string
+	Addr         string
+	Port         int64
+	IdcId        int
+	Key          string
+	Secret       string
+	AssemblyType int
 
 	Must *actions.Must
 	CSRF *actionutils.CSRF
@@ -39,11 +39,19 @@ func (this *CreatePopupAction) RunPost(params struct {
 		Field("addr", params.Addr).
 		Require("请输入地址")
 
+	params.Must.
+		Field("assemblyType", params.AssemblyType).
+		Require("请选择节点类型")
+
+	params.Must.
+		Field("idcId", params.IdcId).
+		Require("请选择数据中心")
+
 	if params.Port <= 0 {
 		this.Fail("请选择端口")
 	}
 
-	switch params.Type {
+	switch params.AssemblyType {
 	case 0: //ddos防火墙
 		params.Must.
 			Field("key", params.Key).
@@ -82,8 +90,9 @@ func (this *CreatePopupAction) RunPost(params struct {
 		Name:   params.Name,
 		Addr:   params.Addr,
 		Port:   params.Port,
-		Idc:    params.Idc,
-		Type:   params.Type,
+		Idc:    params.IdcId,
+		Type:   params.AssemblyType,
+		State:  1,
 		Key:    params.Key,
 		Secret: params.Secret,
 	}

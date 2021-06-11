@@ -12,7 +12,7 @@ Vue.component("assembly-selector", {
 	data: function () {
 		let assemblyType = this.vAssemblyId
 		if (assemblyType == null) {
-			assemblyType = 0
+			assemblyType = -1
 		}
 		return {
 			assemblys: [],
@@ -28,7 +28,7 @@ Vue.component("assembly-selector", {
 	},
 	template: `<div>
 	<select class="ui dropdown auto-width" name="assemblyType" v-model="assemblyType">
-		<option value="0">[选择节点类型]</option>
+		<option value="-1">[选择节点类型]</option>
 		<option v-for="assembly in assemblys" :value="assembly.id">{{assembly.name}}</option>
 	</select>
 </div>`

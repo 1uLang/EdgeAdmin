@@ -1,5 +1,5 @@
 Tea.context(function () {
-	this.createUser = function () {
+	this.createNode = function () {
 		teaweb.popup(Tea.url(".createPopup"), {
 			height: "30em",
 			callback: function () {
@@ -10,12 +10,23 @@ Tea.context(function () {
 		})
 	}
 
-	this.deleteUser = function (userId) {
+	this.updateNode = function (id) {
+		teaweb.popup(Tea.url(".update?NodeId="+id), {
+			height: "30em",
+			callback: function () {
+				teaweb.success("修改成功", function () {
+					teaweb.reload()
+				})
+			}
+		})
+	}
+
+	this.deleteNode = function (nodeId) {
 		let that = this
-		teaweb.confirm("确定要删除这个用户吗？", function () {
+		teaweb.confirm("确定要删除这个节点吗？", function () {
 			that.$post(".delete")
 				.params({
-					userId: userId
+					NodeId: nodeId
 				})
 				.refresh()
 		})

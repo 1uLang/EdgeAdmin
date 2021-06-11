@@ -16,7 +16,7 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	Keyword string
 }) {
-	list, err := subassemblynode.GetNodeList()
+	list, count, err := subassemblynode.GetNodeList()
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -31,7 +31,7 @@ func (this *IndexAction) RunGet(params struct {
 				"port":      v.Port,
 				"type":      v.Type,
 				"idc":       v.Idc,
-				"state":     v.State,
+				"state":     v.State == 1,
 				"status":    v.Status,
 				"key":       v.Key,
 				"secret":    v.Secret,
@@ -39,9 +39,10 @@ func (this *IndexAction) RunGet(params struct {
 				"type_name": typeMap[v.Type],
 			}
 		}
-
 	}
 	this.Data["list"] = listMap
+	page := this.NewPage(count)
+	this.Data["page"] = page.AsHTML()
 
 	this.Show()
 }

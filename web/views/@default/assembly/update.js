@@ -1,5 +1,5 @@
 Tea.context(function () {
-	this.success = NotifySuccess("保存成功", "/users/user?userId=" + this.user.id)
+	this.success = NotifySuccess("保存成功", "/assembly/update?NodeId=" + this.node.id)
 
 	this.passwordEditing = false
 
