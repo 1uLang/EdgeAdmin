@@ -23,3 +23,16 @@ func init() {
 			EndAll()
 	})
 }
+
+var typeMap = map[int]string{
+	0: "DDoS防护",
+	1: "云防火墙",
+	2: "主机防护",
+	3: "WEB漏洞扫描",
+	4: "主机漏洞扫描",
+}
+var idcMap = map[int]string{
+	0: "成都IDC",
+	1: "杭州IDC",
+	2: "济南IDC",
+}

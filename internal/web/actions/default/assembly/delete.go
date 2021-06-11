@@ -1,8 +1,8 @@
 package assembly
 
 import (
+	subassemblynode_server "github.com/1uLang/zhiannet-api/common/server/subassemblynode"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 )
 
 type DeleteAction struct {
@@ -10,13 +10,12 @@ type DeleteAction struct {
 }
 
 func (this *DeleteAction) RunPost(params struct {
-	UserId int64
+	NodeId uint64
 }) {
-	defer this.CreateLogInfo("删除用户 %d", params.UserId)
+	defer this.CreateLogInfo("删除节点 %d", params.NodeId)
 
 	// TODO 检查用户是否有未完成的业务
-
-	_, err := this.RPC().UserRPC().DeleteUser(this.AdminContext(), &pb.DeleteUserRequest{UserId: params.UserId})
+	err := subassemblynode_server.Del(params.NodeId)
 	if err != nil {
 		this.ErrorPage(err)
 		return
