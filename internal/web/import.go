@@ -142,4 +142,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/ddos/host"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/ddos/logs"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/ddos/whiteblacklist"
+
+	// web漏洞扫描
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/webscan"
 )
