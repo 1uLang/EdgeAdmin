@@ -1,4 +1,4 @@
-package ddos
+package host
 
 import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"

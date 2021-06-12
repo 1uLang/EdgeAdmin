@@ -63,7 +63,7 @@
         <td class="center">{{policy.tcp_conn_out}}</td>
         <td class="center">{{policy.udp_conn}}</td>
         <td>
-            <a :href="'/ddos/host/shield_list?id=' + policy.host_id">详情</a> &nbsp; <a href="" @click.prevent="deletePolicy(policy.host_id)">删除</a>
+            <a :href="'/ddos/host/shieldList?id=' + policy.host_id">配置</a> &nbsp; <a href="" @click.prevent="deletePolicy(policy.host_id)">删除</a>
         </td>
     </tr>
 </table>

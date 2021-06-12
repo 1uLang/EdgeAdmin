@@ -303,10 +303,33 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			},
 		},
 		{
-			"code":   "ddos",
-			"module": configloaders.AdminModuleCodeDdos,
-			"name":   "DDOS",
-			"icon":   "ddos",
+			"code":     "ddos",
+			"module":   configloaders.AdminModuleCodeDdos,
+			"name":     "DDOS",
+			"subtitle": "全局状态",
+			"icon":     "history",
+			"subItems": []maps.Map{
+				{
+					"name": "全局状态",
+					"url":  "/ddos",
+					"code": "global",
+				},
+				{
+					"name": "主机状态",
+					"url":  "/ddos/host",
+					"code": "host",
+				},
+				{
+					"name": "黑白名单",
+					"url":  "/ddos/whitebalcklist",
+					"code": "whitebalcklist",
+				},
+				{
+					"name": "统计日志",
+					"url":  "/ddos/logs",
+					"code": "logs",
+				},
+			},
 		},
 	}
 

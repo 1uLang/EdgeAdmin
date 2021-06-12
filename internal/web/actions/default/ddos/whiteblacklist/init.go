@@ -1,4 +1,4 @@
-package ddos
+package whiteblacklist
 
 import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
@@ -11,10 +11,10 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeDdos)).
 			Data("teaMenu", "ddos").
-			Prefix("/ddos").
+			Prefix("/ddos/whitebalcklist").
 			Get("", new(IndexAction)).
-			//GetPost("/createPopup", new(CreatePopupAction)).
-			//GetPost("/ddos/host/shield_list", new(UpdatePopupAction)).
+			GetPost("/del", new(DelAction)). //添删除ip
+			GetPost("/createPopup", new(CreatePopupAction)).
 			EndAll()
 	})
 }

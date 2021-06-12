@@ -1,4 +1,4 @@
-package ddos
+package logs
 
 import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
@@ -11,10 +11,8 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeDdos)).
 			Data("teaMenu", "ddos").
-			Prefix("/ddos").
+			Prefix("/ddos/logs").
 			Get("", new(IndexAction)).
-			//GetPost("/createPopup", new(CreatePopupAction)).
-			//GetPost("/ddos/host/shield_list", new(UpdatePopupAction)).
 			EndAll()
 	})
 }

@@ -1,4 +1,4 @@
-package ddos
+package whiteblacklist
 
 import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"

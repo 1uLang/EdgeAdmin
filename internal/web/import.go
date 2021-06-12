@@ -139,4 +139,7 @@ import (
 
 	//ddos
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/ddos"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/ddos/host"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/ddos/logs"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/ddos/whiteblacklist"
 )
