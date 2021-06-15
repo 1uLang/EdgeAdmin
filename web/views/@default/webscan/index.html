@@ -14,23 +14,23 @@
 <div class="card-box ui five columns grid" style="height: 130px">
     <div class="ui column">
         <h4>正在扫描</h4>
-        <div class="value"><span class="show-num">1</span></div>
+        <div class="value"><span class="show-num">{{data.scans_running_count}}</span></div>
     </div>
     <div class="ui column">
         <h4>等待扫描</h4>
-        <div class="value"><span class="show-num">0</span></div>
+        <div class="value"><span class="show-num">{{data.scans_waiting_count}}</span></div>
     </div>
     <div class="ui column">
         <h4>扫描次数</h4>
-        <div class="value"><span class="show-num">1</span></div>
+        <div class="value"><span class="show-num">{{data.scans_conducted_count}}</span></div>
     </div>
     <div class="ui column">
         <h4>发现漏洞</h4>
-        <div class="value"><span class="show-num">1</span></div>
+        <div class="value"><span class="show-num">{{data.vuln_count.low + data.vuln_count.med}}</span></div>
     </div>
     <div class="ui column">
         <h4>目标总数</h4>
-        <div class="value"><span class="show-num">1</span></div>
+        <div class="value"><span class="show-num">{{data.targets_count}}</span></div>
     </div>
 </div>
 <div class="card-box" style="height: auto;width: 48%;float: left;margin-top: 30px">
@@ -47,7 +47,6 @@
             </td>
         </tr>
     </table>
-
 </div>
 <div class="card-box" style="height: auto;width: 48%;float: left;margin-top: 30px;margin-left: 4%">
     <h5>常见漏洞</h5>

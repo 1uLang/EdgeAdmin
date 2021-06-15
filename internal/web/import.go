@@ -145,4 +145,8 @@ import (
 
 	// web漏洞扫描
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/webscan"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/webscan/reports"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/webscan/scans"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/webscan/targets"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/webscan/vulnerabilities"
 )
