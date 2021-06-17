@@ -14,7 +14,10 @@ type CreateAction struct {
 	actionutils.ParentAction
 }
 
-func (this *CreateAction) PostGet(params struct {
+func (this *CreateAction) RunGet(params struct{}) {
+	this.Show()
+}
+func (this *CreateAction) RunPost(params struct {
 	Ids []string `json:"id_list"`
 
 	TemplateId string `json:"template_id"`

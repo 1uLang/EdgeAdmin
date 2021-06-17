@@ -13,7 +13,10 @@ type CreateAction struct {
 	actionutils.ParentAction
 }
 
-func (this *CreateAction) PostGet(params struct {
+func (this *CreateAction) RunGet(params struct{}) {
+	this.Show()
+}
+func (this *CreateAction) RunPost(params struct {
 	TargetId  string
 	ProfileId string
 

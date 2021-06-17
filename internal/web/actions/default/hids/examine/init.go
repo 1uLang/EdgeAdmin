@@ -11,11 +11,11 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeHids)).
-			Data("teaMenu", "webscan").
-			Prefix("/webscan/examine").
+			Data("teaMenu", "hids").
+			Prefix("/hids/examine").
 			Get("", new(IndexAction)).
 			Get("/detail", new(DetailAction)).
-			Post("/scans", new(IndexAction)).
+			Post("/scans", new(ScanAction)).
 			EndAll()
 	})
 }

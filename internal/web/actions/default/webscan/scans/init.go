@@ -15,7 +15,7 @@ func init() {
 			Data("teaMenu", "webscan").
 			Prefix("/webscan/scans").
 			Get("", new(IndexAction)).
-			Post("/create", new(CreateAction)).
+			GetPost("/create", new(CreateAction)).
 			Post("/delete", new(DeleteAction)).
 			Post("/stop", new(StopAction)).
 			EndAll()
