@@ -1,0 +1,36 @@
+<!-- 扫描报告 -->
+{$layout}
+<div class="btn-contain" v-if="vulnerabilities.length > 0">
+    <div id="del-btn" onclick="onDelete()">删除</div>
+</div>
+<p class="comment" v-if="vulnerabilities.length == 0">暂时还没有目标。</p>
+<table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;" v-if="vulnerabilities.length > 0">
+    <thead>
+    <tr>
+        <th class='table-head-bg' style="width: 60px;">
+            <input id="js-all-checkbox" type="checkbox" onclick="checkAll(this)">
+        </th>
+        <th class='table-head-bg' style="width: 243px;">目标</th>
+        <th class='table-head-bg' style="width: 275px;">创建时间</th>
+        <th class='table-head-bg' style="width: 262px;">状态</th>
+        <th class='table-head-bg' style="width: 191px;">下载</th>
+        <th class='table-head-bg' style="width: 141px;">操作</th>
+    </tr>
+    </thead>
+    <tbody id='tableBody'>
+    <tr align="center" style="height: 50px;" v-for="item in vulnerabilities">
+        <td>
+            <input type="checkbox" name="select" value=item.id onclick="clickCheckbox()">
+        </td>
+        <td>{{item.ip}}</td>
+        <td>{{item.createTime}}</td>
+        <td>{{item.lastStatus}}</td>
+        <td>{{item.type}}</td>
+        <td>
+            <a href="" @click.prevent="deleteNode(node.id)">删除</a>
+        </td>
+        
+        
+    </tr>
+    </tbody>
+</table>

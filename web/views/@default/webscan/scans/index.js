@@ -1,36 +1,21 @@
-function hanleOpen(){
-    teaweb.popup(Tea.url(".create"), {
-        callback: function () {
-            teaweb.success("保存成功", function () {
-                teaweb.reload()
-            })
-        }
-    })
+var bScanning = false //是否在扫描中
+function onStopScan(){
+    if(checkValues.length > 0 && bScanning){
+        console.log("touch onStopScan");
+    }
 }
 
-function save(){
-    const tempAddress = console.log(document.getElementById('key').value);
-    const tempDesc =console.log(document.getElementById('value').value);
+function onCreateReport(){
+    if(checkValues.length > 0){
+        console.log("touch onCreateReport");
+    }
 }
 
-function handleOnCheck() {
-    const scanBtn = document.getElementById('scan-btn')
-    scanBtn.style.backgroundColor = "#14539A"
-    scanBtn.style.cursor = 'pointer'
-
-    const delBtn = document.getElementById('del-btn')
-    delBtn.style.backgroundColor = "#D9001B"
-    delBtn.style.cursor = 'pointer'
+function onDelete(){
+    if(checkValues.length > 0 && !bScanning){
+        console.log("touch onDelete");
+    }
 }
-
-/* 数据模版
-var scanData = [
-    {'id':1,'ip':'192.168.0.1','disc':'test','type':'web','loophole':{'red':1,'yellow':2,'blue':3,'green':4},'lastStatus':'已完成','lastTime':'2021-06-11 09:29:23'},
-    {'id':2,'ip':'192.168.1.1','disc':'test','type':'web','loophole':{'red':1,'yellow':3,'blue':4,'green':2},'lastStatus':'未完成','lastTime':'2021-06-12 09:29:23'},
-    {'id':3,'ip':'192.168.5.1','disc':'test','type':'web','loophole':{'red':3,'yellow':2,'blue':1,'green':4},'lastStatus':'进行中','lastTime':'2021-06-13 09:29:23'},
-    {'id':4,'ip':'192.168.6.1','disc':'test','type':'web','loophole':{'red':6,'yellow':5,'blue':1,'green':4},'lastStatus':'进行中','lastTime':'2021-06-14 09:29:23'},
-]
-*/
 
 var checkValues = [] //选中的ID
 function clickCheckbox () {
@@ -72,29 +57,26 @@ function checkAll (current) {
 }
 function updateBtnStatus(){
     
-    const scanBtn = document.getElementById('scan-btn')
+    const stopBtn = document.getElementById('stop-btn')
+    const createBtn = document.getElementById('create-btn')
     const delBtn = document.getElementById('del-btn')
     if(checkValues.length > 0){
-        scanBtn.style.backgroundColor = "#14539A"
-        scanBtn.style.cursor = 'pointer'
+        stopBtn.style.backgroundColor = "#14539A"
+        stopBtn.style.cursor = 'pointer'
+
+        createBtn.style.backgroundColor = "#14539A"
+        createBtn.style.cursor = 'pointer'
 
         delBtn.style.backgroundColor = "#D9001B"
         delBtn.style.cursor = 'pointer'
     }else{
-        scanBtn.style.backgroundColor = "#AAAAAA"
-        scanBtn.style.cursor = null
+        stopBtn.style.backgroundColor = "#AAAAAA"
+        stopBtn.style.cursor = null
+
+        createBtn.style.backgroundColor = "#AAAAAA"
+        createBtn.style.cursor = null
 
         delBtn.style.backgroundColor = "#AAAAAA"
         delBtn.style.cursor = null
-    }
-}
-function onScan(){
-    if(checkValues.length > 0){
-        console.log("touch onScan");
-    }
-}
-function onDelete(){
-    if(checkValues.length > 0){
-        console.log("touch onDelete");
     }
 }

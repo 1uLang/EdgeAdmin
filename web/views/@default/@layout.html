@@ -64,6 +64,9 @@
                     <li v-for="subItem in module.subItems">
                         <a :href="subItem.url">{{subItem.name}}</a>
                     </li>
+                    <!-- <li>
+                        <a href="webscan/vulnerabilities">task</a>
+                    </li> -->
                 </ul>
             </div>
         </div>
@@ -166,18 +169,12 @@
 </div>
 <script type="text/javascript">
     function showMenu(index) {
-        console.log(1)
         console.log(index)
         document.getElementsByClassName('navMain' + index)[0].style.display = 'block'
     }
     function hideMenu(index) {
-        console.log(2)
         document.getElementsByClassName('navMain' + index)[0].style.display = 'none'
     }
-    // new Vue({
-    //     el: '#app1',
-    //     data: {},
-    // })
 </script>
 {$echo "footer"}
 

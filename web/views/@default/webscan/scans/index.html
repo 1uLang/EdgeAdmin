@@ -1,30 +1,27 @@
-<!-- 添加目标 -->
+<!-- 扫描任务 -->
 {$layout}
-<first-menu>
-	<menu-item @click.prevent="hanleOpen">[添加目标]</menu-item>
-</first-menu>
-
-<div class="btn-contain" v-if="targets.length > 0">
-    <div id="scan-btn" onclick="onScan()">扫描</div>
+<div class="btn-contain" v-if="vulnerabilities.length > 0">
+    <div id="stop-btn" onclick="onStopScan()">停止扫描</div>
+    <div id="create-btn" onclick="onCreateReport()">生成报告</div>
     <div id="del-btn" onclick="onDelete()">删除</div>
 </div>
-<p class="comment" v-if="targets.length == 0">暂时还没有目标。</p>
-<table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;" v-if="targets.length > 0">
+<p class="comment" v-if="vulnerabilities.length == 0">暂时还没有目标。</p>
+<table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;" v-if="vulnerabilities.length > 0">
     <thead>
     <tr>
         <th class='table-head-bg' style="width: 72px;">
             <input id="js-all-checkbox" type="checkbox" onclick="checkAll(this)">
         </th>
-        <th class='table-head-bg' style="width: 185px;">地址</th>
-        <th class='table-head-bg' style="width: 150px;">描述</th>
+        <th class='table-head-bg' style="width: 185px;">目标</th>
+        <th class='table-head-bg' style="width: 150px;">目标描述</th>
         <th class='table-head-bg' style="width: 167px;">类型</th>
         <th class='table-head-bg' style="width: 282px;">漏洞</th>
-        <th class='table-head-bg' style="width: 129px;">上次扫描状态</th>
-        <th class='table-head-bg' style="width: 214px;">上次扫描时间</th>
+        <th class='table-head-bg' style="width: 129px;">状态</th>
+        <th class='table-head-bg' style="width: 214px;">扫描时间</th>
     </tr>
     </thead>
     <tbody id='tableBody'>
-    <tr align="center" style="height: 50px;" v-for="item in targets">
+    <tr align="center" style="height: 50px;" v-for="item in vulnerabilities">
         <td>
             <input type="checkbox" name="select" value=item.id onclick="clickCheckbox()">
         </td>
@@ -44,4 +41,3 @@
     </tr>
     </tbody>
 </table>
-
