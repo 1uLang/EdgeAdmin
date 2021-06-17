@@ -31,7 +31,7 @@ func (this *CreateAction) PostGet(params struct {
 		Field("template_id", params.TemplateId).
 		Require("请选择生成的报表模板")
 
-	err := webscan.InitAWVSServer()
+	err := webscan.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
 		return

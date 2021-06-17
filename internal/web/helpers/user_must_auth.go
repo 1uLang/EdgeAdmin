@@ -337,6 +337,13 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"name":     "漏洞扫描",
 			"subtitle": "全局状态",
 			"icon":     "setting",
+			"subItems": []maps.Map{
+				{
+					"name": "扫描目标",
+					"url":  "/webscan/targets",
+					"code": "global",
+				},
+			},
 		},
 	}
 

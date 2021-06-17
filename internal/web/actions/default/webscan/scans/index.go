@@ -20,7 +20,7 @@ func (this *IndexAction) RunGet(params struct {
 	pageNo   int
 }) {
 
-	err := webscan.InitAWVSServer()
+	err := webscan.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -37,5 +37,5 @@ func (this *IndexAction) RunGet(params struct {
 		return
 	}
 	this.Data["scans"] = list["scans"]
-	this.Success()
+	this.Show()
 }

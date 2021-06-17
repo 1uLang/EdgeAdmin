@@ -29,7 +29,7 @@ func (this *CreateAction) PostGet(params struct {
 		Field("profile_id", params.ProfileId).
 		Require("请输入扫描类型")
 
-	err := webscan.InitAWVSServer()
+	err := webscan.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
 		return

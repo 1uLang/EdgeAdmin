@@ -22,7 +22,7 @@ func (this *IndexAction) RunGet(params struct {
 	address  string
 	level    string
 }) {
-	err := webscan.InitAWVSServer()
+	err := webscan.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -49,5 +49,5 @@ func (this *IndexAction) RunGet(params struct {
 		return
 	}
 	this.Data["vulnerabilities"] = list["vulnerabilities"]
-	this.Success()
+	this.Show()
 }

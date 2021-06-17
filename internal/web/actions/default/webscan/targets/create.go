@@ -26,7 +26,7 @@ func (this *CreateAction) PostGet(params struct {
 		Field("address", params.Address).
 		Require("请输入目标地址")
 
-	err := webscan.InitAWVSServer()
+	err := webscan.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
 		return

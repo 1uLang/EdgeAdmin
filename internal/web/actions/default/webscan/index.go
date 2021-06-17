@@ -14,7 +14,7 @@ func (this *IndexAction) Init() {
 }
 
 func (this *IndexAction) RunGet() {
-	err := InitAWVSServer()
+	err := InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
 		return

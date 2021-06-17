@@ -1,0 +1,70 @@
+{$layout}
+<div class="addTag" onclick="hanleOpen()">[添加目标]</div>
+<div class="dialog" id="dialog">
+    <div class="wrap">
+        <header>
+            <h4>添加目标</h4>
+            <div onclick="hanleClose()">X</div>
+        </header>
+        <main>
+            <section>
+                <div>地址*</div>
+                <div>
+                    <input type="text" id="key" placeholder=""/>
+                </div>
+            </section>
+            <section>
+                <div>描述</div>
+                <div>
+                    <input type="text" id="value" placeholder=""/>
+                </div>
+            </section>
+        </main>
+        <footer>
+            <div onclick="save()">保存</div>
+        </footer>
+    </div>
+</div>
+
+<hr width="100%" size="1" color="#f0f0f0" align="center" noshade/>
+<div class="btn-contain">
+    <div id="scan-btn" onclick="onScan()">扫描</div>
+    <div id="del-btn" onclick="onDelete()">删除</div>
+</div>
+
+<table class="table-contain multi-table" border="1" style="border-collapse: collapse;">
+    <thead>
+    <tr>
+        <th class='table-head-bg' style="width: 72px;">
+            <input id="js-all-checkbox" type="checkbox" onclick="checkAll(this)">
+        </th>
+        <th class='table-head-bg' style="width: 185px;">地址</th>
+        <th class='table-head-bg' style="width: 150px;">描述</th>
+        <th class='table-head-bg' style="width: 167px;">类型</th>
+        <th class='table-head-bg' style="width: 282px;">漏洞</th>
+        <th class='table-head-bg' style="width: 129px;">上次扫描状态</th>
+        <th class='table-head-bg' style="width: 214px;">上次扫描时间</th>
+    </tr>
+    </thead>
+    <tbody id='tableBody'>
+    <tr align="center" style="height: 50px;" v-for="item in scanData">
+        <td>
+            <input type="checkbox" name="select" value=item.id onclick="clickCheckbox()">
+        </td>
+        <td>{{item.ip}}</td>
+        <td>{{item.disc}}</td>
+        <td>{{item.type}}</td>
+        <td>
+            <div style="display: flex;justify-content: center;">
+                <div class="vulnerable-num" style="background-color: #ec808d;">{{item.loophole.red}}</div>
+                <div class="vulnerable-num" style="background-color: #fcc77d;">{{item.loophole.yellow}}</div>
+                <div class="vulnerable-num" style="background-color: #3abee8;">{{item.loophole.blue}}</div>
+                <div class="vulnerable-num" style="background-color: #00b144;">{{item.loophole.green}}</div>
+            </div>
+        </td>
+        <td>{{item.lastStatus}}</td>
+        <td>{{item.lastTime}}</td>
+    </tr>
+    </tbody>
+</table>
+

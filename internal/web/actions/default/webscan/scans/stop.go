@@ -22,7 +22,7 @@ func (this *StopAction) RunPost(params struct {
 		Field("scanId", params.scanId).
 		Require("请输入扫描id")
 
-	err := webscan.InitAWVSServer()
+	err := webscan.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
 		return

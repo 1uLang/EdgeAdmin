@@ -6,6 +6,7 @@ import (
 	"github.com/iwind/TeaGo"
 )
 
+//节点管理
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.

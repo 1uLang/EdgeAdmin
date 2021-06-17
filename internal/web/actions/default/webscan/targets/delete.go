@@ -22,7 +22,7 @@ func (this *DeleteAction) RunPost(params struct {
 		Field("targetId", params.targetId).
 		Require("请输入目标id")
 
-	err := webscan.InitAWVSServer()
+	err := webscan.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
 		return
