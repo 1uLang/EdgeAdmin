@@ -2,6 +2,9 @@ Tea.context(function () {
   this.bScanning = false; //是否在扫描中
   this.checkValues = []; //选中的ID
 
+  this.nShowState = 1   //三个界面的状态控制 1 2 3
+
+  this.bLoopholeDetail = false    //漏洞详情是否显示
   this.onStopScan = function () {
     if (this.checkValues.length > 0 && bScanning) {
       console.log("touch onStopScan");
@@ -97,4 +100,53 @@ Tea.context(function () {
     }
     return resultTime;
   };
+
+    this.onChangeState = function (state) { 
+        this.nShowState = state;
+    }
+
+    this.onShowDetail = function (id) { 
+        this.onChangeState(2)
+    }
+
+    this.onOpenLoopholeDetail = function (id){
+        if(id){
+            bLoopholeDetail = true
+        }else{
+            bLoopholeDetail = false
+        }
+    }
+
+
+
+    this.loopholeData = [
+        {status:"height",desc:"zheshimiaoshu",address:"192.168.0.1"},
+        {status:"low",desc:"zheshimiaoshu",address:"192.168.0.2"},
+        {status:"middle",desc:"zheshimiaoshu",address:"192.168.0.3"},
+    ]
+
+    this.scans = [
+       {id:1,address:"192.168.0.1",description:"sfjla",high:1,medium:2,low:3,info:4,status:"asdf",start_date:"2021-12-12T10:20:32.000"},
+       {id:1,address:"192.168.0.1",description:"sfjla",high:1,medium:2,low:3,info:4,status:"asdf",start_date:"2021-12-12T10:20:32.000"},
+       {id:1,address:"192.168.0.1",description:"sfjla",high:1,medium:2,low:3,info:4,status:"asdf",start_date:"2021-12-12T10:20:32.000"},
+       {id:1,address:"192.168.0.1",description:"sfjla",high:1,medium:2,low:3,info:4,status:"asdf",start_date:"2021-12-12T10:20:32.000"},
+    ]
+
+    this.data = {
+        scanTime:"13m32s", scanReq:"4,551",scansRet:"27ms",define:"123",
+        attTag:[
+            {id:1,key:"地址",value:"192.168.111.111",},
+            {id:1,key:"地址",value:"192.168.111.111",},
+            {id:1,key:"地址",value:"192.168.111.111",},
+            {id:1,key:"地址",value:"192.168.111.111",},
+            {id:1,key:"地址",value:"192.168.111.111",}
+        ],
+        warring:[
+            {id:1,key:"Elasticsearch 服务可访问",value:"2021-12-12T10:20:32.000"}, 
+            {id:1,key:"Elasticsearch 服务可访问",value:"2021-12-12T10:20:32.000"}, 
+            {id:1,key:"Elasticsearch 服务可访问",value:"2021-12-12T10:20:32.000"}, 
+            {id:1,key:"Elasticsearch 服务可访问",value:"2021-12-12T10:20:32.000"}, 
+        ]
+            
+    }
 });

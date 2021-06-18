@@ -1,18 +1,17 @@
 Tea.context(function () {
   this.address = ''
   this.severity = ''
+  this.detailInfo = null
   this.onOpenDetail = function (vul) {
-
-    const info = this.$get(".details")
+      if(vul){
+        detailInfo = this.$get(".details")
         .params({
           VulId: vul.vuln_id
         })
-
-    if (!vul.vuln_id) {
-      document.getElementById("rightDiv").style.display = "none";
-    } else {
-      document.getElementById("rightDiv").style.display = "flex";
-    }
+        document.getElementById("rightDiv").style.display = "flex";
+      }else{
+        document.getElementById("rightDiv").style.display = "none";
+      }
   };
 
   this.onChangeTimeFormat = function (time) {

@@ -54,8 +54,18 @@
     <div id="rightDiv" style="display: none;flex: 1;width: 100%;position: relative;">
         <div style="height: 100%;width: 5px;background-color: #f0f0f0;margin: 1px 10px;"></div>
         <div style="margin-top: 34px;">
-            <h2>这是说明</h2>
-            <div>哈哈，这就是说明啊！</div>
+            <h2>Elasticsearch 服务可访问</h2>
+            <div>URL:           http://182.150.0.104/</div>
+            <h2>漏洞描述</h2>
+            <div>Elasticsearch 是一种高度可扩展的开源全文本搜索和分析引擎，使您可以快速、近乎实时地存储、搜索和分析大量数据，通常用作为具有复杂搜索功能和要求的应用程序提供支持的基础引擎/技术。
+                <br />
+                <br />Acunetix 发现可以访问 elasticsearch 服务。此服务在生产网站上应不可访问，因为它可能使攻击者访问有关受影响系统的敏感信息。Elasticsearch 没有访问角色或身份验证机制。这意味着您在连接群集后就可以完全控制它。
+                <br />
+                <br />发现者 Elasticsearch 服务可访问</div>
+            <h2>此漏洞的影响</h2>
+            <div>攻击者可以在 elasticsearch 服务上查询、更新和创建新索引。</div>
+            <h2>如何修复此漏洞</h2>
+            <div>禁止外部访问 elasticsearch 服务。</div>
         </div>
         <div style="position: absolute;right: 10px;top: 8px;font-size: 24px;cursor: pointer;" @click="onOpenDetail()">X</div>
     </div>
