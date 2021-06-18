@@ -133,6 +133,7 @@ import (
 
 	// 平台用户
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/users"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/users/accesskeys"
 
 	// 组件管理
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/assembly"

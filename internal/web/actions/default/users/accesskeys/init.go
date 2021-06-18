@@ -1,4 +1,4 @@
-package users
+package accesskeys
 
 import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
@@ -11,21 +11,13 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeUser)).
 			Data("teaMenu", "users").
-			Prefix("/users").
+
+			// AccessKeys
+			Prefix("/users/accessKeys").
 			Get("", new(IndexAction)).
 			GetPost("/createPopup", new(CreatePopupAction)).
-			Get("/user", new(UserAction)).
-			GetPost("/update", new(UpdateAction)).
 			Post("/delete", new(DeleteAction)).
-			GetPost("/features", new(FeaturesAction)).
-
-			//// AccessKeys
-			//Prefix("/users/accessKeys").
-			//Get("", new(accesskeys.IndexAction)).
-			//GetPost("/createPopup", new(accesskeys.CreatePopupAction)).
-			//Post("/delete", new(accesskeys.DeleteAction)).
-			//Post("/updateIsOn", new(accesskeys.UpdateIsOnAction)).
-
+			Post("/updateIsOn", new(UpdateIsOnAction)).
 			EndAll()
 	})
 }

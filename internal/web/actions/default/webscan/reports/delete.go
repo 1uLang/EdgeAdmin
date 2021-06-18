@@ -12,14 +12,14 @@ type DeleteAction struct {
 }
 
 func (this *DeleteAction) RunPost(params struct {
-	scanId string
+	ReportId string
 
 	Must *actions.Must
 	CSRF *actionutils.CSRF
 }) {
 
 	params.Must.
-		Field("scanId", params.scanId).
+		Field("report_id", params.ReportId).
 		Require("请输入扫描id")
 
 	err := webscan.InitAPIServer()
@@ -27,7 +27,7 @@ func (this *DeleteAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	err = reports_server.Delete(params.scanId)
+	err = reports_server.Delete(params.ReportId)
 	if err != nil {
 		this.ErrorPage(err)
 		return

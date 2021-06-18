@@ -343,6 +343,21 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"url":  "/webscan/targets",
 					"code": "global",
 				},
+				{
+					"name": "漏洞详情",
+					"url":  "/webscan/vulnerabilities",
+					"code": "global",
+				},
+				{
+					"name": "扫描任务",
+					"url":  "/webscan/scans",
+					"code": "global",
+				},
+				{
+					"name": "扫描报告",
+					"url":  "/webscan/reports",
+					"code": "global",
+				},
 			},
 		},
 	}

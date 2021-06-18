@@ -17,33 +17,33 @@ func (this *IndexAction) Init() {
 }
 
 func (this *IndexAction) RunGet(params struct {
-	pageSize int
-	pageNo   int
-	address  string
-	level    string
+	PageSize int
+	PageNo   int
+	Address  string
+	Severity string
 }) {
 	err := webscan.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	if params.pageNo < 0 {
-		params.pageNo = 0
+	if params.PageNo < 0 {
+		params.PageNo = 0
 	}
-	if params.pageSize < 0 {
-		params.pageSize = 20
+	if params.PageSize < 0 {
+		params.PageSize = 20
 	}
 	var query string
-	if params.address != "" {
-		query += "target_id:" + params.address
+	if params.Address != "" {
+		query += "target_id:" + params.Address
 		query += ";"
 	}
-	if params.level != "" {
-		query += "severity:" + params.level
+	if params.Severity != "" {
+		query += "severity:" + params.Severity
 		query += ";"
 	}
 
-	list, err := vulnerabilities_server.List(&vulnerabilities.ListReq{Limit: params.pageSize, C: params.pageNo * params.pageSize, Query: query})
+	list, err := vulnerabilities_server.List(&vulnerabilities.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, Query: query})
 	if err != nil {
 		this.ErrorPage(err)
 		return

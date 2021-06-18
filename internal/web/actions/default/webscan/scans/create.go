@@ -17,8 +17,7 @@ func (this *CreateAction) RunGet(params struct{}) {
 	this.Show()
 }
 func (this *CreateAction) RunPost(params struct {
-	TargetId  string
-	ProfileId string
+	TargetId string `json:"target_id"`
 
 	Must *actions.Must
 	CSRF *actionutils.CSRF
@@ -28,16 +27,12 @@ func (this *CreateAction) RunPost(params struct {
 		Field("target_id", params.TargetId).
 		Require("请输入目标id")
 
-	params.Must.
-		Field("profile_id", params.ProfileId).
-		Require("请输入扫描类型")
-
 	err := webscan.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	req := &scans.AddReq{TargetId: params.TargetId, ProfileId: params.ProfileId}
+	req := &scans.AddReq{TargetId: params.TargetId, ProfileId: "11111111-1111-1111-1111-111111111111"}
 
 	err = scans_server.Add(req)
 	if err != nil {

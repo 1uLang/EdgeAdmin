@@ -1,12 +1,13 @@
 <!-- 扫描任务 -->
 {$layout}
-<div class="btn-contain" v-if="vulnerabilities.length > 0">
+<div class="btn-contain" v-if="scans.length > 0">
     <div id="stop-btn" onclick="onStopScan()">停止扫描</div>
     <div id="create-btn" onclick="onCreateReport()">生成报告</div>
     <div id="del-btn" onclick="onDelete()">删除</div>
 </div>
-<p class="comment" v-if="vulnerabilities.length == 0">暂时还没有目标。</p>
-<table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;" v-if="vulnerabilities.length > 0">
+<p class="comment" v-if="scans.length == 0">暂时还没有目标。</p>
+
+<table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;" v-if="scans.length > 0">
     <thead>
     <tr>
         <th class='table-head-bg' style="width: 72px;">
@@ -21,23 +22,23 @@
     </tr>
     </thead>
     <tbody id='tableBody'>
-    <tr align="center" style="height: 50px;" v-for="item in vulnerabilities">
+    <tr align="center" style="height: 50px;" v-for="item in scans">
         <td>
             <input type="checkbox" name="select" value=item.id onclick="clickCheckbox()">
         </td>
-        <td>{{item.ip}}</td>
-        <td>{{item.disc}}</td>
-        <td>{{item.type}}</td>
+        <td>{{item.target.address}}</td>
+        <td>{{item.target.description}}</td>
+        <td>Web</td>
         <td>
             <div style="display: flex;justify-content: center;">
-                <div class="vulnerable-num" style="background-color: #ec808d;">{{item.loophole.red}}</div>
-                <div class="vulnerable-num" style="background-color: #fcc77d;">{{item.loophole.yellow}}</div>
-                <div class="vulnerable-num" style="background-color: #3abee8;">{{item.loophole.blue}}</div>
-                <div class="vulnerable-num" style="background-color: #00b144;">{{item.loophole.green}}</div>
+                <div class="vulnerable-num" style="background-color: #ec808d;">{{item.current_session.severity_counts.high}}</div>
+                <div class="vulnerable-num" style="background-color: #fcc77d;">{{item.current_session.severity_counts.medium}}</div>
+                <div class="vulnerable-num" style="background-color: #3abee8;">{{item.current_session.severity_counts.low}}</div>
+                <div class="vulnerable-num" style="background-color: #00b144;">{{item.current_session.severity_counts.info}}</div>
             </div>
         </td>
-        <td>{{item.lastStatus}}</td>
-        <td>{{item.lastTime}}</td>
+        <td>{{item.current_session.status}}</td>
+        <td>{{item.current_session.start_date}}</td>
     </tr>
     </tbody>
 </table>

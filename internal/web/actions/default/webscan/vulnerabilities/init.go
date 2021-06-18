@@ -13,6 +13,7 @@ func init() {
 			Data("teaMenu", "webscan").
 			Prefix("/webscan/vulnerabilities").
 			Get("", new(IndexAction)).
+			Get("/details", new(DetailAction)).
 			EndAll()
 	})
 }

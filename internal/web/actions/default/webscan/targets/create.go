@@ -17,7 +17,7 @@ type CreateAction struct {
 func (this *CreateAction) RunGet(params struct{}) {
 	this.Show()
 }
-func (this *CreateAction) PostGet(params struct {
+func (this *CreateAction) RunPost(params struct {
 	Address string
 	Desc    string
 

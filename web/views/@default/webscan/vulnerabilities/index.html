@@ -29,7 +29,6 @@
         </div>
     </div>
 </form>
-
 <table class="ui table selectable celled" border="1" style="border-collapse: collapse;" v-if="vulnerabilities.length > 0">
     <thead>
     <tr>
@@ -41,10 +40,10 @@
     </thead>
     <tbody id='tableBody'>
     <tr align="center" style="height: 50px;" v-for="item in vulnerabilities">
-        <td>{{item.status}}</td>
-        <td>{{item.scanDisc}}</td>
-        <td>{{item.target}}</td>
-        <td>{{item.findTime}}</td>
+        <td>{{item.severity}}</td>
+        <td>{{item.vt_name}}</td>
+        <td>{{item.affects_url}}</td>
+        <td>{{item.last_seen}}</td>
     </tr>
     </tbody>
 </table>
