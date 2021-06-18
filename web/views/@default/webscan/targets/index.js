@@ -3,12 +3,28 @@ Tea.context(function () {
 
   this.onScan = function () {
     if (this.checkValues.length > 0) {
-      console.log("touch onScan");
+      let that = this
+      let target_ids = JSON.parse(JSON.stringify(this.checkValues))
+      teaweb.confirm("确定要扫描这个目标吗？", function () {
+        that.$post("/webscan/scans/create")
+            .params({
+              TargetIds: target_ids
+            })
+            .refresh()
+      })
     }
   };
   this.onDelete = function () {
     if (this.checkValues.length > 0) {
-      console.log("touch onDelete");
+      let that = this
+      let target_ids = JSON.parse(JSON.stringify(this.checkValues))
+      teaweb.confirm("确定要删除这个目标吗？", function () {
+        that.$post(".delete")
+            .params({
+              TargetIds: target_ids
+            })
+            .refresh()
+      })
     }
   };
 
@@ -117,5 +133,17 @@ Tea.context(function () {
       resultTime = tempTime.replace("T", " ");
     }
     return resultTime;
+  };
+
+  this.onChangeStatusFormat = function (status) {
+    var resultStatus = status;
+    if (status) {
+      switch (status) {
+        case "aborted":return "已中止";
+        case "completed": return "已完成";
+        case "progressing": return "正在进行";
+      }
+    }
+    return resultStatus;
   };
 });

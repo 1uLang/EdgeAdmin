@@ -4,7 +4,6 @@ import (
 	targets_server "github.com/1uLang/zhiannet-api/awvs/server/targets"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/webscan"
-	"github.com/iwind/TeaGo/actions"
 )
 
 type DeleteAction struct {
@@ -12,25 +11,26 @@ type DeleteAction struct {
 }
 
 func (this *DeleteAction) RunPost(params struct {
-	TargetId string `json:"target_id"`
-
-	Must *actions.Must
-	CSRF *actionutils.CSRF
+	TargetIds []string `json:"target_ids"`
 }) {
 
-	params.Must.
-		Field("targetId", params.TargetId).
-		Require("请输入目标id")
+	if len(params.TargetIds) == 0 {
+		this.FailField("username", "请选择需要删除的目标")
+		return
+	}
 
 	err := webscan.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	err = targets_server.Delete(params.TargetId)
-	if err != nil {
-		this.ErrorPage(err)
-		return
+	for _, targetId := range params.TargetIds {
+		err = targets_server.Delete(targetId)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
 	}
+
 	this.Success()
 }

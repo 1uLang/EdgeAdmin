@@ -15,7 +15,6 @@ func (this *DetailAction) RunGet(params struct {
 	VulId string
 
 	Must *actions.Must
-	CSRF *actionutils.CSRF
 }) {
 	params.Must.
 		Field("macCode", params.VulId).
@@ -33,5 +32,5 @@ func (this *DetailAction) RunGet(params struct {
 	}
 	this.Data["data"] = info
 
-	this.Show()
+	this.Success()
 }

@@ -5,7 +5,6 @@ import (
 	scans_server "github.com/1uLang/zhiannet-api/awvs/server/scans"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/webscan"
-	"github.com/iwind/TeaGo/actions"
 )
 
 //任务目标
@@ -17,27 +16,27 @@ func (this *CreateAction) RunGet(params struct{}) {
 	this.Show()
 }
 func (this *CreateAction) RunPost(params struct {
-	TargetId string `json:"target_id"`
-
-	Must *actions.Must
-	CSRF *actionutils.CSRF
+	TargetIds []string
 }) {
 
-	params.Must.
-		Field("target_id", params.TargetId).
-		Require("请输入目标id")
+	if len(params.TargetIds) == 0 {
+		this.FailField("username", "请选择需要扫描的目标")
+		return
+	}
 
 	err := webscan.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	req := &scans.AddReq{TargetId: params.TargetId, ProfileId: "11111111-1111-1111-1111-111111111111"}
-
-	err = scans_server.Add(req)
-	if err != nil {
-		this.ErrorPage(err)
-		return
+	req := &scans.AddReq{ProfileId: "11111111-1111-1111-1111-111111111111"}
+	for _, targetId := range params.TargetIds {
+		req.TargetId = targetId
+		err = scans_server.Add(req)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
 	}
 	this.Success()
 }

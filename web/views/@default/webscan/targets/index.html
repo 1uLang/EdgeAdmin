@@ -46,8 +46,9 @@
                 <div class="vulnerable-num" style="background-color: #00b144;">0</div>
             </div>
         </td>
-        <td>{{item.last_scan_session_status}}</td>
+        <td>{{onChangeStatusFormat(item.last_scan_session_status)}}</td>
         <td>{{onChangeTimeFormat(item.last_scan_date)}}</td>
     </tr>
     </tbody>
 </table>
+
