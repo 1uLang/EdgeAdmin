@@ -19,8 +19,11 @@ func init() {
 			EndAll()
 	})
 }
+
+var ServerUrl = "https://scan-web.zhiannet.com"
+
 func InitAPIServer() error {
-	err := server.SetUrl("https://scan-web.zhiannet.com")
+	err := server.SetUrl(ServerUrl)
 	if err != nil {
 		return err
 	}

@@ -18,21 +18,14 @@ func (this *CreateAction) RunGet(params struct{}) {
 	this.Show()
 }
 func (this *CreateAction) RunPost(params struct {
-	Ids []string `json:"id_list"`
-
-	TemplateId string `json:"template_id"`
+	Ids []string
 
 	Must *actions.Must
-	CSRF *actionutils.CSRF
 }) {
 
 	params.Must.
 		Field("id_list", params.Ids).
 		Require("请选择指定生成报表的扫描目标")
-
-	params.Must.
-		Field("template_id", params.TemplateId).
-		Require("请选择生成的报表模板")
 
 	err := webscan.InitAPIServer()
 	if err != nil {
@@ -44,7 +37,7 @@ func (this *CreateAction) RunPost(params struct {
 			IDS  []string `json:"id_list"`
 			Type string   `json:"list_type"`
 		}{IDS: params.Ids, Type: "scans"},
-		TemplateId: params.TemplateId,
+		TemplateId: "11111111-1111-1111-1111-111111111112", //快速
 	}
 	info, err := reports_server.Create(req)
 	if err != nil {

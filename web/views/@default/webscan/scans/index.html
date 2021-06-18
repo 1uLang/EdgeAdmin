@@ -24,7 +24,7 @@
     <tbody id='tableBody'>
     <tr align="center" style="height: 50px;" v-for="item in scans">
         <td>
-            <input type="checkbox" name="select" value=item.id @click="clickCheckbox">
+            <input type="checkbox" name="select" :value="item.scan_id" @click="clickCheckbox">
         </td>
         <td>{{item.target.address}}</td>
         <td>{{item.target.description}}</td>
@@ -37,8 +37,8 @@
                 <div class="vulnerable-num" style="background-color: #00b144;">{{item.current_session.severity_counts.info}}</div>
             </div>
         </td>
-        <td>{{item.current_session.status}}</td>
-        <td>{{item.current_session.start_date}}</td>
+        <td>{{onChangeStatusFormat(item.current_session.status)}}</td>
+        <td>{{onChangeTimeFormat(item.current_session.start_date)}}</td>
     </tr>
     </tbody>
 </table>

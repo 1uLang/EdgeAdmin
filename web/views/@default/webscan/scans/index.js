@@ -1,22 +1,45 @@
 Tea.context(function () {
-  this.bScanning = false; //是否在扫描中
   this.checkValues = []; //选中的ID
 
   this.onStopScan = function () {
-    if (this.checkValues.length > 0 && bScanning) {
-      console.log("touch onStopScan");
+    if (this.checkValues.length > 0) {
+      let that = this
+      let scan_ids = JSON.parse(JSON.stringify(this.checkValues))
+      teaweb.confirm("确定要停止这个扫描吗？", function () {
+        that.$post(".stop")
+            .params({
+              Ids: scan_ids
+            })
+            .refresh()
+      })
     }
   };
 
   this.onCreateReport = function () {
     if (this.checkValues.length > 0) {
-      console.log("touch onCreateReport");
+      let that = this
+      let scan_ids = JSON.parse(JSON.stringify(this.checkValues))
+      teaweb.confirm("确定要生成这个扫描的报表吗？", function () {
+        that.$post("/web/scan/report/create")
+            .params({
+              Ids: scan_ids
+            })
+            .refresh()
+      })
     }
   };
 
   this.onDelete = function () {
-    if (this.checkValues.length > 0 && !bScanning) {
-      console.log("touch onDelete");
+    if (this.checkValues.length > 0 ) {
+      let that = this
+      let scan_ids = JSON.parse(JSON.stringify(this.checkValues))
+      teaweb.confirm("确定要删除这个扫描吗？", function () {
+        that.$post(".delete")
+            .params({
+              ScanIds: scan_ids
+            })
+            .refresh()
+      })
     }
   };
 
@@ -89,6 +112,7 @@ Tea.context(function () {
       delBtn.style.cursor = null;
     }
   };
+
   this.onChangeTimeFormat = function (time) {
     var resultTime = "";
     if (time) {
@@ -96,5 +120,17 @@ Tea.context(function () {
       resultTime = tempTime.replace("T", " ");
     }
     return resultTime;
+  };
+
+  this.onChangeStatusFormat = function (status) {
+    var resultStatus = status;
+    if (status) {
+      switch (status) {
+        case "aborted":return "已中止";
+        case "completed": return "已完成";
+        case "progressing": return "正在进行";
+      }
+    }
+    return resultStatus;
   };
 });

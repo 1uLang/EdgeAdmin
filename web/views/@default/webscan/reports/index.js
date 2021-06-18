@@ -57,13 +57,19 @@ Tea.context(function () {
     }
   };
 
-  //item 内的删除
-  this.deleteNode = function (id) {
-    teaweb.confirm("确定要删除这个节点吗？", function () {});
-  };
   //btn删除
   this.onDelete = function () {
-    teaweb.confirm("确定要删除这些节点吗？", function () {});
+    if (this.checkValues.length > 0 ) {
+      let that = this
+      let report_ids = JSON.parse(JSON.stringify(this.checkValues))
+      teaweb.confirm("确定要删除这个报表吗？", function () {
+        that.$post(".delete")
+            .params({
+              ReportIds: report_ids
+            })
+            .refresh()
+      })
+    }
   };
 
   this.onChangeTimeFormat = function (time) {
@@ -75,12 +81,15 @@ Tea.context(function () {
     return resultTime;
   };
 
-  this.onChangeTimeFormat = function (time) {
-    var resultTime = "";
-    if (time) {
-      var tempTime = time.substring(0, time.indexOf("."));
-      resultTime = tempTime.replace("T", " ");
+  this.onChangeStatusFormat = function (status) {
+    var resultStatus = status;
+    if (status) {
+      switch (status) {
+        case "aborted":return "已中止";
+        case "completed": return "已完成";
+        case "progressing": return "正在进行";
+      }
     }
-    return resultTime;
+    return resultStatus;
   };
 });
