@@ -14,23 +14,17 @@
         <th class='table-head-bg' style="width: 275px;">创建时间</th>
         <th class='table-head-bg' style="width: 262px;">状态</th>
         <th class='table-head-bg' style="width: 191px;">下载</th>
-        <th class='table-head-bg' style="width: 141px;">操作</th>
     </tr>
     </thead>
     <tbody id='tableBody'>
     <tr align="center" style="height: 50px;" v-for="item in reports">
         <td>
-            <input type="checkbox" name="select" value=item.id @click="clickCheckbox">
+            <input type="checkbox" name="select" :value="item.report_id" @click="clickCheckbox">
         </td>
-        <td>{{item.soure.description}}</td>
-        <td>{{item.generation_date}}</td>
+        <td>{{item.source.description}}</td>
+        <td>{{onChangeTimeFormat(item.generation_date)}}</td>
+        <td>{{onChangeStatusFormat(item.status)}}</td>
         <td>{{item.status}}</td>
-        <td>{{item.type}}</td>
-        <td>
-            <a href="" @click.prevent="deleteNode(node.id)">删除</a>
-        </td>
-        
-        
     </tr>
     </tbody>
 </table>

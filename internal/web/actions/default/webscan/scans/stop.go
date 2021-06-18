@@ -12,14 +12,13 @@ type StopAction struct {
 }
 
 func (this *StopAction) RunPost(params struct {
-	scanId string
+	ScanIds []string
 
 	Must *actions.Must
-	CSRF *actionutils.CSRF
 }) {
 
 	params.Must.
-		Field("scanId", params.scanId).
+		Field("ScanIds", params.ScanIds).
 		Require("请输入扫描id")
 
 	err := webscan.InitAPIServer()
@@ -27,10 +26,12 @@ func (this *StopAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	err = scans_server.Abort(params.scanId)
-	if err != nil {
-		this.ErrorPage(err)
-		return
+	for _, scanId := range params.ScanIds {
+		err = scans_server.Abort(scanId)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
 	}
 	this.Success()
 }
