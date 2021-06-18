@@ -1,14 +1,14 @@
 <!-- 扫描报告 -->
 {$layout}
 <div class="btn-contain" v-if="reports.length > 0">
-    <div id="del-btn" onclick="onDelete()">删除</div>
+    <div id="del-btn" @click="onDelete()">删除</div>
 </div>
 <p class="comment" v-if="reports.length == 0">暂时还没有目标。</p>
 <table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;" v-if="reports.length > 0">
     <thead>
     <tr>
         <th class='table-head-bg' style="width: 60px;">
-            <input id="js-all-checkbox" type="checkbox" onclick="checkAll(this)">
+            <input id="js-all-checkbox" type="checkbox" @click="checkAll">
         </th>
         <th class='table-head-bg' style="width: 243px;">目标</th>
         <th class='table-head-bg' style="width: 275px;">创建时间</th>
@@ -20,7 +20,7 @@
     <tbody id='tableBody'>
     <tr align="center" style="height: 50px;" v-for="item in reports">
         <td>
-            <input type="checkbox" name="select" value=item.id onclick="clickCheckbox()">
+            <input type="checkbox" name="select" value=item.id @click="clickCheckbox">
         </td>
         <td>{{item.soure.description}}</td>
         <td>{{item.generation_date}}</td>

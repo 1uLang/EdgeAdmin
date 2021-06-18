@@ -1,18 +1,20 @@
 <!-- 添加目标 -->
 {$layout}
+{$template "/datepicker"}
+
 <first-menu>
 	<menu-item @click.prevent="hanleOpen">[添加目标]</menu-item>
 </first-menu>
 <div class="btn-contain" v-if="targets.length > 0">
-    <div id="scan-btn" onclick="onScan()">扫描</div>
-    <div id="del-btn" onclick="onDelete()">删除</div>
+    <div id="scan-btn" @click="onScan()">扫描</div>
+    <div id="del-btn" @click="onDelete()">删除</div>
 </div>
 <p class="comment" v-if="targets.length == 0">暂时还没有目标。</p>
 <table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;" v-if="targets.length > 0">
     <thead>
     <tr>
         <th class='table-head-bg' style="width: 72px;">
-            <input id="js-all-checkbox" type="checkbox" onclick="checkAll(this)">
+            <input id="js-all-checkbox" type="checkbox" @click="checkAll">
         </th>
         <th class='table-head-bg' style="width: 185px;">地址</th>
         <th class='table-head-bg' style="width: 150px;">描述</th>
@@ -25,7 +27,7 @@
     <tbody id='tableBody'>
     <tr align="center" style="height: 50px;" v-for="item in targets">
         <td>
-            <input type="checkbox" name="select" value=item.id onclick="clickCheckbox()">
+            <input type="checkbox" name="select" :value="item.target_id" @click="clickCheckbox">
         </td>
         <td>{{item.address}}</td>
         <td>{{item.description}}</td>
@@ -45,8 +47,7 @@
             </div>
         </td>
         <td>{{item.last_scan_session_status}}</td>
-        <td>{{item.last_scan_date}}</td>
+        <td>{{onChangeTimeFormat(item.last_scan_date)}}</td>
     </tr>
     </tbody>
 </table>
-

@@ -1,9 +1,9 @@
 <!-- 扫描任务 -->
 {$layout}
 <div class="btn-contain" v-if="scans.length > 0">
-    <div id="stop-btn" onclick="onStopScan()">停止扫描</div>
-    <div id="create-btn" onclick="onCreateReport()">生成报告</div>
-    <div id="del-btn" onclick="onDelete()">删除</div>
+    <div id="stop-btn" @click="onStopScan()">停止扫描</div>
+    <div id="create-btn" @click="onCreateReport()">生成报告</div>
+    <div id="del-btn" @click="onDelete()">删除</div>
 </div>
 <p class="comment" v-if="scans.length == 0">暂时还没有目标。</p>
 
@@ -11,7 +11,7 @@
     <thead>
     <tr>
         <th class='table-head-bg' style="width: 72px;">
-            <input id="js-all-checkbox" type="checkbox" onclick="checkAll(this)">
+            <input id="js-all-checkbox" type="checkbox" @click="checkAll">
         </th>
         <th class='table-head-bg' style="width: 185px;">目标</th>
         <th class='table-head-bg' style="width: 150px;">目标描述</th>
@@ -24,7 +24,7 @@
     <tbody id='tableBody'>
     <tr align="center" style="height: 50px;" v-for="item in scans">
         <td>
-            <input type="checkbox" name="select" value=item.id onclick="clickCheckbox()">
+            <input type="checkbox" name="select" value=item.id @click="clickCheckbox">
         </td>
         <td>{{item.target.address}}</td>
         <td>{{item.target.description}}</td>

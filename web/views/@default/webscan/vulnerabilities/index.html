@@ -1,49 +1,61 @@
 <!-- 漏洞详情 -->
 
 {$layout}
-<form method="get" class="ui form" action="/vulnerabilities">
-    <input type="hidden" name="auditingFlag" :value="auditingFlag"/>
-	<div class="ui margin"></div>
-    <div class="ui menu basic text">
-        <div class="item">
-            <div class="ui fields inline">
-                
-                <div class="ui field">
-                    <span class="ui field">目标：</span>
-                    <input type="text" name="keyword" placeholder="请输入目标地址" v-model="keyword"/>
-                </div>
-                <span>严重性：</span>
-                <div class="ui field">
-                    <div class="ui field">
-                        <select class="ui dropdown auto-width" name="clusterId" v-model="clusterId">
-                            <option value="0">全部</option>
-                            <option v-for="cluster in clusters" :value="cluster.id">{{cluster.name}}</option>
-                        </select>
+<div style="width: 100%;display: inline-flex;">
+    <div style="flex: 1;width: 100%;">
+        <form method="get" class="ui form" action="/vulnerabilities">
+            <input type="hidden" name="auditingFlag" :value="auditingFlag"/>
+            <div class="ui margin"></div>
+            <div class="ui menu basic text">
+                <div class="item">
+                    <div class="ui fields inline">
+                        
+                        <div class="ui field">
+                            <span class="ui field">目标：</span>
+                            <input type="text" name="keyword" placeholder="请输入目标地址" v-model="keyword"/>
+                        </div>
+                        <span>严重性：</span>
+                        <div class="ui field">
+                            <div class="ui field">
+                                <select class="ui dropdown auto-width" name="clusterId" v-model="clusterId">
+                                    <option value="0">全部</option>
+                                    <option v-for="cluster in clusters" :value="cluster.id">{{cluster.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="ui field">
+                            <button type="submit" class="ui button">搜索</button>
+                        </div>
                     </div>
                 </div>
-
-                <div class="ui field">
-                    <button type="submit" class="ui button">搜索</button>
-                </div>
             </div>
-        </div>
+        </form>
+        <table class="ui table selectable celled" border="1" style="border-collapse: collapse;" v-if="vulnerabilities.length > 0">
+            <thead>
+            <tr>
+                <th class='table-head-bg' style="width: 183px;">严重性</th>
+                <th class='table-head-bg' style="width: 462px;">漏洞</th>
+                <th class='table-head-bg' style="width: 238px;">目标</th>
+                <th class='table-head-bg' style="width: 297px;">发现时间</th>
+            </tr>
+            </thead>
+            <tbody id='tableBody'>
+            <tr align="center" style="height: 50px;" v-for="item in vulnerabilities" @click="onOpenDetail(item.target_id)" >
+                <td>{{item.severity}}</td>
+                <td>{{item.vt_name}}</td>
+                <td>{{item.affects_url}}</td>
+                <td>{{onChangeTimeFormat(item.last_seen)}}</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-</form>
-<table class="ui table selectable celled" border="1" style="border-collapse: collapse;" v-if="vulnerabilities.length > 0">
-    <thead>
-    <tr>
-        <th class='table-head-bg' style="width: 183px;">严重性</th>
-        <th class='table-head-bg' style="width: 462px;">漏洞</th>
-        <th class='table-head-bg' style="width: 238px;">目标</th>
-        <th class='table-head-bg' style="width: 297px;">发现时间</th>
-    </tr>
-    </thead>
-    <tbody id='tableBody'>
-    <tr align="center" style="height: 50px;" v-for="item in vulnerabilities">
-        <td>{{item.severity}}</td>
-        <td>{{item.vt_name}}</td>
-        <td>{{item.affects_url}}</td>
-        <td>{{item.last_seen}}</td>
-    </tr>
-    </tbody>
-</table>
+    <div id="rightDiv" style="display: none;flex: 1;width: 100%;position: relative;">
+        <div style="height: 100%;width: 5px;background-color: #f0f0f0;margin: 1px 10px;"></div>
+        <div style="margin-top: 34px;">
+            <h2>这是说明</h2>
+            <div>哈哈，这就是说明啊！</div>
+        </div>
+        <div style="position: absolute;right: 10px;top: 8px;font-size: 24px;cursor: pointer;" @click="onOpenDetail()">X</div>
+    </div>
+</div>
