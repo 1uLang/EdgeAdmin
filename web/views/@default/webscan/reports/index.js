@@ -92,4 +92,8 @@ Tea.context(function () {
     }
     return resultStatus;
   };
+
+  this.downloadFile = function(url){
+    
+  }
 });

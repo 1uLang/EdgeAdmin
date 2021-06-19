@@ -24,7 +24,12 @@
         <td>{{item.source.description}}</td>
         <td>{{onChangeTimeFormat(item.generation_date)}}</td>
         <td>{{onChangeStatusFormat(item.status)}}</td>
-        <td>{{item.status}}</td>
+        <td>
+            <div style="display: inline-flex;">
+                <img src="/images/WechatIMG133.jpeg" :alt="item.id" style="cursor: pointer;margin-right: 10px;" width="27px" height="27px" @click="downloadFile()">
+                <img src="/images/WechatIMG134.jpeg" :alt="item.id" style="cursor: pointer;" width="27px" height="27px" @click="downloadFile()">
+            </div>
+        </td>
     </tr>
     </tbody>
 </table>
