@@ -93,7 +93,7 @@ Tea.context(function () {
     return resultStatus;
   };
 
-  this.downloadFile = function(url){
-    
+  this.downloadFile = function(path){
+    console.log("download file : ",path)
   }
 });

@@ -42,7 +42,7 @@
             </tr>
             </thead>
             <tbody id='tableBody'>
-            <tr align="center" style="height: 50px;" v-for="item in vulnerabilities" @click="getDataiInfo(item.severity)" >
+            <tr align="center" style="height: 50px;" v-for="item in vulnerabilities" @click="getDetailInfo(item)" >
                 <td :class="{'red-color':item.severity===3, 'yellow-color':item.severity===2,'blue-color':item.severity===1,'green-color':item.severity===0}">{{onChangeSeverityFormat(item.severity)}}</td>
                 <td>{{item.vt_name}}</td>
                 <td>{{item.affects_url}}</td>
@@ -54,15 +54,18 @@
     <div v-if="bShowDetail && detailInfo" style="display: flex; flex: 1;width: 100%;position: relative;">
         <div style="height: 100%;width: 5px;background-color: #f0f0f0;margin: 1px 10px;"></div>
         <div style="margin-top: 34px;">
-            <h2>{{detailInfo.title1}}</h2>
-            <div>{{detailInfo.content1}}</div>
-            <h2>{{detailInfo.title2}}</h2>
-            <div>{{detailInfo.content2}}</div>
-            <h2>{{detailInfo.title3}}</h2>
-            <div>{{detailInfo.title3}}</div>
-            <h2>{{detailInfo.title4}}</h2>
-            <div>{{detailInfo.title4}}</div>
+            <h2>{{detailInfo.vt_name}}</h2>
+            <div>{{detailInfo.affects_url}}</div>
+            <h2>攻击详细信息</h2>
+            <div>{{detailInfo.details}}</div>
+            <h2>漏洞描述</h2>
+            {{detailInfo.description}}
+            <div>发现者：<span style="font-weight: bold">{{detailInfo.vt_name}}</span></div>
+            <h2>此漏洞的影响</h2>
+            <div>{{detailInfo.impact}}</div>
+            <h2>如何修复此漏洞</h2>
+            <div>{{detailInfo.recommendation}}</div>
         </div>
-        <div style="position: absolute;right: 10px;top: 8px;font-size: 24px;cursor: pointer;" @click="onOpenDetail()">X</div>
+        <div style="position: absolute;right: 10px;top: 8px;font-size: 24px;cursor: pointer;" @click="onCloseDetail()">X</div>
     </div>
 </div>
