@@ -321,8 +321,8 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 				},
 				{
 					"name": "黑白名单",
-					"url":  "/ddos/whitebalcklist",
-					"code": "whitebalcklist",
+					"url":  "/ddos/whiteblacklist",
+					"code": "whiteblacklist",
 				},
 				{
 					"name": "统计日志",

@@ -11,7 +11,7 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeDdos)).
 			Data("teaMenu", "ddos").
-			Prefix("/ddos/whitebalcklist").
+			Prefix("/ddos/whiteblacklist").
 			Get("", new(IndexAction)).
 			GetPost("/del", new(DelAction)). //添删除ip
 			GetPost("/createPopup", new(CreatePopupAction)).
