@@ -8,6 +8,10 @@
 .config-menu-select-color{
     color: #0090cb
 }
+.table-head-bg{
+    height: 32px;
+    background: #f0f0f0;
+}
 
 .btn-switch {
     cursor: pointer;
