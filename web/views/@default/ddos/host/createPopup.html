@@ -1,8 +1,18 @@
 {$layout "layout_popup"}
 
-<h3>添加高防ip</h3>
-<form method="post" class="ui form" data-tea-action="$" data-tea-success="success">
+
+<form method="post" class="ui form" data-tea-action="$" data-tea-success="success" style="margin-top: 50px;">
     <table class="ui table definition selectable">
+        <tr>
+            <td class="title">当前节点</td>
+            <td>成都DDOS-181.22.122.76</td>
+        </tr>
+        <tr>
+            <td class="title">所属用户*</td>
+            <td>
+                <user-selector></user-selector>
+            </td>
+        </tr>
         <tr>
             <td class="title">高防IP*</td>
             <td>

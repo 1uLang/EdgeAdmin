@@ -7,6 +7,200 @@
     <div id="del-btn" @click="onDelete()">删除</div>
 </div>
 
+<div v-if="nShowState!=1" style="display: inline-flex;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
+	<div class="define-menu" @click.prevent="onChangeState(1)" style="cursor: pointer;">任务列表</div>
+    <div :class="{'select-menu':nShowState===2, 'define-menu':ShowState!=2}" @click.prevent="onChangeState(2)" style="cursor: pointer;">扫描信息</div>
+    <div :class="{'select-menu':nShowState===3, 'define-menu':ShowState!=3}" @click.prevent="onChangeState(3)" style="cursor: pointer;">漏洞</div>
+</div>
+
+<div v-if="nShowState===1">
+    <p class="comment" v-if="scans.length === 0">暂时还没有目标。</p>
+    <table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;" v-if="scans.length > 0">
+        <thead>
+        <tr>
+            <th class='table-head-bg' style="width: 72px;">
+                <input id="js-all-checkbox" type="checkbox" @click="checkAll">
+            </th>
+            <th class='table-head-bg' style="width: 185px;">目标</th>
+            <th class='table-head-bg' style="width: 150px;">目标描述</th>
+            <th class='table-head-bg' style="width: 167px;">类型</th>
+            <th class='table-head-bg' style="width: 282px;">漏洞</th>
+            <th class='table-head-bg' style="width: 129px;">状态</th>
+            <th class='table-head-bg' style="width: 214px;">扫描时间</th>
+        </tr>
+        </thead>
+        <tbody id='tableBody'>
+        <tr align="center" style="height: 50px;" v-for="item in scans" @click="onShowDetail(1)">
+            <td>
+                <input type="checkbox" name="select" value=item.id @click="clickCheckbox">
+            </td>
+            <td>{{item.address}}</td>
+            <td>{{item.description}}</td>
+            <td>Web</td>
+            <td>
+                <div style="display: flex;justify-content: center;">
+                    <div class="vulnerable-num" style="background-color: #ec808d;">{{item.high}}</div>
+                    <div class="vulnerable-num" style="background-color: #fcc77d;">{{item.medium}}</div>
+                    <div class="vulnerable-num" style="background-color: #3abee8;">{{item.low}}</div>
+                    <div class="vulnerable-num" style="background-color: #00b144;">{{item.info}}</div>
+                </div>
+            </td>
+            <td>{{item.status}}</td>
+            <td>{{item.start_date}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div v-else-if="nShowState===2">
+    <div style="display: inline-flex;width: 100%;margin-top: 20px;">
+        <div class="card-box" style="flex: 1;margin-right: 15px;">
+            <div style="display: inline-flex;">
+                <h2>Acunetix 威胁等级</h2>
+                <div style="margin-left: 5px;">3</div>
+            </div>
+            <div>扫描程序发现了一个或多个高危类型漏洞。恶意用户可以利用这些漏洞并破坏后端数据库和/或损坏您的网站。</div>
+        </div>
+        <div class="card-box" style="flex: 1;">
+            <div style="display: inline-flex;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 5px;justify-content: space-between;">
+                <div style="font-size: 20px;">活动</div>
+                <div style="font-size: 16px;">扫描中</div>
+            </div>
+            <div style="display: inline-flex;width: 100%;padding: 10px 0;">
+                <div align="left" style="flex: 1;">总体进度</div>
+                <div align="right" style="flex: 1;">{{checkPer}}</div>
+            </div>
+            <div class="progressBar" id="progressBar">
+                <div class="barContent" id="barContent" style="width: 0%;"></div>
+            </div>
+            <dl v-for="item in activityData">
+                <dt>
+                    <div style="display: inline-flex;justify-items: center;width: 100%;">
+                        <div style="flex: 3;margin-right: 20px;">{{item.key}}</div>
+                        <div align="right" style="flex: 2;">{{onChangeTimeFormat(item.value)}}</div>
+                    </div>
+                </dt>
+            </dl>
+        </div>
+    </div>
+    
+
+    <div class="card-box ui four columns grid" style="height: 130px;width: 100%;">
+        <div class="ui column">
+            <h4>持续扫描时间</h4>
+            <div class="value"><span class="show-num">{{data.scanTime}}</span></div>
+        </div>
+        <div class="ui column">
+            <h4>请求</h4>
+            <div class="value"><span class="show-num">{{data.scanReq}}</span></div>
+        </div>
+        <div class="ui column">
+            <h4>平均响应事件</h4>
+            <div class="value"><span class="show-num">{{data.scansRet}}</span></div>
+        </div>
+        <div class="ui column">
+            <h4>路径已确认</h4>
+            <div class="value"><span class="show-num">{{data.define}}</span></div>
+        </div>
+    </div>
+    <div style="width:100%; display: inline-flex;margin-top: 30px;">
+        <table class="ui table selectable" style="flex: 1;margin-right: 15px;">
+            <thead>
+                <tr>
+                    <th><h5>目标信息</h5></th>
+                </tr>
+            </thead>
+            <tbody id='tableBody'>
+                <tr style="height: 50px;">
+                    <td>
+                        <dl v-for="item in data.attTag">
+                            <dt>
+                                <div style="display: inline-flex;">
+                                    <div>{{item.key}}</div>
+                                    <div>{{item.value}}</div>
+                                </div>
+                            </dt>
+                        </dl>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="ui table selectable" style="flex: 1">
+            <thead>
+                <tr>
+                    <th>
+                        <div style="display: inline-flex;">
+                            <h5>最新警报</h5>
+                            <div style="display: inline-flex;">
+                                <div class="vulnerable-num" style="background-color: #ec808d;">1</div>
+                                <div class="vulnerable-num" style="background-color: #fcc77d;">2</div>
+                                <div class="vulnerable-num" style="background-color: #3abee8;">3</div>
+                                <div class="vulnerable-num" style="background-color: #00b144;">4</div>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody id='tableBody'>
+                <tr>
+                    <td>
+                        <dl v-for="item in data.warring">
+                            <dt>
+                                <div style="display: inline-flex;">
+                                    <div>{{item.key}}</div>
+                                    <div>{{onChangeTimeFormat(item.value)}}</div>
+                                </div>
+                            </dt>
+                        </dl>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div v-else>
+    <form method="get" class="ui form" action="/scans">
+        <input type="hidden" name="auditingFlag" :value="auditingFlag"/>
+        <div class="ui margin"></div>
+        <div class="ui menu basic text">
+            <div class="item">
+                <div class="ui fields inline">
+                    <span>严重性：</span>
+                    <div class="ui field">
+                        <div class="ui field">
+                            <select class="ui dropdown auto-width" name="clusterId" v-model="clusterId">
+                                <option value="0">全部</option>
+                                <option v-for="cluster in clusters" :value="cluster.id">{{cluster.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="ui field">
+                        <button type="submit" class="ui button">查询</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <p class="comment" v-if="loopholeData.length == 0">暂时还没有数据。</p>
+    <table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;" v-if="loopholeData.length > 0">
+        <thead>
+        <tr>
+            <th class='table-head-bg' style="width: 185px;">严重性</th>
+            <th class='table-head-bg' style="width: 282px;">漏洞</th>
+            <th class='table-head-bg' style="width: 214px;">URL</th>
+        </tr>
+        </thead>
+        <tbody id='tableBody'>
+        <tr align="center" style="height: 50px;" v-for="item in loopholeData">
+            <td>{{item.status}}</td>
+            <td>{{item.desc}}</td>
+            <td>{{item.address}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
 <table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;" v-if="scans.length > 0">
     <thead>
     <tr>
