@@ -1,2 +1,59 @@
 {$layout}
-黑白名单
+<div style="display: flex;justify-content: space-between;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
+    <div style="cursor: pointer;margin-top: 10px;" @click="onAddNameList">[添加黑白名单]</div>
+    <div align="right" style="display: inline-flex;">
+        <div style="line-height: 40px;text-align: center;">DDoS防火墙节点：</div>
+        <div class="ui field">  
+            <div class="ui field">
+                <select class="ui dropdown auto-width" name="severity" v-model="severity">
+                    <option value="">成都-ddos-192.168.1.1</option>
+                    <option value="1">成都-ddos-192.168.1.1</option>
+                    <option value="2">成都-ddos-192.168.1.1</option>
+                    <option value="3">成都-ddos-192.168.1.1</option>
+                    <option value="4">成都-ddos-192.168.1.1</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form method="get" class="ui form" action="vulnerabilities">
+    <div class="ui margin"></div>
+    <div class="ui menu basic text">
+        <div class="item">
+            <div class="ui fields inline">
+                <div class="ui field">
+                    <input type="text" name="severity" placeholder="请输入主机IP" v-model="severity"/>
+                </div>
+
+                <div class="ui field">
+                    <button type="submit" class="ui button">搜索</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+    <thead>
+        <tr>
+            <th class='table-head-bg' style="width: 364px;" >地址</th>
+            <th class='table-head-bg' style="width: 223px;" >类型</th>
+            <th class='table-head-bg' style="width: 223px;" >匹配</th>
+            <th class='table-head-bg' style="width: 223px;" >备注</th>
+            <th class='table-head-bg' style="width: 82px;" >操作</th>
+        </tr>
+    </thead>
+    <tbody id='tableBody'>
+        <tr align="center" style="height: 40px;" v-for="item in tableData" >
+            <td>{{item.host}}</td>
+            <td>{{item.nameType}}</td>
+            <td>{{item.matchCount}}</td>
+            <td>{{item.remarks}}</td>
+            <td style="cursor: pointer;color: red;" @click="onDelete(item.id)">删除</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+

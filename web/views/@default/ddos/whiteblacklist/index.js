@@ -1,30 +1,23 @@
 Tea.context(function () {
-
-
-    this.createPolicy = function () {
-        teaweb.popup("/ddos/whiteblacklist/createPopup", {
+    this.severity=''
+    this.onAddNameList = function () { 
+        teaweb.popup(Tea.url(".createPopup"), {
             callback: function () {
-                teaweb.success("保存成功", function () {
-                    teaweb.reload()
-                })
-            }
-        })
+              teaweb.success("保存成功", function () {
+                teaweb.reload();
+              });
+            },
+          });
     }
 
+    this.onDelete = function (id) { 
 
-
-    this.deleteGroup = function (groupId) {
-        let that = this
-        teaweb.confirm("确定要删除这个分组吗？", function () {
-            that.$post("/servers/components/groups/delete")
-                .params({
-                    groupId: groupId
-                })
-                .success(function () {
-                    teaweb.success("删除成功", function () {
-                        teaweb.reload()
-                    })
-                })
-        })
     }
+
+    this.tableData = [
+        {id:1,host:"192.168.0.1",nameType:"黑名单",matchCount:303,remarks:"备注"},
+        {id:1,host:"192.168.0.1",nameType:"黑名单",matchCount:303,remarks:"备注"},
+        {id:1,host:"192.168.0.1",nameType:"黑名单",matchCount:303,remarks:"备注"},
+        {id:1,host:"192.168.0.1",nameType:"黑名单",matchCount:303,remarks:"备注"},
+    ]
 })

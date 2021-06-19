@@ -1,12 +1,23 @@
 {$layout "layout_popup"}
 
-<h3>添加黑白名单</h3>
-<form method="post" class="ui form" data-tea-action="$" data-tea-success="success">
+
+<form method="post" class="ui form" data-tea-action="$" data-tea-success="success" style="margin-top: 50px;">
     <table class="ui table definition selectable">
         <tr>
-            <td class="title">名单IP*</td>
+            <td class="title">当前节点</td>
+            <td>成都DDOS-181.22.122.76</td>
+        </tr>
+        <tr>
+            <td class="title">地址*</td>
             <td>
                 <input type="text" name="addr" maxlength="50" ref="focus"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="title">类型*</td>
+            <td>
+                <label><input type="radio" name="nametype" value="黑名单">黑名单</label>
+                <label><input type="radio" name="nametype" value="白名单">白名单</label>
             </td>
         </tr>
     </table>
