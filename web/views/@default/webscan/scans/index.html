@@ -52,6 +52,38 @@
     </table>
 </div>
 <div v-else-if="nShowState===2">
+    <div style="display: inline-flex;width: 100%;margin-top: 20px;">
+        <div class="card-box" style="flex: 1;margin-right: 15px;">
+            <div style="display: inline-flex;">
+                <h2>Acunetix 威胁等级</h2>
+                <div style="margin-left: 5px;">3</div>
+            </div>
+            <div>扫描程序发现了一个或多个高危类型漏洞。恶意用户可以利用这些漏洞并破坏后端数据库和/或损坏您的网站。</div>
+        </div>
+        <div class="card-box" style="flex: 1;">
+            <div style="display: inline-flex;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 5px;justify-content: space-between;">
+                <div style="font-size: 20px;">活动</div>
+                <div style="font-size: 16px;">扫描中</div>
+            </div>
+            <div style="display: inline-flex;width: 100%;padding: 10px 0;">
+                <div align="left" style="flex: 1;">总体进度</div>
+                <div align="right" style="flex: 1;">{{checkPer}}</div>
+            </div>
+            <div class="progressBar" id="progressBar">
+                <div class="barContent" id="barContent" style="width: 0%;"></div>
+            </div>
+            <dl v-for="item in activityData">
+                <dt>
+                    <div style="display: inline-flex;justify-items: center;width: 100%;">
+                        <div style="flex: 3;margin-right: 20px;">{{item.key}}</div>
+                        <div align="right" style="flex: 2;">{{onChangeTimeFormat(item.value)}}</div>
+                    </div>
+                </dt>
+            </dl>
+        </div>
+    </div>
+    
+
     <div class="card-box ui four columns grid" style="height: 130px;width: 100%;">
         <div class="ui column">
             <h4>持续扫描时间</h4>

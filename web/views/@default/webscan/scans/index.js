@@ -3,6 +3,8 @@ Tea.context(function () {
 
   this.nShowState = 1   //三个界面的状态控制 1 2 3
 
+  this.checkPer = "12%"
+
   this.bLoopholeDetail = false    //漏洞详情是否显示
   this.onStopScan = function () {
     if (this.checkValues.length > 0) {
@@ -125,13 +127,13 @@ Tea.context(function () {
     return resultTime;
   };
 
-    // this.onChangeState = function (state) { 
-    //     this.nShowState = state;
-    // }
+    this.onChangeState = function (state) { 
+        this.nShowState = state;
+    }
 
-    // this.onShowDetail = function (id) { 
-    //     this.onChangeState(2)
-    // }
+    this.onShowDetail = function (id) { 
+        this.onChangeState(2)
+    }
 
     // this.onOpenLoopholeDetail = function (id){
     //     if(id){
@@ -140,6 +142,14 @@ Tea.context(function () {
     //         bLoopholeDetail = false
     //     }
     // }
+
+    this.refreshProgress = function () { 
+        var maxCount = 100
+        var tempCount = 25
+        var curPer = Math.floor(maxCount/tempCount)
+        checkPer = curPer+"%"
+        document.getElementById("barContent").style.width = checkPer;
+     }
 
  
   this.onChangeStatusFormat = function (status) {
@@ -153,4 +163,12 @@ Tea.context(function () {
     }
     return resultStatus;
   };
+
+
+
+  this.activityData = [
+      {id:1,key:"Start URL changed (initial request to http://www.baidu.com/ was redirected to https://www.baidu.com/)",value:"2021-12-12T06:08:20.000"},
+      {id:1,key:"Start URL changed (initial request to http://www.baidu.com/ was redirected to https://www.baidu.com/)",value:"2021-12-12T06:08:20.000"},
+      {id:1,key:"Start URL changed (initial request to http://www.baidu.com/ was redirected to https://www.baidu.com/)",value:"2021-12-12T06:08:20.000"},
+  ]
 });

@@ -69,3 +69,17 @@
     padding: 16px;
     border-radius: 4px;
 }
+
+.progressBar {
+    margin-top: 30px;
+    width: 100%;
+    height:8px;
+    background:#72c5e4;
+    border-radius:5px;
+}
+
+.barContent {
+    height: 8px;
+    background: #0091cb;
+    border-radius: 5px;
+}
