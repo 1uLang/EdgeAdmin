@@ -1,71 +1,54 @@
 {$layout}
 
-<first-menu>
-    <menu-item href="/ddos/host" code="index">主机列表</menu-item>
-    <span class="item">|</span>
-    <a href="" class="item" @click.prevent="createPolicy()">[添加高仿IP]</a>
-    DDoS防护节点:
-    <select class="ui dropdown auto-width" name="userType" v-model="userType">
-        <option value="">[用户类型]</option>
-        <option value="admin">管理员</option>
-        <option value="user">用户</option>
-    </select>
-</first-menu>
+{$var "header"}
+<!-- echart -->
+<script type="text/javascript" src="/js/echarts/echarts.min.js"></script>
+{$end}
 
-<!-- 搜索 -->
-<div class="margin"></div>
-<form class="ui form" method="get" action="/ddos/host">
-    <div class="ui fields inline">
+<div style="display: flex;justify-content: flex-end;height: 40px;">
+    <div style="line-height: 40px;text-align: center;">DDoS防火墙节点：</div>
+    <div class="ui field">  
         <div class="ui field">
-            <input type="text" name="keyword" v-model="keyword" placeholder="ddos名称..."/>
-        </div>
-        <div class="ui field">
-            <button type="submit" class="ui button">搜索</button>
+            <select class="ui dropdown auto-width" name="severity" v-model="severity">
+                <option value="">成都-ddos-192.168.1.1</option>
+                <option value="1">成都-ddos-192.168.1.1</option>
+                <option value="2">成都-ddos-192.168.1.1</option>
+                <option value="3">成都-ddos-192.168.1.1</option>
+                <option value="4">成都-ddos-192.168.1.1</option>
+            </select>
         </div>
     </div>
-</form>
+</div>
 
-<!-- 列表 -->
-<p class="comment" v-if="list == null || list.length == 0">暂时还没有主机。</p>
-<table class="ui table selectable celled" v-if="list != null && list.length > 0">
+<div style="margin-top: 10px;border: 1px solid #000;margin-bottom: 50px;">
+    <div style="width: 100%;height: 30px; background-color: #00498c;color: #fff;line-height: 30px;text-align: center;">流量统计</div>
+    <div style="height:15em" id="hour-chart-box"></div>
+    <div style="width: 100%;display: inline-flex;margin: 20px 0;">
+        <div style="flex: 1;height:15em;" id="day-chart-box"></div>
+        <div style="flex: 1;height:15em;" id="month-chart-box"></div>
+    </div>
+</div>
+
+<div style="width: 100%;height: 30px; background-color: #00498c;color: #fff;line-height: 30px;text-align: center;">当前频率</div>
+<table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
     <thead>
-    <tr>
-        <th>主机</th>
-        <th>IN</th>
-        <th>OUT</th>
-        <th class="center">SYN</th>
-        <th class="center">ACK</th>
-        <th class="center">UDP</th>
-        <th class="center">ICMP</th>
-        <th class="center">FRAG</th>
-        <th class="center">NonIP</th>
-        <th class="center">NewTCP</th>
-        <th class="center">NewUDP</th>
-        <th class="center">IN</th>
-        <th class="center">OUT</th>
-        <th class="center">UDP</th>
-        <th class="two op">操作</th>
-    </tr>
+        <tr>
+            <th class='table-head-bg' style="width: 130px;" rowspan="2">方向</th>
+            <th class='table-head-bg' style="width: 725px;" colspan="2">输入</th>
+            <th class='table-head-bg' style="width: 270px;" rowspan="2">匿名</th>
+        </tr>
+        <tr>   
+            <th>流量</th> 
+            <th>报文</th>
+        </tr> 
     </thead>
-    <tr v-for="(policy, index) in list">
-        <td><keyword :v-word="keyword">{{policy.addr}}</keyword></td>
-        <td>{{policy.bandwidth_in}}</td>
-        <td>{{policy.bandwidth_out}}</td>
-        <td>{{policy.rate_syn}}</td>
-        <td>{{policy.rate_ack}}</td>
-        <td>{{policy.rate_udp}}</td>
-        <td>{{policy.rate_icmp}}</td>
-        <td>{{policy.rate_frag}}</td>
-        <td>{{policy.rate_nonip}}</td>
-        <td>{{policy.rate_new_tcp}}</td>
-        <td>{{policy.rate_new_udp}}</td>
-        <td>{{policy.tcp_conn_in}}</td>
-        <td class="center">{{policy.tcp_conn_out}}</td>
-        <td class="center">{{policy.udp_conn}}</td>
-        <td>
-            <a :href="'/ddos/host/shield_list?id=' + policy.host_id">详情</a> &nbsp; <a href="" @click.prevent="deletePolicy(policy.host_id)">删除</a>
-        </td>
-    </tr>
+    <tbody id='tableBody'>
+        <tr align="center" style="height: 40px;" v-for="item in tableData" >
+            <td>{{item.direction}}</td>
+            <td>{{item.flow}}</td>
+            <td>{{item.msg}}</td>
+            <td>{{item.anyKey}}</td>
+        </tr>
+    </tbody>
 </table>
 
-<div class="page" v-html="page"></div>
