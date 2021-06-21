@@ -150,4 +150,11 @@ import (
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/webscan/scans"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/webscan/targets"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/webscan/vulnerabilities"
+
+	//云防火墙
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/acl"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/ips"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/logs"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/nat"
 )
