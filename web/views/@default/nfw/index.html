@@ -6,11 +6,7 @@
         <div class="ui field">  
             <div class="ui field">
                 <select class="ui dropdown auto-width" name="severity" v-model="severity">
-                    <option value="">成都-ddos-192.168.1.1</option>
-                    <option value="1">成都-ddos-192.168.1.1</option>
-                    <option value="2">成都-ddos-192.168.1.1</option>
-                    <option value="3">成都-ddos-192.168.1.1</option>
-                    <option value="4">成都-ddos-192.168.1.1</option>
+                    <option v-for="item in hostData" :value="item.id">{{item.hostAddress}}</option>
                 </select>
             </div>
         </div>
