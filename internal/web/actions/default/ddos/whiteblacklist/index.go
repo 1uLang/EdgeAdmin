@@ -1,6 +1,8 @@
 package whiteblacklist
 
 import (
+	black_white_list_server "github.com/1uLang/zhiannet-api/ddos/server/black_white_list"
+	host_status_server "github.com/1uLang/zhiannet-api/ddos/server/host_status"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 )
 
@@ -13,29 +15,31 @@ func (this *IndexAction) Init() {
 }
 
 func (this *IndexAction) RunGet(params struct {
-	Keyword  string
+	Address  string
 	NodeId   uint64
 	PageNum  int
 	PageSize int
 }) {
-	//if params.NodeId == 0 {
-	//	params.NodeId = 1
-	//}
-	//list, total, err := host_status_server.GetHostList(&ddos_host_ip.HostReq{
-	//	NodeId:   params.NodeId,
-	//	Addr:     params.Keyword,
-	//	PageSize: params.PageSize,
-	//	PageNum:  params.PageNum,
-	//})
-	//if err != nil {
-	//	this.ErrorPage(err)
-	//	return
-	//}
-	////ddos节点
-	//ddos, _, err := host_status_server.GetDdosNodeList()
-	//this.Data["list"] = list
-	//this.Data["total"] = total
-	//this.Data["ddos"] = ddos
+
+	//ddos节点
+	ddos, _, err := host_status_server.GetDdosNodeList()
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	if len(ddos) > 0 && params.NodeId == 0 {
+		params.NodeId = ddos[0].Id
+	}
+	req := &black_white_list_server.BWReq{
+		NodeId: params.NodeId,
+		Addr:   params.Address,
+	}
+	list, err := black_white_list_server.GetBWList(req)
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	this.Data["list"] = list.Bwlist
+	this.Data["ddos"] = ddos
 	this.Show()
-	//this.Success()
 }

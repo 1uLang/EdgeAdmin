@@ -2,9 +2,10 @@ Tea.context(function () {
   this.checkValues = []; //选中的ID
 
   this.nShowState = 1   //三个界面的状态控制 1 2 3
-
+  this.vulnerabilities = []
+  this.statistics = {}
   this.checkPer = "12%"
-
+  this.Address = ""
   this.bLoopholeDetail = false    //漏洞详情是否显示
   this.onStopScan = function () {
     if (this.checkValues.length > 0) {
@@ -129,19 +130,42 @@ Tea.context(function () {
 
     this.onChangeState = function (state) { 
         this.nShowState = state;
+        if(state ===3){ //漏洞详情
+          this.vulnerabilities = []
+          this.$get("/webscan/vulnerabilities").params({Address:this.Address,List:true}).success(resp => {
+            if(resp.code===200){
+              this.vulnerabilities = resp.data.vulnerabilities
+            }
+          })
+        }
     }
 
-    this.onShowDetail = function (id) { 
-        this.onChangeState(2)
-    }
+    this.onShowDetail = function (item) {
 
-    // this.onOpenLoopholeDetail = function (id){
-    //     if(id){
-    //         bLoopholeDetail = true
-    //     }else{
-    //         bLoopholeDetail = false
-    //     }
-    // }
+      //获取漏洞详情报表
+      this.$get(".statistics").params({ScanId: item.scan_id,ScanSessionId:item.current_session.scan_session_id}).success(resp => {
+        if(resp.code===200){
+          console.log(item.target_id)
+          this.statistics.status = this.onChangeStatusFormat(resp.data.statistics.status)
+          this.statistics.severity_counts = item.current_session.severity_counts
+          this.statistics.event_level = resp.data.statistics.scanning_app.wvs.event_level
+          this.statistics.host = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].host
+          this.statistics.os = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].target_info.os
+          this.statistics.responsive = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].target_info.responsive ? '是':'否'
+          this.statistics.server = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].target_info.server
+          this.statistics.technologies = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].target_info.technologies
+          this.statistics.request_count = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].web_scan_status.request_count
+          this.statistics.avg_response_time = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].web_scan_status.avg_response_time
+          this.statistics.locations = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].web_scan_status.locations
+          this.statistics.vulns = resp.data.statistics.scanning_app.wvs.main.vulns
+          this.statistics.duration = resp.data.statistics.scanning_app.wvs.main.duration
+          this.statistics.progress = resp.data.statistics.scanning_app.wvs.main.progress
+          this.statistics.messages = resp.data.statistics.scanning_app.wvs.main.messages
+          console.log(this.statistics)
+          this.onChangeState(2)
+        }
+      })
+    }
 
     this.refreshProgress = function () { 
         var maxCount = 100
@@ -163,12 +187,15 @@ Tea.context(function () {
     }
     return resultStatus;
   };
+  this.onChangeTimeFormat2 = function (time){
+    let m = parseInt(time / 60)
+    let s = time % 60
+    return m +'m' +s +'s'
+  };
+  this.onChangeCountFormat = function (count){
+    let q = parseInt(count / 1000);
+    let s = count % 1000;
 
-
-
-  this.activityData = [
-      {id:1,key:"Start URL changed (initial request to http://www.baidu.com/ was redirected to https://www.baidu.com/)",value:"2021-12-12T06:08:20.000"},
-      {id:1,key:"Start URL changed (initial request to http://www.baidu.com/ was redirected to https://www.baidu.com/)",value:"2021-12-12T06:08:20.000"},
-      {id:1,key:"Start URL changed (initial request to http://www.baidu.com/ was redirected to https://www.baidu.com/)",value:"2021-12-12T06:08:20.000"},
-  ]
+    return q +','+s
+  };
 });

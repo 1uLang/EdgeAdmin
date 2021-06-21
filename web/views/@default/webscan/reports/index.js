@@ -94,6 +94,12 @@ Tea.context(function () {
   };
 
   this.downloadFile = function(path){
-    console.log("download file : ",path)
+    this.$get(".download").params({
+      path: path
+    }).success(resp => {
+      if (resp.code === 200){
+        window.open(resp.data.url)
+      }
+    })
   }
 });

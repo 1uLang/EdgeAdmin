@@ -5,14 +5,17 @@
     <table class="ui table definition selectable">
         <tr>
             <td class="title">当前节点</td>
-            <td>成都DDOS-181.22.122.76</td>
-        </tr>
-        <tr>
-            <td class="title">所属用户*</td>
             <td>
-                <user-selector></user-selector>
+                {{ddos}}
+                <input type="text" name="nodeId" maxlength="50" ref="focus" :value="node"  style="display: none"  />
             </td>
         </tr>
+<!--        <tr>-->
+<!--            <td class="title">所属用户*</td>-->
+<!--            <td>-->
+<!--                <user-selector></user-selector>-->
+<!--            </td>-->
+<!--        </tr>-->
         <tr>
             <td class="title">高防IP*</td>
             <td>

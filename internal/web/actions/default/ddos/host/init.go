@@ -14,8 +14,9 @@ func init() {
 			Prefix("/ddos/host").
 			Get("", new(IndexAction)).
 			GetPost("/createPopup", new(CreatePopupAction)). //添加高防ip
-			GetPost("/shieldList", new(ShieldListAction)).   //IP策略配置
-			Post("/set", new(ShieldListAction)).             //IP策略配置
+			GetPost("/shield", new(ShieldAction)).           //IP策略配置
+			GetPost("/set", new(SetAction)).                 //IP策略配置
+			Get("/link", new(LinkAction)).                   //IP策略配置
 			EndAll()
 	})
 }

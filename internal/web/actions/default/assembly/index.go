@@ -16,7 +16,6 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	Keyword string
 }) {
-	list, _, err := subassemblynode.GetNodeList()
 	list, count, err := subassemblynode.GetNodeList()
 	if err != nil {
 		this.ErrorPage(err)
