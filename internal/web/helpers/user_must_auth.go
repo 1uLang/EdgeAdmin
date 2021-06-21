@@ -360,6 +360,40 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 				},
 			},
 		},
+		{
+			"code":     "ddos",
+			"module":   configloaders.AdminModuleCodeNfw,
+			"name":     "nfw",
+			"subtitle": "云防火墙",
+			"icon":     "history",
+			"subItems": []maps.Map{
+				{
+					"name": "全局状态",
+					"url":  "/nfw",
+					"code": "global",
+				},
+				{
+					"name": "NAT规则",
+					"url":  "/nfw/nat",
+					"code": "global",
+				},
+				{
+					"name": "ACL规则",
+					"url":  "/nfw/acl",
+					"code": "global",
+				},
+				{
+					"name": "IPS规则",
+					"url":  "/nfw/ips",
+					"code": "global",
+				},
+				{
+					"name": "统计日志",
+					"url":  "/nfw/logs",
+					"code": "global",
+				},
+			},
+		},
 	}
 
 	result := []maps.Map{}
