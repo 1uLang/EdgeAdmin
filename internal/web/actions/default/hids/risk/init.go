@@ -26,7 +26,7 @@ func init() {
 			Get("/dangerAccountList", new(DangerAccountListAction)).
 			//配置缺陷
 			GetPost("/configDefect", new(ConfigDefectAction)).
-			Get("/configDefectList", new(ConfigDefectAction)).
+			Get("/configDefectList", new(ConfigDefectListAction)).
 			EndAll()
 	})
 }

@@ -359,6 +359,44 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"code": "global",
 				},
 			},
+		}, {
+			"code":     "hids",
+			"module":   configloaders.AdminModuleCodeHids,
+			"name":     "主机安全防护",
+			"subtitle": "全局状态",
+			"icon":     "history",
+			"subItems": []maps.Map{
+				{
+					"name": "全局状态",
+					"url":  "/hids",
+					"code": "global",
+				},
+				{
+					"name": "主机体检",
+					"url":  "/hids/examine",
+					"code": "global",
+				},
+				{
+					"name": "漏洞风险",
+					"url":  "/hids/risk",
+					"code": "global",
+				},
+				{
+					"name": "入侵威胁",
+					"url":  "/hids/invade",
+					"code": "global",
+				},
+				{
+					"name": "合规基线",
+					"url":  "/hids/baseline",
+					"code": "global",
+				},
+				{
+					"name": "Agent管理",
+					"url":  "/hids/agent",
+					"code": "global",
+				},
+			},
 		},
 		{
 			"code":     "nfw",

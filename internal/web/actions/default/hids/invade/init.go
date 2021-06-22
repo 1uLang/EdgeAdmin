@@ -13,12 +13,12 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeHids)).
 			Data("teaMenu", "hids").
-			Prefix("/hids/risk").
+			Prefix("/hids/invade").
 			Get("", new(IndexAction)).
 			//病毒木马
-			GetPost("/virus", new(VirusAction)).                  //相关主机 - 操作[信任-隔离]
-			Get("/virus/detailList", new(VirusDetailListAction)). //病毒木马详情列表
-			Get("/virus/detail", new(VirusDetailAction)).         //病毒木马详情
+			GetPost("/virus", new(VirusAction)).                 //相关主机 - 操作[信任-隔离]
+			Get("/virusDetailList", new(VirusDetailListAction)). //病毒木马详情列表
+			Get("/virusDetail", new(VirusDetailAction)).         //病毒木马详情
 			//弱口令
 			//GetPost("/weak", new(WeakAction)).
 			//Get("/weakList", new(WeakListAction)).
