@@ -27,6 +27,7 @@ const (
 	AdminModuleCodeWebScan   AdminModuleCode = "webscan"   // webscan
 	AdminModuleCodeHids      AdminModuleCode = "hids"      // hids 主机防护
 	AdminModuleCodeNfw       AdminModuleCode = "nfw"       // 下一代防火墙
+	AdminModuleCodeMonitor   AdminModuleCode = "monitor"   //监控告警
 )
 
 var sharedAdminModuleMapping = map[int64]*AdminModuleList{} // adminId => AdminModuleList

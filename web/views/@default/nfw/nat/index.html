@@ -1,5 +1,6 @@
 {$layout}
-
+{{tableDataList}}
+{{nodes}}
 <div style="height: 90vh;">
 
     <div style="display: flex;justify-content: space-between;height: 45px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;margin-bottom: 30px;">
@@ -12,8 +13,11 @@
             <div style="line-height: 40px;text-align: center;">DDoS防火墙节点：</div>
             <div class="ui field">  
                 <div class="ui field">
-                    <select class="ui dropdown auto-width" name="severity" v-model="severity">
-                        <option v-for="item in hostData" :value="item.id">{{item.hostAddress}}</option>
+                    <select class="ui dropdown auto-width" name="nodeId" v-model="selectNode">
+                        <option v-for="item in nodes" :value="item.id" v-if="item.id == selectNode" selected>{{item.addr}}</option>
+                        <option :value="item.id" v-else>
+                            {{item.addr}}
+                        </option>
                     </select>
                 </div>
             </div>
@@ -34,21 +38,24 @@
                 </tr>
             </thead>
             <tbody id='tableBody'>
-                <tr align="center" style="height: 40px;" v-for="item in tableData" >
-                    <td>{{item.postId}}</td>
-                    <td>{{item.intIP}}</td>
-                    <td>{{item.outIP}}</td>
-                    <td>{{item.targetIP}}</td>
-                    <td>{{item.desc}}</td>
+                <tr align="center" style="height: 40px;" v-for="item in tableDataList" >
+                    <td>{{item.interface}}</td>
+                    <td>{{item.external}}</td>
+                    <td>{{item.src}}</td>
+                    <td>{{item.dst}}</td>
+                    <td>{{item.descr}}</td>
                     <td>
-                        <div :class="{'status-open':item.status===1,'status-close':item.status===2}">
+                        <div :class="{'status-open':item.status=='1','status-close':item.status=='0'}">
                             {{getStatus(item.status)}}
                         </div>
                     </td>
                     <td>
                         <div style="display: flex;justify-content: space-around;">
                             <div class="edit_btn" @click="onOpenChangeView(item.id)">修改</div>
-                            <div class="edit_btn" @click="onOpenConfig(item.id)">启用</div>
+
+                            <div class="edit_btn" @click="onOpenConfig(item.id,item.status)" v-if="item.status=='0'">启用</div>
+                            <div class="edit_btn" @click="onOpenConfig(item.id,item.status)" v-else>禁用</div>
+
                             <div class="edit_btn" @click="onDelConfig(item.id)">删除</div>
                         </div>
                     </td>

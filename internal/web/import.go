@@ -157,4 +157,8 @@ import (
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/ips"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/logs"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/nat"
+
+	//监控告警
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/monitor"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/monitor/notice"
 )
