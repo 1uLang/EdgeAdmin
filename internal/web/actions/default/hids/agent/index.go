@@ -5,7 +5,6 @@ import (
 	agent_server "github.com/1uLang/zhiannet-api/hids/server/agent"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
-	"github.com/iwind/TeaGo/actions"
 )
 
 type IndexAction struct {
@@ -23,9 +22,11 @@ func (this *IndexAction) RunGet(params struct {
 	ServerIp      string
 	ServerLocalIp string
 
-	Must *actions.Must
-	CSRF *actionutils.CSRF
+	//Must *actions.Must
+	//CSRF *actionutils.CSRF
 }) {
+	this.Show()
+	return
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)

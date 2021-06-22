@@ -1,6 +1,9 @@
 package nat
 
 import (
+	"fmt"
+	opnsense_server "github.com/1uLang/zhiannet-api/opnsense/server/nat"
+	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/actions"
 )
@@ -18,31 +21,27 @@ func (this *SetAction) RunGet(params struct{}) {
 }
 
 func (this *SetAction) RunPost(params struct {
-	Addr   string
-	Ignore bool //IP直通
-	Set    int  //防护等级
+	Id     string
+	NodeId uint64
+	Status string //状态 0禁用 1启用
 
 	Must *actions.Must
 }) {
-	//params.Must.
-	//	Field("name", params.Addr).
-	//	Require("请输入ip地址")
-	//id, err := host_status_server.AddAddr(&ddos_host_ip.AddHost{
-	//	Addr:   params.Addr,
-	//	//NodeId: params.Set,
-	//})
-	//if err != nil {
-	//	this.ErrorPage(err)
-	//	return
-	//}
-	//
-	//this.Data["ddos"] = maps.Map{
-	//	"id":   id,
-	//	"addr": params.Addr,
-	//}
+	params.Must.
+		Field("id", params.Id).
+		Require("ID不能为空")
+	res, err := opnsense_server.StartUpNat1To1(&opnsense_server.StartNat1To1Req{
+		Id:     params.Id,
+		NodeId: params.NodeId,
+	})
+	if err != nil || !res {
+		this.ErrorPage(fmt.Errorf("操作失败"))
+		return
+	}
+
 	//
 	//// 创建日志
-	//defer this.CreateLog(oplogs.LevelInfo, "创建高防IP %d", params.Addr)
+	defer this.CreateLog(oplogs.LevelInfo, "修改云防火墙状态 节点=%d id=%d", params.NodeId, params.Id)
 
 	this.Success()
 }

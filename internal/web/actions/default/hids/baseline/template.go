@@ -5,7 +5,6 @@ import (
 	baseline_server "github.com/1uLang/zhiannet-api/hids/server/baseline"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
-	"github.com/iwind/TeaGo/actions"
 )
 
 type TemplateAction struct {
@@ -21,9 +20,11 @@ func (this *TemplateAction) RunGet(params struct {
 	PageSize int
 	UserName string
 
-	Must *actions.Must
-	CSRF *actionutils.CSRF
+	//Must *actions.Must
+	//CSRF *actionutils.CSRF
 }) {
+	this.Show()
+	return
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
@@ -57,12 +58,14 @@ func (this *TemplateDetailAction) RunGet(params struct {
 	UserName   string
 	TemplateId string
 
-	Must *actions.Must
-	CSRF *actionutils.CSRF
+	//Must *actions.Must
+	//CSRF *actionutils.CSRF
 }) {
-	params.Must.
-		Field("templateId", params.TemplateId).
-		Require("请输入合规基线模板")
+	this.Show()
+	return
+	//params.Must.
+	//	Field("templateId", params.TemplateId).
+	//	Require("请输入合规基线模板")
 
 	err := hids.InitAPIServer()
 	if err != nil {

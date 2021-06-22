@@ -359,9 +359,47 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"code": "global",
 				},
 			},
+		}, {
+			"code":     "hids",
+			"module":   configloaders.AdminModuleCodeHids,
+			"name":     "主机安全防护",
+			"subtitle": "全局状态",
+			"icon":     "history",
+			"subItems": []maps.Map{
+				{
+					"name": "全局状态",
+					"url":  "/hids",
+					"code": "global",
+				},
+				{
+					"name": "主机体检",
+					"url":  "/hids/examine",
+					"code": "global",
+				},
+				{
+					"name": "漏洞风险",
+					"url":  "/hids/risk",
+					"code": "global",
+				},
+				{
+					"name": "入侵威胁",
+					"url":  "/hids/invade",
+					"code": "global",
+				},
+				{
+					"name": "合规基线",
+					"url":  "/hids/baseline",
+					"code": "global",
+				},
+				{
+					"name": "Agent管理",
+					"url":  "/hids/agent",
+					"code": "global",
+				},
+			},
 		},
 		{
-			"code":     "ddos",
+			"code":     "nfw",
 			"module":   configloaders.AdminModuleCodeNfw,
 			"name":     "nfw",
 			"subtitle": "云防火墙",
@@ -390,6 +428,25 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 				{
 					"name": "统计日志",
 					"url":  "/nfw/logs",
+					"code": "global",
+				},
+			},
+		},
+		{
+			"code":     "monitor",
+			"module":   configloaders.AdminModuleCodeMonitor,
+			"name":     "监控告警",
+			"subtitle": "监控任务",
+			"icon":     "history",
+			"subItems": []maps.Map{
+				{
+					"name": "监控任务",
+					"url":  "/monitor",
+					"code": "global",
+				},
+				{
+					"name": "告警通知",
+					"url":  "/monitor/notice",
 					"code": "global",
 				},
 			},

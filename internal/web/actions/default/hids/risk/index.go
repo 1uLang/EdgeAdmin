@@ -15,5 +15,5 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 }) {
 
-	this.Success()
+	this.Show()
 }
