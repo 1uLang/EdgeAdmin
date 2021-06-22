@@ -1,14 +1,14 @@
 {$layout "layout_popup"}
 
-<h3>添加URL监控</h3>
+<h3>添加web监控</h3>
 <form method="post" class="ui form" data-tea-action="$" data-tea-success="success" style="margin-top: 50px;">
     <table class="ui table definition selectable">
-        <tr>
-            <td class="title">所属用户*</td>
-            <td>
-                <nfw-user-selector></nfw-user-selector>
-            </td>
-        </tr>
+<!--        <tr>-->
+<!--            <td class="title">所属用户*</td>-->
+<!--            <td>-->
+<!--                <nfw-user-selector></nfw-user-selector>-->
+<!--            </td>-->
+<!--        </tr>-->
         <tr>
             <td class="title">URL*</td>
             <td>
@@ -18,7 +18,7 @@
         <tr>
             <td class="title">HTTP状态码*</td>
             <td>
-                <input type="text" name="post" maxlength="50" placeholder="状态码默认为200"/>
+                <input type="text" name="code" maxlength="50" placeholder="状态码默认为200"/>
             </td>
         </tr>
     </table>

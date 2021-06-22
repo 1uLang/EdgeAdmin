@@ -6,21 +6,21 @@ import (
 	"github.com/iwind/TeaGo/actions"
 )
 
-type CreatePopupAction struct {
+type CreateAction struct {
 	actionutils.ParentAction
 }
 
-func (this *CreatePopupAction) Init() {
+func (this *CreateAction) Init() {
 	this.Nav("", "", "")
 }
 
-func (this *CreatePopupAction) RunGet(params struct{}) {
+func (this *CreateAction) RunGet(params struct{}) {
 	this.Show()
 }
 
-func (this *CreatePopupAction) RunPost(params struct {
+func (this *CreateAction) RunPost(params struct {
 	Addr string
-	Port int
+	Code int
 
 	Must *actions.Must
 }) {
@@ -29,11 +29,10 @@ func (this *CreatePopupAction) RunPost(params struct {
 		Require("请输入IP地址")
 
 	params.Must.
-		Field("port", params.Port).
-		Require("请输入监控端口")
+		Field("code", params.Code).
+		Require("请输入HTTP状态码")
 
-	_, err := monitor_list_server.Add(&monitor_list_server.AddReq{Addr: params.Addr, MonitorType: 1,
-		Port: params.Port})
+	_, err := monitor_list_server.Add(&monitor_list_server.AddReq{Addr: params.Addr, MonitorType: 2, Code: params.Code})
 	if err != nil {
 		this.ErrorPage(err)
 	}

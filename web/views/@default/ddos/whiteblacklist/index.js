@@ -28,13 +28,7 @@ Tea.context(function () {
     }
 
     this.showHost = function () { //重新加载该页面
-        let node = ''
-        if (this.nodeId === '') {    //重新加载该页面
-            node = document.getElementById('selectBox').value
-            this.nodeId = node
-        } else {
-            node = this.nodeId
-        }
+        let node = this.getNodeId()
         window.location.href = '/ddos/whiteblacklist?nodeId=' + node
     }
     this.toShowFlags = function (flags) {

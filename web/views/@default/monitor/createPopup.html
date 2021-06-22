@@ -1,24 +1,24 @@
 {$layout "layout_popup"}
 
-<h3>添加端口</h3>
+<h3>添加端口监控</h3>
 <form method="post" class="ui form" data-tea-action="$" data-tea-success="success" style="margin-top: 50px;">
     <table class="ui table definition selectable">
-        <tr>
-            <td class="title">所属用户</td>
-            <td>
-                <nfw-user-selector></nfw-user-selector>
-            </td>
-        </tr>
+<!--        <tr>-->
+<!--            <td class="title">所属用户</td>-->
+<!--            <td>-->
+<!--                <nfw-user-selector></nfw-user-selector>-->
+<!--            </td>-->
+<!--        </tr>-->
         <tr>
             <td class="title">IP地址</td>
             <td>
-                <input type="text" name="addr" maxlength="50" ref="focus"/>
+                <input type="text" name="addr"  placeholder="请输入IP地址" maxlength="50" ref="focus"/>
             </td>
         </tr>
         <tr>
             <td class="title">端口</td>
             <td>
-                <input type="text" name="post" maxlength="50"/>
+                <input type="text" name="port" maxlength="50"  placeholder="请输入监控端口"/>
             </td>
         </tr>
     </table>
