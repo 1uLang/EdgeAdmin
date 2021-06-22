@@ -1,1 +1,37 @@
 {$layout}
+<div style="margin-top: 20px;width: 100%;height: 80vh;border: 1px #000 solid;box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);">
+    <div style="display: flex;margin: 10px 10px;">
+        <form method="get" action="/ddos/logs" class="ui form" autocomplete="off">
+            <div class="ui fields inline">
+                <div class="ui field">
+                    <input type="text" name="keyword" style="width:10em" v-model="keyword" placeholder=""/>
+                </div>
+                <div class="ui field">
+                    <button type="submit" class="ui button">查询</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div>
+        <table id = "tab" class="ui table selectable celled" border="0" style="border-collapse: collapse;">
+            <thead>
+                <tr align="center">
+                    <th class='table-head-bg' style="width: 578px;" >告警内容</th>
+                    <th class='table-head-bg' style="width: 147px;" >归属用户</th>
+                    <th class='table-head-bg' style="width: 293px;" >告警时间</th>
+                    <th class='table-head-bg' style="width: 117px;" >操作</th>
+                </tr>
+            </thead>
+            <tbody id='tableBody'>
+                <tr align="center" style="height: 40px;" v-for="item in tableData" >
+                    <td>{{item.warringDesc}}</td>
+                    <td>{{item.user}}</td>
+                    <td>{{onChangeTimeFormat(item.warringTime)}}</td>
+                    <td>
+                        <div class="edit_btn" @click="onDelete(item.id)">删除</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
