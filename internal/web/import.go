@@ -161,4 +161,12 @@ import (
 	//监控告警
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/monitor"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/monitor/notice"
+
+	//主机安全防护
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/agent"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/baseline"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/examine"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/invade"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/risk"
 )

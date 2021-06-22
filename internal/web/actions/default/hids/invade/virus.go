@@ -5,7 +5,6 @@ import (
 	risk_server "github.com/1uLang/zhiannet-api/hids/server/risk"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
-	"github.com/iwind/TeaGo/actions"
 )
 
 type VirusAction struct {
@@ -23,7 +22,8 @@ func (this *VirusAction) RunGet(params struct {
 	PageNo   int
 	pageSize int
 }) {
-
+	this.Show()
+	return
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
@@ -83,12 +83,14 @@ func (this *VirusDetailAction) RunGet(params struct {
 	PageSize     int
 	ProcessState int
 
-	Must *actions.Must
-	CSRF *actionutils.CSRF
+	//Must *actions.Must
+	//CSRF *actionutils.CSRF
 }) {
-	params.Must.
-		Field("macCode", params.MacCode).
-		Require("请输入机器码")
+	this.Show()
+	return
+	//params.Must.
+	//	Field("macCode", params.MacCode).
+	//	Require("请输入机器码")
 
 	err := hids.InitAPIServer()
 	if err != nil {
@@ -125,12 +127,14 @@ func (this *VirusDetailListAction) RunGet(params struct {
 	PageSize     int
 	ProcessState int
 
-	Must *actions.Must
-	CSRF *actionutils.CSRF
+	//Must *actions.Must
+	//CSRF *actionutils.CSRF
 }) {
-	params.Must.
-		Field("macCode", params.MacCode).
-		Require("请输入机器码")
+	this.Show()
+	return
+	//params.Must.
+	//	Field("macCode", params.MacCode).
+	//	Require("请输入机器码")
 
 	err := hids.InitAPIServer()
 	if err != nil {
