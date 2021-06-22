@@ -1,2 +1,40 @@
 {$layout}
-agent 管理
+
+<div style="width: 100%;height: 40px;display: flex;justify-content: flex-end;margin: 10px 0;">
+    <div style="display: inline-flex;align-items: center;">
+        <button class="ui button" style="background-color:#0091cc;color: #fff;" @click="onOpenCommand">获取安装命令</button>
+    </div>
+</div>
+
+<div>
+    <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+        <thead>
+            <tr align="center">
+                <th class='table-head-bg' style="width: 259px;" >主机IP</th>
+                <th class='table-head-bg' style="width: 129px;" >Agent状态</th>
+                <th class='table-head-bg' style="width: 100px;" >版本</th>
+                <th class='table-head-bg' style="width: 167px;" >安装时间</th>
+                <th class='table-head-bg' style="width: 167px;" >最近上线时间</th>
+                <th class='table-head-bg' style="width: 167px;" >最后在线时间</th>
+                <th class='table-head-bg' style="width: 148px;" >操作</th>
+            </tr>
+        </thead>
+        <tbody id='tableBody'>
+            <tr align="center" style="height: 40px;" v-for="item in tableData" >
+                <td>{{item.ip}}</td>
+                <td>{{getStatusImgName(item.status)}}</td>
+                <td>{{item.edition}}</td>
+                <td>{{onChangeTimeFormat(item.installTime)}}</td>
+                <td>{{onChangeTimeFormat(item.latelyOnlineTime)}}</td>
+                <td>{{onChangeTimeFormat(item.lastOnlineTime)}}</td>
+                <td>
+                    <div style="display: inline-flex;justify-content: center;">
+                        <div v-if="item.status===1" class="edit_btn_blue" @click="onStopConfig(item.id)">停用</div>
+                        <div v-else class="edit_btn_blue" @click="onStartConfig(item.id)">启用</div>
+                        <div class="edit_btn_red" @click="onDelete(item.id)">卸载</div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

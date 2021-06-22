@@ -1,6 +1,94 @@
 {$layout}
-漏洞风险<br>
-<a href="/hids/risk/systemRisk" class="item">系统漏洞</a><br>
+<!-- 漏洞风险 -->
+<!-- <a href="/hids/risk/systemRisk" class="item">系统漏洞</a><br>
  <a href="/hids/risk/weak" class="item">弱口令</a><br>
  <a href="/hids/risk/dangerAccount" class="item">风险账号</a><br>
- <a href="/hids/risk/configDefect" class="item">缺陷配置</a><br>
+ <a href="/hids/risk/configDefect" class="item">缺陷配置</a><br> -->
+ <div class="card-div" style="width: 100%;margin-top: 50px;" @click="onOpenDetail(1)">
+    <div style="height: 60%;display: flex;justify-content: space-between;margin-bottom: 10px;">
+        <div style="width: 30%;margin-right: 5%;display: flex;flex-direction: row;">
+            <img src="/images/icon_success.png" width="40px" height="40px">
+            <div style="margin-left: 15px;">
+                <div style="margin-bottom: 10px;">系统漏洞总数</div>
+                <div style="font-size: 30px;">306</div>
+            </div>
+        </div>
+        <div style="width: 60%;margin-top: 10px;">
+            <div class="model-stype" style="margin-bottom: 10px;">
+                <span class="serious-color">·危急</span>
+                <span class="height-color">·高危</span>
+                <span class="middle-color">·中危</span>
+                <span class="low-color">·低危</span>
+            </div>
+            <div class="model-stype">
+                <div class="model-background" style="display: flex;flex-direction: row;">
+                    <div class="model-child-background serious-bg-color" :style="{flex:data.seriousCount}">10</div>
+                    <div class="model-child-background height-bg-color" :style="{flex:data.heightCount}">30</div>
+                    <div class="model-child-background middle-bg-color" :style="{flex:data.middleCount}">60</div>
+                    <div class="model-child-background low-bg-color" :style="{flex:data.lowCount}">120</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div style="border-bottom:1px solid #f0f0f0;"></div>  
+    <div style="margin-top: 10px;display: flex;flex-direction: row;">
+        <div style="width: 30%;margin-right: 5%;">
+            <span>影响主机数：</span>
+            <span style="color: #0090cb;">10</span>
+        </div>
+        <div style="width: 30%;margin-right: 5%;">
+            <span>影响windows主机数：</span>
+            <span style="color: #0090cb;">20</span>
+        </div>
+        <div style="width: 30%;">
+            <span>影响linux主机数：</span>
+            <span style="color: #0090cb;">30</span>
+        </div>
+    </div>
+ </div>
+
+ <div style="width: 100%;margin-top: 50px;display: flex;flex-direction: row;">
+    <div class="card-div" style="margin-right: 5%;">
+        <div style="height: 60%;display: flex;justify-content: center;margin-bottom: 10px;">
+            <img src="/images/icon_success.png" width="50px" height="50px">
+            <div style="margin-left: 10px;">
+                <div style="margin-bottom: 10px;">弱口令</div>
+                <div style="font-size: 30px;">{{data.value1.allCount}}</div>
+            </div>
+        </div>
+        <div style="border-bottom:1px solid #000;"></div>  
+        <div style="margin-top: 10px;display: flex;justify-content: center;">
+            <span>影响主机数：</span>
+            <span style="color: #0090cb;">{{data.value1.errCount}}</span>
+        </div>
+    </div>
+    <div class="card-div" style="margin-right: 5%;">
+        <div style="height: 60%;display: flex;justify-content: center;margin-bottom: 10px;">
+            <img src="/images/icon_success.png" width="50px" height="50px">
+            <div style="margin-left: 10px;">
+                <div style="margin-bottom: 10px;">风险账号</div>
+                <div style="font-size: 30px;">{{data.value2.allCount}}</div>
+            </div>
+        </div>
+        <div style="border-bottom:1px solid #000;"></div>  
+        <div style="margin-top: 10px;display: flex;justify-content: center;">
+            <span>影响主机数：</span>
+            <span style="color: #0090cb;">{{data.value2.errCount}}</span>
+        </div>
+    </div>
+    <div class="card-div">
+        <div style="height: 60%;display: flex;justify-content: center;margin-bottom: 10px;">
+            <img src="/images/icon_success.png" width="50px" height="50px">
+            <div style="margin-left: 10px;">
+                <div style="margin-bottom: 10px;">缺陷配置</div>
+                <div style="font-size: 30px;">{{data.value3.allCount}}</div>
+            </div>
+        </div>
+        <div style="border-bottom:1px solid #000;"></div>  
+        <div style="margin-top: 10px;display: flex;justify-content: center;">
+            <span>影响主机数：</span>
+            <span style="color: #0090cb;">{{data.value3.errCount}}</span>
+        </div>
+    </div>
+</div>
