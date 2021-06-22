@@ -2,54 +2,61 @@
 {$template "/datepicker"}
 <div style="display: flex;justify-content: space-between;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;margin-bottom: 30px;">
     <div style="display: inline-flex;margin-top: 10px;">
-        <div :class="{'menu-select-color':nShowState===1,'menu-define-color':nShowState!=1}" @click="onChangeShowState(1)">攻击分析</div>
-        <div :class="{'menu-select-color':nShowState===2,'menu-define-color':nShowState!=2}" @click="onChangeShowState(2)">流量分析</div>
-        <div :class="{'menu-select-color':nShowState===3,'menu-define-color':nShowState!=3}" @click="onChangeShowState(3)">连接分析</div>
+        <div :class="{'menu-select-color':nShowState===1,'menu-define-color':nShowState!=1}"
+             @click="onChangeShowState(1)">攻击分析
+        </div>
+        <div :class="{'menu-select-color':nShowState===2,'menu-define-color':nShowState!=2}"
+             @click="onChangeShowState(2)">流量分析
+        </div>
+        <div :class="{'menu-select-color':nShowState===3,'menu-define-color':nShowState!=3}"
+             @click="onChangeShowState(3)">连接分析
+        </div>
     </div>
     <div align="right" style="display: inline-flex;">
         <div style="line-height: 40px;text-align: center;">DDoS防火墙节点：</div>
-        <div class="ui field">  
+        <div class="ui field">
             <div class="ui field">
-                <select class="ui dropdown auto-width" name="severity" v-model="severity">
-                    <option value="">成都-ddos-192.168.1.1</option>
-                    <option value="1">成都-ddos-192.168.1.1</option>
-                    <option value="2">成都-ddos-192.168.1.1</option>
-                    <option value="3">成都-ddos-192.168.1.1</option>
-                    <option value="4">成都-ddos-192.168.1.1</option>
+                <select class="ui dropdown auto-width" @change="showHost" v-model="nodeId" name="nodeId">
+                    <option :value="item.id" v-for="item in ddos">{{item.name}}-ddos-{{item.addr}}</option>
                 </select>
             </div>
         </div>
     </div>
 </div>
 <div v-if="nShowState===1">
-    <form method="get" action="/ddos/logs" class="ui form" autocomplete="off">
+    <form method="get" action="logs" class="ui form" autocomplete="off">
         <div class="ui fields inline">
             <div class="ui field">
-                <input type="text" name="dayFrom" placeholder="开始日期" v-model="dayFrom" value="" style="width:8em" id="day-from-picker"/>
+                <input type="text" name="startTime" placeholder="开始日期" v-model="startTime" value="" style="width:8em"
+                       id="day-from-picker"/>
             </div>
             <div class="ui field">
-                <input type="text" name="dayTo" placeholder="结束日期" v-model="dayTo" value="" style="width:8em" id="day-to-picker"/>
+                <input type="text" name="endTime" placeholder="结束日期" v-model="endTime" value="" style="width:8em"
+                       id="day-to-picker"/>
             </div>
+            <div class="ui field">攻击类型：</div>
             <div class="ui field">
-                <select class="ui dropdown auto-width" name="severity" v-model="severity">
-                    <option value="">攻击类型</option>
-                    <option value="1">[syn]</option>
-                    <option value="2">[ack]</option>
-                    <option value="3">[udp]</option>
-                    <option value="4">[udp]</option>
+                <select class="ui dropdown auto-width" name="attackType" v-model="attackType">
+                    <option value="0">全部</option>
+                    <option value="65535">[SYN]</option>
+                    <option value="131072">[ACK]</option>
+                    <option value="262144">[UDP]</option>
+                    <option value="524288">[ICMP]</option>
+                    <option value="1048576">[FRAG]</option>
+                    <option value="2097152">[NonIP]</option>
                 </select>
             </div>
+            <div class="ui field">状态：</div>
             <div class="ui field">
-                <select class="ui dropdown auto-width" name="severity" v-model="severity">
-                    <option value="">状态</option>
-                    <option value="1">状态</option>
-                    <option value="2">保护中</option>
-                    <option value="3">停止</option>
+                <select class="ui dropdown auto-width" name="status" v-model="status">
+                    <option value="0">全部</option>
+                    <option value="1">保护中</option>
+                    <option value="2">停止</option>
                 </select>
             </div>
-            <div class="ui field">主机地址：</div>
+            <div class="ui field">目的主机：</div>
             <div class="ui field">
-                <input type="text" name="keyword" style="width:10em" v-model="keyword" placeholder="关键词"/>
+                <input type="text" name="address" style="width:10em" v-model="address"/>
             </div>
             <div class="ui field">
                 <button type="submit" class="ui button">查询</button>
@@ -57,139 +64,140 @@
         </div>
     </form>
     <div style="margin-top: 30px;">
-        <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+        <table class="ui table selectable celled" border="1" style="border-collapse: collapse;">
             <thead>
-                <tr align="center">
-                    <th class='table-head-bg' style="width: 126px;" >目的地址</th>
-                    <th class='table-head-bg' style="width: 70px;" >目的端口</th>
-                    <th class='table-head-bg' style="width: 140px;" >开始时间</th>
-                    <th class='table-head-bg' style="width: 140px;" >结束时间</th>
-                    <th class='table-head-bg' style="width: 78px;" >攻击类型</th>
-                    <th class='table-head-bg' style="width: 113px;" >高层协议</th>
-                    <th class='table-head-bg' style="width: 77px;" >状态</th>
-                    <th class='table-head-bg' style="width: 116px;" >最大流量</th>
-                    <th class='table-head-bg' style="width: 182px;" >攻击源地址</th>
-                    <th class='table-head-bg' style="width: 75px;" >报文</th>
-                </tr>
+            <tr align="center">
+                <th class='table-head-bg' style="width: 126px;">目的地址</th>
+                <th class='table-head-bg' style="width: 70px;">目的端口</th>
+                <th class='table-head-bg' style="width: 140px;">开始时间</th>
+                <th class='table-head-bg' style="width: 140px;">结束时间</th>
+                <th class='table-head-bg' style="width: 78px;">攻击类型</th>
+                <th class='table-head-bg' style="width: 113px;">高层协议</th>
+                <th class='table-head-bg' style="width: 77px;">状态</th>
+                <th class='table-head-bg' style="width: 116px;">最大流量</th>
+                <th class='table-head-bg' style="width: 182px;">攻击源地址</th>
+                <!--                    <th class='table-head-bg' style="width: 75px;" >报文</th>-->
+            </tr>
             </thead>
-            <tbody id='tableBody'>
-                <tr align="center" style="height: 40px;" v-for="item in tableData1" >
-                    <td>{{item.tagAddress}}</td>
-                    <td>{{item.value1}}</td>
-                    <td>{{onChangeTimeFormat(item.value2)}}</td>
-                    <td>{{onChangeTimeFormat(item.value3)}}</td>
-                    <td>{{item.value4}}</td>
-                    <td>{{item.value5}}</td>
-                    <td>{{item.value6}}</td>
-                    <td>{{item.value7}}</td>
-                    <td>{{item.value8}}</td>
-                    <td style="cursor: pointer;color: #0090cb;;" @click="onDownLoad(item.id)">下载</td>
-                </tr>
+            <tbody>
+            <tr align="center" style="height: 40px;" v-for="item in attacks">
+                <td>{{item.DstAddress}}</td>
+                <td>{{item.DstPort}}</td>
+                <td>{{item.Begin}}</td>
+                <td>{{item.End}}</td>
+                <td>{{item.Flags}}</td>
+                <td>{{item.Highproto}}</td>
+                <td>{{toShowStatus(item.Status)}}</td>
+                <td>{{item.BpsIn}}</td>
+                <td>{{item.FromAddress}}</td>
+                <!--                    <td style="cursor: pointer;color: #0090cb;;" @click="onDownLoad(item.id)">下载</td>-->
+            </tr>
             </tbody>
         </table>
     </div>
 </div>
 <div v-else>
-    <form method="get" action="/ddos/logs" class="ui form" autocomplete="off">
+    <form method="get" action="logs/traffic" class="ui form" autocomplete="off">
         <div class="ui fields inline">
             <div class="ui field">
-                <select class="ui dropdown auto-width" name="severity" v-model="severity">
-                    <option value="">查看每分流量</option>
+                <select class="ui dropdown auto-width" name="level" v-model="level">
                     <option value="1">查看每分流量</option>
-                    <option value="2">查看每分流量</option>
-                    <option value="3">查看每分流量</option>
-                    <option value="4">查看每分流量</option>
+                    <option value="2">查看每时流量</option>
+                    <option value="3">查看每日流量</option>
+                    <option value="4">查看每月流量</option>
                 </select>
             </div>
-            <div class="ui field">主机地址：</div>
+<!--            <div class="ui field">主机地址：</div>-->
+<!--            <div class="ui field">-->
+<!--                <input type="text" name="address" style="width:10em" v-model="address" />-->
+<!--            </div>-->
             <div class="ui field">
-                <input type="text" name="keyword" style="width:10em" v-model="keyword" placeholder="关键词"/>
-            </div>
-            <div class="ui field">
-                <button type="submit" class="ui button">查询</button>
+                <button type="button" class="ui button" @click="search">查询</button>
             </div>
         </div>
     </form>
-    
+
     <div v-if="nShowState===2" style="margin-top: 30px;">
-        <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+        <table class="ui table selectable celled" border="1" style="border-collapse: collapse;">
             <thead>
-                <tr align="center">
-                    <th class='table-head-bg' style="width: 150px;" rowspan="3">统计区间</th>
-                    <th class='table-head-bg' style="width: 110px;" colspan="6">最大值</th>
-                    <th class='table-head-bg' style="width: 122px;" colspan="5">平均值</th>
-                </tr>
-                <tr align="center">   
-                    <th rowspan="2">时间</th> 
-                    <th colspan="3">输入</th>
-                    <th colspan="2">输出</th>
-                    <th colspan="3">输入</th>
-                    <th colspan="2">输出</th>
-                </tr> 
-                <tr align="center">   
-                    <th>Mbps</th> 
-                    <th>PPS</th>
-                    <th>Mbps</th>
-                    <th>PPS</th>
-                    <th>SPS</th>
-                    <th>Mbps</th> 
-                    <th>PPS</th>
-                    <th>Mbps</th>
-                    <th>PPS</th>
-                    <th>SPS</th>
-                </tr> 
+            <tr align="center">
+                <th class='table-head-bg' style="width: 150px;" rowspan="3">统计区间</th>
+                <th class='table-head-bg' style="width: 110px;" colspan="6">最大值</th>
+                <th class='table-head-bg' style="width: 122px;" colspan="5">平均值</th>
+            </tr>
+            <tr align="center">
+                <th rowspan="2">时间</th>
+                <th colspan="2">输入</th>
+                <th colspan="2">输出</th>
+                <th colspan="1"></th>
+                <th colspan="2">输入</th>
+                <th colspan="2">输出</th>
+                <th colspan="1"></th>
+            </tr>
+            <tr align="center">
+                <th>Mbps</th>
+                <th>PPS</th>
+                <th>Mbps</th>
+                <th>PPS</th>
+                <th>SPS</th>
+                <th>Mbps</th>
+                <th>PPS</th>
+                <th>Mbps</th>
+                <th>PPS</th>
+                <th>SPS</th>
+            </tr>
             </thead>
-            <tbody id='tableBody'>
-                <tr align="center" style="height: 40px;" v-for="item in tableData2" >
-                    <td>{{item.censusData}}</td>
-                    <td>{{item.value1}}</td>
-                    <td>{{item.value2}}</td>
-                    <td>{{item.value3}}</td>
-                    <td>{{item.value4}}</td>
-                    <td>{{item.value5}}</td>
-                    <td>{{item.value6}}</td>
-                    <td>{{item.value7}}</td>
-                    <td>{{item.value8}}</td>
-                    <td>{{item.value9}}</td>
-                    <td>{{item.value10}}</td>
-                    <td>{{item.value11}}</td>
-                </tr>
+            <tbody>
+            <tr align="center" style="height: 40px;" v-for="item in traffics">
+                <td>{{item.DateTime}}</td>
+                <td>{{item.DateTimeMax}}</td>
+                <td>{{item.InputBpsMax}}</td>
+                <td>{{item.InputPpsMax}}</td>
+                <td>{{item.OutputBpsMax}}</td>
+                <td>{{item.OutputPpsMax}}</td>
+                <td>{{item.SpsMax}}</td>
+                <td>{{item.InputBpsAve}}</td>
+                <td>{{item.InputPpsAve}}</td>
+                <td>{{item.OutputBpsAve}}</td>
+                <td>{{item.OutputPpsAve}}</td>
+                <td>{{item.SpsAve}}</td>
+            </tr>
             </tbody>
         </table>
     </div>
     <div v-else style="margin-top: 30px;">
-        <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+        <table id="tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
             <thead>
-                <tr align="center">
-                    <th class='table-head-bg' style="width: 150px;" rowspan="2">统计区间</th>
-                    <th class='table-head-bg' style="width: 110px;" colspan="6">最大值</th>
-                    <th class='table-head-bg' style="width: 122px;" colspan="3">平均值</th>
-                </tr>
-                <tr align="center">   
-                    <th>时间</th> 
-                    <th>TCP in</th>
-                    <th>TCP out</th>
-                    <th>UDP</th>
-                    <th>输入</th>
-                    <th>输出</th>
-                    <th>TCP in</th>
-                    <th>TCP out</th>
-                    <th>UDP</th>
-                </tr> 
+            <tr align="center">
+                <th class='table-head-bg' style="width: 150px;" rowspan="2">统计区间</th>
+                <th class='table-head-bg' style="width: 110px;" colspan="6">最大值</th>
+                <th class='table-head-bg' style="width: 122px;" colspan="3">平均值</th>
+            </tr>
+            <tr align="center">
+                <th>时间</th>
+                <th>TCP in</th>
+                <th>TCP out</th>
+                <th>UDP</th>
+                <th>输入</th>
+                <th>输出</th>
+                <th>TCP in</th>
+                <th>TCP out</th>
+                <th>UDP</th>
+            </tr>
             </thead>
-            <tbody id='tableBody'>
-                <tr align="center" style="height: 40px;" v-for="item in tableData3" >
-                    <td>{{item.censusData}}</td>
-                    <td>{{item.value1}}</td>
-                    <td>{{item.value2}}</td>
-                    <td>{{item.value3}}</td>
-                    <td>{{item.value4}}</td>
-                    <td>{{item.value5}}</td>
-                    <td>{{item.value6}}</td>
-                    <td>{{item.value7}}</td>
-                    <td>{{item.value8}}</td>
-                    <td>{{item.value9}}</td>
-                </tr>
+            <tbody>
+            <tr align="center" style="height: 40px;" v-for="item in links">
+                <td>{{item.DateTime}}</td>
+                <td>{{item.DateTimeMax}}</td>
+                <td>{{item.TcpInMax}}</td>
+                <td>{{item.TcpOutMax}}</td>
+                <td>{{item.UdpMax}}</td>
+                <td>{{item.InputBpsMax}}</td>
+                <td>{{item.OutputBpsMax}}</td>
+                <td>{{item.TcpInAve}}</td>
+                <td>{{item.TcpOutAve}}</td>
+                <td>{{item.UdpAve}}</td>
+            </tr>
             </tbody>
         </table>
     </div>

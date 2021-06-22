@@ -44,6 +44,8 @@ func (this *IndexAction) RunGet(params struct {
 	this.Data["list"] = list
 	this.Data["total"] = total
 	this.Data["ddos"] = ddos
+	this.Data["nodeId"] = params.NodeId
+	this.Data["address"] = params.Address
 	this.Show()
 	//this.Success()
 }

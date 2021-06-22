@@ -13,6 +13,8 @@ func init() {
 			Data("teaMenu", "ddos").
 			Prefix("/ddos/logs").
 			Get("", new(IndexAction)).
+			Get("/traffic", new(TrafficAction)).
+			Get("/link", new(LinkAction)).
 			EndAll()
 	})
 }

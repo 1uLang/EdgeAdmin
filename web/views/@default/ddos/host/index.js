@@ -1,22 +1,8 @@
 Tea.context(function () {
 
-    //获取url上参数
-    this.nodeId = function (variable) {
-        var query = window.location.search.substring(1);
-        var vars = query.split("&");
-        for (var i = 0; i < vars.length; i++) {
-            var pair = vars[i].split("=");
-            if (pair[0] == variable) {
-                return pair[1];
-            }
-        }
-        return ('');
-    }('nodeId')
-
-    this.level = "0"//防护策略等级
+    this.level = "1"//防护策略等级
     this.ignore = false //ip直通
     this.dropNode = ''
-    this.address = ''
     this.src_ip = ""
     this.shieldList = []
     this.linkList = []
@@ -46,6 +32,8 @@ Tea.context(function () {
     }
     this.setHost = function (notice) {
 
+        if(notice !== true && notice !== false)
+            return;
         let ignore = document.getElementById('btn-switch-ignore').checked
         let level = document.getElementById('ddosLevel').value
         let that = this
@@ -81,20 +69,14 @@ Tea.context(function () {
         }
     }
     this.getNodeId = function () {
-        let node = ''
-        if (this.nodeId === '') {    //重新加载该页面
-            node = document.getElementById('selectBox').value
-            this.nodeId = node
-        } else {
-            node = this.nodeId
-        }
+        let node = this.nodeId
         return node
     }
     this.shieldSearchList = function (state) {
-        let searchIp = this.src_ip === '' ? '' : '-' + this.src_ip
+        let searchIp = this.src_ip === '' ? 'all' : this.src_ip
         let node = this.getNodeId()
         //屏蔽列表
-        this.$get(".shield").params({Addr: this.address + searchIp, NodeId: node}).success(resp => {
+        this.$get(".shield").params({Addr:searchIp, NodeId: node}).success(resp => {
             if (resp.code === 200) {
                 if (resp.data.shield)
                     this.shieldList = resp.data.shield
@@ -141,10 +123,10 @@ Tea.context(function () {
 
     //连接列表查询
     this.linkSearchList = function (state) {
-        let searchIp = this.src_ip === '' ? '' : '-' + this.src_ip
+        let searchIp = this.src_ip === '' ? 'all' : this.src_ip
         let node = this.getNodeId()
         //屏蔽列表
-        this.$get(".link").params({Addr: this.address + searchIp, NodeId: node}).success(resp => {
+        this.$get(".link").params({Addr:searchIp, NodeId: node}).success(resp => {
             if (resp.code === 200) {
                 this.linkList = resp.data.list
                 this.tableState = state
@@ -175,7 +157,7 @@ Tea.context(function () {
         }
         //ip直通 防护策略
         teaweb.confirm("确定要" + msg + "释放吗？", function () {
-            this.post(".shield").params({Addr: adds, NodeId: node}).success(resp => {
+            this.$post(".shield").params({Addr: adds, NodeId: node}).success(resp => {
                 if (resp.code === 200) {
                     teaweb.success("释放成功", function () {
                         teaweb.reload()

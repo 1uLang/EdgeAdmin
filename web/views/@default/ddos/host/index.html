@@ -10,10 +10,7 @@
         <div style="line-height: 40px;text-align: center;">DDoS防火墙节点：</div>
         <div class="ui field">  
             <div class="ui field">
-                <select class="ui dropdown auto-width" id="selectBox" @change="showHost" v-if="nodeId === ''">
-                    <option :value="item.id" v-for="(item,idx) in ddos" :selected="idx === 0" >{{item.name}}-ddos-{{item.addr}}</option>
-                </select>
-                <select class="ui dropdown auto-width" @change="showHost" v-model="nodeId" v-else>
+                <select class="ui dropdown auto-width" @change="showHost" v-model="nodeId" >
                     <option :value="item.id" v-for="item in ddos" >{{item.name}}-ddos-{{item.addr}}</option>
                 </select>
             </div>
@@ -118,9 +115,9 @@
         <div class="ui fields inline" style="display:inline-flex;justify-content: space-between;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
             <div style="display:inline-flex;padding: 0 10px;">
                 <div class="ui field" style="margin: 10px 0;">
-                    <input type="text" id="linkHostInput" name="src_ip" placeholder="请输入访问源IP" v-model="src_ip"/>
+                    <input type="text" id="linkHostInput" name="src_ip" placeholder="请输入主机IP" v-model="src_ip"/>
                 </div>
-                <button class="ui button" style="margin: 0px 20px" @click="shieldSearchList">查询</button>
+                <button class="ui button" style="margin: 0px 20px" @click="shieldSearchList(1)">查询</button>
 <!--                <button class="ui button" @click="onExport">导出</button>-->
             </div>
             <button class="ui button" style="background-color:red;color: #fff;" @click="onRelease('all')">全部释放</button>
@@ -137,8 +134,8 @@
             </thead>
             <tbody>
                 <tr align="center" style="height: 40px;" v-for="item in shieldList" >
-                    <td>{{item.RemoteAddress}}</td>
                     <td>{{item.LocalAddress}}</td>
+                    <td>{{item.RemoteAddress}}</td>
                     <td>{{item.ReleaseTime}}</td>
                     <td>{{item.ForbidReason}}</td>
                     <td style="cursor: pointer;color: red;" @click="onRelease(item)">释放</td>
@@ -150,9 +147,9 @@
         <div class="ui fields inline" style="display:inline-flex;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
             <div style="display:inline-flex;padding: 0 10px;">
                 <div class="ui field" style="margin: 10px 0;">
-                    <input type="text" name="src_ip" placeholder="请输入访问源IP" v-model="src_ip"/>
+                    <input type="text" name="src_ip" placeholder="请输入主机源IP" v-model="src_ip"/>
                 </div>
-                <button class="ui button" style="margin: 0px 20px" @click="linkSearchList">查询</button>
+                <button class="ui button" style="margin: 0px 20px" @click="linkSearchList(2)">查询</button>
 <!--                <button class="ui button" @click="onExport">导出</button>-->
             </div>
         </div>

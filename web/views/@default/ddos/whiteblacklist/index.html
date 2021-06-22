@@ -5,10 +5,7 @@
         <div style="line-height: 40px;text-align: center;">DDoS防火墙节点：</div>
         <div class="ui field">
             <div class="ui field">
-                <select class="ui dropdown auto-width" id="selectBox" @change="showHost" v-if="nodeId === ''">
-                    <option :value="item.id" v-for="(item,idx) in ddos" :selected="idx === 0" >{{item.name}}-ddos-{{item.addr}}</option>
-                </select>
-                <select class="ui dropdown auto-width" @change="showHost" v-model="nodeId" v-else>
+                <select class="ui dropdown auto-width" @change="showHost" v-model="nodeId">
                     <option :value="item.id" v-for="item in ddos" >{{item.name}}-ddos-{{item.addr}}</option>
                 </select>
             </div>
