@@ -25,6 +25,9 @@
     margin-left: 10px;
     color: #fff;
 }
+.show-num{
+    font-size: 32px !important;
+}
 .table-contain{
     width: 100%;
 }
@@ -82,4 +85,16 @@
     height: 8px;
     background: #0091cb;
     border-radius: 5px;
+}
+.red-color{
+    color: #f6959f;
+}
+.yellow-color{
+    color: #fc9337;
+}
+.blue-color{
+    color: #0091cc;
+}
+.green-color{
+    color: #00b247;
 }

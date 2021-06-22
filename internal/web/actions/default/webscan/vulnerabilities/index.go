@@ -21,6 +21,8 @@ func (this *IndexAction) RunGet(params struct {
 	PageNo   int
 	Address  string
 	Severity string
+
+	List bool
 }) {
 	err := webscan.InitAPIServer()
 	if err != nil {
@@ -49,5 +51,9 @@ func (this *IndexAction) RunGet(params struct {
 		return
 	}
 	this.Data["vulnerabilities"] = list["vulnerabilities"]
-	this.Show()
+	if !params.List {
+		this.Show()
+	} else {
+		this.Success()
+	}
 }

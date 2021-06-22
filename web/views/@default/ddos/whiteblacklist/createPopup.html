@@ -5,19 +5,22 @@
     <table class="ui table definition selectable">
         <tr>
             <td class="title">当前节点</td>
-            <td>成都DDOS-181.22.122.76</td>
+            <td>
+                {{ddos}}
+                <input type="text" name="nodeId" maxlength="50" ref="focus" :value="node"  style="display: none"  />
+            </td>
         </tr>
         <tr>
             <td class="title">地址*</td>
             <td>
-                <input type="text" name="addr" maxlength="50" ref="focus"/>
+                <input type="text" name="Addr" maxlength="50" ref="focus"/>
             </td>
         </tr>
         <tr>
             <td class="title">类型*</td>
             <td>
-                <label style="margin-right: 30px;"><input type="radio" name="nametype" value="黑名单">黑名单</label>
-                <label><input type="radio" name="nametype" value="白名单">白名单</label>
+                <label style="margin-right: 30px;"><input type="radio" name="White" checked="checked" value="黑名单">黑名单</label>
+                <label><input type="radio" name="White" value="白名单">白名单</label>
             </td>
         </tr>
     </table>

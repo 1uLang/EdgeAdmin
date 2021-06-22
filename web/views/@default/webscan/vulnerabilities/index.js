@@ -5,8 +5,7 @@ Tea.context(function () {
     this.bShowDetail = false
 
     this.onCloseDetail = function () {
-        document.getElementById("rightDiv").style.display = "none";
-
+        this.bShowDetail = false
     };
 
     this.onChangeTimeFormat = function (time) {
@@ -35,7 +34,7 @@ Tea.context(function () {
 
     this.getDetailInfo = function (vul) {
         this.detailInfo = null
-        this.$get(".details").params({
+        this.$get("/webscan/vulnerabilities/details").params({
             VulId: vul.vuln_id
         }).success(resp => {
             if (resp.code === 200) {

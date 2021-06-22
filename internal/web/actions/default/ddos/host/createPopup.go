@@ -17,7 +17,16 @@ func (this *CreatePopupAction) Init() {
 	this.Nav("", "", "")
 }
 
-func (this *CreatePopupAction) RunGet(params struct{}) {
+func (this *CreatePopupAction) RunGet(params struct{ NodeId uint64 }) {
+
+	//ddos节点
+	ddos, err := host_status_server.GetDDoSNodeInfo(params.NodeId)
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	this.Data["ddos"] = ddos.Name + "-ddos-" + ddos.Addr
+	this.Data["node"] = params.NodeId
 	this.Show()
 }
 

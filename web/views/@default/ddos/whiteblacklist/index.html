@@ -3,29 +3,27 @@
     <div style="cursor: pointer;margin-top: 10px;" @click="onAddNameList">[添加黑白名单]</div>
     <div align="right" style="display: inline-flex;">
         <div style="line-height: 40px;text-align: center;">DDoS防火墙节点：</div>
-        <div class="ui field">  
+        <div class="ui field">
             <div class="ui field">
-                <select class="ui dropdown auto-width" name="severity" v-model="severity">
-                    <option value="">成都-ddos-192.168.1.1</option>
-                    <option value="1">成都-ddos-192.168.1.1</option>
-                    <option value="2">成都-ddos-192.168.1.1</option>
-                    <option value="3">成都-ddos-192.168.1.1</option>
-                    <option value="4">成都-ddos-192.168.1.1</option>
+                <select class="ui dropdown auto-width" @change="showHost" v-model="nodeId">
+                    <option :value="item.id" v-for="item in ddos" >{{item.name}}-ddos-{{item.addr}}</option>
                 </select>
             </div>
         </div>
     </div>
 </div>
 
-<form method="get" class="ui form" action="vulnerabilities">
+<form method="get" class="ui form" action="whiteblacklist">
     <div class="ui margin"></div>
     <div class="ui menu basic text">
         <div class="item">
             <div class="ui fields inline">
                 <div class="ui field">
-                    <input type="text" name="severity" placeholder="请输入主机IP" v-model="severity"/>
+                    <input type="text" name="Address" placeholder="请输入主机IP" v-model="Address"/>
                 </div>
-
+                <div class="ui field">
+                    <input type="text" name="nodeId"  :value="nodeId"  style="display: none"  />
+                </div>
                 <div class="ui field">
                     <button type="submit" class="ui button">搜索</button>
                 </div>
@@ -33,24 +31,21 @@
         </div>
     </div>
 </form>
-
 <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
     <thead>
         <tr>
             <th class='table-head-bg' style="width: 364px;" >地址</th>
             <th class='table-head-bg' style="width: 223px;" >类型</th>
             <th class='table-head-bg' style="width: 223px;" >匹配</th>
-            <th class='table-head-bg' style="width: 223px;" >备注</th>
             <th class='table-head-bg' style="width: 82px;" >操作</th>
         </tr>
     </thead>
     <tbody id='tableBody'>
-        <tr align="center" style="height: 40px;" v-for="item in tableData" >
-            <td>{{item.host}}</td>
-            <td>{{item.nameType}}</td>
-            <td>{{item.matchCount}}</td>
-            <td>{{item.remarks}}</td>
-            <td style="cursor: pointer;color: red;" @click="onDelete(item.id)">删除</td>
+        <tr align="center" style="height: 40px;" v-for="item in list" >
+            <td>{{item.Address}}</td>
+            <td>{{toShowFlags(item.Flags)}}</td>
+            <td>{{item.Hits}}</td>
+            <td style="cursor: pointer;color: red;" @click="onDelete(item)">删除</td>
         </tr>
     </tbody>
 </table>

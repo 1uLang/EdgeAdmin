@@ -14,6 +14,7 @@ func init() {
 			Prefix("/monitor").
 			Get("", new(IndexAction)).
 			GetPost("/createPopup", new(CreatePopupAction)). //修改创建
+			GetPost("/create", new(CreateAction)).           //修改创建
 			GetPost("/delete", new(DeleteAction)).           //删除
 			EndAll()
 	})

@@ -1,6 +1,7 @@
 package whiteblacklist
 
 import (
+	black_white_list_server "github.com/1uLang/zhiannet-api/ddos/server/black_white_list"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/actions"
 )
@@ -19,30 +20,22 @@ func (this *DelAction) RunGet(params struct{}) {
 
 func (this *DelAction) RunPost(params struct {
 	Addr   string
-	Ignore bool //IP直通
-	Del    int  //防护等级
-
-	Must *actions.Must
+	NodeId uint64
+	Type   string
+	Must   *actions.Must
 }) {
-	//params.Must.
-	//	Field("name", params.Addr).
-	//	Require("请输入ip地址")
-	//id, err := host_status_server.AddAddr(&ddos_host_ip.AddHost{
-	//	Addr:   params.Addr,
-	//	//NodeId: params.Del,
-	//})
-	//if err != nil {
-	//	this.ErrorPage(err)
-	//	return
-	//}
-	//
-	//this.Data["ddos"] = maps.Map{
-	//	"id":   id,
-	//	"addr": params.Addr,
-	//}
-	//
-	//// 创建日志
-	//defer this.CreateLog(oplogs.LevelInfo, "创建高防IP %d", params.Addr)
+	params.Must.
+		Field("Addr", params.Addr).
+		Require("请输入ip地址")
 
+	_, err := black_white_list_server.DeleteBW(&black_white_list_server.EditBWReq{
+		Addr:   []string{params.Addr},
+		NodeId: params.NodeId,
+		White:  !(params.Type == "blacklist"),
+	})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
 	this.Success()
 }
