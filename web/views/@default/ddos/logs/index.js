@@ -1,5 +1,16 @@
 Tea.context(function () {
     this.severity=''
+    this.dayFrom = ""
+    this.dayTo = ""
+
+    this.keyword = ""
+
+
+    this.$delay(function () {
+        teaweb.datepicker("day-from-picker")
+        teaweb.datepicker("day-to-picker")
+    })
+
 
     this.onDelete = function (id) { 
 
