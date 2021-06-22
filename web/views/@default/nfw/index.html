@@ -12,3 +12,101 @@
         </div>
     </div>
 </div>
+<div style="margin-top: 20px;">
+    <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+        <thead>
+            <tr>
+                <th class='table-head-bg' style="width: 415px;" >名称</th>
+                <th class='table-head-bg' style="width: 694px;" >dengbao.cloud</th>
+            </tr>
+        </thead>
+        <tbody id='tableBody'>
+            <tr>
+                <td class="title">版本</td>
+                <td>{{tableData.verInfo}}</td>
+            </tr>
+            <tr>
+                <td class="title">CPU type</td>
+                <td>{{tableData.cpuInfo}}</td>
+            </tr>
+            <tr>
+                <td class="title">平均负载</td>
+                <td>{{tableData.slbInfo}}</td>
+            </tr>
+            <tr>
+                <td class="title">运行时间</td>
+                <td>{{tableData.runTime}}</td>
+            </tr>
+            <tr>
+                <td class="title">当前日期/时间</td>
+                <td>{{tableData.timeNow}}</td>
+            </tr>
+            <tr>
+                <td class="title">最近一次配置</td>
+                <td>{{tableData.lastConfigTime}}</td>
+            </tr>
+            <tr>
+                <td class="title">CPU使用率</td>
+                <td>
+                    <div class="Bar">
+                        <div id="CPUItem">
+                            <span>{{strCPUPer}}</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">状态表大小</td>
+                <td>
+                    <div class="Bar">
+                        <div id="statusItem">
+                            <span>{{strStatusPer}}</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">MBUF usage</td>
+                <td>
+                    <div class="Bar">
+                        <div id="MBUFItem">
+                            <span>{{getShowPerText(strMBUFPer,tableData.MBUFCount.maxValue,tableData.MBUFCount.useValue)}}</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">内存使用率</td>
+                <td>
+                    <div class="Bar">
+                        <div id="RAMItem">
+                            <span>{{getShowPerText(strRAMPer,tableData.RAMPer.maxValue,tableData.RAMPer.useValue,tableData.RAMPer.unit)}}</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">SWAP使用率</td>
+                <td>
+                    <div class="Bar">
+                        <div id="SWAPItem">
+                            <span>{{getShowPerText(strSWAPPer,tableData.SWAPPer.maxValue,tableData.SWAPPer.useValue,tableData.SWAPPer.unit)}}</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">磁盘使用率</td>
+                <td>
+                    <div class="Bar">
+                        <div id="diskItem">
+                            <span>{{tableData.diskPer}}</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            
+        </tbody>
+            
+    </table>
+</div>

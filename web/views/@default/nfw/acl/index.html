@@ -1,2 +1,186 @@
 {$layout}
-acl list
+{$layout}
+
+
+    <div style="display: flex;justify-content: space-between;height: 45px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;margin-bottom: 30px;">
+        <div style="display: inline-flex;margin-top: 10px;">
+            <div :class="{'menu-select-color':nShowState===1,'menu-define-color':nShowState!=1}" @click="onChangeShowState(1)">规则列表</div>
+            <div v-show="nShowState!=3" :class="{'menu-select-color':nShowState===2,'menu-define-color':nShowState!=2}" @click="onChangeShowState(2)">添加规则</div>
+            <div v-show="nShowState===3" :class="{'menu-select-color':nShowState===3,'menu-define-color':nShowState!=3}">修改规则</div>
+        </div>
+        <div align="right" style="display: inline-flex;">
+            <div style="line-height: 40px;text-align: center;">DDoS防火墙节点：</div>
+            <div class="ui field">  
+                <div class="ui field">
+                    <select class="ui dropdown auto-width" name="severity" v-model="severity">
+                        <option v-for="item in hostData" :value="item.id">{{item.hostAddress}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div v-if="nShowState===1" style="margin-top: 20px;">
+        <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <thead>
+                <tr align="center">
+                    <th class='table-head-bg' style="width: 68px;" rowspan="2">接口</th>
+                    <th class='table-head-bg' style="width: 60px;" rowspan="2">方向</th>
+                    <th class='table-head-bg' style="width: 98px;" rowspan="2">协议</th>
+                    <th class='table-head-bg' style="width: 216px;" colspan="2">源</th>
+                    <th class='table-head-bg' style="width: 250px;" colspan="2">目标</th>
+                    <th class='table-head-bg' style="width: 101px;" rowspan="2">描述</th>
+                    <th class='table-head-bg' style="width: 67px;" rowspan="2">策略</th>
+                    <th class='table-head-bg' style="width: 96px;" rowspan="2">状态</th>
+                    <th class='table-head-bg' style="width: 152px;" rowspan="2">操作</th>
+                </tr>
+                <tr align="center">   
+                    <th>IP</th> 
+                    <th>端口</th>
+                    <th>IP</th> 
+                    <th>端口</th>
+                </tr> 
+            </thead>
+            <tbody id='tableBody'>
+                <tr align="center" style="height: 40px;" v-for="item in tableData" >
+                    <td>{{item.postId}}</td>
+                    <td>{{getDirection(item.directionType)}}</td>
+                    <td>{{item.agreement}}</td>
+                    <td>{{item.value1}}</td>
+                    <td>{{item.post1}}</td>
+                    <td>{{item.value2}}</td>
+                    <td>{{item.post2}}</td>
+                    <td>{{item.desc}}</td>
+                    <td>{{getTactics(item.tactics)}}</td>
+                    <td>
+                        <div :class="{'status-open':item.status===1,'status-close':item.status===2}">
+                            {{getStatus(item.status)}}
+                        </div>
+                    </td>
+                    <td>
+                        <div style="display: flex;justify-content: space-around;">
+                            <div class="edit_btn" @click="onOpenChangeView(item.id)">修改</div>
+                            <div v-show="item.status===1" class="edit_btn" @click="onCloseConfig(item.id)">禁用</div>
+                            <div v-show="item.status===2" class="edit_btn" @click="onOpenConfig(item.id)">启用</div>
+                            <div class="edit_btn" @click="onDelConfig(item.id)">删除</div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div v-else>
+        <form method="post" class="ui form" data-tea-action="$" data-tea-success="success" style="margin-top: 50px;">
+            <table class="ui table definition selectable">
+                <tr>
+                    <td class="title">操作*</td>
+                    <td>
+                        <div>
+                            <select class="ui dropdown auto-width" name="editId" v-model="editId">
+
+                                <option v-for="item in editData" :value="item.id">{{item.value}}</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">接口*</td>
+                    <td>
+                        <nfw-interface-selector :v-idc-id="postId"></nfw-interface-selector>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">方向*</td>
+                    <td>
+                        <div>
+                            <select class="ui dropdown auto-width" name="dirctionId" v-model="dirctionId">
+
+                                <option v-for="item in dirctionData" :value="item.id">{{item.value}}</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">TCP/IP版本*</td>
+                    <td>
+                        <!-- <nfw-httpType-selector :v-idc-id="agreementTypeId"></nfw-httpType-selector> -->
+                        <!-- 不知道为啥上面的显示不出来可能服务器认为我在攻击他 先用下面的显示-->
+                        <nfw-agreement-selector :v-idc-id="agreementTypeId"></nfw-agreement-selector>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">协议*</td>
+                    <td>
+                        <nfw-agreement-selector :v-idc-id="agreementId"></nfw-agreement-selector>
+                    </td>
+                </tr>
+                <tr v-show="nShowState===2">
+                    <td class="title" >源*</td>
+                    <td>
+                        <!-- <nfw-sourceNetType-selector :v-idc-id="sourceTypeId"></nfw-sourceNetType-selector> -->
+                        <!-- 不知道为啥上面的显示不出来可能服务器认为我在攻击他 先用下面的显示-->
+                        <nfw-agreement-selector :v-idc-id="sourceTypeId"></nfw-agreement-selector>
+                        
+                        <div style="display: flex;justify-content: start;flex-direction: row;">
+                            <input type="text" name="source" maxlength="50" :value="sourceValue"/>
+                            <!-- 网络请求用这个 -->
+                            <!-- <nfw-source-selector :v-idc-id="sourceId"></nfw-source-selector> -->
+                            <!-- 本地数据用这个 -->
+                            <select class="ui dropdown auto-width" name="sourceId" v-model="sourceId">
+                                <option v-for="item in dropNodeData" :value="item.id">{{item.value}}</option>
+                            </select>
+                        </div>
+                        
+                    </td>
+                </tr>
+                <tr v-show="nShowState===3">
+                    <td class="title">源*</td>
+                    <td>
+                        <nfw-target-selector :v-idc-id="editSourceId"></nfw-target-selector>
+                    </td>
+                </tr>
+                <tr v-show="nShowState===2">
+                    <td class="title">目标*</td>
+                    <td v-show="nShowState===2">
+                        <!-- <nfw-sourceNetType-selector :v-idc-id="targetTypeId"></nfw-sourceNetType-selector> -->
+                        <!-- 不知道为啥上面的显示不出来可能服务器认为我在攻击他 先用下面的显示-->
+                        <nfw-agreement-selector :v-idc-id="targetTypeId"></nfw-agreement-selector>
+
+                        <div style="display: flex;justify-content: start;flex-direction: row;">
+                            <input type="text" name="source" maxlength="50" :value="targetValue"/>
+                            <!-- 网络请求用这个 -->
+                            <!-- <nfw-source-selector :v-idc-id="targetId"></nfw-source-selector> -->
+                            <!-- 本地数据用这个 -->
+                            <select class="ui dropdown auto-width" name="targetId" v-model="targetId">
+                                <option v-for="item in dropNodeData" :value="item.id">{{item.value}}</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr v-show="nShowState===3">
+                    <td class="title">目标*</td>
+                    <td>
+                        <nfw-target-selector :v-idc-id="editTargetId"></nfw-target-selector>
+                    </td>
+                </tr>
+                <tr v-show="nShowState===3">
+                    <td class="title">目标端口范围</td>
+                    <td>
+                        <div style="display: flex;justify-content: start;flex-direction: row;">
+                            <span style="margin:10px 10px;">从</span>
+                            <nfw-target-selector :v-idc-id="targerRangeStartId"></nfw-target-selector>
+                            <span style="margin:10px 20px;">到</span>
+                            <nfw-target-selector :v-idc-id="targerRangeEndId"></nfw-target-selector>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">描述</td>
+                    <td>
+                        <input type="text" name="desc" maxlength="50" :value="descValue"/>
+                    </td>
+                </tr>
+            </table>
+            <submit-btn></submit-btn>
+        </form>
+    </div>

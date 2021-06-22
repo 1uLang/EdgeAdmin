@@ -1,12 +1,6 @@
-.menu-define-color{
-    color: #000;
-    cursor: pointer;
-    margin-right: 15px;
-}
-.menu-select-color{
-    color: #0090cb;
-    cursor: pointer;
-    margin-right: 15px;
+.table-head-bg{
+    height: 32px;
+    background: #f0f0f0;
 }
 
 .status-open{
@@ -22,8 +16,4 @@
 .edit_btn{
     color: #0090cb;
     cursor: pointer;
-}
-.table-head-bg{
-    height: 32px;
-    background: #f0f0f0;
 }
