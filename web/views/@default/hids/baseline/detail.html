@@ -1,2 +1,111 @@
 {$layout}
-合规基线详情
+<!-- 合规基线详情 -->
+
+<div class="title-content-style bottom-line-style">
+    <div>
+        <span>当前基线模板：</span>
+        <span>{{valueData.modelName}}</span>
+    </div>
+    <div class="edit_btn" @click="onGoBack">返回</div>
+</div>
+<div class="bottom-line-style" style="width:100%;display: inline-flex;padding: 20px 30px;align-items: center;">
+    <div class="out-circular-style" style="margin-right: 40px;">无异常项</div>
+    <div style="display: flex;flex-direction: column;justify-content: start;">
+        <div style="display: inline-flex;">
+            <span>本次共检测{{valueData.checkCount}}项，共发现</span>
+            <span style="color: red;">{{valueData.exceptionCount}}</span>
+            <span>项异常，异常项占比</span>
+            <span style="color: red;">{{getProgressPer(valueData.exceptionCount,valueData.checkCount)}}</span>
+        </div>
+        <div style="display: inline-flex;margin-top: 10px;">
+            <span style="font-weight: bold;margin-right: 10px;">检测时间：</span>
+            <span>{{onChangeTimeFormat(valueData.checkTime)}}</span>
+        </div>
+        <div style="display: inline-flex;margin-top: 10px;">
+            <span style="font-weight: bold;margin-right: 10px;">检测项目：</span>
+            <span>{{valueData.checkProject}}</span>
+        </div>
+        <div style="display: inline-flex;margin-top: 10px;">
+            <span style="font-weight: bold;margin-right: 10px;">基线模板：</span>
+            <span>{{valueData.modelName}}</span>
+        </div>
+    </div>
+</div>
+
+<div style="margin-top: 10px;">
+    <div style="display: inline-flex;margin-bottom: 10px;">
+        <div :class="{'menu-select-color':nTableState===1,'menu-define-color':nTableState!=1}">操作系统安全 | 异常{{valueData.exceptionSystem.length}}项</div>
+        <div :class="{'menu-select-color':nTableState===2,'menu-define-color':nTableState!=2}">中间件安全  | 异常{{valueData.exceptionKey.length}}项</div>
+    </div>
+    <div v-if="nTableState===1">
+        <table class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <thead>
+                <tr align="center">
+                    <th class='table-head-bg' style="width: 130px;" >类型</th>
+                    <th class='table-head-bg' style="width: 900px;" >描述</th>
+                    <th class='table-head-bg' style="width: 100px;" >详情</th>
+                </tr>
+            </thead>
+            <tbody >
+                <tr align="center" style="height: 40px;" v-for="item in valueData.exceptionSystem" >
+                    <td>{{item.type}}</td>
+                    <td>{{item.desc}}</td>
+                    <td>
+                        <div style="display: inline-flex;justify-content: center;">
+                            <div class="edit_btn_blue" @click="onOpenDetail(item.id,valueData.exceptionSystem)">查看</div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div v-else>
+        <table class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <thead>
+                <tr align="center">
+                    <th class='table-head-bg' style="width: 130px;" >类型</th>
+                    <th class='table-head-bg' style="width: 900px;" >描述</th>
+                    <th class='table-head-bg' style="width: 100px;" >详情</th>
+                </tr>
+            </thead>
+            <tbody >
+                <tr align="center" style="height: 40px;" v-for="item in valueData.exceptionKey" >
+                    <td>{{item.type}}</td>
+                    <td>{{item.desc}}</td>
+                    <td>
+                        <div style="display: inline-flex;justify-content: center;">
+                            <div class="edit_btn_blue" @click="onOpenDetail(item.id,valueData.exceptionKey)">查看</div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div v-if="bShowDetail" class="dialog-style" @click.stop>
+    <div class="dialog-bg-style" style="display: flex;flex-direction: column;">
+        <div style="flex: 3;">
+            <div style="padding: 20px;">
+                <table class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+                    <thead>
+                        <tr align="center">
+                            <th class='table-head-bg' style="width: 500px;" >修复建议</th>
+                            <th class='table-head-bg' style="width: 500px;" >检测方法</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        <tr align="center" style="height: 145px;" >
+                            <td>{{pDetailData.fixFunc}}</td>
+                            <td>{{pDetailData.checkFunc}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div style="flex: 1;display: flex;justify-content: space-around;align-items: center;">
+            <div class="sure-btn" @click="onCloseDetail">确定</div>
+        </div>
+    </div>
+</div>

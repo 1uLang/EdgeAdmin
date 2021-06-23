@@ -1,4 +1,103 @@
+
+<!-- 合规基线 -->
+<!-- <a href="/hids/baseline/template" class="item">基线检查 </a>
+<a href="/hids/baseline/detail" class="item">详情 </a> -->
 {$layout}
-合规基线
-<a href="/hids/baseline/template" class="item">基线检查 </a>
-<a href="/hids/baseline/detail" class="item">详情 </a>
+{$template "/datepicker"}
+<div class="card-div" style="margin-top: 20px;">
+    <div style="display: inline-flex;margin: 15px;">
+        <div class="title-style">检查状态</div>
+        <div :class="{'meun-select-color':nCheckState===1,'meun-define-color':nCheckState!=1}" @click="onChangeCheckState(1)">全部</div>
+        <div :class="{'meun-select-color':nCheckState===2,'meun-define-color':nCheckState!=2}" @click="onChangeCheckState(2)">未检查</div>
+        <div :class="{'meun-select-color':nCheckState===3,'meun-define-color':nCheckState!=3}" @click="onChangeCheckState(3)">检查中</div>
+        <div :class="{'meun-select-color':nCheckState===4,'meun-define-color':nCheckState!=4}" @click="onChangeCheckState(4)">已完成</div>
+
+    </div>
+    <div style="display: flex;flex-direction: row;justify-content: space-between;margin: 15px;">
+        <div style="display: inline-flex;">
+            <div class="title-style">检查结论</div>
+            <div :class="{'meun-select-color':nResultState===1,'meun-define-color':nResultState!=1}" @click="onChangeResultState(1)">全部</div>
+            <div :class="{'meun-select-color':nResultState===2,'meun-define-color':nResultState!=2}" @click="onChangeResultState(2)">基线异常</div>
+            <div :class="{'meun-select-color':nResultState===3,'meun-define-color':nResultState!=3}" @click="onChangeResultState(3)">基线正常</div>
+        </div>
+        <div style="display: inline-flex;">
+            <div class="title-style">检查时间</div>
+            <div class="ui field" style="margin-right: 10px;">
+                <input type="text" name="dayFrom" placeholder="开始日期" v-model="dayFrom" value="" style="width:8em" id="day-from-picker"/>
+            </div>
+            <div class="ui field">
+                <input type="text" name="dayTo" placeholder="结束日期" v-model="dayTo" value="" style="width:8em" id="day-to-picker"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="margin-top: 20px;">
+    <table class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+        <thead>
+            <tr align="center">
+                <th class='table-head-bg' style="width: 345px;">主机</th>
+                <th class='table-head-bg' style="width: 286px;">检查进度</th>
+                <th class='table-head-bg' style="width: 85px;">状态</th>
+                <th class='table-head-bg' style="width: 140px;">异常项/总检查项</th>
+                <th class='table-head-bg' style="width: 160px;">完成时间</th>
+                <th class='table-head-bg' style="width: 160px;">操作</th>
+            </tr>
+        </thead>
+        <tbody >
+            <tr align="center" style="height: 40px;" v-for="(item,index) in tableData" >
+                <td style="position: relative;" @mouseenter="enters(index)" @mouseleave="leaver(index)">{{item.hostData.intIp}}
+                    <div v-show="curIndex===index" class="table-item-style">
+                        <div>外网IP：{{item.hostData.outIp}}</div>
+                        <div>内网IP：{{item.hostData.intIp}}</div>
+                        <div>主机名：{{item.hostData.hostName}}</div>
+                        <div>操作系统：{{item.hostData.systemName}}</div>
+                        <div>系统内核：{{item.hostData.rootName}}</div>
+                        <div>Mac地址：{{item.hostData.macAddr}}</div>
+                        <div>备注信息：{{item.hostData.remarks}}</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="Bar" style="display: inline-flex;">
+                        <div id="MBUFItem" :style="{width: getProgressPer(item.curCount,item.maxCount)}">
+                            <span>{{getProgressPer(item.curCount,item.maxCount)}}</span>
+                        </div>
+                    </div>
+                </td>
+                <td>{{getStatusName(item.status)}}</td>
+                <td>{{item.checkCurCount}}/{{item.checkAllCount}}</td>
+                <td>{{onChangeTimeFormat(item.finishTime)}}</td>
+                <td>
+                    <div style="display: inline-flex;justify-content: center;">
+                        <div v-if="item.status==1" class="edit_btn_blue" @click="onOpenCheck(item.id)">基线检查</div>
+                        <div v-if="item.status==3" class="edit_btn_blue" @click="onOpenCheck(item.id)">重新检查</div>
+                        <div v-if="item.status==2" class="edit_btn_blue" @click="onStopCheck(item.id)">取消体检</div>
+                        <div v-if="item.status==3" class="edit_btn_blue" @click="onOpenDetail(item.id)">详情</div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div v-if="bShowCheckDetail" class="dialog-style" @click.stop>
+    <div class="dialog-bg-style" style="display: flex;flex-direction: column;">
+        <div style="flex: 7;">
+            <div style="background: #0091cc;width: 100%;height: 25px;color: #fff;text-align: center;line-height: 25px;">基线检查</div>
+            <div style="display: inline-flex;">
+                <div style="font-weight: bold;width: 150px;margin:10px 30px 0 30px;">选择检查模板：</div>
+                <div style="margin-top: 10px;">
+                    <div v-for='item in pCheckDetailData.checkValue' @click="onAddSelectValue(item.id)" style="display: flex;justify-content: start;align-items: center;margin: 5px 0;">
+                        <img :src="getShowSelectImage(item.id)" width="12px" height="12px">
+                        <span style="margin-left: 10px;">{{item.value}}</span>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+        <div style="flex: 1;display: flex;justify-content: space-around;align-items: center;border-top: 1px #f0f0f0 solid;">
+            <div class="sure-btn" @click="onStartCheck">确定</div>
+            <div class="close-btn" @click="onCloseCheck">取消</div>
+        </div>
+    </div>
+</div>
