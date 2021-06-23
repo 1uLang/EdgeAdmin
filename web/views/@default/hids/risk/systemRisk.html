@@ -1,63 +1,73 @@
 {$layout}
 <!-- 漏洞风险-系统漏洞 -->
-<div class="card-div" style="display: flex;flex-direction: row;justify-content: space-between;padding: 15px 10px;margin-top: 20px;">
-    <div>系统漏洞</div>
-    <div class="edit_btn" @click="onGoBack">返回</div>
-</div>
+<div @click="closeSelect">
+    <div class="card-div" style="display: flex;flex-direction: row;justify-content: space-between;padding: 15px 10px;margin-top: 20px;">
+        <div>系统漏洞</div>
+        <div class="edit_btn" @click="onGoBack">返回</div>
+    </div>
 
-<div class="card-div" style="display: flex;flex-direction: row;margin-top: 15px;">
-    <form method="get" action="/ddos/logs" class="ui form" autocomplete="off" style="padding-top: 5px;">
-        <div class="ui fields inline">
-            <div class="ui field">风险等级:</div>
-            <!-- <div class="ui field">
-                <select id="moreSelect" class="ui dropdown auto-width" multiple="multiple" name="moreSelect">
-                    <option value="">请选择</option>
-                    <option value="1">[syn]</option>
-                    <option value="2">[ack]</option>
-                    <option value="3">[udp]</option>
-                    <option value="4">[udd]</option>
-                    <option value="5">[ude]</option>
-                    <option value="6">[udf]</option>
-                </select>
-            </div> -->
-            <div class="ui field">主机IP：</div>
-            <div class="ui field">
-                <input type="text" name="keyword" style="width:10em" v-model="keyword"/>
-            </div>
-            <div class="ui field">
-                <button type="submit" class="ui button" @click="">查询</button>
-            </div>
-        </div>
-    </form>
-</div>
-
-<div class="card-div" style="height: 600px;;display: flex;flex-direction: row;margin-top: 15px;">
-    <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
-        <thead>
-            <tr align="center">
-                <th class='table-head-bg' style="width: 377px;" >主机IP</th>
-                <th class='table-head-bg' style="width: 641px;" >漏洞数量分布</th>
-                <th class='table-head-bg' style="width: 110px;" >漏洞详情</th>
-            </tr>
-        </thead>
-        <tbody id='tableBody'>
-            <tr align="center" style="height: 40px;" v-for="item in tableData" >
-                <td>{{item.hostData.intIp}}</td>
-                <td>
-                    <div class="model-background" style="display: flex;flex-direction: row;">
-                        <div class="model-child-background serious-bg-color" :style="{flex:item.value1}">{{item.value1}}</div>
-                        <div class="model-child-background height-bg-color" :style="{flex:item.value2}">{{item.value2}}</div>
-                        <div class="model-child-background middle-bg-color" :style="{flex:item.value3}">{{item.value3}}</div>
-                        <div class="model-child-background low-bg-color" :style="{flex:item.value4}">{{item.value4}}</div>
-                        <div class="model-child-background grey-bg-color" :style="{flex:item.value5}">{{item.value5}}</div>
+    <div class="card-div" style="display: flex;flex-direction: row;margin-top: 15px;">
+        <form method="get" action="/ddos/logs" class="ui form" autocomplete="off" style="padding-top: 5px;">
+            <div class="ui fields inline">
+                <div class="ui field">风险等级:</div>
+                <div class="ui field">
+                    <div id="select" @click.stop='openSelect'> {{showSelectValue}}
+                        <div v-show="bShowSelectBox" id="select_box" @click.stop>
+                            <div v-for='item in dangerData' @click="onAddSelectValue(item.id)" style="display: flex;justify-content: start;align-items: center;">
+                                <img :src="getShowSelectImage(item.id)" width="12px" height="12px">
+                                <span style="margin-left: 10px;">{{item.value}}</span>
+                            </div>
+                        </div>
                     </div>
-                </td>
-                <td>
-                    <div class="edit_btn" @click="onOpenDetail(item.id)">查看</div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+                </div>
+                <div class="ui field">主机IP：</div>
+                <div class="ui field">
+                    <input type="text" name="keyword" style="width:10em" v-model="keyword"/>
+                </div>
+                <div class="ui field">
+                    <button type="submit" class="ui button" @click="">查询</button>
+                </div>
+            </div>
+        </form>
+    </div>
 
+    <div class="card-div" style="height: 600px;;display: flex;flex-direction: row;margin-top: 15px;">
+        <table id = "tab" height="40px" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <thead>
+                <tr align="center">
+                    <th class='table-head-bg' style="width: 377px;" >主机IP</th>
+                    <th class='table-head-bg' style="width: 641px;" >漏洞数量分布</th>
+                    <th class='table-head-bg' style="width: 110px;" >漏洞详情</th>
+                </tr>
+            </thead>
+            <tbody id='tableBody'>
+                <tr align="center" v-for="(item, index) in tableData" >
+                    <td style="position: relative;" @mouseenter="enters(index)" @mouseleave="leaver(index)">{{item.hostData.intIp}}
+                        <div v-show="curIndex===index" class="table-item-style">
+                            <div>外网IP：{{item.hostData.outIp}}</div>
+                            <div>内网IP：{{item.hostData.intIp}}</div>
+                            <div>主机名：{{item.hostData.hostName}}</div>
+                            <div>操作系统：{{item.hostData.systemName}}</div>
+                            <div>系统内核：{{item.hostData.rootName}}</div>
+                            <div>Mac地址：{{item.hostData.macAddr}}</div>
+                            <div>备注信息：{{item.hostData.remarks}}</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="model-background" style="display: flex;flex-direction: row;">
+                            <div class="model-child-background serious-bg-color" :style="{flex:item.value1}">{{item.value1}}</div>
+                            <div class="model-child-background height-bg-color" :style="{flex:item.value2}">{{item.value2}}</div>
+                            <div class="model-child-background middle-bg-color" :style="{flex:item.value3}">{{item.value3}}</div>
+                            <div class="model-child-background low-bg-color" :style="{flex:item.value4}">{{item.value4}}</div>
+                            <div class="model-child-background grey-bg-color" :style="{flex:item.value5}">{{item.value5}}</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="edit_btn" @click="onOpenDetail(item.id)">查看</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
