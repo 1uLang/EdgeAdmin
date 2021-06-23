@@ -34,8 +34,8 @@
 
 <div style="margin-top: 10px;">
     <div style="display: inline-flex;margin-bottom: 10px;">
-        <div :class="{'menu-select-color':nTableState===1,'menu-define-color':nTableState!=1}">操作系统安全 | 异常{{valueData.exceptionSystem.length}}项</div>
-        <div :class="{'menu-select-color':nTableState===2,'menu-define-color':nTableState!=2}">中间件安全  | 异常{{valueData.exceptionKey.length}}项</div>
+        <div :class="{'menu-select-color':nTableState===1,'menu-define-color':nTableState!=1}" @click="onChangeTableState(1)">操作系统安全 | 异常{{valueData.exceptionSystem.length}}项</div>
+        <div :class="{'menu-select-color':nTableState===2,'menu-define-color':nTableState!=2}" @click="onChangeTableState(2)">中间件安全  | 异常{{valueData.exceptionKey.length}}项</div>
     </div>
     <div v-if="nTableState===1">
         <table class="ui table selectable celled" border="1" style="border-collapse: collapse;">
