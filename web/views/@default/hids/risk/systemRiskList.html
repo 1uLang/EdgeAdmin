@@ -58,7 +58,7 @@
                     <td>{{getStatusName(item.value6)}}</td>
                     <td>
                         <div style="display: flex;justify-content: space-around;">
-                            <div class="edit_btn" @click="onDetail(item.id)">详情</div>
+                            <div class="edit_btn" @click="onDetail(item.id,tableData1)">详情</div>
                             <div class="edit_btn" @click="onIgnore(item.id)">忽略</div>
                             <div class="edit_btn" @click="onFix(item.id)">修复</div>
                         </div>
@@ -94,7 +94,7 @@
                     <td>{{getStatusName(item.value6)}}</td>
                     <td>
                         <div style="display: flex;justify-content: space-around;">
-                            <div class="edit_btn" @click="onDetail(item.id)">详情</div>
+                            <div class="edit_btn" @click="onDetail(item.id,tableData2)">详情</div>
                             <div class="edit_btn" @click="onIgnore(item.id)">取消忽略</div>
                         </div>
                     </td>
@@ -105,15 +105,38 @@
     
 </div>
 
-<div v-show="dialogVisible" class="dialog-style" @click.stop>
-    <div class="dialog-bg-style">
-        <div style="margin: 10px; display: flex;flex-direction: row;justify-content: flex-start;">
-            <div :class="{'low-bg-color':item.level===1,'middle-bg-color':item.level===2,'height-bg-color':item.level===3,'serious-bg-color':item.level===4}">
-                {{getDangerName(detailInfo.level)}}
+<div v-if="dialogVisible" class="dialog-style" @click.stop>
+    <div class="dialog-bg-style" style="display: flex;flex-direction: column;">
+        <div style="border: 1px solid #f0f0f0;flex: 1;">
+            <div style="padding: 30px;display: flex;flex-direction: row;justify-content: flex-start;">
+                <div :class="{'low-bg-color':detailInfo.level===1,'middle-bg-color':detailInfo.level===2,'height-bg-color':detailInfo.level===3,'serious-bg-color':detailInfo.level===4}">
+                    {{getDangerName(detailInfo.level)}}
+                </div>
+                <div style="margin-left: 20px;">{{detailInfo.value1}}</div>
+                <div>（操作系统内部版本 {{detailInfo.systemVer}}）</div>
             </div>
-            <div>{{detailInfo.value1}}</div>
-            <div>（操作系统内部版本 {{detailInfo.systemVer}}）</div>
         </div>
-        <div style="border-bottom:1px solid #f0f0f0;"></div>  
+        <!-- <div style="border-bottom:1px solid #f0f0f0;"></div> -->
+        <div style="flex: 5;padding-left: 15px;">
+            <h3 style="margin: 10px 15px;">详情描述</h3>
+            <div style="margin: 10px 15px;">{{detailInfo.dangerInfo}}</div>
+            <div style="display: flex;flex-direction: column;">
+                <div style="margin: 10px 15px; display:flex;justify-content: start;align-items: center;">
+                    <h3>修复影响</h3>
+                    <span style="margin-left: 15px;">{{detailInfo.value3}}</span>
+                </div>
+                <div style="margin: 10px 15px;display:flex;justify-content: start;align-items: center;">
+                    <h3>漏洞来源</h3>
+                    <span style="margin-left: 15px;">{{detailInfo.dangerSource}}</span>
+                </div>
+                <div style="margin: 10px 15px;display:flex;flex-direction: column;justify-content: start;">
+                    <h3 >参考详情</h3>
+                    <span >{{detailInfo.url}}</span>
+                </div>
+            </div>
+        </div>
+        <div style="flex: 1;display: flex;justify-content: center;align-items: center;">
+            <div class="sure-btn" @click="onCloseDetail">确定</div>
+        </div>
     </div>
 </div>

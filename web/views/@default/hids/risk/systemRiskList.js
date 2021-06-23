@@ -73,7 +73,7 @@ Tea.context(function () {
     if(tableData){
       for (var i = 0; i < tableData.length; i++) {
         if (tableData[i].id == id) {
-          detailInfo = tableData[i]
+          this.detailInfo = tableData[i]
           break
         }
       }
@@ -98,7 +98,10 @@ Tea.context(function () {
       value5: "本地扫描",
       value6: 1,
       detailTime: "2021-06-07T11:33:06.000",
-      systemVer:"10240.18186"
+      systemVer:"10240.18186",
+      dangerSource:"Microsoft",
+      dangerInfo:"此更新包修改包括：1.解决了在节点操作期间引发异常时，可能导致使用 MSXML6 的应用程序停止响应的问题。2.解决了在编辑包含 Internet Explorer 10 Internet 设置的组策略首选项 (GPP) 的组策略对象 (GPO) 时，导致组策略编辑器停止响应的问题。",
+      url:"https://support.microsoft.com/en-us/kb/4493475"
     },
     {
       id: 2,
@@ -110,6 +113,10 @@ Tea.context(function () {
       value5: "本地扫描",
       value6: 2,
       detailTime: "2021-06-07T11:33:06.000",
+      systemVer:"10240.18186",
+      dangerSource:"Microsoft",
+      dangerInfo:"此更新包修改包括：1.解决了在节点操作期间引发异常时，可能导致使用 MSXML6 的应用程序停止响应的问题。2.解决了在编辑包含 Internet Explorer 10 Internet 设置的组策略首选项 (GPP) 的组策略对象 (GPO) 时，导致组策略编辑器停止响应的问题。",
+      url:"https://support.microsoft.com/en-us/kb/4493475"
     },
     {
       id: 3,
@@ -121,6 +128,10 @@ Tea.context(function () {
       value5: "本地扫描",
       value6: 3,
       detailTime: "2021-06-07T11:33:06.000",
+      systemVer:"10240.18186",
+      dangerSource:"Microsoft",
+      dangerInfo:"此更新包修改包括：1.解决了在节点操作期间引发异常时，可能导致使用 MSXML6 的应用程序停止响应的问题。2.解决了在编辑包含 Internet Explorer 10 Internet 设置的组策略首选项 (GPP) 的组策略对象 (GPO) 时，导致组策略编辑器停止响应的问题。",
+      url:"https://support.microsoft.com/en-us/kb/4493475"
     },
     {
       id: 4,
@@ -132,6 +143,10 @@ Tea.context(function () {
       value5: "本地扫描",
       value6: 4,
       detailTime: "2021-06-07T11:33:06.000",
+      systemVer:"10240.18186",
+      dangerSource:"Microsoft",
+      dangerInfo:"此更新包修改包括：1.解决了在节点操作期间引发异常时，可能导致使用 MSXML6 的应用程序停止响应的问题。2.解决了在编辑包含 Internet Explorer 10 Internet 设置的组策略首选项 (GPP) 的组策略对象 (GPO) 时，导致组策略编辑器停止响应的问题。",
+      url:"https://support.microsoft.com/en-us/kb/4493475"
     },
     {
       id: 5,
@@ -143,6 +158,10 @@ Tea.context(function () {
       value5: "本地扫描",
       value6: 5,
       detailTime: "2021-06-07T11:33:06.000",
+      systemVer:"10240.18186",
+      dangerSource:"Microsoft",
+      dangerInfo:"此更新包修改包括：1.解决了在节点操作期间引发异常时，可能导致使用 MSXML6 的应用程序停止响应的问题。2.解决了在编辑包含 Internet Explorer 10 Internet 设置的组策略首选项 (GPP) 的组策略对象 (GPO) 时，导致组策略编辑器停止响应的问题。",
+      url:"https://support.microsoft.com/en-us/kb/4493475"
     },
   ];
   this.tableData2 = [
@@ -156,6 +175,10 @@ Tea.context(function () {
       value5: "本地扫描",
       value6: 1,
       detailTime: "2021-06-07T11:33:06.000",
+      systemVer:"10240.18186",
+      dangerSource:"Microsoft",
+      dangerInfo:"此更新包修改包括：1.解决了在节点操作期间引发异常时，可能导致使用 MSXML6 的应用程序停止响应的问题。2.解决了在编辑包含 Internet Explorer 10 Internet 设置的组策略首选项 (GPP) 的组策略对象 (GPO) 时，导致组策略编辑器停止响应的问题。",
+      url:"https://support.microsoft.com/en-us/kb/4493475"
     },
     {
       id: 2,
@@ -167,6 +190,10 @@ Tea.context(function () {
       value5: "本地扫描",
       value6: 2,
       detailTime: "2021-06-07T11:33:06.000",
+      systemVer:"10240.18186",
+      dangerSource:"Microsoft",
+      dangerInfo:"此更新包修改包括：1.解决了在节点操作期间引发异常时，可能导致使用 MSXML6 的应用程序停止响应的问题。2.解决了在编辑包含 Internet Explorer 10 Internet 设置的组策略首选项 (GPP) 的组策略对象 (GPO) 时，导致组策略编辑器停止响应的问题。",
+      url:"https://support.microsoft.com/en-us/kb/4493475"
     },
     {
       id: 3,
@@ -178,6 +205,10 @@ Tea.context(function () {
       value5: "本地扫描",
       value6: 3,
       detailTime: "2021-06-07T11:33:06.000",
+      systemVer:"10240.18186",
+      dangerSource:"Microsoft",
+      dangerInfo:"此更新包修改包括：1.解决了在节点操作期间引发异常时，可能导致使用 MSXML6 的应用程序停止响应的问题。2.解决了在编辑包含 Internet Explorer 10 Internet 设置的组策略首选项 (GPP) 的组策略对象 (GPO) 时，导致组策略编辑器停止响应的问题。",
+      url:"https://support.microsoft.com/en-us/kb/4493475"
     },
     {
       id: 4,
@@ -189,6 +220,10 @@ Tea.context(function () {
       value5: "本地扫描",
       value6: 4,
       detailTime: "2021-06-07T11:33:06.000",
+      systemVer:"10240.18186",
+      dangerSource:"Microsoft",
+      dangerInfo:"此更新包修改包括：1.解决了在节点操作期间引发异常时，可能导致使用 MSXML6 的应用程序停止响应的问题。2.解决了在编辑包含 Internet Explorer 10 Internet 设置的组策略首选项 (GPP) 的组策略对象 (GPO) 时，导致组策略编辑器停止响应的问题。",
+      url:"https://support.microsoft.com/en-us/kb/4493475"
     }
   ];
 });
