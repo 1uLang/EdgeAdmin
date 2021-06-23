@@ -15,8 +15,8 @@ func init() {
 			Data("teaMenu", "hids").
 			Prefix("/hids/agent").
 			Get("", new(IndexAction)).
-			Get("/download", new(DisportAction)).
-			Get("/install", new(DisportAction)).
+			Get("/download", new(DownloadAction)).
+			Get("/install", new(InstallAction)).
 			Post("/disport", new(DisportAction)).
 			EndAll()
 	})
