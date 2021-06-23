@@ -60,7 +60,7 @@ Tea.context(function () {
         {id:4,hostAddress:"成都-ddos-192.168.1.4",},
     ]
 
-    this.tableData = {
+    this.tableDatas = {
         verInfo:"CloudFW 21.1.5-amd64<br />FreeBSD 12.1-RELEASE-p16-HBSD<br />OpenSSL 1.1.1k 25 Mar 2021",
         cpuInfo:"CPU type",
         slbInfo:"0.41, 0.34, 0.27",

@@ -6,6 +6,7 @@ import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/actions"
+	"github.com/sirupsen/logrus"
 )
 
 type SetAction struct {
@@ -30,6 +31,10 @@ func (this *SetAction) RunPost(params struct {
 	params.Must.
 		Field("id", params.Id).
 		Require("ID不能为空")
+	params.Must.
+		Field("node_id", params.NodeId).
+		Require("节点不能为空")
+	logrus.Info("nodeid", params.NodeId)
 	res, err := opnsense_server.StartUpNat1To1(&opnsense_server.StartNat1To1Req{
 		Id:     params.Id,
 		NodeId: params.NodeId,

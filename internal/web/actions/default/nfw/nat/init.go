@@ -12,7 +12,8 @@ func init() {
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeNfw)).
 			Data("teaMenu", "nfw").
 			Prefix("/nfw/nat").
-			Get("", new(IndexAction)).
+			GetPost("", new(IndexAction)).
+			Get("/detail/options", new(DetailAction)).
 			GetPost("/createPopup", new(CreatePopupAction)). //修改创建
 			GetPost("/delete", new(DeleteAction)).           //删除
 			Post("/set", new(SetAction)).                    //禁用 启动

@@ -84,7 +84,7 @@ func (this *ConfigDefectListAction) RunGet(params struct {
 	ProcessState int
 
 	Must *actions.Must
-	CSRF *actionutils.CSRF
+	//CSRF *actionutils.CSRF
 }) {
 	params.Must.
 		Field("macCode", params.MacCode).

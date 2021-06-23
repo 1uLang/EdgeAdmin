@@ -3,14 +3,17 @@ Tea.context(function () {
 
     this.nShowState = 1
 
-    this.postId = 1     //接口* ID
-    this.typeId = 1     //类型* ID
-    this.outNewValue = ""//外部网络*的值
-    this.sourceValue = ""//源的值
-    this.sourceId = 1   //源的ID
-    this.targetId = 1   //目标的ID
-    this.descValue = "" //描述的ID
-
+    this.id = "" //id
+    this.interface = "wan"     //接口* ID
+    this.type = "binat"     //类型* ID
+    this.external = ""//外部网络*的值
+    this.src = ""//源的值
+    this.srcmask = ""//源的掩码
+    this.dst = ""   //目标 input
+    this.dsts = ""   //目标 select
+    this.dstmask = ""   //目标的掩码
+    this.descr = "" //描述
+    // this.selectNode = 0 //节点
     this.onChangeShowState = function (state) {
         if (this.nShowState != state) {
             this.nShowState = state
@@ -34,16 +37,21 @@ Tea.context(function () {
     //修改配置
     this.onOpenChangeView = function (id) {
         console.log(id)
-        for (var i = 0; i < this.tableData.length; i++) {
-            if (this.tableData[i].id == id) {
+        //获取详细数据
+        this.GetNatInfo(id)
+        for (var i = 0; i < this.tableDataList.length; i++) {
+            if (this.tableDataList[i].id == id) {
                 console.log("tableData")
-                this.postId = this.tableData[i].postIndex
-                this.typeId = this.tableData[i].typeIndex
-                this.outNewValue = this.tableData[i].outIP
-                this.sourceValue = this.tableData[i].sourceValue
-                this.sourceId = this.tableData[i].sourceTypeIndex
-                this.targetId = this.tableData[i].targetIndex
-                this.descValue = this.tableData[i].desc
+                this.id = this.tableDataList[i].id
+                this.interface = this.tableDataList[i].interface
+                this.type = this.tableDataList[i].type
+                this.external = this.tableDataList[i].external
+                this.src = this.tableDataList[i].src
+                // this.srcmask = this.tableDataList[i].srcmask //
+                this.dst = this.tableDataList[i].dst
+                this.dsts = this.tableDataList[i].dst
+                // this.dstmask = this.tableDataList[i].dstmask //
+                this.descr = this.tableDataList[i].descr
                 break
             }
         }
@@ -52,39 +60,64 @@ Tea.context(function () {
 
     //重置value
     this.resetValue = function () {
-        this.postId = 1
-        this.typeId = 1
-        this.outNewValue = ""
-        this.sourceValue = ""
-        this.sourceId = 1
-        this.targetId = 1
-        this.descValue = ""
+        this.id = ""
+        this.interface = "wan"
+        this.type = "binat"
+        this.external = ""
+        this.src = ""
+        this.srcmask = ""
+        this.dst = ""
+        this.dsts = ""
+        this.dstmask = ""
+        this.descr = ""
+
     }
 
     //保存配置
     this.onSaveConfig = function () {
+        console.log(this.interface);
 
+        Tea.action("/nfw/nat/createPopup")
+            .params({
+                nodeId: this.selectNode,
+                id: this.id,
+                interface:this.interface,
+                type:this.type,
+                external:this.external,
+                src:this.src,
+                srcmask:this.srcmask,
+                dst:this.Dst,
+                dsts:this.Dsts,
+                dstmask:this.dstmask,
+                descr:this.descr,
+            })
+            .post()
+            .success(function (resp) {
+
+                console.log(resp.data);
+            })
     }
 
     //开启配置
-    this.onOpenConfig = function (id) {
-
-    }
+    // this.onOpenConfig = function (id) {
+    //
+    // }
 
     //关闭配置
-    this.onOpenConfig = function (id,status) {
+    this.onOpenConfig = function (id, status) {
         let tops = "禁用"
         let statusUp = "0"
         let that = this
-        if(status == "0"){
+        if (status == "0") {
             tops = "启用"
             statusUp = "1"
         }
-        teaweb.confirm("确定要"+tops+"此项吗？", function () {
+        teaweb.confirm("确定要" + tops + "此项吗？", function () {
             that.$post(".set")
                 .params({
                     id: id,
-                    status,statusUp,
+                    status: statusUp,
+                    nodeId: this.selectNode,
                 })
                 .refresh()
         })
@@ -93,25 +126,24 @@ Tea.context(function () {
     this.onDelConfig = function (id) {
         teaweb.confirm("确定要删除所选规则？", function () {
             let that = this
-            teaweb.confirm("确定要删除这个用户吗？", function () {
                 that.$post(".delete")
                     .params({
-                        userId: userId
+                        id: id,
+                        nodeId: this.selectNode,
                     })
                     .refresh()
-            })
         })
     }
 
-    this.dropNodeData = [
-        {id: 1, value: 1},
-        {id: 2, value: 2},
-        {id: 3, value: 3},
-        {id: 4, value: 4},
-        {id: 5, value: 5},
-        {id: 6, value: 6},
-        {id: 7, value: 7},
-        {id: 8, value: 8},
+    this.masks = [
+        {id: 1, value: 1}, {id: 2, value: 2}, {id: 3, value: 3}, {id: 4, value: 4},
+        {id: 5, value: 5}, {id: 6, value: 6}, {id: 7, value: 7}, {id: 8, value: 8},
+        {id: 9, value: 9}, {id: 10, value: 10}, {id: 11, value: 11}, {id: 12, value: 12},
+        {id: 13, value: 13}, {id: 14, value: 14}, {id: 15, value: 15}, {id: 16, value: 16},
+        {id: 17, value: 17}, {id: 18, value: 18}, {id: 19, value: 19}, {id: 20, value: 20},
+        {id: 21, value: 21}, {id: 22, value: 22}, {id: 23, value: 23}, {id: 24, value: 24},
+        {id: 25, value: 25}, {id: 26, value: 26}, {id: 27, value: 27}, {id: 28, value: 28},
+        {id: 29, value: 29}, {id: 30, value: 30}, {id: 31, value:31}, {id: 32,  value: 32},
     ]
 
     this.hostData = [
@@ -181,5 +213,42 @@ Tea.context(function () {
             sourceValue: "源的值"
         }
     ]
+
+    //获取当前选中的节点
+    this.GetSelectNode = function (event) {
+        this.selectNode = event.target.value; //获取option对应的value值
+        let node = this.selectNode
+        window.location.href = '/nfw/nat?nodeId=' + node
+
+    }
+
+    //通过ID 获取详细数据
+    this.GetNatInfo = function(id){
+        Tea.action("/nfw/nat/detail/options")
+            .params({
+                NodeId: this.selectNode,
+                id: id,
+            })
+            .get()
+            .success(function (resp) {
+                this.srcmask = "32"
+                let srcmask = resp.data.srcmask
+                for(var i = 0; i < srcmask.length; i++){
+                    if(srcmask[i].selected == true ){
+                        this.srcmask = srcmask[i].value
+
+                    }
+                }
+
+                this.dstmask = "32"
+                let dstmask = resp.data.dstmask
+                for(var i = 0; i < dstmask.length; i++){
+                    if(dstmask[i].selected == true ){
+                        this.dstmask = dstmask[i].value
+                    }
+                }
+
+            })
+    }
 
 })
