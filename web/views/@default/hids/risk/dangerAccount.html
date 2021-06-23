@@ -1,5 +1,57 @@
 {$layout}
-漏洞风险-风险账号
+
+<!-- 列表 <a href="/hids/risk/dangerAccountList" class="item">查看</a> -->
+<!-- 漏洞风险-风险账号 -->
+<div>
+    <div class="card-div" style="display: flex;flex-direction: row;justify-content: space-between;padding: 15px 10px;margin-top: 20px;">
+        <div>风险账号</div>
+        <div class="edit_btn" @click="onGoBack">返回</div>
+    </div>
+
+    <div class="card-div" style="display: flex;flex-direction: row;margin-top: 15px;">
+        <form method="get" action="/ddos/logs" class="ui form" autocomplete="off" style="padding-top: 5px;">
+            <div class="ui fields inline">
+                <div class="ui field">主机IP：</div>
+                <div class="ui field">
+                    <input type="text" name="keyword" style="width:10em" v-model="keyword"/>
+                </div>
+                <div class="ui field">
+                    <button type="submit" class="ui button" @click="">查询</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="card-div" style="height: 600px;;display: flex;flex-direction: row;margin-top: 15px;">
+        <table id = "tab" height="40px" class="ui table selectable celled" border="1" style="border-collapse: collapse;margin:15px;">
+            <thead>
+                <tr align="center">
+                    <th class='table-head-bg' style="width: 500px;" >主机IP</th>
+                    <th class='table-head-bg' style="width: 500px;" >风险账号数量</th>
+                    <th class='table-head-bg' style="width: 160px;" >详情</th>
+                </tr>
+            </thead>
+            <tbody id='tableBody'>
+                <tr align="center" v-for="(item, index) in tableData" >
+                    <td style="position: relative;" @mouseenter="enters(index)" @mouseleave="leaver(index)">{{item.hostData.intIp}}
+                        <div v-show="curIndex===index" class="table-item-style">
+                            <div>外网IP：{{item.hostData.outIp}}</div>
+                            <div>内网IP：{{item.hostData.intIp}}</div>
+                            <div>主机名：{{item.hostData.hostName}}</div>
+                            <div>操作系统：{{item.hostData.systemName}}</div>
+                            <div>系统内核：{{item.hostData.rootName}}</div>
+                            <div>Mac地址：{{item.hostData.macAddr}}</div>
+                            <div>备注信息：{{item.hostData.remarks}}</div>
+                        </div>
+                    </td>
+                    <td>{{item.value1}}</td>
+                    <td>
+                        <div class="edit_btn" @click="onOpenDetail(item.id)">查看</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
 
-列表 <a href="/hids/risk/dangerAccountList" class="item">查看</a>
