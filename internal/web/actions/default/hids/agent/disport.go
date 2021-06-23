@@ -20,14 +20,13 @@ func (this *DisportAction) RunPost(params struct {
 	Opt     string
 
 	Must *actions.Must
-	CSRF *actionutils.CSRF
 }) {
 	params.Must.
-		Field("username", params.MacCode).
+		Field("MacCode", params.MacCode).
 		Require("请输入机器码")
 
 	params.Must.
-		Field("osType", params.Opt).
+		Field("Opt", params.Opt).
 		Require("请选择操作方式")
 
 	err := hids.InitAPIServer()

@@ -5,9 +5,8 @@
         <button class="ui button" style="background-color:#0091cc;color: #fff;" @click="onOpenCommand">获取安装命令</button>
     </div>
 </div>
-
 <div>
-    <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+    <table class="ui table selectable celled" border="1" style="border-collapse: collapse;">
         <thead>
             <tr align="center">
                 <th class='table-head-bg' style="width: 259px;" >主机IP</th>
@@ -19,19 +18,19 @@
                 <th class='table-head-bg' style="width: 148px;" >操作</th>
             </tr>
         </thead>
-        <tbody id='tableBody'>
-            <tr align="center" style="height: 40px;" v-for="item in tableData" >
-                <td>{{item.ip}}</td>
-                <td>{{getStatusImgName(item.status)}}</td>
-                <td>{{item.edition}}</td>
-                <td>{{onChangeTimeFormat(item.installTime)}}</td>
-                <td>{{onChangeTimeFormat(item.latelyOnlineTime)}}</td>
-                <td>{{onChangeTimeFormat(item.lastOnlineTime)}}</td>
+        <tbody >
+            <tr align="center" style="height: 40px;" v-for="item in agents" >
+                <td>{{item.serverIp}}</td>
+                <td>{{getStateName(item.agentState)}}</td>
+                <td>{{item.version}}</td>
+                <td>{{item.installTime}}</td>
+                <td>{{item.lastOnlineTime}}</td>
+                <td>{{item.lastUpdateTime}}</td>
                 <td>
                     <div style="display: inline-flex;justify-content: center;">
-                        <div v-if="item.status===1" class="edit_btn_blue" @click="onStopConfig(item.id)">停用</div>
-                        <div v-else class="edit_btn_blue" @click="onStartConfig(item.id)">启用</div>
-                        <div class="edit_btn_red" @click="onDelete(item.id)">卸载</div>
+                        <div v-if="item.agentState!=3 && item.agentState!=4" class="edit_btn_blue" @click="onStopConfig(item)">停用</div>
+                        <div v-if="item.agentState !=2 && item.agentState!=1" class="edit_btn_blue" @click="onStartConfig(item)">启用</div>
+                        <div v-if="item.agentState !=5 && item.agentState!=6" class="edit_btn_red" @click="onDelete(item)">卸载</div>
                     </div>
                 </td>
             </tr>

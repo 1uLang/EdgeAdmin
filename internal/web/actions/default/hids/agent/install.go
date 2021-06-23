@@ -15,33 +15,25 @@ func (this *InstallAction) Init() {
 }
 
 func (this *InstallAction) RunGet(params struct {
-	UserName string
-	osType   string
-
-	//Must *actions.Must
-	//CSRF *actionutils.CSRF
 }) {
-	this.Show()
-	return
-	//params.Must.
-	//	Field("username", params.UserName).
-	//	Require("请输入用户名")
-	//
-	//params.Must.
-	//	Field("osType", params.osType).
-	//	Require("请选择主机操作系统")
-	//
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
 
-	list, err := agent_server.Install(params.UserName, params.osType)
+	linux, err := agent_server.Install("luobing", "Linux")
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	this.Data["data"] = list
+
+	windows, err := agent_server.Install("luobing", "Windows")
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	this.Data["linux"] = linux
+	this.Data["windows"] = windows
 	this.Show()
 }

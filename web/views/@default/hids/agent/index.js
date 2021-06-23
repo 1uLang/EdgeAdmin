@@ -1,41 +1,58 @@
 Tea.context(function () {
 
 
-    this.onChangeTimeFormat = function (time) {
-        var resultTime = "";
-        if (time) {
-          var tempTime = time.substring(0, time.indexOf("."));
-          resultTime = tempTime.replace("T", " ");
-        }
-        return resultTime;
-      };
-
-
-    this.onOpenCommand = function(){
-        teaweb.popup(Tea.url(".createCommand"));
+    this.onOpenCommand = function () {
+        teaweb.popup(Tea.url(".install"));
     }
 
-    this.onStartConfig = function(id){
-        
-    }
-
-    this.onStopConfig = function(id){
+    this.onStartConfig = function (item) {
+        teaweb.confirm("确定要启动吗？", function () {
+            this.$post(".disport")
+                .params({
+                    MacCode: item.macCode,
+                    Opt: 'enable',
+                })
+                .refresh()
+        })
 
     }
 
-    this.onDelete = function(id){
-        teaweb.confirm("确定要删除？", function () {
-           
+    this.onStopConfig = function (item) {
+        teaweb.confirm("确定要停用吗？", function () {
+            this.$post(".disport")
+                .params({
+                    MacCode: item.macCode,
+                    Opt: 'disable',
+                })
+                .refresh()
+        })
+
+    }
+
+    this.onDelete = function (item) {
+        teaweb.confirm("确定要卸载吗？", function () {
+            this.$post(".disport")
+                .params({
+                    MacCode: item.macCode,
+                    Opt: 'delete',
+                })
+                .refresh()
         })
     }
 
-    this.getStatusImgName = function(status){
-        return status == 1? "已启用":"已停用"
+    this.getStateName = function (state) {
+        if(state == '1')
+            return "启用中"
+        else if(state == '2')
+            return "已启用"
+        else if(state == '3')
+            return "停用中"
+        else if(state == '4')
+            return "已停用"
+        else if(state == '5')
+            return "卸载中"
+        else if(state == '6')
+            return "已卸载"
     }
-
-    this.tableData = [
-        {id:1,ip:"192.168.0.1",status:1,edition:"(Windows)5.4.30014",installTime:"2021-06-07T11:33:06.000",latelyOnlineTime:"2021-06-08T11:33:06.000",lastOnlineTime:"2021-06-09T11:33:06.000"},
-        {id:2,ip:"192.168.0.2",status:2,edition:"(Linux64)4.0.30693",installTime:"2021-06-07T11:33:06.000",latelyOnlineTime:"2021-06-08T11:33:06.000",lastOnlineTime:"2021-06-09T11:33:06.000"}
-    ]
 });
   
