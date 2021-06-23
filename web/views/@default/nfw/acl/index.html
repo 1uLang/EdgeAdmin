@@ -127,7 +127,7 @@
                             <!-- <nfw-source-selector :v-idc-id="sourceId"></nfw-source-selector> -->
                             <!-- 本地数据用这个 -->
                             <select class="ui dropdown auto-width" name="sourceId" v-model="sourceId">
-                                <option v-for="item in dropNodeData" :value="item.id">{{item.value}}</option>
+                                <option v-for="item in masks" :value="item.id">{{item.value}}</option>
                             </select>
                         </div>
                         
@@ -152,7 +152,7 @@
                             <!-- <nfw-source-selector :v-idc-id="targetId"></nfw-source-selector> -->
                             <!-- 本地数据用这个 -->
                             <select class="ui dropdown auto-width" name="targetId" v-model="targetId">
-                                <option v-for="item in dropNodeData" :value="item.id">{{item.value}}</option>
+                                <option v-for="item in masks" :value="item.id">{{item.value}}</option>
                             </select>
                         </div>
                     </td>

@@ -1,20 +1,26 @@
 {$layout}
-{{tableDataList}}
-{{nodes}}
 <div style="height: 90vh;">
 
     <div style="display: flex;justify-content: space-between;height: 45px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;margin-bottom: 30px;">
         <div style="display: inline-flex;margin-top: 10px;">
-            <div :class="{'menu-select-color':nShowState===1,'menu-define-color':nShowState!=1}" @click="onChangeShowState(1)">规则列表</div>
-            <div v-show="nShowState!=3" :class="{'menu-select-color':nShowState===2,'menu-define-color':nShowState!=2}" @click="onChangeShowState(2)">添加规则</div>
-            <div v-show="nShowState===3" :class="{'menu-select-color':nShowState===3,'menu-define-color':nShowState!=3}">修改规则</div>
+            <div :class="{'menu-select-color':nShowState===1,'menu-define-color':nShowState!=1}"
+                 @click="onChangeShowState(1)">规则列表
+            </div>
+            <div v-show="nShowState!=3" :class="{'menu-select-color':nShowState===2,'menu-define-color':nShowState!=2}"
+                 @click="onChangeShowState(2)">添加规则
+            </div>
+            <div v-show="nShowState===3"
+                 :class="{'menu-select-color':nShowState===3,'menu-define-color':nShowState!=3}">修改规则
+            </div>
         </div>
         <div align="right" style="display: inline-flex;">
             <div style="line-height: 40px;text-align: center;">DDoS防火墙节点：</div>
-            <div class="ui field">  
+            <div class="ui field">
                 <div class="ui field">
-                    <select class="ui dropdown auto-width" name="nodeId" v-model="selectNode">
-                        <option v-for="item in nodes" :value="item.id" v-if="item.id == selectNode" selected>{{item.addr}}</option>
+                    <select class="ui dropdown auto-width" name="nodeId" v-model="selectNode"
+                            @change="GetSelectNode($event)">
+                        <option v-for="item in nodes" :value="item.id" v-if="item.id == selectNode"
+                                selected>{{item.addr}}</option>
                         <option :value="item.id" v-else>
                             {{item.addr}}
                         </option>
@@ -25,78 +31,82 @@
     </div>
 
     <div v-if="nShowState===1" style="margin-top: 20px;">
-        <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+        <table id="tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
             <thead>
-                <tr align="center">
-                    <th class='table-head-bg' style="width: 138px;" >接口</th>
-                    <th class='table-head-bg' style="width: 198px;" >外部IP</th>
-                    <th class='table-head-bg' style="width: 143px;" >内部IP</th>
-                    <th class='table-head-bg' style="width: 172px;" >目标IP</th>
-                    <th class='table-head-bg' style="width: 177px;" >描述</th>
-                    <th class='table-head-bg' style="width: 107px;" >状态</th>
-                    <th class='table-head-bg' style="width: 208px;" >操作</th>
-                </tr>
+            <tr align="center">
+                <th class='table-head-bg' style="width: 138px;">接口</th>
+                <th class='table-head-bg' style="width: 198px;">外部IP</th>
+                <th class='table-head-bg' style="width: 143px;">内部IP</th>
+                <th class='table-head-bg' style="width: 172px;">目标IP</th>
+                <th class='table-head-bg' style="width: 177px;">描述</th>
+                <th class='table-head-bg' style="width: 107px;">状态</th>
+                <th class='table-head-bg' style="width: 208px;">操作</th>
+            </tr>
             </thead>
             <tbody id='tableBody'>
-                <tr align="center" style="height: 40px;" v-for="item in tableDataList" >
-                    <td>{{item.interface}}</td>
-                    <td>{{item.external}}</td>
-                    <td>{{item.src}}</td>
-                    <td>{{item.dst}}</td>
-                    <td>{{item.descr}}</td>
-                    <td>
-                        <div :class="{'status-open':item.status=='1','status-close':item.status=='0'}">
-                            {{getStatus(item.status)}}
-                        </div>
-                    </td>
-                    <td>
-                        <div style="display: flex;justify-content: space-around;">
-                            <div class="edit_btn" @click="onOpenChangeView(item.id)">修改</div>
+            <tr align="center" style="height: 40px;" v-for="item in tableDataList">
+                <td>{{item.interface}}</td>
+                <td>{{item.external}}</td>
+                <td>{{item.src}}</td>
+                <td>{{item.dst}}</td>
+                <td>{{item.descr}}</td>
+                <td>
+                    <div :class="{'status-open':item.status=='1','status-close':item.status=='0'}">
+                        {{getStatus(item.status)}}
+                    </div>
+                </td>
+                <td>
+                    <div style="display: flex;justify-content: space-around;">
+                        <div class="edit_btn" @click="onOpenChangeView(item.id)">修改</div>
 
-                            <div class="edit_btn" @click="onOpenConfig(item.id,item.status)" v-if="item.status=='0'">启用</div>
-                            <div class="edit_btn" @click="onOpenConfig(item.id,item.status)" v-else>禁用</div>
-
-                            <div class="edit_btn" @click="onDelConfig(item.id)">删除</div>
+                        <div class="edit_btn" @click="onOpenConfig(item.id,item.status)" v-if="item.status=='0'">启用
                         </div>
-                    </td>
-                </tr>
+                        <div class="edit_btn" @click="onOpenConfig(item.id,item.status)" v-else>禁用</div>
+
+                        <div class="edit_btn" @click="onDelConfig(item.id)">删除</div>
+                    </div>
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>
     <div v-else style="height: 90%;">
-        <form method="post" class="ui form" data-tea-action="$" data-tea-success="success" style="margin-top: 50px;">
+        <form method="post" class="ui form" action="/nfw/nat/createPopup" data-tea-success="success"
+              style="margin-top: 50px;">
+            <!--<csrf-token></csrf-token>-->
             <table class="ui table definition selectable">
                 <tr>
                     <td class="title">接口*</td>
                     <td>
-                        <nfw-interface-selector :v-idc-id="postId"></nfw-interface-selector>
+                        <nfw-interface-selector :v-interface-id="interface" :v-node-id="selectNode"
+                                                :v-id="id"></nfw-interface-selector>
                     </td>
                 </tr>
                 <tr>
                     <td class="title">类型*</td>
                     <td>
-                        <nfw-type-selector :v-idc-id="typeId"></nfw-type-selector>
+                        <nfw-type-selector :v-type="type" :v-node-id="selectNode" :v-id="id"></nfw-type-selector>
                     </td>
                 </tr>
                 <tr>
                     <td class="title">外部网络*</td>
                     <td>
-                        <input type="text" name="outNet" maxlength="50" :value="outNewValue" ref="focus"/>
+                        <input type="text" name="external" maxlength="50" :value="external" ref="focus"/>
                     </td>
                 </tr>
                 <tr>
                     <td class="title">源*</td>
                     <td>
-                        <input type="text" name="source" maxlength="50" :value="sourceValue"/>
-                    </td>
-                    <td>
-                        <!-- 网络请求用这个 -->
+                        <input type="text" name="src" maxlength="50" :value="src" :value="src"/>
+                        <!-- </td>
+                         <td>
+                              网络请求用这个 -->
                         <!-- <nfw-source-selector :v-idc-id="sourceId"></nfw-source-selector> -->
                         <!-- 本地数据用这个 -->
                         <div>
-                            <select class="ui dropdown auto-width" name="sourceId" v-model="sourceId">
+                            <select class="ui dropdown auto-width" name="srcmask" v-model="srcmask" :value="srcmask">
 
-                                <option v-for="item in dropNodeData" :value="item.id">{{item.value}}</option>
+                                <option v-for="item in masks" :value="item.id">{{item.value}}</option>
                             </select>
                         </div>
                     </td>
@@ -104,17 +114,22 @@
                 <tr>
                     <td class="title">目标*</td>
                     <td>
-                        <nfw-target-selector :v-idc-id="targetId"></nfw-target-selector>
+                        <nfw-target-selector :v-dst="dst" :v-node-id="selectNode" :v-id="id" :v-dstmask="dstmask"
+                                             :v-masks="masks"></nfw-target-selector>
                     </td>
                 </tr>
                 <tr>
                     <td class="title">描述</td>
                     <td>
-                        <input type="text" name="desc" maxlength="50" :value="descValue"/>
+                        <input type="text" name="descr" maxlength="50" :value="descr"/>
                     </td>
                 </tr>
             </table>
-            <submit-btn></submit-btn>
+            <input type="hidden" name="id" :value="id">
+            <input type="hidden" name="nodeId" :value="selectNode">
+            <button class="ui button primary" type="button" @click="onSaveConfig">
+                <slot>保存</slot>
+            </button>
         </form>
     </div>
 </div>

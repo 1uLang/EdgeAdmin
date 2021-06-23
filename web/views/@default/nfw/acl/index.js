@@ -132,7 +132,7 @@ Tea.context(function () {
 
 
     //源和目标的位数
-    this.dropNodeData = [
+    this.masks = [
         {id:1,value:1},
         {id:2,value:2},
         {id:3,value:3},
