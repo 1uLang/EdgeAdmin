@@ -1,4 +1,33 @@
+<!-- <a href="/hids/examine/detail" class="item">详情</a> -->
+<!-- 主机体检 -->
 {$layout}
-主机体检
+{$template "/datepicker"}
 
-<a href="/hids/examine/detail" class="item">详情</a>
+<div class="card-div" style="margin-top: 20px;">
+    <form class="ui form" autocomplete="off">
+        <div style="display: inline-flex;margin: 15px;">
+            <div class="title-style">体检状态</div>
+            <div :class="{'meun-select-color':nCheckState===1,'meun-define-color':nCheckState!=1}" @click="onChangeCheckState(1)">全部</div>
+            <div :class="{'meun-select-color':nCheckState===2,'meun-define-color':nCheckState!=2}" @click="onChangeCheckState(2)">未检查</div>
+            <div :class="{'meun-select-color':nCheckState===3,'meun-define-color':nCheckState!=3}" @click="onChangeCheckState(3)">检查中</div>
+            <div :class="{'meun-select-color':nCheckState===4,'meun-define-color':nCheckState!=4}" @click="onChangeCheckState(4)">已完成</div>
+        </div>
+        <div style="display: flex;flex-direction: row;margin: 15px;">
+            <div style="display: inline-flex;align-items: center;width: 50%;">
+                <div class="title-style">体检结论</div>
+                <div :class="{'meun-select-color':nResultState===1,'meun-define-color':nResultState!=1}" @click="onChangeResultState(1)">全部</div>
+                <div :class="{'meun-select-color':nResultState===2,'meun-define-color':nResultState!=2}" @click="onChangeResultState(2)">基线异常</div>
+                <div :class="{'meun-select-color':nResultState===3,'meun-define-color':nResultState!=3}" @click="onChangeResultState(3)">基线正常</div>
+            </div>
+            <div class="ui fields inline">
+                <div class="title-style">体检时间</div>
+                <div class="ui field" style="margin-right: 10px;">
+                    <input type="text" name="dayFrom" placeholder="开始日期" v-model="dayFrom" value="" style="width:8em" id="day-from-picker"/>
+                </div>
+                <div class="ui field">
+                    <input type="text" name="dayTo" placeholder="结束日期" v-model="dayTo" value="" style="width:8em" id="day-to-picker"/>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
