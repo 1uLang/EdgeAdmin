@@ -2,6 +2,8 @@ cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMT
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
 github.com/1uLang/zhiannet-api v0.0.0-20210622031039-71e8d9dcaf41 h1:7xi0+Ti0/UB4PRPfV5gLq8sYH8GFO7U8r9iMDPHSjMI=
 github.com/1uLang/zhiannet-api v0.0.0-20210622031039-71e8d9dcaf41/go.mod h1:roVKSA5tjx0MKSEF3AlhlRl8oRT2so3oI799U54hhtw=
+github.com/1uLang/zhiannet-api v0.0.0-20210624071840-f17271f5366d h1:s1lSgUcOimLcKc2eEqHozUyJ9B/y8dJpwOByfmzz5ac=
+github.com/1uLang/zhiannet-api v0.0.0-20210624071840-f17271f5366d/go.mod h1:roVKSA5tjx0MKSEF3AlhlRl8oRT2so3oI799U54hhtw=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
 github.com/DataDog/sketches-go v0.0.0-20190923095040-43f19ad77ff7/go.mod h1:Q5DbzQ+3AkgGwymQO7aZFNP7ns2lZKGtvRBzRXfdi60=

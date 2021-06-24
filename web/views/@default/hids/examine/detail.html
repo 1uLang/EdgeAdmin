@@ -22,10 +22,23 @@
             <span style="font-weight: bold;margin-right: 20px;">体检时间：</span>
             <span>{{onChangeTimeFormat(pageData.checkTime)}}</span>
         </div>
-        <div style="margin-top: 15px;">
+        <div style="margin-top: 15px;display: inline-flex;">
             <span style="font-weight: bold;margin-right: 20px;">体检项目：</span>
-            <div>
-
+            <div style="display: flex;flex-direction: column;">
+                <div style="display: inline-flex;margin-bottom: 20px;">
+                    <div v-for='item in pageData.checkTopItem' class="more-select-content">
+                        <img v-show="item.status===3" src="/images/check-select.png" width="15px" height="15px">
+                        <div v-show="item.status===2" style="width: 15px;height: 15px;"></div>
+                        <span style="margin-left: 5px;" :class="{'select-txt-color':item.status!=1,'define-txt-color':item.status===1}">{{item.value}}</span>
+                    </div>
+                </div>
+                <div style="display: inline-flex;">
+                    <div v-for='item in pageData.checkBottomItem' class="more-select-content">
+                        <img v-show="item.status===3" src="/images/check-select.png" width="15px" height="15px">
+                        <div v-show="item.status===2" style="width: 15px;height: 15px;"></div>
+                        <span style="margin-left: 5px;" :class="{'select-txt-color':item.status!=1,'define-txt-color':item.status===1}">{{item.value}}</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -21,3 +21,21 @@
 .hight-health-color{
     color: #169bd5;
 }
+
+.more-select-content{
+    min-width: 120px;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    width: 120px ;
+    height: 20px;
+    cursor: default;
+}
+
+.select-txt-color{
+    color: #999999;
+}
+.define-txt-color{
+    color: #000;
+}

@@ -93,39 +93,36 @@ Tea.context(function () {
                 bottom: 30,
                 containLabel: true
             },
-			xAxis: {
-                // name: 'Hour',
-                // boundaryGap值为false的时候，折线第一个点在y轴上
-				data: this.tableData.titleValue,
-                axisLabel: {
-                    // rotate: -30, // 旋转角度
-                    interval: 0  //设置X轴数据间隔几个显示一个，为0表示都显示
-                },
-			},
-			yAxis: {
-                name: '体检概况',
-                min:0, // 设置y轴刻度的最小值
-                // max:8,  // 设置y轴刻度的最大值
-                splitNumber:4,  // 设置y轴刻度间隔个数
-                // axisLine: {
-                //     lineStyle: {
-                //         // 设置y轴颜色
-                //         color: '#fff'
-                //     }
-                // },
+            legend: {
+                top: '5%',
+                left: 'center'
             },
 			tooltip: {
-				trigger: "axis",
+				trigger: "item",
 			},
+            color:['#2698fb','#26c4c3'],
 			series: [
-				{
-					type: "bar",
-					data: this.tableData.itemValue,
-					barWidth:"120px",
-                    color: "#2698fb"
-				},
-                
-			],
+                {
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '40',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: this.tableData.circularValue
+                }
+            ],
 			animation: false
 		}
 		chart.setOption(option)
@@ -136,10 +133,32 @@ Tea.context(function () {
         ipAddr:"45.195.61.132 （192.168.1.47;172.17.0.1;172.18.0.1）",
         checkNum:70,
         checkTime:"2021-06-05T12:15:25.000",
+        checkTopItem:[
+            //1未选择 2进行中 3已完成
+            {id:1,value:"漏洞风险",status:1},
+            {id:2,value:"系统漏洞",status:3},
+            {id:3,value:"弱口令",status:3},
+            {id:4,value:"风险账号",status:3},
+            {id:5,value:"配置缺陷",status:2},
+        ],
+        checkBottomItem:[
+            {id:6,value:"入侵威胁",status:1},
+            {id:7,value:"病毒木马",status:2},
+            {id:8,value:"网页后门",status:2},
+            {id:9,value:"反弹shell",status:3},
+            {id:10,value:"异常账号",status:2},
+            {id:10,value:"系统命令篡改",status:3},
+            {id:10,value:"异常进程",status:2},
+            {id:10,value:"日志异常删除",status:2},
+        ]
     }
 
     this.tableData = {
         titleValue:["系统漏洞","配置缺陷"],
-        itemValue:[20,2]
+        itemValue:[20,2],
+        circularValue:[
+            {value: 20, name: '系统漏洞'},
+            {value: 2, name: '配置缺陷'}
+        ]
     }
 })
