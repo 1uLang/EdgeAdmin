@@ -13,6 +13,12 @@ Tea.context(function () {
     this.pCheckDetailData = null
     this.sSelectCheckValue = []
 
+    this.webSearchKey = ""
+    this.searchPath = ""
+
+    this.bTimeOutTip = false
+    this.bShowScanPath = false
+
     this.sTopSelectItem = [
         {id:1,value:"系统漏洞"},
         {id:2,value:"弱口令"},
@@ -146,26 +152,11 @@ Tea.context(function () {
                 {
                     checkName:"入侵威胁检查项：",
                     checkValue:[
-                        {id:6,value:"系统漏洞"},
-                        {id:7,value:"系统漏洞"},
-                        {id:8,value:"系统漏洞"},
-                        {id:9,value:"系统漏洞"},
-                        {id:10,value:"系统漏洞"},
-                    ]
-                },
-                {
-                    checkName:"入侵威胁检查项：",
-                    checkValue:[
-                        {id:11,value:"系统漏洞"},
-                        {id:12,value:"系统漏洞"},
-                        {id:13,value:"系统漏洞"},
-                        {id:14,value:"系统漏洞"},
-                        {id:15,value:"系统漏洞"},
-                        {id:16,value:"系统漏洞"},
-                        {id:17,value:"系统漏洞"},
-                        {id:18,value:"系统漏洞"},
-                        {id:19,value:"系统漏洞"},
-                        {id:20,value:"系统漏洞"},
+                        {id:6,value:"反弹shell"},
+                        {id:7,value:"异常账号"},
+                        {id:8,value:"系统命令篡改"},
+                        {id:9,value:"异常进程"},
+                        {id:10,value:"日志异常删除"},
                     ]
                 }
             ]
@@ -202,6 +193,14 @@ Tea.context(function () {
         return "/images/select_box.png";
     }
 
+    this.onCheckSelectItem = function (id) {
+        let bValue = false;
+        if(this.checkSelectValue){
+            bValue = this.checkSelectValue(id,this.sSelectCheckValue);
+        }
+        return bValue
+    }
+
     this.onCloseCheck = function () { 
         this.sSelectCheckValue = []
         this.bShowCheckDetail = false
@@ -209,12 +208,35 @@ Tea.context(function () {
 
     this.onStartCheck = function (id) { 
         this.bShowCheckDetail = false
+        //
     }
     this.onStopCheck = function (id) { 
         teaweb.confirm("确定取消体检吗？", function () {
 			
 		})
+    }  
+     //检测是否显示扫描路径的输入框和提示框
+    this.onCheckSelectValue=function() {
+        
+        var selextBox = document.getElementsByName("customScan")
+        if(selextBox){
+            for(var item of selextBox){
+                if(item.checked){
+                    if(item.value==2){
+                        this.bTimeOutTip = true
+                        this.bShowScanPath = false
+                    }else if(item.value==3){
+                        this.bTimeOutTip = false
+                        this.bShowScanPath = true
+                    }else{
+                        this.bTimeOutTip = false
+                        this.bShowScanPath = false
+                    }
+                }
+            }
+        }
     }
+
 
     this.tableData = [
         {   
