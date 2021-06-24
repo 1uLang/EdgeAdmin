@@ -1,5 +1,6 @@
 {$layout}
 {$template "/datepicker"}
+<script type="text/javascript" src="/js/echarts/echarts.min.js"></script>
 
 <div style="width: 100%;margin-top: 30px;display: flex;flex-direction: row;">
     <div class="card-div" style="margin-right: 5%;">
@@ -48,21 +49,32 @@
 
 <div class="card-div" style="width: 100%;height: 430px;margin-top: 30px;">
     <div style="display: flex;justify-content: space-between;height: 45px;border-bottom: 1px #000 solid;padding-bottom: 10px;">
-        <div style="display: inline-flex;">
+        <div style="display: inline-flex;margin-top: 10px;">
             <div :class="{'menu-select-color':nShowState===1,'menu-define-color':nShowState!=1}" @click="onChangeShowState(1)">系统漏洞发现</div>
             <div :class="{'menu-select-color':nShowState===2,'menu-define-color':nShowState!=2}" @click="onChangeShowState(2)">系统漏洞处置</div>
         </div>
         <div align="right" style="display: inline-flex;">
-            <div :class="{'time-select-color':nTimeSelect===1,'time-define-color':nTimeSelect!=1}" @click="onChangeTimeSelect(1)">7天</div>
-            <div :class="{'time-select-color':nTimeSelect===2,'time-define-color':nTimeSelect!=2}" @click="onChangeTimeSelect(2)">30天</div>
-            <div :class="{'time-select-color':nTimeSelect===3,'time-define-color':nTimeSelect!=3}" @click="onChangeTimeSelect(3)">全年</div>
-            <div class="ui field">
-                <input type="text" name="dayFrom" placeholder="开始日期" v-model="dayFrom" value="" style="width:8em" id="day-from-picker"/>
-            </div>
-            <div class="ui field">
-                <input type="text" name="dayTo" placeholder="结束日期" v-model="dayTo" value="" style="width:8em" id="day-to-picker"/>
-            </div>
+            <form class="ui form" autocomplete="off">
+                <div style="display: flex;flex-direction: row;">
+                    <div style="display: inline-flex;align-items: center;width: 50%;">
+                        <div :class="{'time-select-color':nTimeSelect===1,'time-define-color':nTimeSelect!=1}" @click="onChangeTimeSelect(1)">7天</div>
+                        <div :class="{'time-select-color':nTimeSelect===2,'time-define-color':nTimeSelect!=2}" @click="onChangeTimeSelect(2)">30天</div>
+                        <div :class="{'time-select-color':nTimeSelect===3,'time-define-color':nTimeSelect!=3}" @click="onChangeTimeSelect(3)">全年</div>
+                    </div>
+                    <div class="ui fields inline">
+                        <div class="ui field">
+                            <input type="text" name="dayFrom" placeholder="开始日期" v-model="dayFrom" value="" style="width:8em" id="day-from-picker"/>
+                        </div>
+                        <div class="ui field">
+                            <input type="text" name="dayTo" placeholder="结束日期" v-model="dayTo" value="" style="width:8em" id="day-to-picker"/>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
+
+    <div v-show="nShowState===1" style="height:30em;width: 100%;" id="find-chart-box"></div>
+    <div v-show="nShowState===2" style="height:30em;width: 100%;" id="detail-chart-box"></div>
 
 </div>
