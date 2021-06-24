@@ -359,7 +359,8 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"code": "global",
 				},
 			},
-		}, {
+		},
+		{
 			"code":     "hids",
 			"module":   configloaders.AdminModuleCodeHids,
 			"name":     "主机安全防护",

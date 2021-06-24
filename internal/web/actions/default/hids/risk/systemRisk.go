@@ -1,6 +1,7 @@
 package risk
 
 import (
+	"fmt"
 	"github.com/1uLang/zhiannet-api/hids/model/risk"
 	risk_server "github.com/1uLang/zhiannet-api/hids/server/risk"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
@@ -20,10 +21,8 @@ func (this *SystemRiskAction) RunGet(params struct {
 	Level    int
 	ServerIp string
 	PageNo   int
-	pageSize int
+	PageSize int
 }) {
-	this.Show()
-	return
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
@@ -32,14 +31,18 @@ func (this *SystemRiskAction) RunGet(params struct {
 	req := &risk.SearchReq{}
 	req.Level = params.Level
 	req.ServerIp = params.ServerIp
-	req.PageSize = params.pageSize
+	req.PageSize = params.PageSize
 	req.PageNo = params.PageNo
-	list, err := risk_server.SystemRiskList(req)
+	req.UserName = "luobing"
+
+	//系统漏洞数汇总
+	risk, err := risk_server.SystemDistributed(req)
 	if err != nil {
 		this.ErrorPage(err)
-		return
 	}
-	this.Data["data"] = list
+	this.Data["risks"] = risk.List
+	this.Data["serverIp"] = params.ServerIp
+	this.Data["level"] = params.Level
 	this.Show()
 }
 
@@ -47,7 +50,7 @@ func (this *SystemRiskAction) RunGet(params struct {
 func (this *SystemRiskAction) RunPost(params struct {
 	Opt     string
 	MacCode string
-	RiskIds []string
+	RiskIds []int
 	ItemIds []string
 }) {
 	err := hids.InitAPIServer()
@@ -61,51 +64,10 @@ func (this *SystemRiskAction) RunPost(params struct {
 	req.Req.ItemIds = params.ItemIds
 
 	err = risk_server.ProcessRisk(req)
+	fmt.Println(err)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
 	this.Success()
-}
-
-type SystemRiskListAction struct {
-	actionutils.ParentAction
-}
-
-func (this *SystemRiskListAction) Init() {
-	this.FirstMenu("index")
-}
-
-// 系统漏洞列表
-func (this *SystemRiskListAction) RunGet(params struct {
-	MacCode string
-	RiskId  string
-
-	//Must *actions.Must
-	//CSRF *actionutils.CSRF
-}) {
-	this.Show()
-	return
-	//params.Must.
-	//	Field("macCode", params.MacCode).
-	//	Require("请输入机器码")
-	//
-	//params.Must.
-	//	Field("riskId", params.RiskId).
-	//	Require("请输入系统漏洞id")
-
-	err := hids.InitAPIServer()
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-
-	list, err := risk_server.SystemRiskDetail(params.MacCode, params.RiskId)
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-	this.Data["data"] = list
-
-	this.Show()
 }

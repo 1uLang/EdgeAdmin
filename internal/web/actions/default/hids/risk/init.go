@@ -18,14 +18,18 @@ func init() {
 			//系统漏洞
 			GetPost("/systemRisk", new(SystemRiskAction)).
 			Get("/systemRiskList", new(SystemRiskListAction)).
+			Get("/riskDetail", new(RiskDetailAction)).
 			//弱口令
 			GetPost("/weak", new(WeakAction)).
+			Get("/weakDetail", new(WeakDetailAction)).
 			Get("/weakList", new(WeakListAction)).
 			//风险账号
 			GetPost("/dangerAccount", new(DangerAccountAction)).
+			Get("/dangerAccountDetail", new(DangerAccountDetailAction)).
 			Get("/dangerAccountList", new(DangerAccountListAction)).
 			//配置缺陷
 			GetPost("/configDefect", new(ConfigDefectAction)).
+			Get("/configDefectDetail", new(ConfigDefectDetailAction)).
 			Get("/configDefectList", new(ConfigDefectListAction)).
 			EndAll()
 	})
