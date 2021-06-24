@@ -47,7 +47,7 @@ func (this *VirusAction) RunGet(params struct {
 func (this *VirusAction) RunPost(params struct {
 	Opt     string
 	MacCode string
-	RiskIds []string
+	RiskIds []int
 	ItemIds []string
 }) {
 	err := hids.InitAPIServer()
@@ -102,7 +102,7 @@ func (this *VirusDetailAction) RunGet(params struct {
 	req.Req.PageSize = params.PageSize
 	req.Req.ProcessState = params.ProcessState
 
-	list, err := risk_server.WeakDetail(req)
+	list, err := risk_server.WeakDetailList(req)
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -146,7 +146,7 @@ func (this *VirusDetailListAction) RunGet(params struct {
 	req.Req.PageSize = params.PageSize
 	req.Req.ProcessState = params.ProcessState
 
-	list, err := risk_server.WeakDetail(req)
+	list, err := risk_server.WeakDetailList(req)
 	if err != nil {
 		this.ErrorPage(err)
 		return

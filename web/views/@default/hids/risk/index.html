@@ -10,7 +10,7 @@
             <img src="/images/danget_icon_3_blue.png" width="40px" height="40px">
             <div style="margin-left: 15px;">
                 <div style="margin-bottom: 10px;">系统漏洞总数</div>
-                <div style="font-size: 30px;">306</div>
+                <div style="font-size: 30px;">{{risk.total}}</div>
             </div>
         </div>
         <div style="width: 60%;margin-top: 10px;">
@@ -22,10 +22,10 @@
             </div>
             <div class="model-stype">
                 <div class="model-background" style="display: flex;flex-direction: row;">
-                    <div class="model-child-background serious-bg-color" :style="{flex:data.seriousCount}">10</div>
-                    <div class="model-child-background height-bg-color" :style="{flex:data.heightCount}">30</div>
-                    <div class="model-child-background middle-bg-color" :style="{flex:data.middleCount}">60</div>
-                    <div class="model-child-background low-bg-color" :style="{flex:data.lowCount}">120</div>
+                    <div class="model-child-background serious-bg-color" :style="{flex:data.seriousCount}">{{risk.critical}}</div>
+                    <div class="model-child-background height-bg-color" :style="{flex:data.heightCount}">{{risk.high}}</div>
+                    <div class="model-child-background middle-bg-color" :style="{flex:data.middleCount}">{{risk.middle}}</div>
+                    <div class="model-child-background low-bg-color" :style="{flex:data.lowCount}">{{risk.low}}</div>
                 </div>
 
             </div>
@@ -35,16 +35,16 @@
     <div style="margin-top: 10px;display: flex;flex-direction: row;">
         <div style="width: 30%;margin-right: 5%;">
             <span>影响主机数：</span>
-            <span style="color: #0090cb;">10</span>
+            <span style="color: #0090cb;">{{risk.host}}</span>
         </div>
-        <div style="width: 30%;margin-right: 5%;">
-            <span>影响windows主机数：</span>
-            <span style="color: #0090cb;">20</span>
-        </div>
-        <div style="width: 30%;">
-            <span>影响linux主机数：</span>
-            <span style="color: #0090cb;">30</span>
-        </div>
+<!--        <div style="width: 30%;margin-right: 5%;">-->
+<!--            <span>影响windows主机数：</span>-->
+<!--            <span style="color: #0090cb;">20</span>-->
+<!--        </div>-->
+<!--        <div style="width: 30%;">-->
+<!--            <span>影响linux主机数：</span>-->
+<!--            <span style="color: #0090cb;">30</span>-->
+<!--        </div>-->
     </div>
  </div>
 
@@ -54,13 +54,13 @@
             <img src="/images/danget_icon_3_blue.png" width="50px" height="50px">
             <div style="margin-left: 10px;">
                 <div style="margin-bottom: 10px;">弱口令</div>
-                <div style="font-size: 30px;">{{data.value1.allCount}}</div>
+                <div style="font-size: 30px;">{{weak.total}}</div>
             </div>
         </div>
         <div style="border-bottom:1px solid #000;"></div>  
         <div style="margin-top: 10px;display: flex;justify-content: center;">
             <span>影响主机数：</span>
-            <span style="color: #0090cb;">{{data.value1.errCount}}</span>
+            <span style="color: #0090cb;">{{weak.host}}</span>
         </div>
     </div>
     <div class="card-div" style="margin-right: 5%;" @click="onOpenDetail(3)">
@@ -68,13 +68,13 @@
             <img src="/images/danget_icon_3_blue.png" width="50px" height="50px">
             <div style="margin-left: 10px;">
                 <div style="margin-bottom: 10px;">风险账号</div>
-                <div style="font-size: 30px;">{{data.value2.allCount}}</div>
+                <div style="font-size: 30px;">{{dangerAccount.total}}</div>
             </div>
         </div>
         <div style="border-bottom:1px solid #000;"></div>  
         <div style="margin-top: 10px;display: flex;justify-content: center;">
             <span>影响主机数：</span>
-            <span style="color: #0090cb;">{{data.value2.errCount}}</span>
+            <span style="color: #0090cb;">{{dangerAccount.host}}</span>
         </div>
     </div>
     <div class="card-div" @click="onOpenDetail(4)">
@@ -82,13 +82,13 @@
             <img src="/images/danget_icon_3_blue.png" width="50px" height="50px">
             <div style="margin-left: 10px;">
                 <div style="margin-bottom: 10px;">缺陷配置</div>
-                <div style="font-size: 30px;">{{data.value3.allCount}}</div>
+                <div style="font-size: 30px;">{{configDefect.total}}</div>
             </div>
         </div>
         <div style="border-bottom:1px solid #000;"></div>  
         <div style="margin-top: 10px;display: flex;justify-content: center;">
             <span>影响主机数：</span>
-            <span style="color: #0090cb;">{{data.value3.errCount}}</span>
+            <span style="color: #0090cb;">{{configDefect.host}}</span>
         </div>
     </div>
 </div>
