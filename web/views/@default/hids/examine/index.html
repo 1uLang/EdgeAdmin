@@ -3,16 +3,26 @@
 {$layout}
 {$template "/datepicker"}
 
-<div class="card-div" style="margin-top: 20px;">
+<div class="card-div" style="margin-top: 20px;height: 240px;">
     <form class="ui form" autocomplete="off">
-        <div style="display: inline-flex;margin: 15px;">
-            <div class="title-style">体检状态</div>
-            <div :class="{'meun-select-color':nCheckState===1,'meun-define-color':nCheckState!=1}" @click="onChangeCheckState(1)">全部</div>
-            <div :class="{'meun-select-color':nCheckState===2,'meun-define-color':nCheckState!=2}" @click="onChangeCheckState(2)">未检查</div>
-            <div :class="{'meun-select-color':nCheckState===3,'meun-define-color':nCheckState!=3}" @click="onChangeCheckState(3)">检查中</div>
-            <div :class="{'meun-select-color':nCheckState===4,'meun-define-color':nCheckState!=4}" @click="onChangeCheckState(4)">已完成</div>
+        <div style="display: flex;flex-direction: row;margin: 0px 15px 15px 15px;height: 40px;align-items: center;">
+            <div style="display: inline-flex;width: 50%;">
+                <div class="title-style">体检状态</div>
+                <div :class="{'meun-select-color':nCheckState===1,'meun-define-color':nCheckState!=1}" @click="onChangeCheckState(1)">全部</div>
+                <div :class="{'meun-select-color':nCheckState===2,'meun-define-color':nCheckState!=2}" @click="onChangeCheckState(2)">未检查</div>
+                <div :class="{'meun-select-color':nCheckState===3,'meun-define-color':nCheckState!=3}" @click="onChangeCheckState(3)">检查中</div>
+                <div :class="{'meun-select-color':nCheckState===4,'meun-define-color':nCheckState!=4}" @click="onChangeCheckState(4)">已完成</div>
+            </div>
+            <div style="display: inline-flex;width: 50%;">
+                <div class="title-style">体检分数</div>
+                <div :class="{'meun-select-color':nHealthNumState===1,'meun-define-color':nHealthNumState!=1}" @click="onChangeHealthNumState(1)">全部</div>
+                <div :class="{'meun-select-color':nHealthNumState===2,'low-health-color':nHealthNumState!=2}" @click="onChangeHealthNumState(2)">0-59（不健康）</div>
+                <div :class="{'meun-select-color':nHealthNumState===3,'middle-health-color':nHealthNumState!=3}" @click="onChangeHealthNumState(3)">60-89（亚健康）</div>
+                <div :class="{'meun-select-color':nHealthNumState===4,'hight-health-color':nHealthNumState!=4}" @click="onChangeHealthNumState(4)">90-100（健康）</div>
+            </div>
         </div>
-        <div style="display: flex;flex-direction: row;margin: 15px;">
+       
+        <div style="display: flex;flex-direction: row;margin: 15px;height: 40px;">
             <div style="display: inline-flex;align-items: center;width: 50%;">
                 <div class="title-style">体检结论</div>
                 <div :class="{'meun-select-color':nResultState===1,'meun-define-color':nResultState!=1}" @click="onChangeResultState(1)">全部</div>
@@ -29,5 +39,92 @@
                 </div>
             </div>
         </div>
+
+        <div style="display: inline-flex;margin: 15px;">
+            <div class="title-style">体检项目</div>
+            <div style="display: flex;flex-direction: column;">
+                <div style="display: inline-flex;margin-bottom: 20px;">
+                    <div v-for='item in sTopSelectItem' @click="onAddSelectValue(item.id)" class="more-select-content">
+                        <img :src="getShowSelectImage(item.id)" width="15px" height="15px">
+                        <span style="margin-left: 10px;">{{item.value}}</span>
+                    </div>
+                </div>
+                <div style="display: inline-flex;">
+                    <div v-for='item in sBottomSelectItem' class="more-select-content" @click="onAddSelectValue(item.id)">
+                        <img :src="getShowSelectImage(item.id)" width="15px" height="15px">
+                        <span style="margin-left: 10px;">{{item.value}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
+</div>
+
+<div class="card-div" style="height: 500px; margin-top: 20px;">
+    <table id = "tab" height="40px" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+        <thead>
+            <tr align="center">
+                <th class='table-head-bg' style="width: 240px;" >主机</th>
+                <th class='table-head-bg' style="width: 260px;" >体检进度</th>
+                <th class='table-head-bg' style="width: 70px;" >状态</th>
+                <th class='table-head-bg' style="width: 90px;" >体检分数</th>
+                <th class='table-head-bg' style="width: 165px;" >开始时间</th>
+                <th class='table-head-bg' style="width: 165px;" >完成时间</th>
+                <th class='table-head-bg' style="width: 165px;" >操作</th>
+            </tr>
+        </thead>
+        <tbody id='tableBody'>
+            <tr align="center" v-for="(item, index) in tableData" >
+                <td style="position: relative;" @mouseenter="enters(index)" @mouseleave="leaver(index)">{{item.hostData.intIp}}
+                    <div v-show="curIndex===index" class="table-item-style">
+                        <div>外网IP：{{item.hostData.outIp}}</div>
+                        <div>内网IP：{{item.hostData.intIp}}</div>
+                        <div>主机名：{{item.hostData.hostName}}</div>
+                        <div>操作系统：{{item.hostData.systemName}}</div>
+                        <div>系统内核：{{item.hostData.rootName}}</div>
+                        <div>Mac地址：{{item.hostData.macAddr}}</div>
+                        <div>备注信息：{{item.hostData.remarks}}</div>
+                    </div>
+                </td>
+                <td>
+                    progress
+                </td>
+                <td>{{getStatusName(item.status)}}</td>
+                <td>{{getCheckNumName(item.checkNum)}}</td>
+                <td>{{onChangeTimeFormat(item.startTime)}}</td>
+                <td>{{onChangeTimeFormat(item.endTime)}}</td>
+                <td>
+                    <div style="display: flex;justify-content: space-around;">
+                        <div v-show="item.status===3" class="edit_btn" @click="onOpenCheck(item.id)">立即体检</div>
+                        <div v-show="item.status===2" class="edit_btn" @click="onStopCheck(item.id)">取消体检</div>
+                        <div v-show="item.status===3" class="edit_btn" @click="onOpenDetail(item.id)">详情</div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div v-if="bShowCheckDetail" class="dialog-style" @click.stop>
+    <div class="dialog-bg-style" style="display: flex;flex-direction: column;">
+        <div style="flex: 7;">
+            <div style="background: #0091cc;width: 100%;height: 25px;color: #fff;text-align: center;line-height: 25px;">立即体检</div>
+            <div style="display: flex;flex-direction: column;">
+                <div v-for="item in pCheckDetailData" style="display:inline-flex;padding: 15px 30px 8px 30px;">
+                    <div style="width: 150px;min-width: 150px;">{{item.checkName}}</div>
+                    <div style="display: flex;flex-wrap: wrap;">
+                        <div v-for="checkItem in item.checkValue" class="more-select-check-content" @click="onSelectCheckValue(checkItem.id)">
+                            <img :src="getShowSelectValueImage(checkItem.id)" width="10px" height="10px">
+                            <span style="margin-left: 10px;">{{checkItem.value}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+        <div style="flex: 1;display: flex;justify-content: center;align-items: center;border-top: 1px #f0f0f0 solid;">
+            <div class="sure-btn" @click="onStartCheck">确定</div>
+            <div class="close-btn" @click="onCloseCheck">取消</div>
+        </div>
+    </div>
 </div>
