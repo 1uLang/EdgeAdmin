@@ -95,7 +95,7 @@ func (this *ReboundShellDetailAction) RunGet(params struct {
 		return
 	}
 
-	list, err := risk_server.ReboundShellDetail(params.MacCode, params.RiskId)
+	list, err := risk_server.ReboundShellDetail(params.MacCode, params.RiskId, false)
 	if err != nil {
 		this.ErrorPage(err)
 		return

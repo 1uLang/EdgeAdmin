@@ -45,12 +45,15 @@ func (this *IndexAction) RunGet(params struct {
 		query += ";"
 	}
 
-	list, err := vulnerabilities_server.List(&vulnerabilities.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, Query: query})
+	list, err := vulnerabilities_server.List(&vulnerabilities.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, Query: query, AdminUserId: uint64(this.AdminId())})
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	this.Data["vulnerabilities"] = list["vulnerabilities"]
+	//this.Data["vulnerabilities"] = list["vulnerabilities"]
+	if lists, ok := list["vulnerabilities"]; ok {
+		this.Data["vulnerabilities"] = lists
+	}
 	if !params.List {
 		this.Show()
 	} else {

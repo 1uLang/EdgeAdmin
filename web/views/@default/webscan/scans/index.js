@@ -28,7 +28,7 @@ Tea.context(function () {
       let scan_ids = JSON.parse(JSON.stringify(this.checkValues))
       let tarId = JSON.parse(JSON.stringify(this.checkTargetValues))
       teaweb.confirm("确定要生成这个扫描的报表吗？", function () {
-        that.$post("/web/scan/report/create")
+        that.$post("/webscan/reports/create")
             .params({
               Ids: scan_ids,
               TarIds: tarId,

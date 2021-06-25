@@ -95,7 +95,7 @@ func (this *AbnormalProcessDetailAction) RunGet(params struct {
 		return
 	}
 
-	list, err := risk_server.AbnormalProcessDetail(params.MacCode, params.RiskId)
+	list, err := risk_server.AbnormalProcessDetail(params.MacCode, params.RiskId, false)
 	if err != nil {
 		this.ErrorPage(err)
 		return

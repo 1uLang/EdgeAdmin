@@ -12,7 +12,7 @@
             <div style="line-height: 40px;text-align: center;">DDoS防火墙节点：</div>
             <div class="ui field">  
                 <div class="ui field">
-                    <select class="ui dropdown auto-width" name="SelectNode" v-model="SelectNode" @change="GetSelectNode">
+                    <select class="ui dropdown auto-width" name="SelectNode" v-model="selectNode" @change="GetSelectNode">
                         <option v-for="item in nodes" :value="item.id">{{item.addr}}</option>
                     </select>
                 </div>
@@ -43,18 +43,18 @@
             </thead>
             <tbody id='tableBody'>
                 <tr align="center" style="height: 40px;" v-for="item in tableData" >
-                    <td>{{item.postId}}</td>
-                    <td>{{getDirection(item.directionType)}}</td>
-                    <td>{{item.agreement}}</td>
-                    <td>{{item.value1}}</td>
-                    <td>{{item.post1}}</td>
-                    <td>{{item.value2}}</td>
-                    <td>{{item.post2}}</td>
-                    <td>{{item.desc}}</td>
-                    <td>{{getTactics(item.tactics)}}</td>
+                    <td>{{item.id}}</td>
+                    <td>{{item.direction}}</td>
+                    <td>{{item.protocol}}</td>
+                    <td>{{item.src}}</td>
+                    <td>{{item.src_port}}</td>
+                    <td>{{item.dst}}</td>
+                    <td>{{item.dst_port}}</td>
+                    <td>{{item.descr}}</td>
+                    <td>{{item.type}}</td> <!--getTactics-->
                     <td>
-                        <div :class="{'status-open':item.status===1,'status-close':item.status===2}">
-                            {{getStatus(item.status)}}
+                        <div :class="{'status-open':item.disabled==0,'status-close':item.disabled==1}">
+                            {{getStatus(item.disabled)}}
                         </div>
                     </td>
                     <td>

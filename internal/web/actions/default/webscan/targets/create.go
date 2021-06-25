@@ -33,7 +33,7 @@ func (this *CreateAction) RunPost(params struct {
 	if err != nil {
 		this.ErrorPage(err)
 	}
-	req := &targets.AddReq{Address: params.Address}
+	req := &targets.AddReq{Address: params.Address, AdminUserId: uint64(this.AdminId())}
 	req.Description = params.Desc
 	//req.AdminUserId = uint64(this.AdminId())
 

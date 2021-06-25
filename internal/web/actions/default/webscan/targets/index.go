@@ -19,6 +19,8 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	PageSize int
 	PageNo   int
+
+	Show int
 }) {
 	err := webscan.InitAPIServer()
 	if err != nil {
@@ -31,11 +33,16 @@ func (this *IndexAction) RunGet(params struct {
 	if params.PageSize < 0 {
 		params.PageSize = 20
 	}
-	list, err := targets_server.List(&targets.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize})
+	list, err := targets_server.List(&targets.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, AdminUserId: uint64(this.AdminId())})
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	this.Data["targets"] = list["targets"]
+	if lists, ok := list["targets"]; ok {
+		this.Data["targets"] = lists
+	}
+	if params.Show == 1 {
+		this.Success()
+	}
 	this.Show()
 }

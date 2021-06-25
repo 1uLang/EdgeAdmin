@@ -133,14 +133,14 @@ Tea.context(function () {
 
     //源和目标的位数
     this.masks = [
-        {id:1,value:1},
-        {id:2,value:2},
-        {id:3,value:3},
-        {id:4,value:4},
-        {id:5,value:5},
-        {id:6,value:6},
-        {id:7,value:7},
-        {id:8,value:8},
+        {id: 1, value: 1}, {id: 2, value: 2}, {id: 3, value: 3}, {id: 4, value: 4},
+        {id: 5, value: 5}, {id: 6, value: 6}, {id: 7, value: 7}, {id: 8, value: 8},
+        {id: 9, value: 9}, {id: 10, value: 10}, {id: 11, value: 11}, {id: 12, value: 12},
+        {id: 13, value: 13}, {id: 14, value: 14}, {id: 15, value: 15}, {id: 16, value: 16},
+        {id: 17, value: 17}, {id: 18, value: 18}, {id: 19, value: 19}, {id: 20, value: 20},
+        {id: 21, value: 21}, {id: 22, value: 22}, {id: 23, value: 23}, {id: 24, value: 24},
+        {id: 25, value: 25}, {id: 26, value: 26}, {id: 27, value: 27}, {id: 28, value: 28},
+        {id: 29, value: 29}, {id: 30, value: 30}, {id: 31, value: 31}, {id: 32, value: 32},
     ]
 
     //操作
@@ -154,20 +154,20 @@ Tea.context(function () {
         {id:2,value:"out"},
     ]
 
-    this.hostData = [
-        {id:1,hostAddress:"成都-ddos-192.168.1.1",},
-        {id:2,hostAddress:"成都-ddos-192.168.1.2",},
-        {id:3,hostAddress:"成都-ddos-192.168.1.3",},
-        {id:4,hostAddress:"成都-ddos-192.168.1.4",},
-    ]
+    // this.hostData = [
+    //     {id:1,hostAddress:"成都-ddos-192.168.1.1",},
+    //     {id:2,hostAddress:"成都-ddos-192.168.1.2",},
+    //     {id:3,hostAddress:"成都-ddos-192.168.1.3",},
+    //     {id:4,hostAddress:"成都-ddos-192.168.1.4",},
+    // ]
     
 
     //postIndex:接口* 选择的id  typeIndex 类型* 选择的id  sourceTypeIndex 源* 选择的id  targetIndex 目标* 选择的id
-    this.tableData = [
-        {id:1,postId:"LAN",directionType:1,agreement:"IPv4 TCP",value1:"192.168.0.1",post1:"8877",value2:"192.168.1.1",post2:"3306",desc:"描述",tactics:1,status:1,postIndex:1,typeIndex:1,sourceTypeIndex:1,targetIndex:1,sourceValue:"源的值"},
-        {id:2,postId:"WAN",directionType:2,agreement:"IPv4 TCP",value1:"192.168.0.1",post1:"8877",value2:"192.168.1.1",post2:"3306",desc:"描述",tactics:1,status:1,postIndex:1,typeIndex:1,sourceTypeIndex:1,targetIndex:1,sourceValue:"源的值"},
-        {id:3,postId:"Loopback",directionType:1,agreement:"IPv4 TCP",value1:"192.168.0.1",post1:"8877",value2:"192.168.1.1",post2:"3306",desc:"描述",tactics:1,status:1,postIndex:1,typeIndex:1,sourceTypeIndex:1,targetIndex:1,sourceValue:"源的值"},
-    ]
+    // this.tableData = [
+    //     {id:1,postId:"LAN",directionType:1,agreement:"IPv4 TCP",value1:"192.168.0.1",post1:"8877",value2:"192.168.1.1",post2:"3306",desc:"描述",tactics:1,status:1,postIndex:1,typeIndex:1,sourceTypeIndex:1,targetIndex:1,sourceValue:"源的值"},
+    //     {id:2,postId:"WAN",directionType:2,agreement:"IPv4 TCP",value1:"192.168.0.1",post1:"8877",value2:"192.168.1.1",post2:"3306",desc:"描述",tactics:1,status:1,postIndex:1,typeIndex:1,sourceTypeIndex:1,targetIndex:1,sourceValue:"源的值"},
+    //     {id:3,postId:"Loopback",directionType:1,agreement:"IPv4 TCP",value1:"192.168.0.1",post1:"8877",value2:"192.168.1.1",post2:"3306",desc:"描述",tactics:1,status:1,postIndex:1,typeIndex:1,sourceTypeIndex:1,targetIndex:1,sourceValue:"源的值"},
+    // ]
 
 
     this.GetSelectNode = function (event) {
