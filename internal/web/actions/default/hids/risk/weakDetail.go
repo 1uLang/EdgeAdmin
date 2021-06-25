@@ -31,13 +31,13 @@ func (this *WeakDetailAction) RunGet(params struct {
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
-		return
+
 	}
 
 	info, err := risk_server.WeakDetail(params.MacCode, params.RiskId, params.ProcessState == 2)
 	if err != nil {
 		this.ErrorPage(err)
-		return
+
 	}
 	this.Data["weakDetails"] = info
 

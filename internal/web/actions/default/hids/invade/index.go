@@ -1,6 +1,7 @@
 package invade
 
 import (
+	"fmt"
 	"github.com/1uLang/zhiannet-api/hids/model/risk"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
@@ -23,13 +24,13 @@ func (this *IndexAction) RunGet(params struct{}) {
 	invadeWg := sync.WaitGroup{}
 	nameUrls := []map[string]string{
 		{"name": "病毒木马", "url": "virus"},
-		{"name": "网页后门", "url": "webshell"},
+		{"name": "网页后门", "url": "webShell"},
 		{"name": "反弹shell", "url": "reboundShell"},
 		{"name": "异常账号", "url": "abnormalAccount"},
 		{"name": "日志异常删除", "url": "logDelete"},
 		{"name": "异常登录", "url": "abnormalLogin"},
 		{"name": "异常进程", "url": "abnormalProcess"},
-		{"name": "系统命令篡改", "url": "logDelete"},
+		{"name": "系统命令篡改", "url": "systemCmd"},
 	}
 	fns := []func(*risk.RiskSearchReq) (risk.RiskSearchResp, error){
 		risk.VirusList,
@@ -41,7 +42,9 @@ func (this *IndexAction) RunGet(params struct{}) {
 		risk.AbnormalProcessList,
 		risk.SystemCmdList,
 	}
-	args := &risk.RiskSearchReq{UserName: "luobing"}
+	args := &risk.RiskSearchReq{}
+	args.UserName = "cysct56"
+	args.PageSize = 1
 
 	for i, f := range fns {
 		invadeWg.Add(1)
@@ -55,6 +58,7 @@ func (this *IndexAction) RunGet(params struct{}) {
 				"url":   nameUrls[idx]["url"],
 			}
 			invadeLock.Unlock()
+			fmt.Println(idx, nameUrls[idx]["name"], "=============", risk)
 		}(i, f)
 	}
 	invadeWg.Wait()

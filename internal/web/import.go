@@ -168,5 +168,13 @@ import (
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/baseline"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/examine"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/invade"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/invade/abnormalAccount"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/invade/abnormalLogin"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/invade/abnormalProcess"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/invade/logDelete"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/invade/reboundShell"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/invade/systemCmd"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/invade/virus"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/invade/webShell"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/risk"
 )

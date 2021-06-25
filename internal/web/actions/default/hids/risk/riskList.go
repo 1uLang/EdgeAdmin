@@ -27,7 +27,7 @@ func (this *SystemRiskListAction) RunGet(params struct {
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
-		return
+
 	}
 	req := &risk.SearchReq{}
 	req.PageSize = params.PageSize
@@ -39,14 +39,14 @@ func (this *SystemRiskListAction) RunGet(params struct {
 	list1, err := risk_server.SystemRiskList(req)
 	if err != nil {
 		this.ErrorPage(err)
-		return
+
 	}
 	//已处理
 	req.ProcessState = 2
 	list2, err := risk_server.SystemRiskList(req)
 	if err != nil {
 		this.ErrorPage(err)
-		return
+
 	}
 	//漏洞列表
 	this.Data["risks1"] = list1.SystemRiskInfoList

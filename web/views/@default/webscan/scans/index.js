@@ -182,7 +182,7 @@ Tea.context(function () {
       switch (status) {
         case "aborted":return "已中止";
         case "completed": return "已完成";
-        case "progressing": return "正在进行";
+        case "processing": return "正在进行";
       }
     }
     return resultStatus;
