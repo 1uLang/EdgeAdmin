@@ -108,7 +108,7 @@
     height: 20px; /* 高度 */ 
     line-height: 20px;/* 必须和高度一致，文本才能垂直居中 */ 
 }
-.Bar div span{ 
+.Bar span{ 
     position: absolute; 
     width: 280px; /* 宽度 */ 
     text-align: center; 

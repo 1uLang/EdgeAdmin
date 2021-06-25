@@ -238,6 +238,17 @@ Tea.context(function () {
     }
 
 
+     this.checkShowColor =function (curValue,maxValue) {
+        var curValue = ((curValue/maxValue)*100).toFixed(1)
+        console.log(curValue>=100);
+        return curValue>=100
+     }
+
+    this.getProgressPer = function (curValue,maxValue) { 
+        var curValue = ((curValue/maxValue)*100).toFixed(1)
+        return curValue+"%"
+    }
+
     this.tableData = [
         {   
             id:1,
@@ -253,7 +264,9 @@ Tea.context(function () {
             status:3,
             checkNum:70,
             startTime:"2021-06-05T12:15:25.000",
-            endTime:"2021-06-05T13:15:25.000"
+            endTime:"2021-06-05T13:15:25.000",
+            maxValue:100,
+            curValue:100
         },
         {   
             id:2,
@@ -269,7 +282,9 @@ Tea.context(function () {
             status:2,
             checkNum:70,
             startTime:"2021-06-05T12:15:25.000",
-            endTime:"2021-06-05T13:15:25.000"
+            endTime:"2021-06-05T13:15:25.000",
+            maxValue:100,
+            curValue:70
         }
     ]
 

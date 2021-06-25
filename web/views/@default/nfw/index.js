@@ -40,7 +40,7 @@ Tea.context(function () {
       };
 
     this.getProgressPer =function (maxValue,curValue) {
-        return (curValue/maxValue).toFixed(2)+ "%"
+        return ((curValue/maxValue)*100).toFixed(1) + "%"
     }
 
      this.getShowPerText = function(strPer,maxValue,curValue,unit){

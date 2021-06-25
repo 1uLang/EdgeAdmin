@@ -63,7 +63,7 @@ Tea.context(function () {
     
     this.getProgressPer = function (curValue,maxValue) { 
         if(curValue && maxValue && maxValue >= curValue){
-            return (curValue/maxValue).toFixed(1)+"%"
+            return ((curValue/maxValue)*100).toFixed(1)+"%"
         }
         return "0%"
      }

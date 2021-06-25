@@ -87,7 +87,11 @@
                     </div>
                 </td>
                 <td>
-                    progress
+                    <div class="Bar">
+                        <div :class="[checkShowColor(item.curValue,item.maxValue) ? 'progress-green-bg-style' : '','progress-blue-bg-style']":style="{width:getProgressPer(item.curValue,item.maxValue)}">
+                        </div>
+                        <span>{{getProgressPer(item.curValue,item.maxValue)}}</span>
+                    </div>
                 </td>
                 <td>{{getStatusName(item.status)}}</td>
                 <td>{{getCheckNumName(item.checkNum)}}</td>
