@@ -12,7 +12,7 @@ Tea.context(function () {
 
 	this.updateNode = function (id) {
 		teaweb.popup(Tea.url(".update?NodeId="+id), {
-			height: "30em",
+			height: "40em",
 			callback: function () {
 				teaweb.success("修改成功", function () {
 					teaweb.reload()
