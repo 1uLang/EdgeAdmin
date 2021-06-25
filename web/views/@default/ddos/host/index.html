@@ -86,16 +86,16 @@
     </table>
 </div>
 <div v-if="nShowState===2" style="display: flex;flex-direction: column;">
-    <div style="display:inline-flex;margin:20px 0;">
-        <h2>IP直通：</h2>
+    <div style="display:inline-flex;margin-top:20px;align-items: center;">
+        <span style="width:150px;font-size: 16px;font-weight: bold;">IP直通：</span>
         <input class="btn-switch large" type="checkbox" :checked="ignore" id="btn-switch-ignore" @click.prevent="setHost(true)">
     </div>
     <div style="display: inline-flex;margin-top: 15px;">
-        <div style="line-height: 40px;text-align: center;">DDoS防护策略：</div>
+        <div style="width:150px;line-height: 40px;text-align: left;font-size: 16px;font-weight: bold;">DDoS防护策略：</div>
         <div class="ui field">  
             <div class="ui field">
-                <select class="ui dropdown auto-width" id="ddosLevel" @click="setHost(false)" :value="level">
-                    <option value="0" >宽松防护策略</option>
+                <select class="ui dropdown auto-width" id="ddosLevel" @change="onChangeHandle(this.options[this.options.selectedIndex].value)" :value="level">
+                    <option value="0">宽松防护策略</option>
                     <option value="1">适中防护策略</option>
                     <option value="2">严格防护策略</option>
                     <option value="3">超级严格防护策略</option>

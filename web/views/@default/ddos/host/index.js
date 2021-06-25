@@ -166,4 +166,15 @@ Tea.context(function () {
             }).refresh()
         })
     }
+
+    //策略切换回调
+    this.onChangeHandle = function (selectValue) {
+        console.log(selectValue)
+        console.log(this.level)
+        teaweb.confirm("确定更改防护策略？", function () {
+            this.level  = curLevel
+            this.setHost(false)
+        })
+        
+    }
 })
