@@ -43,7 +43,7 @@
     }
     
     .btn-switch.large:after {
-    content: '关闭';
+    content: '';
     color: #999;
     left: 30px;
     position: absolute;
@@ -52,7 +52,7 @@
     }
     
     .btn-switch.large:checked:after {
-    content: '开启';
+    content: '';
     color: #fff;
     left: 10px;
     position: absolute;

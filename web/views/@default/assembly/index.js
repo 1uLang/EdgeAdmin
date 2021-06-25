@@ -1,7 +1,7 @@
 Tea.context(function () {
 	this.createNode = function () {
 		teaweb.popup(Tea.url(".createPopup"), {
-			height: "30em",
+			height: "40em",
 			callback: function () {
 				teaweb.success("保存成功", function () {
 					teaweb.reload()
@@ -12,7 +12,7 @@ Tea.context(function () {
 
 	this.updateNode = function (id) {
 		teaweb.popup(Tea.url(".update?NodeId="+id), {
-			height: "40em",
+			height: "42em",
 			callback: function () {
 				teaweb.success("修改成功", function () {
 					teaweb.reload()

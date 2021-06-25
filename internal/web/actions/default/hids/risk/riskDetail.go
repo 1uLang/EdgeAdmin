@@ -36,13 +36,13 @@ func (this *RiskDetailAction) RunGet(params struct {
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
-		return
+
 	}
 
 	list, err := risk_server.SystemRiskDetail(params.MacCode, params.RiskId, params.State == 2)
 	if err != nil {
 		this.ErrorPage(err)
-		return
+
 	}
 	this.Data["riskDetails"] = list
 	this.Data["detailName"] = params.DetailName
