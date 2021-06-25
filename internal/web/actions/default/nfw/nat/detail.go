@@ -34,10 +34,12 @@ func (this *DetailAction) RunGet(params struct {
 	//接口
 	this.Data["interface"] = info.Interface
 	this.Data["type"] = info.Type
-	this.Data["dst"] = info.Dst
 	this.Data["external"] = info.External
+	this.Data["src"] = info.Src
+	this.Data["dst"] = info.Dst
 	this.Data["dstmask"] = info.Dstmask
 	this.Data["srcmask"] = info.Srcmask
+	this.Data["descr"] = info.Descr
 
 	//
 	//// 创建日志

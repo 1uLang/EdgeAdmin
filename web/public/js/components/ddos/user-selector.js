@@ -2,27 +2,24 @@ Vue.component("user-selector", {
 	mounted: function () {
 		let that = this
 
-		Tea.action("/assembly/idc/options")
-			.post()
+		Tea.action("/users/option")
+			.get()
 			.success(function (resp) {
-				that.idcs = resp.data.idcs
+				that.users = resp.data.users
 			})
 	},
-	props: ["v-idc-id"],
+	props: [""],
 	data: function () {
-		let idcId = this.vIdcId
-		if (idcId == null) {
-			idcId = -1
-		}
+
 		return {
-			idcs: [],
-			idcId: idcId
+			users: [],
+			user:"0",
 		}
 	},
 	template: `<div>
-	<select class="ui dropdown auto-width" name="idcId" v-model="idcId">
-		<option value="-1">[选择数据中心]</option>
-		<option v-for="idc in idcs" :value="idc.id">{{idc.name}}</option>
+	<select class="ui dropdown auto-width" name="user_id" v-model="user">
+		<option value="0">[选择所属用户]</option>
+		<option v-for="idc in users" :value="idc.id">{{idc.username}}</option>
 	</select>
 </div>`
 })

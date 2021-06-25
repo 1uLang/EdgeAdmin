@@ -18,9 +18,9 @@ func (this *CreateAction) RunGet(params struct{}) {
 	this.Show()
 }
 func (this *CreateAction) RunPost(params struct {
-	Ids []string
-
-	Must *actions.Must
+	Ids    []string
+	TarIds []string
+	Must   *actions.Must
 }) {
 
 	params.Must.

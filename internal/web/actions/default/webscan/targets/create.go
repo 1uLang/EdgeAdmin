@@ -32,15 +32,14 @@ func (this *CreateAction) RunPost(params struct {
 	err := webscan.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
-		return
 	}
 	req := &targets.AddReq{Address: params.Address}
 	req.Description = params.Desc
+	//req.AdminUserId = uint64(this.AdminId())
 
 	targetId, err := targets_server.Add(req)
 	if err != nil {
 		this.ErrorPage(err)
-		return
 	}
 	logs.Infof("新建目标成功 ：%v", targetId)
 	this.Success()

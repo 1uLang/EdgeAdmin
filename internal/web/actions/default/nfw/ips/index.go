@@ -35,7 +35,11 @@ func (this *IndexAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	this.Data["tableDataList"] = list
+	if len(list.Rows) > 0 {
+		this.Data["tableData"] = list.Rows
+
+	}
+	//this.Data["tableDataList"] = list
 	this.Data["nodes"] = node
 	this.Data["selectNode"] = params.NodeId
 	this.Show()

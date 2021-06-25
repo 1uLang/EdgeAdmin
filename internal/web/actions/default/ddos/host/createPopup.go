@@ -33,15 +33,19 @@ func (this *CreatePopupAction) RunGet(params struct{ NodeId uint64 }) {
 func (this *CreatePopupAction) RunPost(params struct {
 	Addr   string
 	NodeId uint64
+	UserId uint64
 
 	Must *actions.Must
 }) {
 	params.Must.
 		Field("name", params.Addr).
-		Require("请输入ip地址")
+		Require("请输入ip地址").
+		Field("user", params.UserId).
+		Require("请选择所属用户")
 	id, err := host_status_server.AddAddr(&ddos_host_ip.AddHost{
 		Addr:   params.Addr,
 		NodeId: params.NodeId,
+		UserId: params.UserId,
 	})
 	if err != nil {
 		this.ErrorPage(err)
@@ -51,6 +55,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 	this.Data["ddos"] = maps.Map{
 		"id":   id,
 		"addr": params.Addr,
+		"user": params.UserId,
 	}
 
 	// 创建日志

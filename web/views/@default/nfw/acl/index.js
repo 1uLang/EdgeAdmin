@@ -169,4 +169,11 @@ Tea.context(function () {
         {id:3,postId:"Loopback",directionType:1,agreement:"IPv4 TCP",value1:"192.168.0.1",post1:"8877",value2:"192.168.1.1",post2:"3306",desc:"描述",tactics:1,status:1,postIndex:1,typeIndex:1,sourceTypeIndex:1,targetIndex:1,sourceValue:"源的值"},
     ]
 
+
+    this.GetSelectNode = function (event) {
+        this.selectNode = event.target.value; //获取option对应的value值
+        let node = this.selectNode
+        window.location.href = '/nfw/acl?nodeId=' + node
+
+    }
 })
