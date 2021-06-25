@@ -62,9 +62,8 @@
                 <td>
                     <div class="Bar" style="display: inline-flex;">
                         <div id="MBUFItem" :style="{width: getProgressPer(item.progress,100)}">
-                            <span>{{getProgressPer(item.progress,100)}}</span>
                         </div>
-                        <span>{{getProgressPer(item.curCount,item.maxCount)}}</span>
+                        <span>{{getProgressPer(item.progress,100)}}</span>
                     </div>
                 </td>
                 <td>{{getStateName(item.state)}}</td>
