@@ -18,42 +18,43 @@
 
 <div v-if="nShowState===1">
     <p class="comment" v-if="scans.length === 0">暂时还没有目标。</p>
-
-    <table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;" v-if="scans.length > 0">
-        <thead>
-        <tr>
-            <th class='table-head-bg' style="width: 72px;">
-                <input id="js-all-checkbox" type="checkbox" @click="checkAll">
-            </th>
-            <th class='table-head-bg' style="width: 185px;">目标</th>
-            <th class='table-head-bg' style="width: 150px;">目标描述</th>
-            <th class='table-head-bg' style="width: 167px;">类型</th>
-            <th class='table-head-bg' style="width: 282px;">漏洞</th>
-            <th class='table-head-bg' style="width: 129px;">状态</th>
-            <th class='table-head-bg' style="width: 214px;">扫描时间</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr align="center" style="height: 50px;" v-for="item in scans" >
-            <td>
-                <input type="checkbox" name="select" :value="item.scan_id" @click="clickCheckbox">
-            </td>
-            <td @click="onShowDetail(item)">{{item.target.address}}</td>
-            <td>{{item.target.description}}</td>
-            <td>Web</td>
-            <td>
-                <div style="display: flex;justify-content: center;">
-                    <div class="vulnerable-num" style="background-color: #ec808d;">{{item.current_session.severity_counts.high}}</div>
-                    <div class="vulnerable-num" style="background-color: #fcc77d;">{{item.current_session.severity_counts.medium}}</div>
-                    <div class="vulnerable-num" style="background-color: #3abee8;">{{item.current_session.severity_counts.low}}</div>
-                    <div class="vulnerable-num" style="background-color: #00b144;">{{item.current_session.severity_counts.info}}</div>
-                </div>
-            </td>
-            <td>{{onChangeStatusFormat(item.current_session.status)}}</td>
-            <td>{{onChangeTimeFormat(item.current_session.start_date)}}</td>
-        </tr>
-        </tbody>
-    </table>
+    <div style="width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;">
+        <table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;" v-if="scans.length > 0">
+            <thead>
+            <tr align="center">
+                <th class='table-head-bg' style="width: 72px;">
+                    <input id="js-all-checkbox" type="checkbox" @click="checkAll">
+                </th>
+                <th class='table-head-bg' style="width: 185px;">目标</th>
+                <th class='table-head-bg' style="width: 150px;">目标描述</th>
+                <th class='table-head-bg' style="width: 167px;">类型</th>
+                <th class='table-head-bg' style="width: 282px;">漏洞</th>
+                <th class='table-head-bg' style="width: 129px;">状态</th>
+                <th class='table-head-bg' style="width: 214px;">扫描时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr align="center" style="height: 50px;" v-for="item in scans" >
+                <td>
+                    <input type="checkbox" name="select" :value="item.scan_id" @click="clickCheckbox">
+                </td>
+                <td @click="onShowDetail(item)">{{item.target.address}}</td>
+                <td>{{item.target.description}}</td>
+                <td>Web</td>
+                <td>
+                    <div style="display: flex;justify-content: center;">
+                        <div class="vulnerable-num" style="background-color: #ec808d;">{{item.current_session.severity_counts.high}}</div>
+                        <div class="vulnerable-num" style="background-color: #fcc77d;">{{item.current_session.severity_counts.medium}}</div>
+                        <div class="vulnerable-num" style="background-color: #3abee8;">{{item.current_session.severity_counts.low}}</div>
+                        <div class="vulnerable-num" style="background-color: #00b144;">{{item.current_session.severity_counts.info}}</div>
+                    </div>
+                </td>
+                <td>{{onChangeStatusFormat(item.current_session.status)}}</td>
+                <td>{{onChangeTimeFormat(item.current_session.start_date)}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 <div v-else-if="nShowState===2">
     <div style="display: inline-flex;width: 100%;margin-top: 20px;">
@@ -216,24 +217,27 @@
                     </div>
                 </div>
             </form>
-            <table class="ui table selectable celled" border="1" style="border-collapse: collapse;" v-if="vulnerabilities.length > 0">
-                <thead>
-                <tr>
-                    <th class='table-head-bg' style="width: 183px;">严重性</th>
-                    <th class='table-head-bg' style="width: 462px;">漏洞</th>
-                    <th class='table-head-bg' style="width: 238px;">目标</th>
-                    <th class='table-head-bg' style="width: 297px;">发现时间</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr align="center" style="height: 50px;" v-for="item in vulnerabilities" @click="getDetailInfo(item)" >
-                    <td :class="{'red-color':item.severity===3, 'yellow-color':item.severity===2,'blue-color':item.severity===1,'green-color':item.severity===0}">{{onChangeSeverityFormat(item.severity)}}</td>
-                    <td>{{item.vt_name}}</td>
-                    <td>{{item.affects_url}}</td>
-                    <td>{{onChangeTimeFormat(item.last_seen)}}</td>
-                </tr>
-                </tbody>
-            </table>
+    
+            <div style="width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;">
+                <table class="ui table selectable celled" border="1" style="border-collapse: collapse;" v-if="vulnerabilities.length > 0">
+                    <thead>
+                    <tr align="center">
+                        <th class='table-head-bg' style="width: 183px;">严重性</th>
+                        <th class='table-head-bg' style="width: 462px;">漏洞</th>
+                        <th class='table-head-bg' style="width: 238px;">目标</th>
+                        <th class='table-head-bg' style="width: 297px;">发现时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr align="center" style="height: 50px;cursor: pointer;" v-for="item in vulnerabilities" @click="getDetailInfo(item)" >
+                        <td :class="{'red-color':item.severity===3, 'yellow-color':item.severity===2,'blue-color':item.severity===1,'green-color':item.severity===0}">{{onChangeSeverityFormat(item.severity)}}</td>
+                        <td>{{item.vt_name}}</td>
+                        <td>{{item.affects_url}}</td>
+                        <td>{{onChangeTimeFormat(item.last_seen)}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div v-if="bShowDetail && detailInfo" style="display: flex; flex: 1;width: 100%;position: relative;">
             <div style="height: 100%;width: 5px;background-color: #f0f0f0;margin: 1px 10px;"></div>
