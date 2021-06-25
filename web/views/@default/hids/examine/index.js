@@ -208,6 +208,7 @@ Tea.context(function () {
 
     this.onStartCheck = function (id) { 
         this.bShowCheckDetail = false
+
         //
     }
     this.onStopCheck = function (id) { 
@@ -238,6 +239,36 @@ Tea.context(function () {
     }
 
 
+     this.checkShowColor =function (curValue,maxValue) {
+        var curValue = ((curValue/maxValue)*100).toFixed(1)
+        return curValue>=100
+     }
+
+    this.getProgressPer = function (curValue,maxValue) { 
+        var curValue = ((curValue/maxValue)*100).toFixed(1)
+        return curValue+"%"
+    }
+
+    //计时器
+    this.testTime1 = null
+    this.testTime2 = null
+    //传入的值需要用 'testTime1' 命名
+    this.onCreateTimeOut=function (timeId) {
+        this.onReleaseTimeOut(timeId)
+        this[timeId] = createTimer(function(){
+            console.log(timeId + "onStartCheck timer custom alarm");
+        }, {timeout:1000});
+        this[timeId].start();
+    }
+
+    this.onReleaseTimeOut= function (timeId) {
+        console.log(this[timeId])
+        if(this[timeId]){
+            this[timeId].stop()
+            this[timeId] = null
+        }
+    }
+
     this.tableData = [
         {   
             id:1,
@@ -253,7 +284,9 @@ Tea.context(function () {
             status:3,
             checkNum:70,
             startTime:"2021-06-05T12:15:25.000",
-            endTime:"2021-06-05T13:15:25.000"
+            endTime:"2021-06-05T13:15:25.000",
+            maxValue:100,
+            curValue:100
         },
         {   
             id:2,
@@ -269,7 +302,9 @@ Tea.context(function () {
             status:2,
             checkNum:70,
             startTime:"2021-06-05T12:15:25.000",
-            endTime:"2021-06-05T13:15:25.000"
+            endTime:"2021-06-05T13:15:25.000",
+            maxValue:100,
+            curValue:70
         }
     ]
 

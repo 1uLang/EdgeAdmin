@@ -1,10 +1,12 @@
 .menu-define-color{
     color: #000;
     margin-right: 15px;
+    cursor: pointer;
 }
 .menu-select-color{
     color: #0090cb;
     margin-right: 15px;
+    cursor: pointer;
 }
 .table-head-bg{
     height: 32px;

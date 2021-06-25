@@ -109,28 +109,6 @@
     cursor: pointer;
 }
 
-.Bar { 
-    position: relative; 
-    width: 280px;/* 宽度 */ 
-    background:#f0f0f0;/* 进度框背景颜色 */ 
-    border: 1px solid #f0f0f0;
-    padding: 1px; 
-}
-.Bar div{ 
-    display: block; 
-    position: relative;
-    background:#0091cc;/* 进度条背景颜色 */ 
-    color: #333333;
-    height: 20px; /* 高度 */ 
-    line-height: 20px;/* 必须和高度一致，文本才能垂直居中 */ 
-}
-.Bar div span{ 
-    position: absolute; 
-    width: 280px; /* 宽度 */ 
-    text-align: center; 
-    font-weight: bold; 
-}
-
 .table-head-bg{
     height: 32px;
     background: #f0f0f0;
@@ -154,4 +132,36 @@
     height: 20px;
     margin-right: 10px;
     cursor: default;
+}
+
+.Bar { 
+    width: 250px;/* 宽度 */ 
+    background:#f0f0f0;/* 进度框背景颜色 */ 
+    border: 1px solid #f0f0f0;
+    padding: 1px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.Bar span{ 
+    position: absolute; 
+    width: 250px; /* 宽度 */ 
+    text-align: center; 
+    font-weight: bold; 
+}
+
+.progress-blue-bg-style{ 
+    display: block; 
+    position: relative;
+    background:#0091cc;/* 进度条背景颜色 */ 
+    height: 20px; /* 高度 */ 
+    line-height: 20px;/* 必须和高度一致，文本才能垂直居中 */ 
+}
+
+.progress-green-bg-style{ 
+    display: block; 
+    position: relative;
+    background:#00b144;/* 进度条背景颜色 */ 
+    height: 20px; /* 高度 */ 
+    line-height: 20px;/* 必须和高度一致，文本才能垂直居中 */ 
 }

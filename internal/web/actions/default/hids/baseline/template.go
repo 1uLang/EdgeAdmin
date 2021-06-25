@@ -5,6 +5,7 @@ import (
 	baseline_server "github.com/1uLang/zhiannet-api/hids/server/baseline"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
+	"github.com/iwind/TeaGo/actions"
 )
 
 type TemplateAction struct {
@@ -16,15 +17,13 @@ func (this *TemplateAction) Init() {
 }
 
 func (this *TemplateAction) RunGet(params struct {
-	PageNo   int
-	PageSize int
 	UserName string
-
-	//Must *actions.Must
+	MacCode  string
+	Must     *actions.Must
 	//CSRF *actionutils.CSRF
 }) {
-	this.Show()
-	return
+	params.Must.Field("macCode", params.MacCode).Require("请输入机器码")
+
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
@@ -32,15 +31,18 @@ func (this *TemplateAction) RunGet(params struct {
 	}
 	req := &baseline.TemplateSearchReq{}
 	req.UserName = params.UserName
-	req.PageNo = params.PageNo
-	req.PageSize = params.PageSize
+	req.PageNo = 1
+	req.PageSize = 999
 
 	list, err := baseline_server.TemplateList(req)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	this.Data["data"] = list
+	//todo:列出当前机器码对应主机系统的模板
+
+	this.Data["templates"] = list.List
+	this.Data["macCode"] = params.MacCode
 	this.Show()
 }
 
