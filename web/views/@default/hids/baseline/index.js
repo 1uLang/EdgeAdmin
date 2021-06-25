@@ -1,53 +1,29 @@
 Tea.context(function () {
-
-    this.nCheckState = 1    //检测状态
-    this.nResultState = 1   //检查结论
-    this.dayFrom = ""
-    this.dayTo = ""
     this.curIndex = -1
-
-    this.bShowCheckDetail = false
-    this.pCheckDetailData = null
     this.sSelectValue = []
 
-    this.$delay(function () {
-        teaweb.datepicker("day-from-picker")
-        teaweb.datepicker("day-to-picker")
-    })
-
-    this.onChangeCheckState = function (index) { 
-        if(this.nCheckState!=index){
-            this.nCheckState = index
-        }
+    this.onChangeCheckState = function (state) {
+        window.location = "/hids/baseline?State="+state+'&ResultState='+this.ResultState
      }
 
-    this.onChangeResultState = function(index){
-        if(this.nResultState!=index){
-            this.nResultState = index
-        }
+    this.onChangeResultState = function(state){
+        window.location = "/hids/baseline?State="+this.State+'&ResultState='+state
+    }
+    this.parseServerLocalIp = function (ip){
+        let ips = ip.split(";")
+        return ips.slice(-1)[0]
     }
 
-    this.onChangeTimeState = function () { 
-
-     }
-
-    this.onChangeTimeFormat = function (time) {
-        var resultTime = "-";
-        if (time && time.length > 0) {
-            var tempTime = time.substring(0, time.indexOf("."));
-            resultTime = tempTime.replace("T", " ");
-        }
-        return resultTime;
-    };
-
-    this.getStatusName = function (status) { 
+    this.getStateName = function (status) {
         switch(status){
-            case 1:
+            case 0:
                 return "未检查"
-            case 2:
+            case 1:
                 return "检查中"
-            case 3:
+            case 2:
                 return "已完成"
+            case 3:
+                return "检查失败"
             default:
                 return "未知"
         }
@@ -63,45 +39,29 @@ Tea.context(function () {
     
     this.getProgressPer = function (curValue,maxValue) { 
         if(curValue && maxValue && maxValue >= curValue){
-            return (curValue/maxValue).toFixed(1)+"%"
+            return parseInt(curValue/maxValue * 100)+"%"
         }
         return "0%"
      }
 
-     this.getItemInfo = function (id) { 
-        this.pCheckDetailData = null
-        for (var i = 0; i < this.tableData.length; i++) {
-            if (this.tableData[i].id == id) {
-                this.pCheckDetailData = this.tableData[i]
-                break
-            }
-        }
+    //合规基线
+     this.onOpenCheck = function (item) {
+        //打开合规基线弹窗
+         teaweb.popup(Tea.url(".template?macCode="+item.macCode), {
+             height: "30em",
+         })
       }
 
-     this.onOpenCheck = function (id) { 
-         this.getItemInfo(id)
-         if(this.pCheckDetailData){
-            this.bShowCheckDetail =  true
-         }else{
-             this.bShowCheckDetail = false
-         }
-        
-      }
-
-      this.onCloseCheck = function () { 
-        this.bShowCheckDetail = false
-       }
-
-    this.onStartCheck = function (id) {
-        this.onCloseCheck()
+    this.onStartCheck = function (macCode) {
+        console.log(macCode)
     }
 
     this.onStopCheck = function (id) { 
 
     }
 
-    this.onOpenDetail = function (id) { 
-        window.location = "/hids/baseline/detail"
+    this.onOpenDetail = function (item) {
+        window.location = "/hids/baseline/detail?macCode="+item.macCode+'&pageSize='+item.totalItemCount
     }
 
     //检测是否包含元素
@@ -138,96 +98,5 @@ Tea.context(function () {
         }
         return "/images/select_box.png";
       }
-
-    this.tableData = [
-        {
-            id: 1,
-            hostData: {
-              intIp: "192.168.0.1",
-              outIp: "192.168.1.1",
-              hostName: "elk.novalocal",
-              systemName: "centos linux7.6.1810_64bit",
-              rootName: "3.10.0-957.1.3.el7",
-              macAddr: "3.10.0-957.1.3.el7",
-              remarks: "备注信息",
-            },
-            checkValue:[
-                {id:1,value:"Linux等保三级 (LINUX)"},
-                {id:2,value:"Linux等保三级 (LINUX)"},
-                {id:3,value:"Linux等保三级 (LINUX)"},
-                {id:4,value:"Linux等保三级 (LINUX)"},
-                {id:5,value:"Linux等保三级 (LINUX)"},
-                {id:6,value:"Linux等保三级 (LINUX)"},
-                {id:7,value:"Linux等保三级 (LINUX)"},
-                {id:8,value:"Linux等保三级 (LINUX)"},
-                {id:9,value:"Linux等保三级 (LINUX)"},
-            ],
-            status: 1,
-            finishTime: "",
-            maxCount:100,
-            curCount:10,
-            checkAllCount:0,
-            checkCurCount:0,
-          },
-          {
-            id: 2,
-            hostData: {
-              intIp: "192.168.0.1",
-              outIp: "192.168.1.1",
-              hostName: "elk.novalocal",
-              systemName: "centos linux7.6.1810_64bit",
-              rootName: "3.10.0-957.1.3.el7",
-              macAddr: "3.10.0-957.1.3.el7",
-              remarks: "备注信息",
-            },
-            checkValue:[
-                {id:1,value:"Linux等保三级 (LINUX)"},
-                {id:2,value:"Linux等保三级 (LINUX)"},
-                {id:3,value:"Linux等保三级 (LINUX)"},
-                {id:4,value:"Linux等保三级 (LINUX)"},
-                {id:5,value:"Linux等保三级 (LINUX)"},
-                {id:6,value:"Linux等保三级 (LINUX)"},
-                {id:7,value:"Linux等保三级 (LINUX)"},
-                {id:8,value:"Linux等保三级 (LINUX)"},
-                {id:9,value:"Linux等保三级 (LINUX)"},
-            ],
-            status: 2,
-            finishTime: "",
-            maxCount:100,
-            curCount:30,
-            checkAllCount:11,
-            checkCurCount:1,
-          },
-          {
-            id: 3,
-            hostData: {
-              intIp: "192.168.0.1",
-              outIp: "192.168.1.1",
-              hostName: "elk.novalocal",
-              systemName: "centos linux7.6.1810_64bit",
-              rootName: "3.10.0-957.1.3.el7",
-              macAddr: "3.10.0-957.1.3.el7",
-              remarks: "备注信息",
-            },
-            checkValue:[
-                {id:1,value:"Linux等保三级 (LINUX)"},
-                {id:2,value:"Linux等保三级 (LINUX)"},
-                {id:3,value:"Linux等保三级 (LINUX)"},
-                {id:4,value:"Linux等保三级 (LINUX)"},
-                {id:5,value:"Linux等保三级 (LINUX)"},
-                {id:6,value:"Linux等保三级 (LINUX)"},
-                {id:7,value:"Linux等保三级 (LINUX)"},
-                {id:8,value:"Linux等保三级 (LINUX)"},
-                {id:9,value:"Linux等保三级 (LINUX)"},
-            ],
-            status: 3,
-            finishTime: "2021-06-07T11:33:06.000",
-            maxCount:100,
-            curCount:70,
-            checkAllCount:11,
-            checkCurCount:0,
-          },
-    ]
-
 });
   

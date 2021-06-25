@@ -34,11 +34,11 @@
         </tr>
         </thead>
         <tbody>
-        <tr align="center" style="height: 50px;" v-for="item in scans" @click="onShowDetail(item)">
+        <tr align="center" style="height: 50px;" v-for="item in scans" >
             <td>
                 <input type="checkbox" name="select" :value="item.scan_id" @click="clickCheckbox">
             </td>
-            <td>{{item.target.address}}</td>
+            <td @click="onShowDetail(item)">{{item.target.address}}</td>
             <td>{{item.target.description}}</td>
             <td>Web</td>
             <td>

@@ -44,6 +44,6 @@ func (this *CreateAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	logs.Infof("生成目标扫描报表成功 ：%v", info[""])
+	logs.Infof("生成目标扫描报表成功 ：%v", info["report_id"])
 	this.Success()
 }

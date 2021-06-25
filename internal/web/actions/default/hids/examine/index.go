@@ -29,20 +29,28 @@ func (this *IndexAction) RunGet(params struct {
 	//Must *actions.Must
 	//CSRF *actionutils.CSRF
 }) {
-	this.Show()
-	return
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
-		return
+	}
+	if params.State == 0 {
+		params.State = -1
+	}
+	if params.Score == 0 {
+		params.Score = -1
+	}
+	if params.Type == 0 {
+		params.Type = -1
 	}
 	req := &examine.SearchReq{}
-	req.UserName = params.UserName
+	req.UserName = "luobing"
 	req.PageNo = params.PageNo
 	req.PageSize = params.PageSize
+
 	req.State = params.State
 	req.Score = params.Score
 	req.Type = params.Type
+
 	req.StartTime = params.StartTime
 	req.EndTime = params.EndTime
 	req.ExamineItems = params.ExamineItems
@@ -50,8 +58,11 @@ func (this *IndexAction) RunGet(params struct {
 	list, err := examine_server.List(req)
 	if err != nil {
 		this.ErrorPage(err)
-		return
 	}
 	this.Data["data"] = list
+	this.Data["state"] = params.State
+	this.Data["type"] = params.Type
+	this.Data["score"] = params.Score
+
 	this.Show()
 }

@@ -29,15 +29,6 @@
                 <div :class="{'meun-select-color':nResultState===2,'meun-define-color':nResultState!=2}" @click="onChangeResultState(2)">基线异常</div>
                 <div :class="{'meun-select-color':nResultState===3,'meun-define-color':nResultState!=3}" @click="onChangeResultState(3)">基线正常</div>
             </div>
-            <div class="ui fields inline">
-                <div class="title-style">体检时间</div>
-                <div class="ui field" style="margin-right: 10px;">
-                    <input type="text" name="dayFrom" placeholder="开始日期" v-model="dayFrom" value="" style="width:8em" id="day-from-picker"/>
-                </div>
-                <div class="ui field">
-                    <input type="text" name="dayTo" placeholder="结束日期" v-model="dayTo" value="" style="width:8em" id="day-to-picker"/>
-                </div>
-            </div>
         </div>
 
         <div style="display: inline-flex;margin: 15px;">
