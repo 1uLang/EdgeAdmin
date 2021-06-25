@@ -252,6 +252,7 @@ Tea.context(function () {
     //计时器
     this.testTime1 = null
     this.testTime2 = null
+    //传入的值需要用 'testTime1' 命名
     this.onCreateTimeOut=function (timeId) {
         this.onReleaseTimeOut(timeId)
         this[timeId] = createTimer(function(){
