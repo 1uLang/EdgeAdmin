@@ -168,9 +168,9 @@ Tea.context(function () {
     }
 
     //策略切换回调
-    this.onChangeHandle = function (selectValue) {
-        console.log(selectValue)
-        console.log(this.level)
+    this.onChangeHandle = function () {
+        let curLevel = document.getElementById('ddosLevel').value
+        document.getElementById('ddosLevel').value = this.level
         teaweb.confirm("确定更改防护策略？", function () {
             this.level  = curLevel
             this.setHost(false)
