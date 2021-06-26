@@ -158,53 +158,100 @@ Tea.context(function () {
         })
     }
 
-    this.onSelectTopMenu=function (id) {
-        if(this.selectTopMenuId !=id){
-            this.selectTopMenuId = id
+
+    this.selectTopMenuId = 1    //选择顶部导航id
+    this.selectLeftMenuId = 1   //选择左侧的菜单id
+    this.letfMenuData = []
+
+
+    this.getLeftData = function (id) {
+        for(var i=0;i<this.mainMenuData.length;i++){
+            if(this.mainMenuData[i].id==id){
+                return this.mainMenuData[i].leftMenu
+            }
         }
+        return null
     }
 
-    this.selectTopMenuId = 1
-    this.selectLeftMenuId = 1
+    this.getDropLeftData = function (id,dropId) {
+        for(var i=0;i<this.mainMenuData.length;i++){
+            if(this.mainMenuData[i].id==id){
+                if(this.mainMenuData[i].dropItem && this.mainMenuData[i].dropItem.length>0){
+                    for(var j=0;j<this.mainMenuData[i].dropItem.length;j++){
+                        if(this.mainMenuData[i].dropItem[j].id==dropId){
+                            return this.mainMenuData[i].dropItem[j].leftMenu
+                        }
+                    }
+                }
+            }
+        }
+        return null
+    }
+
+    this.onSelectTopMenu=function (menuId,dropId) {
+        if(this.selectTopMenuId !=menuId){
+            this.selectTopMenuId = menuId
+        }
+        if(dropId){
+            this.letfMenuData = this.getDropLeftData(menuId,dropId)
+            
+        }else{
+            this.letfMenuData = this.getLeftData(menuId)
+        }
+        if(this.letfMenuData){
+            this.selectLeftMenuId = this.letfMenuData[0].id
+        }
+        
+    }
 
     this.mainMenuData=[
-        {id:1,menuName:"首页",},
-        {id:2,menuName:"节点管理",},
+        {
+            id:1,
+            menuName:"首页",
+            pagePath:"/dashboard",
+            leftMenu:[
+                {id:1101,leftName:"全局状态",icon:"",pagePath:"/dashboard"}
+            ]
+        },
+        {
+            id:2,
+            menuName:"节点管理",
+            pagePath:"/dashboard",
+            leftMenu:[
+                {id:2101,leftName:"节点管理",icon:"",pagePath:""}
+            ]
+        },
         {
             id:3,
             menuName:"安全服务",
             dropItem:[
-                {id:31,dropName:"DDos防火墙",pagePath:"",childId:3100},
-                {id:32,dropName:"云防火墙",pagePath:"",childId:3200},
-                {id:33,dropName:"WEB防火墙",pagePath:"",childId:3300},
-                {id:34,dropName:"WEB漏洞扫描",pagePath:"",childId:3400},
-                {id:35,dropName:"主机安全防护",pagePath:"",childId:3500},
-                {id:36,dropName:"主机漏洞扫描",pagePath:"",childId:3600},
-                {id:37,dropName:"安全审计",pagePath:"",childId:3700},
-                {id:38,dropName:"堡垒机",pagePath:"",childId:3800}
-            ],
-            childItem:[
                 {
-                    id:3100,
+                    id:31,
+                    dropName:"DDos防火墙",
+                    pagePath:"/ddos",
                     leftMenu:[
-                        {id:3101,leftName:"全局状态",icon:"",pagePath:""},
-                        {id:3102,leftName:"主机状态",icon:"",pagePath:""},
-                        {id:3103,leftName:"黑白名单",icon:"",pagePath:""},
-                        {id:3104,leftName:"统计日志",icon:"",pagePath:""}
+                        {id:3101,leftName:"全局状态",icon:"",pagePath:"/ddos"},
+                        {id:3102,leftName:"主机状态",icon:"",pagePath:"/ddos/host"},
+                        {id:3103,leftName:"黑白名单",icon:"",pagePath:"/ddos/whiteblacklist"},
+                        {id:3104,leftName:"统计日志",icon:"",pagePath:"/ddos/logs"}
                     ]
                 },
                 {
-                    id:3200,
+                    id:32,
+                    dropName:"云防火墙",
+                    pagePath:"/nfw",
                     leftMenu:[
-                        {id:3201,leftName:"全局状态",icon:"",pagePath:""},
-                        {id:3202,leftName:"NAT规则",icon:"",pagePath:""},
-                        {id:3203,leftName:"ACL规则",icon:"",pagePath:""},
-                        {id:3204,leftName:"IPS规则",icon:"",pagePath:""},
-                        {id:3205,leftName:"统计日志",icon:"",pagePath:""}
+                        {id:3201,leftName:"全局状态",icon:"",pagePath:"/nfw"},
+                        {id:3202,leftName:"NAT规则",icon:"",pagePath:"/nfw/nat"},
+                        {id:3203,leftName:"ACL规则",icon:"",pagePath:"/nfw/acl"},
+                        {id:3204,leftName:"IPS规则",icon:"",pagePath:"/nfw/ips"},
+                        {id:3205,leftName:"统计日志",icon:"",pagePath:"/nfw/logs"}
                     ]
                 },
                 {
-                    id:3300,
+                    id:33,
+                    dropName:"WEB防火墙",
+                    pagePath:"",
                     leftMenu:[
                         {id:3301,leftName:"全局状态",icon:"",pagePath:""},
                         {id:3302,leftName:"代理服务",icon:"",pagePath:""},
@@ -223,7 +270,9 @@ Tea.context(function () {
                     ]
                 },
                 {
-                    id:3400,
+                    id:34,
+                    dropName:"WEB漏洞扫描",
+                    pagePath:"",
                     leftMenu:[
                         {id:3401,leftName:"全局状态",icon:"",pagePath:""},
                         {id:3402,leftName:"扫描目标",icon:"",pagePath:""},
@@ -233,7 +282,9 @@ Tea.context(function () {
                     ]
                 },
                 {
-                    id:3500,
+                    id:35,
+                    dropName:"主机安全防护",
+                    pagePath:"",
                     leftMenu:[
                         {id:3501,leftName:"全局状态",icon:"",pagePath:""},
                         {id:3502,leftName:"主机体现",icon:"",pagePath:""},
@@ -244,13 +295,17 @@ Tea.context(function () {
                     ]
                 },
                 {
-                    id:3600,
+                    id:36,
+                    dropName:"主机漏洞扫描",
+                    pagePath:"",
                     leftMenu:[
                         {id:3601,leftName:"平台首页",icon:"",pagePath:""}
                     ]
                 },
                 {
-                    id:3700,
+                    id:37,
+                    dropName:"安全审计",
+                    pagePath:"",
                     leftMenu:[
                         {id:3701,leftName:"全局状态",icon:"",pagePath:""},
                         {id:3702,leftName:"资产管理",icon:"",pagePath:""},
@@ -266,18 +321,52 @@ Tea.context(function () {
                     ]
                 },
                 {
-                    id:3800,
+                    id:38,
+                    dropName:"堡垒机",
+                    pagePath:"",
                     leftMenu:[
                         {id:3801,leftName:"平台首页",icon:"",pagePath:""}
                     ]
                 }
+            ],
+        },
+        {
+            id:4,menuName:"监控告警",
+            leftMenu:[
+                {id:4101,leftName:"监控任务",icon:"",pagePath:""},
+                {id:4102,leftName:"告警通知",icon:"",pagePath:""},
+                {id:4103,leftName:"告警设置",icon:"",pagePath:""},
             ]
         },
-        {id:4,menuName:"监控告警",},
-        {id:5,menuName:"平台用户",},
-        {id:6,menuName:"系统用户",},
-        {id:7,menuName:"操作日志",},
-        {id:8,menuName:"系统设置",},
+        {
+            id:5,
+            menuName:"平台用户",
+            leftMenu:[
+                {id:5101,leftName:"平台用户",icon:"",pagePath:""}
+            ]
+        },
+        {
+            id:6,
+            menuName:"系统用户",
+            leftMenu:[
+                {id:6101,leftName:"系统用户",icon:"",pagePath:""}
+            ]
+        },
+        {
+            id:7,
+            menuName:"操作日志",
+            leftMenu:[
+                {id:7101,leftName:"操作日志",icon:"",pagePath:""}
+            ]
+        },
+        {
+            id:8,
+            menuName:"系统设置",
+            leftMenu:[
+                {id:8101,leftName:"基本设置",icon:"",pagePath:""},
+                {id:8102,leftName:"高级设置",icon:"",pagePath:""}
+            ]
+        },
     ]
 });
 

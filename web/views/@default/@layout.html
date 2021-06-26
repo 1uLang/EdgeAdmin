@@ -51,7 +51,9 @@
                                                                        style="width: auto;height: 1.6em"/> &nbsp;
             {{teaTitle}}&nbsp;<sup v-if="teaShowVersion">v{{teaVersion}}</sup> &nbsp;
         </a>
+
         <div class="menu menu1">
+            <!-- 新布局-->
             <!-- <div v-for="(menuItem,index) in mainMenuData" > 
                 <div v-if="menuItem.dropItem && menuItem.dropItem.length>0" @mouseenter="showMenu(index)" @mouseleave="hideMenu(index)">
                     <div class="item navHead" :class="'navHead' + index">
@@ -59,11 +61,11 @@
                     </div>
                     <ul v-if="menuItem.dropItem && menuItem.dropItem.length>0" class="navMain" :class="'navMain' + index">
                         <li v-for="subItem in menuItem.dropItem">
-                            <a :href="subItem.pagePath" @click="onSelectTopMenu(menuItem.id)">{{subItem.dropName}}</a>
+                            <a :href="subItem.pagePath" @click="onSelectTopMenu(menuItem.id,subItem.id)">{{subItem.dropName}}</a>
                         </li>
                     </ul>
                 </div>
-                <a v-else class="item" :class="{active:selectTopMenuId === menuItem.id}" @click="onSelectTopMenu(menuItem.id)">{{menuItem.menuName}}</a>
+                <a v-else class="item" :class="{active:selectTopMenuId === menuItem.id}" @click="onSelectTopMenu(menuItem.id)" :href="menuItem.pagePath">{{menuItem.menuName}}</a>
             </div> -->
             <div @mouseenter="showMenu(index)" @mouseleave="hideMenu(index)" class="navHead" :class="'navHead' + index" v-for="(module,index) in teaModules">
                 <a class="item" :href="Tea.url(module.code)"
@@ -124,27 +126,19 @@
     <!-- 左侧主菜单 -->
     <div class="main-menu" v-cloak="">
         <div class="ui labeled menu vertical blue inverted tiny borderless">
-            <div class="item"></div>
-            <!--<a :href="Tea.url('dashboard')" class="item" :class="{active:teaMenu == 'dashboard'}">
-                <i class="ui dashboard icon"></i>
-                <span>仪表板</span>
-            </a>-->
-
-            <!-- 模块 -->
-            <div v-for="module in teaModules">
-                <!--				<a class="item" :href="Tea.url(module.code)" :class="{active:teaMenu == module.code && teaSubMenu.length == 0, separator:module.code.length == 0, expend: teaMenu == module.code}" v-if="module.isOn !== false">-->
-                <!--					<span v-if="module.code.length > 0">-->
-                <!--						<i class="window restore outline icon" v-if="module.icon == null"></i>-->
-                <!--						<i class="ui icon" v-if="module.icon != null" :class="module.icon"></i>-->
-                <!--						<span>{{module.name}}</span>-->
-                <!--					</span>-->
-                <!--                    <div class="subtitle" v-if="module.subtitle != null && module.subtitle.length > 0">{{module.subtitle}}</div>-->
-                <!--				</a>-->
+            
+            <div v-for="module in teaModules" style="margin-top: 10px;">
                 <div v-if="teaMenu == module.code" class="sub-items">
                     <a class="item" v-for="subItem in module.subItems" v-if="subItem.isOn !== false" :href="subItem.url"
                        :class="{active:subItem.code == teaSubMenu}">{{subItem.name}}</a>
                 </div>
             </div>
+
+            <!-- 新布局-->
+            <!-- <div v-if="letfMenuData" class="sub-items" style="margin-top: 10px;">
+                <a class="item" v-for="subItem in letfMenuData" :href="subItem.pagePath"
+                       :class="{active:selectLeftMenuId == subItem.id}" >{{subItem.leftName}}</a>
+            </div> -->
         </div>
     </div>
 
