@@ -11,8 +11,16 @@ Vue.component("nfw-type-selector", {
         //     .success(function (resp) {
         //         that.types = resp.data.type
         //     })
+    }, watch: {
+        type(newVal, oldVale) {
+            // console.log("dstmask-new:", newVal);
+            // console.log("dstmask-old:", oldVale);
+            if (newVal !== oldVale) {
+                this.$emit("update:vType", newVal)
+            }
+        },
     },
-    props: ["v-type","v-node-id", "v-id","v-types"],
+    props: ["v-type", "v-node-id", "v-id", "v-types"],
     data: function () {
         let type = this.vType
         if (type == null) {

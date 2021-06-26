@@ -3,7 +3,7 @@ Tea.context(function () {
 
     this.nShowState = 1
 
-    this.id = 1             //操作的ID
+    // this.id = 1             //操作的ID
     this.type = ""             //操作
     this.types = []            //操作
     this.interface = "wan"             //接口* ID
@@ -226,7 +226,6 @@ Tea.context(function () {
                 if (resp.data.interface.length > 0) {
                     this.interface = ""
                     this.interfaces = resp.data.interface
-                    console.log(this.interfaces);
                     for (var i = 0; i < resp.data.interface.length; i++) { //接口下拉
                         if (resp.data.interface[i].selected == true) {
                             this.interface = resp.data.interface[i].value
@@ -241,7 +240,6 @@ Tea.context(function () {
                 if (resp.data.direction.length > 0) {
                     this.direction = ""
                     this.directions = resp.data.direction
-                    console.log(this.directions)
                     for (var i = 0; i < resp.data.direction.length; i++) { //下拉
                         if (resp.data.direction[i].selected == true) {
                             this.direction = resp.data.direction[i].value
@@ -256,7 +254,7 @@ Tea.context(function () {
                 if (resp.data.ipprotocol.length > 0) {
                     this.ipprotocol = ""
                     this.ipprotocols = resp.data.ipprotocol
-                    console.log(this.ipprotocols);
+                    // console.log(this.ipprotocols);
                     for (var i = 0; i < resp.data.ipprotocol.length; i++) { //下拉
                         if (resp.data.ipprotocol[i].selected == true) {
                             this.ipprotocol = resp.data.ipprotocol[i].value
@@ -271,7 +269,7 @@ Tea.context(function () {
                 if (resp.data.protocol.length > 0) {
                     this.protocol = ""
                     this.protocols = resp.data.protocol
-                    console.log(this.protocols);
+                    // console.log(this.protocols);
                     for (var i = 0; i < resp.data.protocol.length; i++) { //下拉
                         if (resp.data.protocol[i].selected == true) {
                             this.protocol = resp.data.protocol[i].value
@@ -287,6 +285,8 @@ Tea.context(function () {
                     this.src = ""
                     this.srcinput = ""
                     this.srcs = resp.data.src
+                    console.log(this.srcs);
+
                     for (var i = 0; i < resp.data.src.length; i++) { //目标下拉
                         if (resp.data.src[i].selected == true) {
                             this.src = resp.data.src[i].value
@@ -297,6 +297,8 @@ Tea.context(function () {
                         this.src = resp.data.src[0].value
                         this.srcinput = resp.data.src[0].value
                     }
+                    console.log(this.src);
+
                 }
                 //源掩码
                 this.srcmask = "32"
