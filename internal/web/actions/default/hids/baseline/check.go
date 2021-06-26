@@ -18,7 +18,7 @@ func (this *CheckAction) RunPost(params struct {
 	TemplateId int      `json:"templateId"`
 
 	Must *actions.Must
-	CSRF *actionutils.CSRF
+	//CSRF *actionutils.CSRF
 }) {
 
 	params.Must.

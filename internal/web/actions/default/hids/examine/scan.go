@@ -7,6 +7,7 @@ import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
 	"github.com/iwind/TeaGo/actions"
+	"strings"
 )
 
 type ScanAction struct {
@@ -16,10 +17,12 @@ type ScanAction struct {
 func (this *ScanAction) RunPost(params struct {
 	Opt       string
 	MacCode   []string
-	ScanItems []string
+	ScanItems string
 
-	Must *actions.Must
-	CSRF *actionutils.CSRF
+	VirusPath    string
+	WebShellPath string
+	Must         *actions.Must
+	CSRF         *actionutils.CSRF
 }) {
 
 	params.Must.
@@ -37,7 +40,18 @@ func (this *ScanAction) RunPost(params struct {
 		return
 	}
 	if params.Opt == "now" {
-		err = examine_server.ScanServerNow(&examine.ScanReq{MacCode: params.MacCode, ScanItems: params.ScanItems})
+
+		req := &examine.ScanReq{MacCode: params.MacCode}
+		//去掉 ','
+		params.ScanItems = strings.TrimPrefix(params.ScanItems, ",")
+		params.ScanItems = strings.TrimSuffix(params.ScanItems, ",")
+		if len(params.ScanItems) > 0 {
+			req.ScanItems = strings.Split(params.ScanItems, ",")
+		}
+		req.ScanConfig.VirusPath = params.VirusPath
+		req.ScanConfig.WebShellPath = params.WebShellPath
+
+		err = examine_server.ScanServerNow(req)
 	} else {
 		err = examine_server.ScanServerCancel(params.MacCode)
 	}

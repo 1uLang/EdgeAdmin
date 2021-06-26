@@ -55,7 +55,6 @@ Tea.context(function () {
     this.onStartCheck = function (macCode) {
         teaweb.confirm("确定开始体检该主机吗？", function () {
             this.$post(".check").params({
-                Opt: "ignore",
                 MacCode: [this.macCode],
                 templateId: this.sSelectValue,
             }).refresh()
@@ -67,9 +66,12 @@ Tea.context(function () {
     }
 
     //添加/删除元素
-    this.onAddSelectValue = function (index) {
-        console.log("=========",index)
-        this.sSelectValue = index
+    this.onSetSelectValue = function (index) {
+        if(this.sSelectValue != index)
+            this.sSelectValue = index
+        else{
+            this.sSelectValue = 0
+        }
     }
     this.getShowSelectImage = function (id) {
         console.log(id,this.sSelectValue)
