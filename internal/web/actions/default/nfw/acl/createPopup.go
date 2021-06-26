@@ -1,6 +1,8 @@
 package acl
 
 import (
+	"fmt"
+	"github.com/1uLang/zhiannet-api/opnsense/server/acl"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/actions"
 )
@@ -18,30 +20,67 @@ func (this *CreatePopupAction) RunGet(params struct{}) {
 }
 
 func (this *CreatePopupAction) RunPost(params struct {
-	Addr   string
-	NodeId uint64
+	NodeId     uint64
+	Interface  string
+	Type       string
+	Direction  string
+	Ipprotocol string
+	Protocol   string
+	Src        string
+	Srcinput   string
+	Srcmask    string
+	Dst        string
+	Dstinput   string
+	Dstmask    string
+	Descr      string
+	Id         string
 
 	Must *actions.Must
+	//CSRF *actionutils.CSRF
 }) {
-	//params.Must.
-	//	Field("name", params.Addr).
-	//	Require("请输入ip地址")
-	//id, err := host_status_server.AddAddr(&ddos_host_ip.AddHost{
-	//	Addr:   params.Addr,
-	//	NodeId: params.NodeId,
-	//})
-	//if err != nil {
-	//	this.ErrorPage(err)
-	//	return
-	//}
-	//
-	//this.Data["ddos"] = maps.Map{
-	//	"id":   id,
-	//	"addr": params.Addr,
-	//}
-	//
-	//// 创建日志
-	//defer this.CreateLog(oplogs.LevelInfo, "创建高防IP %d", params.Addr)
+	this.Data["params"] = params
+	//this.Show()
+	this.Success()
+	return
+	params.Must.
+		Field("nodeId", params.NodeId).
+		Require("没有选择节点").
+		//Field("external", params.External).
+		//Require("请输入外部网络").
+		Field("src", params.Src).
+		Require("请输入源")
 
+	if params.Dst == "" { //目标
+		params.Dst = params.Dstinput
+	}
+	//this.Data["params"] = params
+	//this.Success()
+	//return
+	params.Must.
+		Field("dsts", params.Dst).
+		Require("请选择或输入源")
+
+	data := &acl.SaveAclReq{
+		NodeId:     params.NodeId,
+		Interface:  params.Interface,
+		Type:       params.Type,
+		Direction:  params.Direction,
+		Ipprotocol: params.Ipprotocol,
+		Protocol:   params.Protocol,
+		Src:        params.Src,
+		Srcmask:    params.Srcmask,
+		Dst:        params.Dst,
+		Dstmask:    params.Dstmask,
+		Descr:      params.Descr,
+		ID:         params.Id,
+	}
+	tips, err := acl.SaveAcl(data)
+	fmt.Println("err==", err, "tips==", tips)
+	if err != nil || len(tips) > 0 {
+		this.ErrorPage(err)
+	}
+	defer this.CreateLogInfo("编辑acl  %d", params.Id)
+	//this.Data["tops"] = tops
+	//this.Show()
 	this.Success()
 }

@@ -75,14 +75,14 @@
                 <tr>
                     <td class="title">接口*</td>
                     <td>
-                        <nfw-interface-selector :v-interface="interface" :v-node-id="selectNode"
+                        <nfw-interface-selector :v-interface.sync="interface" :v-node-id="selectNode"
                                                 :v-id="id" :v-interfaces="interfaces"></nfw-interface-selector>
                     </td>
                 </tr>
                 <tr>
                     <td class="title">类型*</td>
                     <td>
-                        <nfw-type-selector :v-type="type" :v-node-id="selectNode" :v-id="id" :v-types="types"></nfw-type-selector>
+                        <nfw-type-selector :v-type.sync="type" :v-node-id="selectNode" :v-id="id" :v-types="types"></nfw-type-selector>
                     </td>
                 </tr>
                 <tr>
@@ -111,8 +111,8 @@
                 <tr>
                     <td class="title">目标*</td>
                     <td>
-                        <nfw-target-selector :v-dst="dst" :v-node-id="selectNode" :v-id="id" :v-dstmask.sync="dstmask"
-                                             :v-masks="masks" :v-dsts="dsts" :v-dstinput.synv="dstinput"></nfw-target-selector>
+                        <nfw-target-selector :v-dst.sync="dst" :v-node-id="selectNode" :v-id="id" :v-dstmask.sync="dstmask"
+                                             :v-masks="masks" :v-dsts="dsts" :v-dstinput.sync="dstinput"></nfw-target-selector>
                     </td>
                 </tr>
                 <tr>

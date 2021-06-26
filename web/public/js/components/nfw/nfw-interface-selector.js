@@ -11,8 +11,17 @@ Vue.component("nfw-interface-selector", {
         //     .success(function (resp) {
         //         that.interfaces = resp.data.interface
         //     })
+    }, watch: {
+        interface(newVal, oldVale) {
+            // console.log("dstmask-new:", newVal);
+            // console.log("dstmask-old:", oldVale);
+            if (newVal !== oldVale) {
+                this.$emit("update:vInterface", newVal)
+                console.log(1111);
+            }
+        },
     },
-    props: ["v-node-id", "v-interface", "v-id","v-interfaces"],
+    props: ["v-node-id", "v-interface", "v-id", "v-interfaces"],
     data: function () {
         let interface = this.vInterface
         if (interface == null) {
