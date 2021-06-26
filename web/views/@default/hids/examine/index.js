@@ -1,14 +1,14 @@
 Tea.context(function () {
 
-    this.Items = this.examineItems ? this.examineItems !== ""? this.examineItems.split(","):"" : ""
+    this.Items = this.examineItems !== ""? this.examineItems.split(","): []
     this.curIndex = -1
 
     this.bShowCheckDetail = false
     this.pCheckDetailData = null
     this.sSelectCheckValue = []
 
-    this.webSearchKey = ""
-    this.searchPath = ""
+    this.webSearchKey = "%web%"  //网页后门
+    this.searchPath = "%all%"    //病毒木马
 
     this.bTimeOutTip = false
     this.bShowScanPath = false
@@ -165,22 +165,15 @@ Tea.context(function () {
             {
                 checkName: "漏洞风险检查项：",
                 checkValue: [
-                    {id: 1, value: "系统漏洞"},
-                    {id: 2, value: "系统漏洞"},
-                    {id: 3, value: "系统漏洞"},
-                    {id: 4, value: "系统漏洞"},
-                    {id: 5, value: "系统漏洞"},
+                    {id: "01", value: "系统漏洞"},
+                    {id: "02", value: "弱口令"},
+                    {id: "03", value: "风险账号"},
+                    {id: "04", value: "配置缺陷"},
                 ]
             },
             {
                 checkName: "入侵威胁检查项：",
-                checkValue: [
-                    {id: 6, value: "反弹shell"},
-                    {id: 7, value: "异常账号"},
-                    {id: 8, value: "系统命令篡改"},
-                    {id: 9, value: "异常进程"},
-                    {id: 10, value: "日志异常删除"},
-                ]
+                checkValue: this.sBottomSelectItem
             }
         ]
         if (this.pCheckDetailData) {
@@ -230,13 +223,28 @@ Tea.context(function () {
     }
 
     this.onStartCheck = function (id) {
+        teaweb.confirm("确定立即体检吗？", function () {
+            this.$post(".check").params({
+                Opt:'now',
+                VirusPath:this.searchPath,
+                WebShellPath:this.webSearchKey,
+                MacCode: [this.macCode],
+                templateId: this.sSelectCheckValue.join(","),
+
+            }).refresh()
+        })
+
         this.bShowCheckDetail = false
 
         //
     }
     this.onStopCheck = function (id) {
         teaweb.confirm("确定取消体检吗？", function () {
-
+            this.$post(".check").params({
+                Opt:'cancel',
+                MacCode: [this.macCode],
+                templateId: this.sSelectValue,
+            }).refresh()
         })
     }
     //检测是否显示扫描路径的输入框和提示框

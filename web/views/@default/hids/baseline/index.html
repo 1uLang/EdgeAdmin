@@ -72,8 +72,7 @@
                 <td>
                     <div style="display: inline-flex;justify-content: center;">
                         <div v-if="item.state==0" class="edit_btn_blue" @click="onOpenCheck(item)">基线检查</div>
-                        <div v-if="item.state==3" class="edit_btn_blue" @click="onOpenCheck(item)">重新检查</div>
-<!--                        <div v-if="item.status==1" class="edit_btn_blue" @click="onStopCheck(item)">取消体检</div>-->
+                        <div v-if="item.state==3 || item.state ==2 " class="edit_btn_blue" @click="onOpenCheck(item)">重新检查</div>
                         <div v-if="item.state==2" class="edit_btn_blue" @click="onOpenDetail(item)">详情</div>
                     </div>
                 </td>

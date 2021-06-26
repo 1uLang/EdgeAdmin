@@ -1,7 +1,7 @@
 {$layout "layout_popup"}
 
-<script type="text/javascript" src="/_/@default/hids/baseline/index.js"></script>
-<div class="dialog-bg-style" style="display: flex;flex-direction: column;">
+
+<div  style="display: flex;flex-direction: column;">
     <div style="flex: 7;">
         <div style="background: #0091cc;width: 100%;height: 25px;color: #fff;text-align: center;line-height: 25px;">
             基线检查
@@ -9,9 +9,9 @@
         <div style="display: inline-flex;">
             <div style="font-weight: bold;width: 150px;margin:10px 30px 0 30px;">选择检查模板：</div>
             <div style="margin-top: 10px;">
-                <div v-for='item in templates' @click="onAddSelectValue(item.id)"
+                <div v-for='item in templates' @click="onSetSelectValue(item.id)"
                      style="display: flex;justify-content: start;align-items: center;margin: 5px 0;">
-                    <img :src="getShowSelectImage(item.id)" width="12px" height="12px">
+                    <img :src="sSelectValue == item.id ? '/images/select_select.png':'/images/select_box.png'" width="12px" height="12px">
                     <span style="margin-left: 10px;">{{item.name}}</span>
                 </div>
             </div>

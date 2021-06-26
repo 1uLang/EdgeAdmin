@@ -30,9 +30,9 @@ func (this *TemplateAction) RunGet(params struct {
 		return
 	}
 	req := &baseline.TemplateSearchReq{}
-	req.UserName = params.UserName
+	req.UserName = "luobing"
 	req.PageNo = 1
-	req.PageSize = 999
+	req.PageSize = 100
 
 	list, err := baseline_server.TemplateList(req)
 	if err != nil {

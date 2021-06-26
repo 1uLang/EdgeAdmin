@@ -33,18 +33,18 @@ Vue.component("nfw-target-selector", {
     methods: {
         selectSrc(event) {
             let value = event.target.value
-            let vmap = ["bogons","bogonsv6","virusprot","sshlockout","any","(self)","lan","lanip",
-            "lo0","wan","wanip"]
-            if(vmap.indexOf(value) == -1){
+            let vmap = ["bogons", "bogonsv6", "virusprot", "sshlockout", "any", "(self)", "lan", "lanip",
+                "lo0", "wan", "wanip"]
+            if (vmap.indexOf(value) == -1) {
                 this.hide = false
-            }else{
+            } else {
                 this.hide = true
             }
             console.log(this.hide)
             console.log(value)
         }
     },
-    props: ["v-dst", "v-node-id", "v-id","v-masks","v-dstmask","v-dstinput","v-dsts"],
+    props: ["v-dst", "v-node-id", "v-id", "v-masks", "v-dstmask", "v-dstinput", "v-dsts"],
     data: function () {
         let dst = this.vDst
         if (dst == null) {
@@ -71,19 +71,18 @@ Vue.component("nfw-target-selector", {
             dst: dst,
             nodeId: nodeId,
             id: id,
-            masks:masks,
-            dstmask:dstmask,
-            hide:true,
-            dstinput:dstinput,
+            masks: masks,
+            dstmask: dstmask,
+            hide: true,
+            dstinput: dstinput,
         }
-    },watch: {
+    }, watch: {
         dstmask(newVal, oldVale) {
             console.log("dstmask-new:", newVal);
             console.log("dstmask-old:", oldVale);
 
             if (newVal !== oldVale) {
                 this.$emit("update:vDstmask", newVal)
-                console.log(1111);
             }
         },
         dstinput(newVal, oldVale) {
@@ -92,18 +91,22 @@ Vue.component("nfw-target-selector", {
 
             if (newVal !== oldVale) {
                 this.$emit("update:vDstinput", newVal)
-                console.log(22222);
+            }
+        },
+        dst(newVal, oldVale) {
+            console.log("dst-new:", newVal);
+            console.log("dst-old:", oldVale);
+
+            if (newVal !== oldVale) {
+                this.$emit("update:vDst", newVal)
             }
         }
     },
     template: `<div>
-	<select class="ui dropdown auto-width" name="dsts"  @change="selectSrc($event)"  v-model="dst">
+	<select class="ui dropdown auto-width" name="dst"  @change="selectSrc($event)"  v-model="dst">
 		<option v-for="(idc,k) in dsts" :value="idc.value" :v-data="idc.data_other" :key="k" >
 		    {{idc.name}}
 		</option>
-<!--		<option :value="idc.value" :v-data="idc.data_other" :key="k" v-else>-->
-<!--            {{idc.name}}-->
-<!--        </option>-->
 	</select>
 	<div style="display: flex;justify-content: start;flex-direction: row;">
 	<input type="text" name="dst" ref="dst" maxlength="50"  v-model="dstinput" :class="{'hide':hide==true}"/>
