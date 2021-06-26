@@ -105,10 +105,11 @@ Vue.component("nfw-target-selector", {
 <!--            {{idc.name}}-->
 <!--        </option>-->
 	</select>
-	
+	<div style="display: flex;justify-content: start;flex-direction: row;">
 	<input type="text" name="dst" ref="dst" maxlength="50"  v-model="dstinput" :class="{'hide':hide==true}"/>
 	<select class="ui dropdown auto-width" ref="dstmask" name="dstmask" v-model="dstmask" :class="{'hide':hide==true}" >
     	<option v-for="item in masks" :value="item.id" >{{item.value}}</option>
     </select>
+    </div>
 </div>`
 })

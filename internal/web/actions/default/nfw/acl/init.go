@@ -14,6 +14,7 @@ func init() {
 			Prefix("/nfw/acl").
 			Get("", new(IndexAction)).
 			GetPost("/createPopup", new(CreatePopupAction)). //修改创建
+			GetPost("/detail", new(DetailAction)).           //修改创建
 			GetPost("/delete", new(DeleteAction)).           //删除
 			Post("/set", new(SetAction)).                    //禁用 启动
 			EndAll()
