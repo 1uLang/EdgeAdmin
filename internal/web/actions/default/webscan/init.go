@@ -18,18 +18,26 @@ func init() {
 			Get("", new(IndexAction)).
 			EndAll()
 	})
+	info, err := server.GetWebScan()
+	if err != nil {
+		panic("漏扫节点获取失败")
+	}
+	Key = info.Key
+	ServerUrl = info.Addr
 }
 
-var ServerUrl = "https://scan-web.zhiannet.com"
+var ServerUrl = "" //"https://scan-web.zhiannet.com"
+var Key = ""
 
 func InitAPIServer() error {
+
 	err := server.SetUrl(ServerUrl)
 	if err != nil {
 		return err
 	}
 	//初始化 awvs 系统管理员账号apikeys
 	err = server.SetAPIKeys(&request.APIKeys{
-		XAuth: "1986ad8c0a5b3df4d7028d5f3c06e936c429ffb1149e2491b84fe51cc63a6b26a",
+		XAuth: Key,
 	})
 	if err != nil {
 		return err

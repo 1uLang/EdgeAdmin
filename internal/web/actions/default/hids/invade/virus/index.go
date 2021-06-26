@@ -37,7 +37,6 @@ func (this *IndexAction) RunGet(params struct {
 	list, err := risk_server.VirusList(req)
 	if err != nil {
 		this.ErrorPage(err)
-
 	}
 	for k, v := range list.AbnormalProcessCountInfoList {
 		os, err := server.Info(v["serverIp"].(string))

@@ -5,15 +5,15 @@
     <div style="display: flex;justify-content: space-between;height: 45px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;margin-bottom: 30px;">
         <div style="display: inline-flex;margin-top: 10px;">
             <div :class="{'menu-select-color':nShowState===1,'menu-define-color':nShowState!=1}" @click="onChangeShowState(1)">规则列表</div>
-            <div v-show="nShowState!=3" :class="{'menu-select-color':nShowState===2,'menu-define-color':nShowState!=2}" @click="onChangeShowState(2)">添加规则</div>
+            <div v-show="nShowState!=3" :class="{'menu-select-color':nShowState===2,'menu-define-color':nShowState!=2}" @click="onOpenChangeView('')">添加规则</div>
             <div v-show="nShowState===3" :class="{'menu-select-color':nShowState===3,'menu-define-color':nShowState!=3}">修改规则</div>
         </div>
         <div align="right" style="display: inline-flex;">
             <div style="line-height: 40px;text-align: center;">DDoS防火墙节点：</div>
             <div class="ui field">  
                 <div class="ui field">
-                    <select class="ui dropdown auto-width" name="severity" v-model="severity">
-                        <option v-for="item in hostData" :value="item.id">{{item.hostAddress}}</option>
+                    <select class="ui dropdown auto-width" name="SelectNode" v-model="selectNode" @change="GetSelectNode">
+                        <option v-for="item in nodes" :value="item.id">{{item.addr}}</option>
                     </select>
                 </div>
             </div>
@@ -43,25 +43,25 @@
             </thead>
             <tbody id='tableBody'>
                 <tr align="center" style="height: 40px;" v-for="item in tableData" >
-                    <td>{{item.postId}}</td>
-                    <td>{{getDirection(item.directionType)}}</td>
-                    <td>{{item.agreement}}</td>
-                    <td>{{item.value1}}</td>
-                    <td>{{item.post1}}</td>
-                    <td>{{item.value2}}</td>
-                    <td>{{item.post2}}</td>
-                    <td>{{item.desc}}</td>
-                    <td>{{getTactics(item.tactics)}}</td>
+                    <td>{{getInterfaceName(item.interface)}}</td>
+                    <td>{{getDirection(item.direction)}}</td>
+                    <td>{{item.protocol}}</td>
+                    <td>{{item.src}}</td>
+                    <td>{{item.src_port}}</td>
+                    <td>{{item.dst}}</td>
+                    <td>{{item.dst_port}}</td>
+                    <td>{{item.descr}}</td>
+                    <td>{{item.type}}</td> <!--getTactics-->
                     <td>
-                        <div :class="{'status-open':item.status===1,'status-close':item.status===2}">
-                            {{getStatus(item.status)}}
+                        <div :class="{'status-open':item.disabled==1,'status-close':item.disabled==0}">
+                            {{getStatus(item.disabled)}}
                         </div>
                     </td>
                     <td>
                         <div style="display: flex;justify-content: space-around;">
                             <div class="edit_btn" @click="onOpenChangeView(item.id)">修改</div>
-                            <div v-show="item.status===1" class="edit_btn" @click="onCloseConfig(item.id)">禁用</div>
-                            <div v-show="item.status===2" class="edit_btn" @click="onOpenConfig(item.id)">启用</div>
+                            <div v-show="item.disabled==1" class="edit_btn" @click="onOpenConfig(item.id,item.disabled,item.interface)">禁用</div>
+                            <div v-show="item.disabled==0" class="edit_btn" @click="onOpenConfig(item.id,item.disabled,item.interface)">启用</div>
                             <div class="edit_btn" @click="onDelConfig(item.id)">删除</div>
                         </div>
                     </td>
@@ -76,9 +76,9 @@
                     <td class="title">操作*</td>
                     <td>
                         <div>
-                            <select class="ui dropdown auto-width" name="editId" v-model="editId">
+                            <select class="ui dropdown auto-width" name="type" v-model="type">
 
-                                <option v-for="item in editData" :value="item.id">{{item.value}}</option>
+                                <option v-for="item in types" :value="item.value">{{item.name}}</option>
                             </select>
                         </div>
                     </td>
@@ -86,16 +86,17 @@
                 <tr>
                     <td class="title">接口*</td>
                     <td>
-                        <nfw-interface-selector :v-idc-id="postId"></nfw-interface-selector>
+                        <nfw-interface-selector :v-interface="interface" :v-node-id="selectNode"
+                                                :v-id="id" :v-interfaces="interfaces"></nfw-interface-selector>
                     </td>
                 </tr>
                 <tr>
                     <td class="title">方向*</td>
                     <td>
                         <div>
-                            <select class="ui dropdown auto-width" name="dirctionId" v-model="dirctionId">
+                            <select class="ui dropdown auto-width" name="direction" v-model="direction">
 
-                                <option v-for="item in dirctionData" :value="item.id">{{item.value}}</option>
+                                <option v-for="item in directions" :value="item.value">{{item.value}}</option>
                             </select>
                         </div>
                     </td>
@@ -105,81 +106,59 @@
                     <td>
                         <!-- <nfw-httpType-selector :v-idc-id="agreementTypeId"></nfw-httpType-selector> -->
                         <!-- 不知道为啥上面的显示不出来可能服务器认为我在攻击他 先用下面的显示-->
-                        <nfw-agreement-selector :v-idc-id="agreementTypeId"></nfw-agreement-selector>
+                        <nfw-ipprotocol-selector :v-ipprotocol="ipprotocol" :v-ipprotocols="ipprotocols"></nfw-ipprotocol-selector>
                     </td>
                 </tr>
                 <tr>
                     <td class="title">协议*</td>
                     <td>
-                        <nfw-agreement-selector :v-idc-id="agreementId"></nfw-agreement-selector>
+                        <nfw-protocol-selector :v-protocol="protocol" :v-protocols="protocols"></nfw-protocol-selector>
                     </td>
                 </tr>
-                <tr v-show="nShowState===2">
+                <tr >
                     <td class="title" >源*</td>
                     <td>
                         <!-- <nfw-sourceNetType-selector :v-idc-id="sourceTypeId"></nfw-sourceNetType-selector> -->
                         <!-- 不知道为啥上面的显示不出来可能服务器认为我在攻击他 先用下面的显示-->
-                        <nfw-agreement-selector :v-idc-id="sourceTypeId"></nfw-agreement-selector>
-                        
-                        <div style="display: flex;justify-content: start;flex-direction: row;">
-                            <input type="text" name="source" maxlength="50" :value="sourceValue"/>
-                            <!-- 网络请求用这个 -->
-                            <!-- <nfw-source-selector :v-idc-id="sourceId"></nfw-source-selector> -->
-                            <!-- 本地数据用这个 -->
-                            <select class="ui dropdown auto-width" name="sourceId" v-model="sourceId">
-                                <option v-for="item in masks" :value="item.id">{{item.value}}</option>
-                            </select>
-                        </div>
-                        
+                        <nfw-agreement-selector :v-src="src" :v-srcs="srcs" :v-masks="masks" :v-srcmask="srcmask" :v-srcinput="srcinput"></nfw-agreement-selector>
                     </td>
                 </tr>
-                <tr v-show="nShowState===3">
+                <!--<tr v-show="nShowState===3">
                     <td class="title">源*</td>
                     <td>
-                        <nfw-target-selector :v-idc-id="editSourceId"></nfw-target-selector>
+                        <nfw-target-selector :v-dst="dst" :v-node-id="selectNode" :v-id="id" :v-dstmask.sync="dstmask"
+                                             :v-masks="masks" :v-dsts="dsts" :v-srcinput.synv="srcinput"></nfw-target-selector>
                     </td>
-                </tr>
-                <tr v-show="nShowState===2">
+                </tr>-->
+                <!--<tr v-show="nShowState===2">
                     <td class="title">目标*</td>
                     <td v-show="nShowState===2">
-                        <!-- <nfw-sourceNetType-selector :v-idc-id="targetTypeId"></nfw-sourceNetType-selector> -->
-                        <!-- 不知道为啥上面的显示不出来可能服务器认为我在攻击他 先用下面的显示-->
-                        <nfw-agreement-selector :v-idc-id="targetTypeId"></nfw-agreement-selector>
+                        <nfw-target-selector :v-idc-id="targetTypeId"></nfw-target-selector>
 
                         <div style="display: flex;justify-content: start;flex-direction: row;">
                             <input type="text" name="source" maxlength="50" :value="targetValue"/>
-                            <!-- 网络请求用这个 -->
-                            <!-- <nfw-source-selector :v-idc-id="targetId"></nfw-source-selector> -->
-                            <!-- 本地数据用这个 -->
                             <select class="ui dropdown auto-width" name="targetId" v-model="targetId">
                                 <option v-for="item in masks" :value="item.id">{{item.value}}</option>
                             </select>
                         </div>
                     </td>
-                </tr>
-                <tr v-show="nShowState===3">
+                </tr>-->
+                <tr>
                     <td class="title">目标*</td>
                     <td>
-                        <nfw-target-selector :v-idc-id="editTargetId"></nfw-target-selector>
+                        <nfw-target-selector :v-dst="dst" :v-node-id="selectNode" :v-id="id" :v-dstmask.sync="dstmask"
+                                             :v-masks="masks" :v-dsts="dsts" :v-dstinput.synv="dstinput"></nfw-target-selector>
                     </td>
                 </tr>
-                <tr v-show="nShowState===3">
-                    <td class="title">目标端口范围</td>
-                    <td>
-                        <div style="display: flex;justify-content: start;flex-direction: row;">
-                            <span style="margin:10px 10px;">从</span>
-                            <nfw-target-selector :v-idc-id="targerRangeStartId"></nfw-target-selector>
-                            <span style="margin:10px 20px;">到</span>
-                            <nfw-target-selector :v-idc-id="targerRangeEndId"></nfw-target-selector>
-                        </div>
-                    </td>
-                </tr>
+
                 <tr>
                     <td class="title">描述</td>
                     <td>
-                        <input type="text" name="desc" maxlength="50" :value="descValue"/>
+                        <input type="text" name="descr" maxlength="50" v-model="descr"/>
                     </td>
                 </tr>
+                <input type="hidden" name="id" v-model="id">
+                <input type="hidden" name="node_id" v-model="selectNode">
             </table>
             <submit-btn></submit-btn>
         </form>

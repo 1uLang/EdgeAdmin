@@ -7,7 +7,7 @@
                  @click="onChangeShowState(1)">规则列表
             </div>
             <div v-show="nShowState!=3" :class="{'menu-select-color':nShowState===2,'menu-define-color':nShowState!=2}"
-                 @click="onChangeShowState(2)">添加规则
+                 @click="onOpenChangeView('')">添加规则  <!--onChangeShowState -->
             </div>
             <div v-show="nShowState===3"
                  :class="{'menu-select-color':nShowState===3,'menu-define-color':nShowState!=3}">修改规则
@@ -19,11 +19,8 @@
                 <div class="ui field">
                     <select class="ui dropdown auto-width" name="nodeId" v-model="selectNode"
                             @change="GetSelectNode($event)">
-                        <option v-for="item in nodes" :value="item.id" v-if="item.id == selectNode"
-                                selected>{{item.addr}}</option>
-                        <option :value="item.id" v-else>
-                            {{item.addr}}
-                        </option>
+                        <option v-for="item in nodes" :value="item.id" >{{item.addr}}</option>
+
                     </select>
                 </div>
             </div>
@@ -78,33 +75,33 @@
                 <tr>
                     <td class="title">接口*</td>
                     <td>
-                        <nfw-interface-selector :v-interface-id="interface" :v-node-id="selectNode"
-                                                :v-id="id"></nfw-interface-selector>
+                        <nfw-interface-selector :v-interface="interface" :v-node-id="selectNode"
+                                                :v-id="id" :v-interfaces="interfaces"></nfw-interface-selector>
                     </td>
                 </tr>
                 <tr>
                     <td class="title">类型*</td>
                     <td>
-                        <nfw-type-selector :v-type="type" :v-node-id="selectNode" :v-id="id"></nfw-type-selector>
+                        <nfw-type-selector :v-type="type" :v-node-id="selectNode" :v-id="id" :v-types="types"></nfw-type-selector>
                     </td>
                 </tr>
                 <tr>
                     <td class="title">外部网络*</td>
                     <td>
-                        <input type="text" name="external" maxlength="50" :value="external" ref="focus"/>
+                        <input type="text" name="external" maxlength="50" v-model="external" ref="focus"/>
                     </td>
                 </tr>
                 <tr>
                     <td class="title">源*</td>
                     <td>
-                        <input type="text" name="src" maxlength="50" :value="src" :value="src"/>
+                        <input type="text" name="src" maxlength="50" v-model="src" />
                         <!-- </td>
                          <td>
                               网络请求用这个 -->
                         <!-- <nfw-source-selector :v-idc-id="sourceId"></nfw-source-selector> -->
                         <!-- 本地数据用这个 -->
                         <div>
-                            <select class="ui dropdown auto-width" name="srcmask" v-model="srcmask" :value="srcmask">
+                            <select class="ui dropdown auto-width" name="srcmask" v-model="srcmask" >
 
                                 <option v-for="item in masks" :value="item.id">{{item.value}}</option>
                             </select>
@@ -114,19 +111,19 @@
                 <tr>
                     <td class="title">目标*</td>
                     <td>
-                        <nfw-target-selector :v-dst="dst" :v-node-id="selectNode" :v-id="id" :v-dstmask="dstmask"
-                                             :v-masks="masks"></nfw-target-selector>
+                        <nfw-target-selector :v-dst="dst" :v-node-id="selectNode" :v-id="id" :v-dstmask.sync="dstmask"
+                                             :v-masks="masks" :v-dsts="dsts" :v-dstinput.synv="dstinput"></nfw-target-selector>
                     </td>
                 </tr>
                 <tr>
                     <td class="title">描述</td>
                     <td>
-                        <input type="text" name="descr" maxlength="50" :value="descr"/>
+                        <input type="text" name="descr" maxlength="50" v-model="descr"/>
                     </td>
                 </tr>
             </table>
-            <input type="hidden" name="id" :value="id">
-            <input type="hidden" name="nodeId" :value="selectNode">
+            <input type="hidden" name="id" v-model="id">
+            <input type="hidden" name="nodeId" v-model="selectNode">
             <button class="ui button primary" type="button" @click="onSaveConfig">
                 <slot>保存</slot>
             </button>

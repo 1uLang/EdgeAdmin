@@ -15,8 +15,6 @@ func (this *DeleteAction) RunPost(params struct {
 	NodeId uint64
 	Id     string
 }) {
-	// 记录日志
-	defer this.CreateLog(oplogs.LevelInfo, "从nat 1:1 中删除配置 %d", params.Id)
 	res, err := nat.DelNat1To1(&nat.DelNat1To1Req{
 		NodeId: params.NodeId,
 		Id:     params.Id,
@@ -25,5 +23,7 @@ func (this *DeleteAction) RunPost(params struct {
 		this.ErrorPage(fmt.Errorf("删除失败"))
 		return
 	}
+	// 记录日志
+	defer this.CreateLog(oplogs.LevelInfo, "从nat 1:1 中删除配置 节点%d %d", params.NodeId, params.Id)
 	this.Success()
 }

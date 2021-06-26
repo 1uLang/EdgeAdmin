@@ -7,32 +7,25 @@ import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 )
 
-type SetAction struct {
+type EditActAction struct {
 	actionutils.ParentAction
 }
 
-func (this *SetAction) Init() {
-	this.Nav("", "", "")
-}
-
-func (this *SetAction) RunGet(params struct{}) {
-	this.Show()
-}
-
-func (this *SetAction) RunPost(params struct {
+func (this *EditActAction) RunPost(params struct {
 	Id     int64
 	NodeId uint64
+	Act    string
 }) {
-	res, err := ips.EditIps(&ips.EditIpsReq{
+	_, err := ips.EditAction(&ips.EditActionReq{
 		NodeId: params.NodeId,
 		Sid:    params.Id,
+		Action: params.Act,
 	})
-	if err != nil || !res {
+	if err != nil {
 		this.ErrorPage(fmt.Errorf("修改失败"))
 		return
 	}
-	//// 创建日志
-	defer this.CreateLog(oplogs.LevelInfo, "修改ips规则状态 节点%v ID%d", params.NodeId, params.Id)
-
+	// 记录日志
+	defer this.CreateLog(oplogs.LevelInfo, "修改ips 操作%v 节点%d ID", params.Act, params.NodeId, params.Id)
 	this.Success()
 }

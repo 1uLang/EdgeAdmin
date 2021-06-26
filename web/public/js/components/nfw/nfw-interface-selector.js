@@ -2,19 +2,19 @@ Vue.component("nfw-interface-selector", {
     mounted: function () {
         let that = this
 
-        Tea.action("/nfw/nat/detail/options")
-            .params({
-                NodeId: that.nodeId,
-                id: that.id,
-            })
-            .get()
-            .success(function (resp) {
-                that.interfaces = resp.data.interface
-            })
+        // Tea.action("/nfw/nat/detail/options")
+        //     .params({
+        //         NodeId: that.nodeId,
+        //         id: that.id,
+        //     })
+        //     .get()
+        //     .success(function (resp) {
+        //         that.interfaces = resp.data.interface
+        //     })
     },
-    props: ["v-node-id", "v-interface-id", "v-id"],
+    props: ["v-node-id", "v-interface", "v-id","v-interfaces"],
     data: function () {
-        let interface = this.vInterfaceId
+        let interface = this.vInterface
         if (interface == null) {
             interface = "wan"
         }
@@ -26,18 +26,21 @@ Vue.component("nfw-interface-selector", {
         if (id == null) {
             id = ""
         }
+        let interfaces = this.vInterfaces
+        console.log(interfaces);
+        console.log(interface);
         return {
-            interfaces: [],
+            interfaces: interfaces,
             interface: interface,
             nodeId: nodeId,
             id: id,
         }
     },
     template: `<div>
-	<select class="ui dropdown auto-width" name="interface" :value="interface" v-model="interface"> 
+	<select class="ui dropdown auto-width" name="interface"  v-model="interface"> 
 <!--		<option value="-1">[选择接口]</option>-->
-		<option v-for="idc in interfaces" :value="idc.value" v-if="idc.selected == true" selected>{{idc.name}}</option>
-		<option :value="idc.value" v-else>{{idc.name}}</option>
+		<option v-for="idc in interfaces" :value="idc.value" >{{idc.name}}</option>
+<!--		<option :value="idc.value" v-else>{{idc.name}}</option>-->
 	</select>
 </div>`
 })

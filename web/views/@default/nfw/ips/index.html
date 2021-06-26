@@ -5,8 +5,8 @@
         <div style="text-align: center;">DDoS防火墙节点：</div>
         <div class="ui field">  
             <div class="ui field">
-                <select class="ui dropdown auto-width" name="severity" v-model="severity">
-                    <option v-for="item in hostData" :value="item.id">{{item.hostAddress}}</option>
+                <select class="ui dropdown auto-width" name="selectNode" v-model="selectNode" @change="GetSelectNode">
+                    <option v-for="item in nodes" :value="item.id">{{item.addr}}</option>
                 </select>
             </div>
         </div>
@@ -28,21 +28,21 @@
         </thead>
         <tbody id='tableBody'>
             <tr align="center" style="height: 40px;" v-for="item in tableData" >
-                <td>{{item.value1}}</td>
-                <td>{{getEditName(item.editType ==1)}}</td>
-                <td>{{item.value3}}</td>
-                <td>{{item.value4}}</td>
-                <td>{{item.value5}}</td>
+                <td>{{item.sid}}</td>
+                <td>{{item.action}}</td>
+                <td>{{item.source}}</td>
+                <td>{{item.classtype}}</td>
+                <td>{{item.msg}}</td>
                 <td>
                     <div :class="{'status-open':item.status===1,'status-close':item.status===2}">
-                        {{getStatus(item.status)}}
+                        {{getStatus(item.enabled)}}
                     </div>
                 </td>
                 <td>
                     <div style="display: flex;justify-content: space-around;">
-                        <div v-show="item.status===1" class="edit_btn" @click="onCloseCig(item.id)">禁用</div>
-                        <div v-show="item.status===2" class="edit_btn" @click="onOpenCig(item.id)">启用</div>
-                        <div class="edit_btn" @click="onChangeCig(item.id)">{{getEditName(item.editType!=1)}}</div>
+                        <div v-show="item.enabled==1" class="edit_btn" @click="onCloseCig(item.sid)">禁用</div>
+                        <div v-show="item.enabled==0" class="edit_btn" @click="onOpenCig(item.sid)">启用</div>
+                        <div class="edit_btn" @click="onChangeCig(item.id,item.action)">{{getEditName(item.action)}}</div>
                     </div>
                 </td>
             </tr>

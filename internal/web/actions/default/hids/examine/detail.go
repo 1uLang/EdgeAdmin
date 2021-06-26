@@ -1,9 +1,11 @@
 package examine
 
 import (
+	"github.com/1uLang/zhiannet-api/hids/model/examine"
 	examine_server "github.com/1uLang/zhiannet-api/hids/server/examine"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
+	"github.com/iwind/TeaGo/actions"
 )
 
 type DetailAction struct {
@@ -13,14 +15,12 @@ type DetailAction struct {
 func (this *DetailAction) RunGet(params struct {
 	MacCode string
 
-	//Must *actions.Must
+	Must *actions.Must
 	//CSRF *actionutils.CSRF
 }) {
-	this.Show()
-	return
-	//params.Must.
-	//	Field("macCode", params.MacCode).
-	//	Require("请输入机器码")
+	params.Must.
+		Field("macCode", params.MacCode).
+		Require("请输入机器码")
 
 	if err := hids.InitAPIServer(); err != nil {
 		this.ErrorPage(err)
@@ -31,7 +31,12 @@ func (this *DetailAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	this.Data["data"] = info
+	list, err := examine_server.List(&examine.SearchReq{UserName: "luobing", MacCode: params.MacCode, Type: -1, Score: -1, State: -1})
+	if err != nil {
+		this.ErrorPage(err)
+	}
+	this.Data["details"] = info
+	this.Data["otherDetails"] = list.ServerExamineResultInfoList[0]
 
-	this.Success()
+	this.Show()
 }

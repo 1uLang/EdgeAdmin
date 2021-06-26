@@ -2,31 +2,31 @@ Vue.component("nfw-target-selector", {
     mounted: function () {
         let that = this
 
-        Tea.action("/nfw/nat/detail/options")
-            .params({
-                NodeId: that.nodeId,
-                id: that.id,
-            })
-            .get()
-            .success(function (resp) {
-                that.dsts = resp.data.dst
-                for(var i = 0; i < that.dsts.length; i++){
-                    if(that.dsts[i].selected == true && that.dsts[i].data_other == true){
-                        that.hide = false
-                    }
-
-                    if(that.dsts[i].selected == true){
-                        that.dst = that.dsts[i].value
-                    }
-                }
-                that.dstmask = "32"
-                let dstmask = resp.data.dstmask
-                for(var i = 0; i < dstmask.length; i++){
-                    if(dstmask[i].selected == true ){
-                        that.dstmask = dstmask[i].value
-                    }
-                }
-            })
+        // Tea.action("/nfw/nat/detail/options")
+        //     .params({
+        //         NodeId: that.nodeId,
+        //         id: that.id,
+        //     })
+        //     .get()
+        //     .success(function (resp) {
+        //         that.dsts = resp.data.dst
+        //         for(var i = 0; i < that.dsts.length; i++){
+        //             if(that.dsts[i].selected == true && that.dsts[i].data_other == true){
+        //                 that.hide = false
+        //             }
+        //
+        //             if(that.dsts[i].selected == true){
+        //                 that.dst = that.dsts[i].value
+        //             }
+        //         }
+        //         that.dstmask = "32"
+        //         let dstmask = resp.data.dstmask
+        //         for(var i = 0; i < dstmask.length; i++){
+        //             if(dstmask[i].selected == true ){
+        //                 that.dstmask = dstmask[i].value
+        //             }
+        //         }
+        //     })
 
 
     },
@@ -44,7 +44,7 @@ Vue.component("nfw-target-selector", {
             console.log(value)
         }
     },
-    props: ["v-dst", "v-node-id", "v-id","v-masks",'v-dstmask'],
+    props: ["v-dst", "v-node-id", "v-id","v-masks","v-dstmask","v-dstinput","v-dsts"],
     data: function () {
         let dst = this.vDst
         if (dst == null) {
@@ -60,30 +60,56 @@ Vue.component("nfw-target-selector", {
         }
         let masks = this.vMasks
         let dstmask = this.vDstmask
-
+        let dsts = this.vDsts
+        let dstinput = this.vDstinput
+        console.log("dst select");
+        console.log(dsts);
+        console.log(dstinput);
+        console.log(dst);
         return {
-            dsts: [],
+            dsts: dsts,
             dst: dst,
             nodeId: nodeId,
             id: id,
             masks:masks,
             dstmask:dstmask,
             hide:true,
+            dstinput:dstinput,
+        }
+    },watch: {
+        dstmask(newVal, oldVale) {
+            console.log("dstmask-new:", newVal);
+            console.log("dstmask-old:", oldVale);
+
+            if (newVal !== oldVale) {
+                this.$emit("update:vDstmask", newVal)
+                console.log(1111);
+            }
+        },
+        dstinput(newVal, oldVale) {
+            console.log("dstinput-new:", newVal);
+            console.log("dstinput-old:", oldVale);
+
+            if (newVal !== oldVale) {
+                this.$emit("update:vDstinput", newVal)
+                console.log(22222);
+            }
         }
     },
     template: `<div>
-	<select class="ui dropdown auto-width" name="dsts"  @change="selectSrc($event)" :value="dsts">
-		<option v-for="(idc,k) in dsts" :value="idc.value" :v-data="idc.data_other" :key="k" v-if="idc.selected==true" selected>
+	<select class="ui dropdown auto-width" name="dsts"  @change="selectSrc($event)"  v-model="dst">
+		<option v-for="(idc,k) in dsts" :value="idc.value" :v-data="idc.data_other" :key="k" >
 		    {{idc.name}}
 		</option>
-		<option :value="idc.value" :v-data="idc.data_other" :key="k" v-else>
-            {{idc.name}}
-        </option>
+<!--		<option :value="idc.value" :v-data="idc.data_other" :key="k" v-else>-->
+<!--            {{idc.name}}-->
+<!--        </option>-->
 	</select>
-	
-	<input type="text" name="dst" ref="dst" maxlength="50" :value="dst" :class="{'hide':hide==true}"/>
-	<select class="ui dropdown auto-width" ref="dstmask" name="dstmask" v-model="dstmask" :class="{'hide':hide==true}" :value="dstmask">
+	<div style="display: flex;justify-content: start;flex-direction: row;">
+	<input type="text" name="dst" ref="dst" maxlength="50"  v-model="dstinput" :class="{'hide':hide==true}"/>
+	<select class="ui dropdown auto-width" ref="dstmask" name="dstmask" v-model="dstmask" :class="{'hide':hide==true}" >
     	<option v-for="item in masks" :value="item.id" >{{item.value}}</option>
     </select>
+    </div>
 </div>`
 })

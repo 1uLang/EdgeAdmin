@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/1uLang/zhiannet-api/common/cache"
-	"github.com/1uLang/zhiannet-api/common/model"
+	_ "github.com/1uLang/zhiannet-api/common/cache"
+	_ "github.com/1uLang/zhiannet-api/common/model"
 	"github.com/TeaOSLab/EdgeAdmin/internal/apps"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configs"
 	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
@@ -44,8 +44,6 @@ func main() {
 		}
 		fmt.Println("done")
 	})
-	model.InitMysqlLink()
-	cache.InitClient()
 	app.Run(func() {
 		adminNode := nodes.NewAdminNode()
 		adminNode.Run()

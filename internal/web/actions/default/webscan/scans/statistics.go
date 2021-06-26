@@ -20,6 +20,7 @@ func (this *StatisticsAction) Init() {
 func (this *StatisticsAction) RunGet(params struct {
 	ScanId        string
 	ScanSessionId string
+	TargetId      string
 
 	Must *actions.Must
 }) {

@@ -18,6 +18,7 @@ func init() {
 			GetPost("/update", new(UpdateAction)).
 			Post("/delete", new(DeleteAction)).
 			GetPost("/features", new(FeaturesAction)).
+			GetPost("/option", new(OptionAction)).
 
 			//// AccessKeys
 			//Prefix("/users/accessKeys").

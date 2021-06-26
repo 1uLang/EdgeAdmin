@@ -1,5 +1,6 @@
 Tea.context(function () {
   this.checkValues = []; //选中的ID
+  this.checkTargetValues = []; //选中的targetID
 
   this.nShowState = 1   //三个界面的状态控制 1 2 3
   this.vulnerabilities = []
@@ -25,10 +26,12 @@ Tea.context(function () {
     if (this.checkValues.length > 0) {
       let that = this
       let scan_ids = JSON.parse(JSON.stringify(this.checkValues))
+      let tarId = JSON.parse(JSON.stringify(this.checkTargetValues))
       teaweb.confirm("确定要生成这个扫描的报表吗？", function () {
-        that.$post("/web/scan/report/create")
+        that.$post("/webscan/reports/create")
             .params({
-              Ids: scan_ids
+              Ids: scan_ids,
+              TarIds: tarId,
             })
             .refresh()
       })
@@ -54,8 +57,12 @@ Tea.context(function () {
       ".multi-table tbody input[type=checkbox]:checked"
     );
     this.checkValues = [];
+    this.checkTargetValues = [];
     for (var i = 0, len = checkDomArr.length; i < len; i++) {
       this.checkValues.push(checkDomArr[i].value);
+      let tar  = checkDomArr[i].getAttribute("data")
+      console.log("1targetid="+tar);
+      this.checkTargetValues.push(tar);
     }
     var allCheckDomArr = document.querySelectorAll(
       ".multi-table tbody input[type=checkbox]"
@@ -80,16 +87,21 @@ Tea.context(function () {
     if (!curClickBox.checked) {
       // 点击的时候, 状态已经修改, 所以没选中的时候状态时true
       this.checkValues = [];
+      this.checkTargetValues = [];
       for (var i = 0, len = allCheckDomArr.length; i < len; i++) {
         var checkStatus = allCheckDomArr[i].checked;
         if (checkStatus) allCheckDomArr[i].checked = false;
       }
     } else {
       this.checkValues = [];
+      this.checkTargetValues = [];
       for (var i = 0, len = allCheckDomArr.length; i < len; i++) {
         var checkStatus = allCheckDomArr[i].checked;
         if (!checkStatus) allCheckDomArr[i].checked = true;
         this.checkValues.push(allCheckDomArr[i].value);
+        let tar  = allCheckDomArr[i].getAttribute("data")
+        console.log("2targetid="+tar);
+        this.checkTargetValues.push(tar);
       }
     }
     this.updateBtnStatus();
