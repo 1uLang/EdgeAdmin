@@ -1,6 +1,6 @@
 Tea.context(function () {
 
-    this.Items = this.examineItems ? this.examineItems !== ""? this.examineItems.split(","):"" : ""
+    this.Items = this.examineItems !== ""? this.examineItems.split(","): []
     this.curIndex = -1
 
     this.bShowCheckDetail = false
