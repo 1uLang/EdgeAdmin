@@ -1,33 +1,62 @@
 Tea.context(function () {
-    
+
+    this.sTopSelectItem = [
+        {id: "01", value: "系统漏洞"},
+        {id: "02", value: "弱口令"},
+        {id: "03", value: "风险账号"},
+        {id: "04", value: "配置缺陷"},
+        {id: "11", value: "病毒木马"},
+        {id: "12", value: "网页后门"}
+    ]
+    this.sBottomSelectItem = [
+        {id: "13", value: "反弹shell"},
+        {id: "14", value: "异常账号"},
+        {id: "15", value: "系统命令篡改"},
+        {id: "16", value: "异常进程"},
+        {id: "17", value: "日志异常删除"},
+    ]
 
     this.$delay(function () {
         this.reloadBarTableChart()
         this.reloadCircularTableChart()
+
+        // let that = this
+        // window.addEventListener("resize", function () {
+        //     that.resizeBarTableChart()
+        //     that.resizeCircularTableChart()
+        // })
     })
+
+
+    this.resizeBarTableChart = function () {
+        let chartBox = document.getElementById("bar-chart-box")
+        let chart = echarts.init(chartBox)
+        chart.resize()
+    }
+
+    this.resizeCircularTableChart = function () {
+        let chartBox = document.getElementById("circular-chart-box")
+        let chart = echarts.init(chartBox)
+        chart.resize()
+    }
 
     this.onGoBack = function () {
         window.location = "/hids/examine"
     }
 
-    this.getHealthName = function (num) {
-        if(num<60){
-            return "不健康"
-        }else if(num<90){
-            return "亚健康"
-        }else {
-            return "健康"
+    this.getHealthName = function (score) {
+        if (score < 60){
+            return '不健康'
+        }else if (score < 90){
+            return '亚健康'
+        }else{
+            return '健康'
         }
     }
-
-    this.onChangeTimeFormat = function (time) {
-        var resultTime = "";
-        if (time) {
-          var tempTime = time.substring(0, time.indexOf("."));
-          resultTime = tempTime.replace("T", " ");
-        }
-        return resultTime;
-    };
+    this.parseServerLocalIp = function (ip) {
+        let ips = ip.split(";")
+        return ips.slice(-1)[0]
+    }
 
     this.reloadBarTableChart = function () {
         let chartBox = document.getElementById("bar-chart-box")
@@ -80,6 +109,7 @@ Tea.context(function () {
 		chart.setOption(option)
 		chart.resize()
     }
+
     this.reloadCircularTableChart = function () {
         let chartBox = document.getElementById("circular-chart-box")
 		let chart = echarts.init(chartBox)
@@ -129,36 +159,14 @@ Tea.context(function () {
 		chart.resize()
     }
 
-    this.pageData = {
-        ipAddr:"45.195.61.132 （192.168.1.47;172.17.0.1;172.18.0.1）",
-        checkNum:70,
-        checkTime:"2021-06-05T12:15:25.000",
-        checkTopItem:[
-            //1未选择 2进行中 3已完成
-            {id:1,value:"漏洞风险",status:1},
-            {id:2,value:"系统漏洞",status:3},
-            {id:3,value:"弱口令",status:3},
-            {id:4,value:"风险账号",status:3},
-            {id:5,value:"配置缺陷",status:2},
-        ],
-        checkBottomItem:[
-            {id:6,value:"入侵威胁",status:1},
-            {id:7,value:"病毒木马",status:2},
-            {id:8,value:"网页后门",status:2},
-            {id:9,value:"反弹shell",status:3},
-            {id:10,value:"异常账号",status:2},
-            {id:10,value:"系统命令篡改",status:3},
-            {id:10,value:"异常进程",status:2},
-            {id:10,value:"日志异常删除",status:2},
-        ]
-    }
-
     this.tableData = {
-        titleValue:["系统漏洞","配置缺陷"],
-        itemValue:[20,2],
+        titleValue:["系统漏洞","弱口令","危险账户","配置缺陷"],
+        itemValue:[ this.details.risk,this.details.weak,this.details.danger_account,this.details.config_defect],
         circularValue:[
-            {value: 20, name: '系统漏洞'},
-            {value: 2, name: '配置缺陷'}
+            {value: this.details.risk, name: '系统漏洞'},
+            {value: this.details.weak, name: '弱口令'},
+            {value: this.details.danger_account, name: '危险账户'},
+            {value: this.details.config_defect, name: '配置缺陷'},
         ]
     }
 })

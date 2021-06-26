@@ -9,26 +9,48 @@
         <div style="display: flex;flex-direction: row;margin: 0px 15px 15px 15px;height: 40px;align-items: center;">
             <div style="display: inline-flex;width: 50%;">
                 <div class="title-style">体检状态</div>
-                <div :class="{'meun-select-color':nCheckState===1,'meun-define-color':nCheckState!=1}" @click="onChangeCheckState(1)">全部</div>
-                <div :class="{'meun-select-color':nCheckState===2,'meun-define-color':nCheckState!=2}" @click="onChangeCheckState(2)">未检查</div>
-                <div :class="{'meun-select-color':nCheckState===3,'meun-define-color':nCheckState!=3}" @click="onChangeCheckState(3)">检查中</div>
-                <div :class="{'meun-select-color':nCheckState===4,'meun-define-color':nCheckState!=4}" @click="onChangeCheckState(4)">已完成</div>
+                <div :class="{'meun-select-color':state===0,'meun-define-color':state!=0}"
+                     @click="onChangeCheckState(0)">全部
+                </div>
+                <div :class="{'meun-select-color':state===1,'meun-define-color':state!=1}"
+                     @click="onChangeCheckState(1)">未检查
+                </div>
+                <div :class="{'meun-select-color':state===2,'meun-define-color':state!=2}"
+                     @click="onChangeCheckState(2)">检查中
+                </div>
+                <div :class="{'meun-select-color':state===3,'meun-define-color':state!=3}"
+                     @click="onChangeCheckState(3)">已完成
+                </div>
             </div>
             <div style="display: inline-flex;width: 50%;">
                 <div class="title-style">体检分数</div>
-                <div :class="{'meun-select-color':nHealthNumState===1,'meun-define-color':nHealthNumState!=1}" @click="onChangeHealthNumState(1)">全部</div>
-                <div :class="{'meun-select-color':nHealthNumState===2,'low-health-color':nHealthNumState!=2}" @click="onChangeHealthNumState(2)">0-59（不健康）</div>
-                <div :class="{'meun-select-color':nHealthNumState===3,'middle-health-color':nHealthNumState!=3}" @click="onChangeHealthNumState(3)">60-89（亚健康）</div>
-                <div :class="{'meun-select-color':nHealthNumState===4,'hight-health-color':nHealthNumState!=4}" @click="onChangeHealthNumState(4)">90-100（健康）</div>
+                <div :class="{'meun-select-color':score===0,'meun-define-color':score!=0}"
+                     @click="onChangeHealthNumState(0)">全部
+                </div>
+                <div :class="{'meun-select-color':score===1,'low-health-color':score!=1}"
+                     @click="onChangeHealthNumState(1)">0-59（不健康）
+                </div>
+                <div :class="{'meun-select-color':score===2,'middle-health-color':score!=2}"
+                     @click="onChangeHealthNumState(2)">60-89（亚健康）
+                </div>
+                <div :class="{'meun-select-color':score===3,'hight-health-color':score!=3}"
+                     @click="onChangeHealthNumState(3)">90-100（健康）
+                </div>
             </div>
         </div>
-       
+
         <div style="display: flex;flex-direction: row;margin: 15px;height: 40px;">
             <div style="display: inline-flex;align-items: center;width: 50%;">
                 <div class="title-style">体检结论</div>
-                <div :class="{'meun-select-color':nResultState===1,'meun-define-color':nResultState!=1}" @click="onChangeResultState(1)">全部</div>
-                <div :class="{'meun-select-color':nResultState===2,'meun-define-color':nResultState!=2}" @click="onChangeResultState(2)">基线异常</div>
-                <div :class="{'meun-select-color':nResultState===3,'meun-define-color':nResultState!=3}" @click="onChangeResultState(3)">基线正常</div>
+                <div :class="{'meun-select-color':Type===0,'meun-define-color':Type!=0}"
+                     @click="onChangeResultState(0)">全部
+                </div>
+                <div :class="{'meun-select-color':Type===1,'meun-define-color':Type!=1}"
+                     @click="onChangeResultState(1)">基线异常
+                </div>
+                <div :class="{'meun-select-color':Type===2,'meun-define-color':Type!=2}"
+                     @click="onChangeResultState(2)">基线正常
+                </div>
             </div>
         </div>
 
@@ -42,7 +64,8 @@
                     </div>
                 </div>
                 <div style="display: inline-flex;">
-                    <div v-for='item in sBottomSelectItem' class="more-select-content" @click="onAddSelectValue(item.id)">
+                    <div v-for='item in sBottomSelectItem' class="more-select-content"
+                         @click="onAddSelectValue(item.id)">
                         <img :src="getShowSelectImage(item.id)" width="15px" height="15px">
                         <span style="margin-left: 10px;">{{item.value}}</span>
                     </div>
@@ -53,114 +76,132 @@
 </div>
 
 <div class="card-div" style="height: 500px; margin-top: 20px;">
-    <table id = "tab" height="40px" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+    <table id="tab" height="40px" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
         <thead>
-            <tr align="center">
-                <th class='table-head-bg' style="width: 240px;" >主机</th>
-                <th class='table-head-bg' style="width: 260px;" >体检进度</th>
-                <th class='table-head-bg' style="width: 70px;" >状态</th>
-                <th class='table-head-bg' style="width: 90px;" >体检分数</th>
-                <th class='table-head-bg' style="width: 165px;" >开始时间</th>
-                <th class='table-head-bg' style="width: 165px;" >完成时间</th>
-                <th class='table-head-bg' style="width: 165px;" >操作</th>
-            </tr>
+        <tr align="center">
+            <th class='table-head-bg' style="width: 240px;">主机</th>
+            <th class='table-head-bg' style="width: 260px;">体检进度</th>
+            <th class='table-head-bg' style="width: 70px;">状态</th>
+            <th class='table-head-bg' style="width: 90px;">体检分数</th>
+            <th class='table-head-bg' style="width: 165px;">开始时间</th>
+            <th class='table-head-bg' style="width: 165px;">完成时间</th>
+            <th class='table-head-bg' style="width: 165px;">操作</th>
+        </tr>
         </thead>
         <tbody id='tableBody'>
-            <tr align="center" v-for="(item, index) in tableData" >
-                <td style="position: relative;" @mouseenter="enters(index)" @mouseleave="leaver(index)">{{item.hostData.intIp}}
-                    <div v-show="curIndex===index" class="table-item-style">
-                        <div>外网IP：{{item.hostData.outIp}}</div>
-                        <div>内网IP：{{item.hostData.intIp}}</div>
-                        <div>主机名：{{item.hostData.hostName}}</div>
-                        <div>操作系统：{{item.hostData.systemName}}</div>
-                        <div>系统内核：{{item.hostData.rootName}}</div>
-                        <div>Mac地址：{{item.hostData.macAddr}}</div>
-                        <div>备注信息：{{item.hostData.remarks}}</div>
+        <tr align="center" v-for="(item, index) in datas">
+            <td style="position: relative;" @mouseenter="enters(index)" @mouseleave="leaver(index)">
+                {{item.serverExamineResultInfo.serverIp}}
+                <div v-show="curIndex===index" class="table-item-style">
+                    <div>外网IP：{{item.os.serverIp}}</div>
+                    <div>内网IP：{{parseServerLocalIp(item.os.serverLocalIp)}}</div>
+                    <div>主机名：{{item.os.hostName}}</div>
+                    <div>操作系统：{{item.os.osType}}</div>
+                    <div>系统内核：{{item.os.systemKernel}}</div>
+                    <div>Mac地址：{{item.os.macCode}}</div>
+                    <div>备注信息：{{item.os.remarks}}</div>
+                </div>
+            </td>
+            <td>
+                <div class="Bar">
+                    <div :class="[checkShowColor(item.progress,100) ? 'progress-green-bg-style' : '','progress-blue-bg-style']"
+                         :style="{width:getProgressPer(item.progress,100)}">
                     </div>
-                </td>
-                <td>
-                    <div class="Bar">
-                        <div :class="[checkShowColor(item.curValue,item.maxValue) ? 'progress-green-bg-style' : '','progress-blue-bg-style']":style="{width:getProgressPer(item.curValue,item.maxValue)}">
-                        </div>
-                        <span>{{getProgressPer(item.curValue,item.maxValue)}}</span>
-                    </div>
-                </td>
-                <td>{{getStatusName(item.status)}}</td>
-                <td>{{getCheckNumName(item.checkNum)}}</td>
-                <td>{{onChangeTimeFormat(item.startTime)}}</td>
-                <td>{{onChangeTimeFormat(item.endTime)}}</td>
-                <td>
-                    <div style="display: flex;justify-content: space-around;">
-                        <div v-show="item.status===3" class="edit_btn" @click="onOpenCheck(item.id)">立即体检</div>
-                        <div v-show="item.status===2" class="edit_btn" @click="onStopCheck(item.id)">取消体检</div>
-                        <div v-show="item.status===3" class="edit_btn" @click="onOpenDetail(item.id)">详情</div>
-                    </div>
-                </td>
-            </tr>
+                    <span>{{getProgressPer(item.serverExamineResultInfo.progress,100)}}</span>
+                </div>
+            </td>
+            <td>{{getStatusName(item.serverExamineResultInfo.state)}}</td>
+            <td>{{item.serverExamineResultInfo.score}}分</td>
+            <td>{{item.serverExamineResultInfo.startTime}}</td>
+            <td>{{item.serverExamineResultInfo.lastUpdateTime}}</td>
+            <td>
+                <div style="display: flex;justify-content: space-around;">
+                    <div v-show="item.serverExamineResultInfo.state===0" class="edit_btn" @click="onOpenCheck(item)">立即体检</div>
+                    <div v-show="item.serverExamineResultInfo.state===1" class="edit_btn" @click="onStopCheck(item)">取消体检</div>
+                    <div v-show="item.serverExamineResultInfo.state===2" class="edit_btn" @click="onOpenDetail(item)">详情</div>
+                </div>
+            </td>
+        </tr>
         </tbody>
     </table>
 </div>
 
-<div v-if="bShowCheckDetail" class="dialog-style" @click.stop>
-    <div class="dialog-bg-style" style="display: flex;flex-direction: column;">
-        <div style="flex: 7;">
-            <div style="background: #0091cc;width: 100%;height: 25px;color: #fff;text-align: center;line-height: 25px;">立即体检</div>
-            <div style="display: flex;flex-direction: column;">
-                <div v-for="item in pCheckDetailData" style="display:inline-flex;padding: 15px 30px 8px 30px;">
-                    <div style="width: 150px;min-width: 150px;">{{item.checkName}}</div>
-                    <div style="display: flex;flex-wrap: wrap;">
-                        <div v-for="checkItem in item.checkValue" class="more-select-check-content" @click="onSelectCheckValue(checkItem.id)">
-                            <img :src="getShowSelectValueImage(checkItem.id)" width="10px" height="10px">
-                            <span style="margin-left: 10px;">{{checkItem.value}}</span>
-                        </div>
-                    </div>
-                </div>
+<!--<div v-if="bShowCheckDetail" class="dialog-style" @click.stop>-->
+<!--    <div class="dialog-bg-style" style="display: flex;flex-direction: column;">-->
+<!--        <div style="flex: 7;">-->
+<!--            <div style="background: #0091cc;width: 100%;height: 25px;color: #fff;text-align: center;line-height: 25px;">-->
+<!--                立即体检-->
+<!--            </div>-->
+<!--            <div style="display: flex;flex-direction: column;">-->
+<!--                <div v-for="item in pCheckDetailData" style="display:inline-flex;padding: 15px 30px 8px 30px;">-->
+<!--                    <div style="width: 150px;min-width: 150px;">{{item.checkName}}</div>-->
+<!--                    <div style="display: flex;flex-wrap: wrap;">-->
+<!--                        <div v-for="checkItem in item.checkValue" class="more-select-check-content"-->
+<!--                             @click="onSelectCheckValue(checkItem.id)">-->
+<!--                            <img :src="getShowSelectValueImage(checkItem.id)" width="10px" height="10px">-->
+<!--                            <span style="margin-left: 10px;">{{checkItem.value}}</span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
 
-                <div style="display:inline-flex;padding: 15px 30px 8px 30px;">
-                    <div style="width: 150px;min-width: 150px;"></div>
-                    <div style="display: flex;width: 500px;">
-                        <div style="display: flex;flex-direction: column;width: 50%;margin-right: 30px;">
-                            <div class="more-select-check-content" @click="onSelectCheckValue(11)">
-                                <img :src="getShowSelectValueImage(11)" width="10px" height="10px">
-                                <span style="margin-left: 10px;">病毒木马</span>
-                                <div v-show="onCheckSelectItem(11)" style="display: inline-flex;align-items: center;">
-                                    <div style="width: 15px;height: 15px;border-radius: 50%;border: 1px red solid;text-align: center;line-height: 14px;color: red;font-size: 14px;">!</div>
-                                    <span style="margin-left: 10px;color: red;">资源消耗高</span>
-                                </div>
-                            </div>
-                            <div v-show="onCheckSelectItem(11)" style="border: 1px #666 solid;height: 130px;width: 220px;display: flex;flex-direction: column;padding: 5px;" @click="onCheckSelectValue">
-                                <label style="align-items: center;margin-bottom: 5px;" >
-                                    <input name="customScan" type="radio" value="1" style="margin-right: 5px;"/>快速扫描</label> 
-                                <label style="align-items: center;margin-bottom: 5px;">
-                                    <input name="customScan" type="radio" value="2" style="margin-right: 5px;"/>全盘扫描<span v-show="bTimeOutTip" style="color: red;">(预计扫描需2小时)</span></label> 
-                                <label style="align-items: center;margin-bottom: 5px;">
-                                    <input name="customScan" type="radio" value="3" style="margin-right: 5px;"/>自定义扫描</label> 
-                                <div>
-                                    <textarea  v-show="bShowScanPath" name="searchPath" v-model="searchPath" style="resize: none;height: 45px;width: 210px;" placeholder="回车换行表示路径结束" value="%web%"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="display: flex;flex-direction: column;width: 50%;">
-                            <div class="more-select-check-content" @click="onSelectCheckValue(12)">
-                                <img :src="getShowSelectValueImage(12)" width="10px" height="10px">
-                                <span style="margin-left: 10px;">网页后门</span>
-                                <div v-show="onCheckSelectItem(12)" style="display: inline-flex;align-items: center;">
-                                    <div style="width: 15px;height: 15px;border-radius: 50%;border: 1px red solid;text-align: center;line-height: 14px;color: red;font-size: 14px;">!</div>
-                                    <span style="margin-left: 10px;color: red;">资源消耗高</span>
-                                </div>
-                            </div>
-                            <div  v-show="onCheckSelectItem(12)">
-                                <textarea  name="webSearchKey" v-model="webSearchKey" style="resize: none;height: 130px;width: 220px;">%web%</textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-           
-        </div>
-        <div style="flex: 1;display: flex;justify-content: center;align-items: center;border-top: 1px #f0f0f0 solid;">
-            <div class="sure-btn" @click="onStartCheck">确定</div>
-            <div class="close-btn" @click="onCloseCheck">取消</div>
-        </div>
-    </div>
-</div>
+<!--                <div style="display:inline-flex;padding: 15px 30px 8px 30px;">-->
+<!--                    <div style="width: 150px;min-width: 150px;"></div>-->
+<!--                    <div style="display: flex;width: 500px;">-->
+<!--                        <div style="display: flex;flex-direction: column;width: 50%;margin-right: 30px;">-->
+<!--                            <div class="more-select-check-content" @click="onSelectCheckValue(11)">-->
+<!--                                <img :src="getShowSelectValueImage(11)" width="10px" height="10px">-->
+<!--                                <span style="margin-left: 10px;">病毒木马</span>-->
+<!--                                <div v-show="onCheckSelectItem(11)" style="display: inline-flex;align-items: center;">-->
+<!--                                    <div style="width: 15px;height: 15px;border-radius: 50%;border: 1px red solid;text-align: center;line-height: 14px;color: red;font-size: 14px;">-->
+<!--                                        !-->
+<!--                                    </div>-->
+<!--                                    <span style="margin-left: 10px;color: red;">资源消耗高</span>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div v-show="onCheckSelectItem(11)"-->
+<!--                                 style="border: 1px #666 solid;height: 130px;width: 220px;display: flex;flex-direction: column;padding: 5px;"-->
+<!--                                 @click="onCheckSelectValue">-->
+<!--                                <label style="align-items: center;margin-bottom: 5px;">-->
+<!--                                    <input name="customScan" type="radio" value="1"-->
+<!--                                           style="margin-right: 5px;"/>快速扫描</label>-->
+<!--                                <label style="align-items: center;margin-bottom: 5px;">-->
+<!--                                    <input name="customScan" type="radio" value="2"-->
+<!--                                           style="margin-right: 5px;"/>全盘扫描<span v-show="bTimeOutTip"-->
+<!--                                                                                 style="color: red;">(预计扫描需2小时)</span></label>-->
+<!--                                <label style="align-items: center;margin-bottom: 5px;">-->
+<!--                                    <input name="customScan" type="radio" value="3"-->
+<!--                                           style="margin-right: 5px;"/>自定义扫描</label>-->
+<!--                                <div>-->
+<!--                                    <textarea v-show="bShowScanPath" name="searchPath" v-model="searchPath"-->
+<!--                                              style="resize: none;height: 45px;width: 210px;" placeholder="回车换行表示路径结束"-->
+<!--                                              value="%web%"></textarea>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div style="display: flex;flex-direction: column;width: 50%;">-->
+<!--                            <div class="more-select-check-content" @click="onSelectCheckValue(12)">-->
+<!--                                <img :src="getShowSelectValueImage(12)" width="10px" height="10px">-->
+<!--                                <span style="margin-left: 10px;">网页后门</span>-->
+<!--                                <div v-show="onCheckSelectItem(12)" style="display: inline-flex;align-items: center;">-->
+<!--                                    <div style="width: 15px;height: 15px;border-radius: 50%;border: 1px red solid;text-align: center;line-height: 14px;color: red;font-size: 14px;">-->
+<!--                                        !-->
+<!--                                    </div>-->
+<!--                                    <span style="margin-left: 10px;color: red;">资源消耗高</span>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div v-show="onCheckSelectItem(12)">-->
+<!--                                <textarea name="webSearchKey" v-model="webSearchKey"-->
+<!--                                          style="resize: none;height: 130px;width: 220px;">%web%</textarea>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--        </div>-->
+<!--        <div style="flex: 1;display: flex;justify-content: center;align-items: center;border-top: 1px #f0f0f0 solid;">-->
+<!--            <div class="sure-btn" @click="onStartCheck">确定</div>-->
+<!--            <div class="close-btn" @click="onCloseCheck">取消</div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->

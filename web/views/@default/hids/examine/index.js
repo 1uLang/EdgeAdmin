@@ -1,12 +1,6 @@
 Tea.context(function () {
 
-    this.nCheckState = 1    //体检状态
-    this.nResultState = 1   //体检分数
-    this.nHealthNumState = 1      //分数类型
-    this.sSelectValue = []  //体检项目
-    this.dayFrom = ""
-    this.dayTo = ""
-
+    this.Items = this.examineItems ? this.examineItems !== ""? this.examineItems.split(","):"" : ""
     this.curIndex = -1
 
     this.bShowCheckDetail = false
@@ -20,19 +14,19 @@ Tea.context(function () {
     this.bShowScanPath = false
 
     this.sTopSelectItem = [
-        {id:1,value:"系统漏洞"},
-        {id:2,value:"弱口令"},
-        {id:3,value:"风险账号"},
-        {id:4,value:"配置缺陷"},
-        {id:5,value:"病毒木马"},
-        {id:6,value:"网页后门"}
+        {id: "01", value: "系统漏洞"},
+        {id: "02", value: "弱口令"},
+        {id: "03", value: "风险账号"},
+        {id: "04", value: "配置缺陷"},
+        {id: "11", value: "病毒木马"},
+        {id: "12", value: "网页后门"}
     ]
     this.sBottomSelectItem = [
-        {id:7,value:"反弹shell"},
-        {id:8,value:"异常账号"},
-        {id:9,value:"系统命令篡改"},
-        {id:10,value:"异常进程"},
-        {id:11,value:"日志异常删除"},
+        {id: "13", value: "反弹shell"},
+        {id: "14", value: "异常账号"},
+        {id: "15", value: "系统命令篡改"},
+        {id: "16", value: "异常进程"},
+        {id: "17", value: "日志异常删除"},
     ]
 
     this.$delay(function () {
@@ -40,56 +34,75 @@ Tea.context(function () {
         teaweb.datepicker("day-to-picker")
     })
 
-    this.onChangeCheckState = function(state){
-        if(this.nCheckState!=state){
-            this.nCheckState = state
+    this.onChangeCheckState = function (state) {
+        if (this.state != state) {
+            this.state = state
         }
+        this.refreshPage()
     }
 
-    this.onChangeHealthNumState = function(state){
-        if(this.nHealthNumState!=state){
-            this.nHealthNumState = state
+    this.onChangeHealthNumState = function (state) {
+        if (this.score != state) {
+            this.score = state
         }
+        this.refreshPage()
     }
 
-    this.onChangeResultState = function(state){
-        if(this.nResultState!=state){
-            this.nResultState = state
+    this.onChangeResultState = function (state) {
+        if (this.Type != state) {
+            this.Type = state
         }
+        this.refreshPage()
     }
+    this.refreshPage = function () {
+        let url = "/hids/examine?state=" + this.state + "&score=" + this.score + "&Type=" + this.Type
+        if (this.Items.length > 0) {
+            url += "&examineItems=" + this.Items.toString()
+        }
+        window.location = url
+
+    }
+
+    this.parseServerLocalIp = function (ip) {
+        let ips = ip.split(";")
+        return ips.slice(-1)[0]
+    }
+
 
     //检测是否包含元素
-    this.checkSelectValue = function (index,selectValue) {
-        if(selectValue){
+    this.checkSelectValue = function (index, selectValue) {
+        if (selectValue) {
             for (var i = 0; i < selectValue.length; i++) {
                 if (selectValue[i] == index) {
                     return true;
                 }
             }
         }
-        
+
         return false;
     }
     //添加/删除元素
     this.onAddSelectValue = function (index) {
         let bValue = false;
-        if(this.checkSelectValue){
-            bValue = this.checkSelectValue(index,this.sSelectValue);
+        if (this.checkSelectValue) {
+            bValue = this.checkSelectValue(index, this.Items);
         }
         if (bValue) {
-            this.sSelectValue = this.sSelectValue.filter((itemIndex) => {
+            this.Items = this.Items.filter((itemIndex) => {
                 return itemIndex != index;
             });
         } else {
-            this.sSelectValue.push(index);
+            this.Items.push(index);
         }
+
+        this.refreshPage()
     }
 
 
     this.getShowSelectImage = function (id) {
         let bValue = false;
-        if(this.checkSelectValue){
-            bValue = this.checkSelectValue(id,this.sSelectValue);
+        if (this.checkSelectValue) {
+            bValue = this.checkSelectValue(id, this.Items);
         }
         if (bValue) {
             return "/images/select_select.png";
@@ -100,78 +113,88 @@ Tea.context(function () {
     this.onChangeTimeFormat = function (time) {
         var resultTime = "";
         if (time) {
-          var tempTime = time.substring(0, time.indexOf("."));
-          resultTime = tempTime.replace("T", " ");
+            var tempTime = time.substring(0, time.indexOf("."));
+            resultTime = tempTime.replace("T", " ");
         }
         return resultTime;
-      };
+    };
 
-    this.getStatusName = function (status) { 
-        switch(status){
-            case 1:
+    this.getStatusName = function (status) {
+        switch (status) {
+            case 0:
                 return "未体检"
-            case 2:
+            case 1:
                 return "体检中"
-            case 3:
+            case 2:
                 return "已完成"
             default:
                 return "未知"
         }
     }
 
-    this.getCheckNumName = function (num) { 
-        return (num && num>0) ? num+"分" : "未得出"
+    this.getCheckNumName = function (num) {
+        return (num && num > 0) ? num + "分" : "未得出"
+    }
+
+    this.getHealthName = function (score) {
+        if (score =>0 && score <= 59){
+            return '不健康'
+        }else if (score >=60 && score <=89){
+            return '亚健康'
+        }else{
+            return '健康'
+        }
     }
 
     this.enters = function (index) {
         this.curIndex = index;
-      }
-    
-      this.leaver = function (index) {
-        this.curIndex = -1;
-      }
-
-    this.onOpenDetail = function (id) {
-        window.location="/hids/examine/detail"
     }
 
-    this.onOpenCheck = function (id) {
+    this.leaver = function (index) {
+        this.curIndex = -1;
+    }
+
+    this.onOpenDetail = function (item) {
+        window.location = "/hids/examine/detail?macCode="+item.macCode
+    }
+
+    this.onOpenCheck = function (item) {
         this.sSelectCheckValue = []
         // .success(
-            this.pCheckDetailData = [
-                {
-                    checkName:"漏洞风险检查项：",
-                    checkValue:[
-                        {id:1,value:"系统漏洞"},
-                        {id:2,value:"系统漏洞"},
-                        {id:3,value:"系统漏洞"},
-                        {id:4,value:"系统漏洞"},
-                        {id:5,value:"系统漏洞"},
-                    ]
-                },
-                {
-                    checkName:"入侵威胁检查项：",
-                    checkValue:[
-                        {id:6,value:"反弹shell"},
-                        {id:7,value:"异常账号"},
-                        {id:8,value:"系统命令篡改"},
-                        {id:9,value:"异常进程"},
-                        {id:10,value:"日志异常删除"},
-                    ]
-                }
-            ]
-            if(this.pCheckDetailData){
-                this.bShowCheckDetail =  true
-             }else{
-                 this.bShowCheckDetail = false
-             }
+        this.pCheckDetailData = [
+            {
+                checkName: "漏洞风险检查项：",
+                checkValue: [
+                    {id: 1, value: "系统漏洞"},
+                    {id: 2, value: "系统漏洞"},
+                    {id: 3, value: "系统漏洞"},
+                    {id: 4, value: "系统漏洞"},
+                    {id: 5, value: "系统漏洞"},
+                ]
+            },
+            {
+                checkName: "入侵威胁检查项：",
+                checkValue: [
+                    {id: 6, value: "反弹shell"},
+                    {id: 7, value: "异常账号"},
+                    {id: 8, value: "系统命令篡改"},
+                    {id: 9, value: "异常进程"},
+                    {id: 10, value: "日志异常删除"},
+                ]
+            }
+        ]
+        if (this.pCheckDetailData) {
+            this.bShowCheckDetail = true
+        } else {
+            this.bShowCheckDetail = false
+        }
         // )
     }
 
-    this.onSelectCheckValue = function(index) {
+    this.onSelectCheckValue = function (index) {
         let bValue = false;
-        if(this.checkSelectValue){
-            bValue = this.checkSelectValue(index,this.sSelectCheckValue);
+        if (this.checkSelectValue) {
+            bValue = this.checkSelectValue(index, this.sSelectCheckValue);
         }
         if (bValue) {
             this.sSelectCheckValue = this.sSelectCheckValue.filter((itemIndex) => {
@@ -184,8 +207,8 @@ Tea.context(function () {
 
     this.getShowSelectValueImage = function (id) {
         let bValue = false;
-        if(this.checkSelectValue){
-            bValue = this.checkSelectValue(id,this.sSelectCheckValue);
+        if (this.checkSelectValue) {
+            bValue = this.checkSelectValue(id, this.sSelectCheckValue);
         }
         if (bValue) {
             return "/images/select_select.png";
@@ -195,41 +218,41 @@ Tea.context(function () {
 
     this.onCheckSelectItem = function (id) {
         let bValue = false;
-        if(this.checkSelectValue){
-            bValue = this.checkSelectValue(id,this.sSelectCheckValue);
+        if (this.checkSelectValue) {
+            bValue = this.checkSelectValue(id, this.sSelectCheckValue);
         }
         return bValue
     }
 
-    this.onCloseCheck = function () { 
+    this.onCloseCheck = function () {
         this.sSelectCheckValue = []
         this.bShowCheckDetail = false
     }
 
-    this.onStartCheck = function (id) { 
+    this.onStartCheck = function (id) {
         this.bShowCheckDetail = false
 
         //
     }
-    this.onStopCheck = function (id) { 
+    this.onStopCheck = function (id) {
         teaweb.confirm("确定取消体检吗？", function () {
-			
-		})
-    }  
-     //检测是否显示扫描路径的输入框和提示框
-    this.onCheckSelectValue=function() {
-        
+
+        })
+    }
+    //检测是否显示扫描路径的输入框和提示框
+    this.onCheckSelectValue = function () {
+
         var selextBox = document.getElementsByName("customScan")
-        if(selextBox){
-            for(var item of selextBox){
-                if(item.checked){
-                    if(item.value==2){
+        if (selextBox) {
+            for (var item of selextBox) {
+                if (item.checked) {
+                    if (item.value == 2) {
                         this.bTimeOutTip = true
                         this.bShowScanPath = false
-                    }else if(item.value==3){
+                    } else if (item.value == 3) {
                         this.bTimeOutTip = false
                         this.bShowScanPath = true
-                    }else{
+                    } else {
                         this.bTimeOutTip = false
                         this.bShowScanPath = false
                     }
@@ -239,39 +262,39 @@ Tea.context(function () {
     }
 
 
-     this.checkShowColor =function (curValue,maxValue) {
-        var curValue = ((curValue/maxValue)*100).toFixed(1)
-        return curValue>=100
-     }
+    this.checkShowColor = function (curValue, maxValue) {
+        var curValue = ((curValue / maxValue) * 100).toFixed(1)
+        return curValue >= 100
+    }
 
-    this.getProgressPer = function (curValue,maxValue) { 
-        var curValue = ((curValue/maxValue)*100).toFixed(1)
-        return curValue+"%"
+    this.getProgressPer = function (curValue, maxValue) {
+        var curValue = ((curValue / maxValue) * 100).toFixed(1)
+        return curValue + "%"
     }
 
     //计时器
     this.testTime1 = null
     this.testTime2 = null
     //传入的值需要用 'testTime1' 命名
-    this.onCreateTimeOut=function (timeId) {
+    this.onCreateTimeOut = function (timeId) {
         this.onReleaseTimeOut(timeId)
-        this[timeId] = createTimer(function(){
+        this[timeId] = createTimer(function () {
             console.log(timeId + "onStartCheck timer custom alarm");
-        }, {timeout:1000});
+        }, {timeout: 1000});
         this[timeId].start();
     }
 
-    this.onReleaseTimeOut= function (timeId) {
+    this.onReleaseTimeOut = function (timeId) {
         console.log(this[timeId])
-        if(this[timeId]){
+        if (this[timeId]) {
             this[timeId].stop()
             this[timeId] = null
         }
     }
 
     this.tableData = [
-        {   
-            id:1,
+        {
+            id: 1,
             hostData: {
                 intIp: "192.168.0.1",
                 outIp: "192.168.1.1",
@@ -281,15 +304,15 @@ Tea.context(function () {
                 macAddr: "3.10.0-957.1.3.el7",
                 remarks: "备注信息",
             },
-            status:3,
-            checkNum:70,
-            startTime:"2021-06-05T12:15:25.000",
-            endTime:"2021-06-05T13:15:25.000",
-            maxValue:100,
-            curValue:100
+            status: 3,
+            checkNum: 70,
+            startTime: "2021-06-05T12:15:25.000",
+            endTime: "2021-06-05T13:15:25.000",
+            maxValue: 100,
+            curValue: 100
         },
-        {   
-            id:2,
+        {
+            id: 2,
             hostData: {
                 intIp: "192.168.0.1",
                 outIp: "192.168.1.1",
@@ -299,12 +322,12 @@ Tea.context(function () {
                 macAddr: "3.10.0-957.1.3.el7",
                 remarks: "备注信息",
             },
-            status:2,
-            checkNum:70,
-            startTime:"2021-06-05T12:15:25.000",
-            endTime:"2021-06-05T13:15:25.000",
-            maxValue:100,
-            curValue:70
+            status: 2,
+            checkNum: 70,
+            startTime: "2021-06-05T12:15:25.000",
+            endTime: "2021-06-05T13:15:25.000",
+            maxValue: 100,
+            curValue: 70
         }
     ]
 

@@ -3,40 +3,42 @@
 {$layout}
 <script type="text/javascript" src="/js/echarts/echarts.min.js"></script>
 
+{{otherDetails}}
+{{details}}
 <div class="card-div" style="margin-top: 20px;">
     <div style="display: flex;flex-direction: row;justify-content: space-between;align-items: center;padding: 5px;">
         <div>
             <span>体检详情</span>
-            <span>{{pageData.ipAddr}}</span>
+            <span>{{otherDetails.serverExamineResultInfo.serverIp}}({{parseServerLocalIp(otherDetails.serverExamineResultInfo.serverLocalIp)}})</span>
         </div>
         <div class="edit_btn" @click="onGoBack">返回</div>
     </div>
-    <div style="border-bottom:1px solid #f0f0f0;"></div>  
+    <div style="border-bottom:1px solid #f0f0f0;"></div>
     <div style="display: flex;flex-direction: column;justify-content: start;">
         <div style="margin-top: 10px;">
-            <span style="font-size: 30px;margin-right: 30px;">本次体检得分 {{pageData.checkNum}}分</span>
-            <span :class="{'low-health-color':pageData.checkNum<60,'middle-health-color':pageData.checkNum<90,'hight-health-color':pageData.checkNum>=90}" 
-                    style="margin-right: 30px;font-size: 30px;">{{getHealthName(pageData.checkNum)}}</span>
+            <span style="font-size: 30px;margin-right: 30px;">本次体检得分 {{otherDetails.serverExamineResultInfo.score}}分</span>
+            <span :class="{'low-health-color':otherDetails.serverExamineResultInfo.score<60,'middle-health-color':otherDetails.serverExamineResultInfo.score<90,'hight-health-color':otherDetails.serverExamineResultInfo.score>=90}"
+                    style="margin-right: 30px;font-size: 30px;">{{getHealthName(otherDetails.serverExamineResultInfo.score)}}</span>
         </div>
         <div style="margin-top: 15px;">
             <span style="font-weight: bold;margin-right: 20px;">体检时间：</span>
-            <span>{{onChangeTimeFormat(pageData.checkTime)}}</span>
+            <span>{{otherDetails.serverExamineResultInfo.startTime}}</span>
         </div>
         <div style="margin-top: 15px;display: inline-flex;">
             <span style="font-weight: bold;margin-right: 20px;">体检项目：</span>
             <div style="display: flex;flex-direction: column;">
                 <div style="display: inline-flex;margin-bottom: 20px;">
-                    <div v-for='item in pageData.checkTopItem' class="more-select-content">
-                        <img v-show="item.status===3" src="/images/check-select.png" width="15px" height="15px">
-                        <div v-show="item.status===2" style="width: 15px;height: 15px;"></div>
-                        <span style="margin-left: 5px;" :class="{'select-txt-color':item.status!=1,'define-txt-color':item.status===1}">{{item.value}}</span>
+                    <div v-for='item in sTopSelectItem' class="more-select-content">
+                        <img v-show="otherDetails.serverExamineResultInfo.scanItems.indexOf(item.id) > -1" src="/images/check-select.png" width="15px" height="15px">
+                        <div v-show="otherDetails.serverExamineResultInfo.scanItems.indexOf(item.id) <= -1"  style="width: 15px;height: 15px;"></div>
+                        <span style="margin-left: 5px;" class="select-txt-color define-txt-color">{{item.value}}</span>
                     </div>
                 </div>
                 <div style="display: inline-flex;">
-                    <div v-for='item in pageData.checkBottomItem' class="more-select-content">
-                        <img v-show="item.status===3" src="/images/check-select.png" width="15px" height="15px">
-                        <div v-show="item.status===2" style="width: 15px;height: 15px;"></div>
-                        <span style="margin-left: 5px;" :class="{'select-txt-color':item.status!=1,'define-txt-color':item.status===1}">{{item.value}}</span>
+                    <div v-for='item in sBottomSelectItem' class="more-select-content">
+                        <img v-show="otherDetails.serverExamineResultInfo.scanItems.indexOf(item.id) > -1" src="/images/check-select.png" width="15px" height="15px">
+                        <div v-show="otherDetails.serverExamineResultInfo.scanItems.indexOf(item.id) <= -1" style="width: 15px;height: 15px;"></div>
+                        <span style="margin-left: 5px;" class="select-txt-color define-txt-color">{{item.value}}</span>
                     </div>
                 </div>
             </div>
