@@ -92,9 +92,8 @@ Tea.context(function () {
                 external: this.external,
                 src: this.src,
                 srcmask: this.srcmask,
-                dst: this.Dst,
+                // dst: this.dst,
                 dstinput: this.dstinput,
-                dsts: this.Dsts,
                 dstmask: this.dstmask,
                 descr: this.descr,
             })
@@ -102,7 +101,7 @@ Tea.context(function () {
             .success(function (resp) {
 
                 console.log(resp.data);
-            })
+            }).refresh()
     }
 
     //开启配置
@@ -287,6 +286,10 @@ Tea.context(function () {
                         if (resp.data.dst[i].selected == true) {
                             this.dst = resp.data.dst[i].value
                             this.dstinput = resp.data.dst[i].value
+                            if (resp.data.dst[i].data_other == true && !this.checkDstSrcType(this.dstinput)) {
+                                //单个主机或网络
+                                resp.data.dst[i].value = ""
+                            }
                         }
                     }
                 }
@@ -306,4 +309,14 @@ Tea.context(function () {
     }
 
 
+    //判断输入是否是输入类型
+    this.checkDstSrcType = function(value){
+        let vmap = ["bogons", "bogonsv6", "virusprot", "sshlockout", "any", "(self)", "lan", "lanip",
+            "lo0", "wan", "wanip"]
+        if (vmap.indexOf(value) == -1) {
+            //输入类型
+            return true
+        }
+        return false
+    }
 })

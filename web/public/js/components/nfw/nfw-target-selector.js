@@ -40,16 +40,21 @@ Vue.component("nfw-target-selector", {
             } else {
                 this.hide = true
             }
-            console.log(this.hide)
-            console.log(value)
+            this.dstinput = value
+        },
+        checkHide(value){
+            let vmap = ["bogons", "bogonsv6", "virusprot", "sshlockout", "any", "(self)", "lan", "lanip",
+                "lo0", "wan", "wanip"]
+            if (vmap.indexOf(value) == -1) {
+                return false
+            } else {
+                return true
+            }
         }
     },
     props: ["v-dst", "v-node-id", "v-id", "v-masks", "v-dstmask", "v-dstinput", "v-dsts"],
     data: function () {
         let dst = this.vDst
-        if (dst == null) {
-            dst = ""
-        }
         let nodeId = this.vNodeId
         if (nodeId == null) {
             nodeId = 0
@@ -62,10 +67,11 @@ Vue.component("nfw-target-selector", {
         let dstmask = this.vDstmask
         let dsts = this.vDsts
         let dstinput = this.vDstinput
-        console.log("dst select");
-        console.log(dsts);
-        console.log(dstinput);
-        console.log(dst);
+
+        let hide = true
+        if(!this.checkHide(dstinput)){
+            hide = false
+        }
         return {
             dsts: dsts,
             dst: dst,
@@ -73,32 +79,22 @@ Vue.component("nfw-target-selector", {
             id: id,
             masks: masks,
             dstmask: dstmask,
-            hide: true,
+            hide: hide,
             dstinput: dstinput,
         }
     }, watch: {
         dstmask(newVal, oldVale) {
-            console.log("dstmask-new:", newVal);
-            console.log("dstmask-old:", oldVale);
-
+            // console.log("dstmask-new:", newVal);
+            // console.log("dstmask-old:", oldVale);
             if (newVal !== oldVale) {
                 this.$emit("update:vDstmask", newVal)
             }
         },
         dstinput(newVal, oldVale) {
-            console.log("dstinput-new:", newVal);
-            console.log("dstinput-old:", oldVale);
-
+            // console.log("dstinput-new:", newVal);
+            // console.log("dstinput-old:", oldVale);
             if (newVal !== oldVale) {
                 this.$emit("update:vDstinput", newVal)
-            }
-        },
-        dst(newVal, oldVale) {
-            console.log("dst-new:", newVal);
-            console.log("dst-old:", oldVale);
-
-            if (newVal !== oldVale) {
-                this.$emit("update:vDst", newVal)
             }
         }
     },

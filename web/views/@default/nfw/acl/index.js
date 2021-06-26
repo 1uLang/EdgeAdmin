@@ -1,5 +1,5 @@
 Tea.context(function () {
-    this.severity=1
+    this.severity = 1
 
     this.nShowState = 1
 
@@ -26,15 +26,15 @@ Tea.context(function () {
     // this.targerRangeStartId = 1 //修改中 目标范围的开始值
     // this.targerRangeEndId = 1 //修改中 目标范围的终止值
 
-    this.onChangeShowState=function (state) { 
-        if(this.nShowState != state){
+    this.onChangeShowState = function (state) {
+        if (this.nShowState != state) {
             this.nShowState = state
-            if(state ==2){
+            if (state == 2) {
                 // this.resetValue()
             }
         }
     }
-    this.getInterfaceName= function (interface) {
+    this.getInterfaceName = function (interface) {
         switch (interface) {
             case "wan":
                 return "WAN";
@@ -45,21 +45,21 @@ Tea.context(function () {
         }
         return "";
     }
-    this.getStatus= function (status) { 
-        return status == 1?"已开启":"已停用";
+    this.getStatus = function (status) {
+        return status == 1 ? "已开启" : "已停用";
     }
 
-    this.getDirection= function (type) { 
-        return type == "in"?"进":"出";
+    this.getDirection = function (type) {
+        return type == "in" ? "进" : "出";
     }
 
 
-    this.getTactics= function (type) { 
-        switch(status){
+    this.getTactics = function (type) {
+        switch (status) {
             case 1:
                 return "通过"
             case 2:
-                return "阻止"  
+                return "阻止"
             case 3:
                 return "拒绝"
             default:
@@ -67,9 +67,9 @@ Tea.context(function () {
         }
     }
 
-    this.getItemInfo = function (id) { 
-        for (var i=0;i<this.tableData.length;i++){
-            if(this.tableData[i].id ==id){
+    this.getItemInfo = function (id) {
+        for (var i = 0; i < this.tableData.length; i++) {
+            if (this.tableData[i].id == id) {
                 return this.tableData[i]
             }
         }
@@ -77,39 +77,60 @@ Tea.context(function () {
     }
 
     //修改配置
-    this.onOpenChangeView=function (id) { 
+    this.onOpenChangeView = function (id) {
         console.log(id)
         this.GetNatInfo(id)
         // this.onChangeShowState(3)
     }
 
     //重置value
-    this.resetValue = function () { 
-        this.id = 1             
-        this.interface = 1             
+    this.resetValue = function () {
+        this.id = 1
+        this.interface = 1
         this.direction = 1
         this.ipprotocol = ""
-        this.agreementId = 1        
-        this.sourceTypeId = 1       
-        this.sourceValue = "any"    
-        this.sourceId = 1           
-        this.targetTypeId = 1       
-        this.targetValue = "any"      
-        this.targetId = 1     
-        this.editSourceId = 1    
-        this.editTargetId = 1         
-        this.descValue = ""     
+        this.agreementId = 1
+        this.sourceTypeId = 1
+        this.sourceValue = "any"
+        this.sourceId = 1
+        this.targetTypeId = 1
+        this.targetValue = "any"
+        this.targetId = 1
+        this.editSourceId = 1
+        this.editTargetId = 1
+        this.descValue = ""
         this.targerRangeStartId = 1
-        this.targerRangeEndId = 1   
-     }
+        this.targerRangeEndId = 1
+    }
 
     //保存配置
-    this.onSaveConfig= function () { 
+    this.onSaveConfig = function () {
+        Tea.action("/nfw/acl/createPopup")
+            .params({
+                nodeId: this.selectNode,
+                id: this.id,
+                interface: this.interface,
+                type: this.type,
+                srcinput: this.srcinput,
+                srcmask: this.srcmask,
+                // dst: this.dst,
+                dstinput: this.dstinput,
+                dstmask: this.dstmask,
+                descr: this.descr,
+                direction: this.direction,
+                ipprotocol: this.ipprotocol,
+                protocol: this.protocol,
 
+            })
+            .post()
+            .success(function (resp) {
+
+                console.log(resp.data);
+            }).refresh()
     }
 
     //开启配置
-    this.onOpenConfig = function (id,status,interface) {
+    this.onOpenConfig = function (id, status, interface) {
         let tops = "禁用"
         let statusUp = "0"
         let that = this
@@ -123,7 +144,7 @@ Tea.context(function () {
                     id: id,
                     status: statusUp,
                     nodeId: this.selectNode,
-                    interface:interface,
+                    interface: interface,
                 })
                 .refresh()
         })
@@ -161,14 +182,14 @@ Tea.context(function () {
 
     //操作
     this.types = [
-        {name:"通过",value:"通过"},
-        {name:"阻止",value:"拒绝"},
-        {name:"阻止",value:"阻止"}
+        {name: "通过", value: "通过"},
+        {name: "阻止", value: "拒绝"},
+        {name: "阻止", value: "阻止"}
     ]
     //方向
     this.dirctionData = [
-        {name:"进",value:"in"},
-        {name:"出",value:"out"},
+        {name: "进", value: "in"},
+        {name: "出", value: "out"},
     ]
 
     // this.hostData = [
@@ -177,7 +198,7 @@ Tea.context(function () {
     //     {id:3,hostAddress:"成都-ddos-192.168.1.3",},
     //     {id:4,hostAddress:"成都-ddos-192.168.1.4",},
     // ]
-    
+
 
     //postIndex:接口* 选择的id  typeIndex 类型* 选择的id  sourceTypeIndex 源* 选择的id  targetIndex 目标* 选择的id
     // this.tableData = [
@@ -206,16 +227,16 @@ Tea.context(function () {
             .get()
             .success(function (resp) {
                 //操作
-                if(resp.data.type.length > 0 ){
+                if (resp.data.type.length > 0) {
                     this.types = resp.data.type
                     let typeList = resp.data.type
-                    for(var i=0;i<typeList.length;i++){
+                    for (var i = 0; i < typeList.length; i++) {
                         if (typeList[i].selected == true) {
                             this.type = typeList[i].value
                         }
 
                     }
-                    if(this.type == ""){
+                    if (this.type == "") {
                         this.type = List[0].value
                     }
 
@@ -231,7 +252,7 @@ Tea.context(function () {
                             this.interface = resp.data.interface[i].value
                         }
                     }
-                    if(this.interface){
+                    if (this.interface == "") {
                         this.interface = resp.data.interface[0].value
                     }
                 }
@@ -245,7 +266,7 @@ Tea.context(function () {
                             this.direction = resp.data.direction[i].value
                         }
                     }
-                    if(this.direction == ""){
+                    if (this.direction == "") {
                         this.direction = resp.data.direction[0].value
                     }
                 }
@@ -260,7 +281,7 @@ Tea.context(function () {
                             this.ipprotocol = resp.data.ipprotocol[i].value
                         }
                     }
-                    if(this.ipprotocol == ""){
+                    if (this.ipprotocol == "") {
                         this.ipprotocol = resp.data.ipprotocol[0].value
                     }
                 }
@@ -275,7 +296,7 @@ Tea.context(function () {
                             this.protocol = resp.data.protocol[i].value
                         }
                     }
-                    if(this.protocol){
+                    if (this.protocol =="") {
                         this.protocol = resp.data.protocol[0].value
                     }
                 }
@@ -291,9 +312,13 @@ Tea.context(function () {
                         if (resp.data.src[i].selected == true) {
                             this.src = resp.data.src[i].value
                             this.srcinput = resp.data.src[i].value
+                            if (resp.data.src[i].data_other == true && !this.checkDstSrcType(this.srcinput)) {
+                                //单个主机或网络
+                                resp.data.src[i].value = ""
+                            }
                         }
                     }
-                    if(this.src == ""){
+                    if (this.src == "") {
                         this.src = resp.data.src[0].value
                         this.srcinput = resp.data.src[0].value
                     }
@@ -302,7 +327,7 @@ Tea.context(function () {
                 }
                 //源掩码
                 this.srcmask = "32"
-                if(resp.data.srcmask.length > 0 ){
+                if (resp.data.srcmask.length > 0) {
                     let srcmask = resp.data.srcmask
                     for (var i = 0; i < srcmask.length; i++) {
                         if (srcmask[i].selected == true) {
@@ -323,9 +348,13 @@ Tea.context(function () {
                         if (resp.data.dst[i].selected == true) {
                             this.dst = resp.data.dst[i].value
                             this.dstinput = resp.data.dst[i].value
+                            if (resp.data.dst[i].data_other == true && !this.checkDstSrcType(this.dstinput)) {
+                                //单个主机或网络
+                                resp.data.dst[i].value = ""
+                            }
                         }
                     }
-                    if(this.dst == ""){
+                    if (this.dst == "") {
                         this.dst = resp.data.dst[0].value
                         this.dstinput = resp.data.dst[0].value
                     }
@@ -335,14 +364,14 @@ Tea.context(function () {
 
                 //目标掩码
                 this.dstmask = "32"
-                if(resp.data.dstmask.length > 0 ){
+                if (resp.data.dstmask.length > 0) {
                     let dstmask = resp.data.dstmask
                     for (var i = 0; i < dstmask.length; i++) {
                         if (dstmask[i].selected == true) {
                             this.dstmask = dstmask[i].value
                         }
                     }
-                    if(this.dstmask == ""){
+                    if (this.dstmask == "") {
                         this.dstmask = dstmask[0].value
 
                     }
@@ -351,13 +380,11 @@ Tea.context(function () {
                 this.id = id
 
 
-
-
                 // this.dstmask = this.tableDataList[i].dstmask //
                 this.descr = resp.data.descr
-                if(id != ""){
+                if (id != "") {
                     this.onChangeShowState(3)
-                }else{
+                } else {
                     this.onChangeShowState(2)
                 }
 
@@ -365,6 +392,15 @@ Tea.context(function () {
             })
 
 
-
+    }
+    //判断输入是否是输入类型
+    this.checkDstSrcType = function(value){
+        let vmap = ["bogons", "bogonsv6", "virusprot", "sshlockout", "any", "(self)", "lan", "lanip",
+            "lo0", "wan", "wanip"]
+        if (vmap.indexOf(value) == -1) {
+            //输入类型
+            return true
+        }
+        return false
     }
 })

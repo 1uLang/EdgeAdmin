@@ -17,8 +17,22 @@ Vue.component("nfw-agreement-selector", {
             }else{
                 this.hide = true
             }
-            console.log(this.hide)
-            console.log(value)
+            this.srcinput = value
+        }
+    }, watch: {
+        srcmask(newVal, oldVale) {
+            // console.log("dstmask-new:", newVal);
+            // console.log("dstmask-old:", oldVale);
+            if (newVal !== oldVale) {
+                this.$emit("update:vSrcmask", newVal)
+            }
+        },
+        srcinput(newVal, oldVale) {
+            // console.log("dstinput-new:", newVal);
+            // console.log("dstinput-old:", oldVale);
+            if (newVal !== oldVale) {
+                this.$emit("update:vSrcinput", newVal)
+            }
         }
     },
     props: ["v-srcs", "v-src","v-srcmask","v-masks","v-srcinput"],

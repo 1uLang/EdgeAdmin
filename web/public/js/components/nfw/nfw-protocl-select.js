@@ -7,6 +7,15 @@ Vue.component("nfw-protocol-selector", {
         // 	.success(function (resp) {
         // 		that.idcs = resp.data.idcs
         // 	})
+    }, watch: {
+        protocol(newVal, oldVale) {
+            // console.log("dstmask-new:", newVal);
+            // console.log("dstmask-old:", oldVale);
+            if (newVal !== oldVale) {
+                this.$emit("update:vProtocol", newVal)
+                console.log(1111);
+            }
+        },
     },
     props: ["v-protocol","v-protocols"],
     data: function () {

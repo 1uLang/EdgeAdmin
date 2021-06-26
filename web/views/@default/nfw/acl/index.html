@@ -9,7 +9,7 @@
             <div v-show="nShowState===3" :class="{'menu-select-color':nShowState===3,'menu-define-color':nShowState!=3}">修改规则</div>
         </div>
         <div align="right" style="display: inline-flex;">
-            <div style="line-height: 40px;text-align: center;">DDoS防火墙节点：</div>
+            <div style="line-height: 40px;text-align: center;">云防火墙节点：</div>
             <div class="ui field">  
                 <div class="ui field">
                     <select class="ui dropdown auto-width" name="SelectNode" v-model="selectNode" @change="GetSelectNode">
@@ -86,7 +86,7 @@
                 <tr>
                     <td class="title">接口*</td>
                     <td>
-                        <nfw-interface-selector :v-interface="interface" :v-node-id="selectNode"
+                        <nfw-interface-selector :v-interface.sync="interface" :v-node-id="selectNode"
                                                 :v-id="id" :v-interfaces="interfaces"></nfw-interface-selector>
                     </td>
                 </tr>
@@ -106,13 +106,13 @@
                     <td>
                         <!-- <nfw-httpType-selector :v-idc-id="agreementTypeId"></nfw-httpType-selector> -->
                         <!-- 不知道为啥上面的显示不出来可能服务器认为我在攻击他 先用下面的显示-->
-                        <nfw-ipprotocol-selector :v-ipprotocol="ipprotocol" :v-ipprotocols="ipprotocols"></nfw-ipprotocol-selector>
+                        <nfw-ipprotocol-selector :v-ipprotocol.sync="ipprotocol.sync" :v-ipprotocols="ipprotocols"></nfw-ipprotocol-selector>
                     </td>
                 </tr>
                 <tr>
                     <td class="title">协议*</td>
                     <td>
-                        <nfw-protocol-selector :v-protocol="protocol" :v-protocols="protocols"></nfw-protocol-selector>
+                        <nfw-protocol-selector :v-protocol.sync="protocol" :v-protocols="protocols"></nfw-protocol-selector>
                     </td>
                 </tr>
                 <tr >
@@ -120,7 +120,7 @@
                     <td>
                         <!-- <nfw-sourceNetType-selector :v-idc-id="sourceTypeId"></nfw-sourceNetType-selector> -->
                         <!-- 不知道为啥上面的显示不出来可能服务器认为我在攻击他 先用下面的显示-->
-                        <nfw-agreement-selector :v-src="src" :v-srcs="srcs" :v-masks="masks" :v-srcmask="srcmask" :v-srcinput="srcinput"></nfw-agreement-selector>
+                        <nfw-agreement-selector :v-src="src" :v-srcs="srcs" :v-masks="masks" :v-srcmask.sync="srcmask" :v-srcinput.sync="srcinput"></nfw-agreement-selector>
                     </td>
                 </tr>
                 <!--<tr v-show="nShowState===3">
@@ -160,6 +160,8 @@
                 <input type="hidden" name="id" v-model="id">
                 <input type="hidden" name="node_id" v-model="selectNode">
             </table>
-            <submit-btn></submit-btn>
+            <button class="ui button primary" type="button" @click="onSaveConfig">
+                <slot>保存</slot>
+            </button>
         </form>
     </div>
