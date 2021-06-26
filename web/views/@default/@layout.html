@@ -52,6 +52,19 @@
             {{teaTitle}}&nbsp;<sup v-if="teaShowVersion">v{{teaVersion}}</sup> &nbsp;
         </a>
         <div class="menu menu1">
+            <!-- <div v-for="(menuItem,index) in mainMenuData" > 
+                <div v-if="menuItem.dropItem && menuItem.dropItem.length>0" @mouseenter="showMenu(index)" @mouseleave="hideMenu(index)">
+                    <div class="item navHead" :class="'navHead' + index">
+                        {{menuItem.menuName}} ▼
+                    </div>
+                    <ul v-if="menuItem.dropItem && menuItem.dropItem.length>0" class="navMain" :class="'navMain' + index">
+                        <li v-for="subItem in menuItem.dropItem">
+                            <a :href="subItem.pagePath" @click="onSelectTopMenu(menuItem.id)">{{subItem.dropName}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <a v-else class="item" :class="{active:selectTopMenuId === menuItem.id}" @click="onSelectTopMenu(menuItem.id)">{{menuItem.menuName}}</a>
+            </div> -->
             <div @mouseenter="showMenu(index)" @mouseleave="hideMenu(index)" class="navHead" :class="'navHead' + index" v-for="(module,index) in teaModules">
                 <a class="item" :href="Tea.url(module.code)"
                    :class="{active:teaMenu == module.code && teaSubMenu.length == 0, separator:module.code.length == 0, expend: teaMenu == module.code}"
@@ -64,9 +77,6 @@
                     <li v-for="subItem in module.subItems">
                         <a :href="subItem.url">{{subItem.name}}</a>
                     </li>
-                    <!-- <li>
-                        <a href="webscan/vulnerabilities">task</a>
-                    </li> -->
                 </ul>
             </div>
         </div>
@@ -169,7 +179,6 @@
 </div>
 <script type="text/javascript">
     function showMenu(index) {
-        console.log(index)
         document.getElementsByClassName('navMain' + index)[0].style.display = 'block'
     }
     function hideMenu(index) {

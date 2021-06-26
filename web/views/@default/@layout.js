@@ -157,6 +157,128 @@ Tea.context(function () {
             width: "50em"
         })
     }
+
+    this.onSelectTopMenu=function (id) {
+        if(this.selectTopMenuId !=id){
+            this.selectTopMenuId = id
+        }
+    }
+
+    this.selectTopMenuId = 1
+    this.selectLeftMenuId = 1
+
+    this.mainMenuData=[
+        {id:1,menuName:"首页",},
+        {id:2,menuName:"节点管理",},
+        {
+            id:3,
+            menuName:"安全服务",
+            dropItem:[
+                {id:31,dropName:"DDos防火墙",pagePath:"",childId:3100},
+                {id:32,dropName:"云防火墙",pagePath:"",childId:3200},
+                {id:33,dropName:"WEB防火墙",pagePath:"",childId:3300},
+                {id:34,dropName:"WEB漏洞扫描",pagePath:"",childId:3400},
+                {id:35,dropName:"主机安全防护",pagePath:"",childId:3500},
+                {id:36,dropName:"主机漏洞扫描",pagePath:"",childId:3600},
+                {id:37,dropName:"安全审计",pagePath:"",childId:3700},
+                {id:38,dropName:"堡垒机",pagePath:"",childId:3800}
+            ],
+            childItem:[
+                {
+                    id:3100,
+                    leftMenu:[
+                        {id:3101,leftName:"全局状态",icon:"",pagePath:""},
+                        {id:3102,leftName:"主机状态",icon:"",pagePath:""},
+                        {id:3103,leftName:"黑白名单",icon:"",pagePath:""},
+                        {id:3104,leftName:"统计日志",icon:"",pagePath:""}
+                    ]
+                },
+                {
+                    id:3200,
+                    leftMenu:[
+                        {id:3201,leftName:"全局状态",icon:"",pagePath:""},
+                        {id:3202,leftName:"NAT规则",icon:"",pagePath:""},
+                        {id:3203,leftName:"ACL规则",icon:"",pagePath:""},
+                        {id:3204,leftName:"IPS规则",icon:"",pagePath:""},
+                        {id:3205,leftName:"统计日志",icon:"",pagePath:""}
+                    ]
+                },
+                {
+                    id:3300,
+                    leftMenu:[
+                        {id:3301,leftName:"全局状态",icon:"",pagePath:""},
+                        {id:3302,leftName:"代理服务",icon:"",pagePath:""},
+                        {id:3303,leftName:"通用设置",icon:"",pagePath:""},
+                        {id:3304,leftName:"服务分组",icon:"",pagePath:""},
+                        {id:3305,leftName:"缓存策略",icon:"",pagePath:""},
+                        {id:3306,leftName:"WAF策略",icon:"",pagePath:""},
+                        {id:3307,leftName:"证书管理",icon:"",pagePath:""},
+                        {id:3308,leftName:"边缘节点",icon:"",pagePath:""},
+                        {id:3309,leftName:"节点日志",icon:"",pagePath:""},
+                        {id:3310,leftName:"SSH认证",icon:"",pagePath:""},
+                        {id:3311,leftName:"区域设置",icon:"",pagePath:""},
+                        {id:3312,leftName:"域名解析",icon:"",pagePath:""},
+                        {id:3313,leftName:"问题修复",icon:"",pagePath:""},
+                        {id:3314,leftName:"DNS服务",icon:"",pagePath:""}
+                    ]
+                },
+                {
+                    id:3400,
+                    leftMenu:[
+                        {id:3401,leftName:"全局状态",icon:"",pagePath:""},
+                        {id:3402,leftName:"扫描目标",icon:"",pagePath:""},
+                        {id:3403,leftName:"漏洞详情",icon:"",pagePath:""},
+                        {id:3404,leftName:"扫描任务",icon:"",pagePath:""},
+                        {id:3405,leftName:"扫描报告",icon:"",pagePath:""}
+                    ]
+                },
+                {
+                    id:3500,
+                    leftMenu:[
+                        {id:3501,leftName:"全局状态",icon:"",pagePath:""},
+                        {id:3502,leftName:"主机体现",icon:"",pagePath:""},
+                        {id:3503,leftName:"漏洞风险",icon:"",pagePath:""},
+                        {id:3504,leftName:"入侵威胁",icon:"",pagePath:""},
+                        {id:3505,leftName:"合规基线",icon:"",pagePath:""},
+                        {id:3506,leftName:"Agent管理",icon:"",pagePath:""},
+                    ]
+                },
+                {
+                    id:3600,
+                    leftMenu:[
+                        {id:3601,leftName:"平台首页",icon:"",pagePath:""}
+                    ]
+                },
+                {
+                    id:3700,
+                    leftMenu:[
+                        {id:3701,leftName:"全局状态",icon:"",pagePath:""},
+                        {id:3702,leftName:"资产管理",icon:"",pagePath:""},
+                        {id:3703,leftName:"数据库管理",icon:"",pagePath:""},
+                        {id:3704,leftName:"主机管理",icon:"",pagePath:""},
+                        {id:3705,leftName:"应用管理",icon:"",pagePath:""},
+                        {id:3706,leftName:"agent管理",icon:"",pagePath:""},
+                        {id:3707,leftName:"查询分析",icon:"",pagePath:""},
+                        {id:3708,leftName:"审计日志",icon:"",pagePath:""},
+                        {id:3709,leftName:"风险查询",icon:"",pagePath:""},
+                        {id:3710,leftName:"报表中心",icon:"",pagePath:""},
+                        {id:3711,leftName:"审计归档",icon:"",pagePath:""},
+                    ]
+                },
+                {
+                    id:3800,
+                    leftMenu:[
+                        {id:3801,leftName:"平台首页",icon:"",pagePath:""}
+                    ]
+                }
+            ]
+        },
+        {id:4,menuName:"监控告警",},
+        {id:5,menuName:"平台用户",},
+        {id:6,menuName:"系统用户",},
+        {id:7,menuName:"操作日志",},
+        {id:8,menuName:"系统设置",},
+    ]
 });
 
 window.NotifySuccess = function (message, url, params) {
