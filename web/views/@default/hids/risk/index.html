@@ -22,10 +22,10 @@
             </div>
             <div class="model-stype">
                 <div class="model-background" style="display: flex;flex-direction: row;">
-                    <div class="model-child-background serious-bg-color" :style="{flex:data.seriousCount}">{{risk.critical}}</div>
-                    <div class="model-child-background height-bg-color" :style="{flex:data.heightCount}">{{risk.high}}</div>
-                    <div class="model-child-background middle-bg-color" :style="{flex:data.middleCount}">{{risk.middle}}</div>
-                    <div class="model-child-background low-bg-color" :style="{flex:data.lowCount}">{{risk.low}}</div>
+                    <div v-show="risk.critical>0" class="model-child-background serious-bg-color" :style="{flex:risk.critical}">{{risk.critical}}</div>
+                    <div v-show="risk.high>0" class="model-child-background height-bg-color" :style="{flex:risk.high}">{{risk.high}}</div>
+                    <div v-show="risk.middle>0" class="model-child-background middle-bg-color" :style="{flex:risk.middle}">{{risk.middle}}</div>
+                    <div v-show="risk.low>0" class="model-child-background low-bg-color" :style="{flex:risk.low}">{{risk.low}}</div>
                 </div>
 
             </div>

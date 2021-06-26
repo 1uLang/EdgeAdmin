@@ -210,4 +210,16 @@ Tea.context(function () {
 
     return q +','+s
   };
+  
+
+  this.curIndex = -1
+
+  this.mouseEnter = function (index) {
+    this.curIndex = index;
+  }
+
+  this.mouseLeave = function (index) {
+      this.curIndex = -1;
+  }
+
 });

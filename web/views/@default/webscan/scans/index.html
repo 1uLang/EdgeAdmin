@@ -35,11 +35,14 @@
             </tr>
             </thead>
             <tbody>
-            <tr align="center" style="height: 50px;" v-for="item in scans" >
+            <tr align="center" style="height: 50px;" v-for="(item,index) in scans" >
                 <td>
                     <input type="checkbox" name="select" :value="item.scan_id" :data="item.target_id" @click="clickCheckbox">
                 </td>
-                <td @click="onShowDetail(item)">{{item.target.address}}</td>
+                <td @mouseenter="mouseEnter(index)" @mouseleave="mouseLeave(index)">
+                    <u v-show="index===curIndex" @click="onShowDetail(item)" style="color: #169BD5;cursor: pointer;">{{item.target.address}}</u>
+                    <span v-show="index!=curIndex">{{item.target.address}}</span>
+                </td>
                 <td>{{item.target.description}}</td>
                 <td>Web</td>
                 <td>
