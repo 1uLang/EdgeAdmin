@@ -271,13 +271,19 @@ Tea.context(function () {
 
 
     this.checkShowColor = function (curValue, maxValue) {
-        var curValue = ((curValue / maxValue) * 100).toFixed(1)
-        return curValue >= 100
+        if(curValue && maxValue){
+            var tempValue = ((curValue / maxValue) * 100).toFixed(1)
+            return tempValue >= 100
+        }
+        return false
     }
 
     this.getProgressPer = function (curValue, maxValue) {
-        var curValue = ((curValue / maxValue) * 100).toFixed(1)
-        return curValue + "%"
+        if(curValue && maxValue){
+            var tempValue = ((curValue / maxValue) * 100).toFixed(1)
+            return tempValue + "%"
+        }
+        return "0%"
     }
 
     //计时器

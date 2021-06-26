@@ -2,7 +2,7 @@
 <!-- 漏洞风险-系统漏洞 -->
 <div>
     <div class="card-div" style="display: flex;flex-direction: row;justify-content: space-between;padding: 15px 10px;margin-top: 20px;">
-        <div>系统漏洞</div>
+        <div style="font-size: 16px;">系统漏洞</div>
         <div class="edit_btn" @click="onGoBack">返回</div>
     </div>
 
@@ -43,10 +43,10 @@
                 <td>{{item.serverIp}}|{{parseServerLocalIp(item.serverLocalIp)}}</td>
                 <td>
                     <div class="model-background" style="display: flex;flex-direction: row;">
-                        <div class="model-child-background serious-bg-color" :style="{flex:item.value1}">{{item.criticalCount}}</div>
-                        <div class="model-child-background height-bg-color" :style="{flex:item.value2}">{{item.highRiskCount}}</div>
-                        <div class="model-child-background middle-bg-color" :style="{flex:item.value3}">{{item.middleRiskCount}}</div>
-                        <div class="model-child-background low-bg-color" :style="{flex:item.value4}">{{item.lowRiskCount}}</div>
+                        <div v-show="item.criticalCount>0" class="model-child-background serious-bg-color" :style="{flex:item.criticalCount}">{{item.criticalCount}}</div>
+                        <div v-show="item.highRiskCount>0" class="model-child-background height-bg-color" :style="{flex:item.highRiskCount}">{{item.highRiskCount}}</div>
+                        <div v-show="item.middleRiskCount>0" class="model-child-background middle-bg-color" :style="{flex:item.middleRiskCount}">{{item.middleRiskCount}}</div>
+                        <div v-show="item.lowRiskCount>0" class="model-child-background low-bg-color" :style="{flex:item.lowRiskCount}">{{item.lowRiskCount}}</div>
                     </div>
                 </td>
                 <td>
