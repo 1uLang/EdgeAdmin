@@ -5,7 +5,6 @@ import (
 	reports_server "github.com/1uLang/zhiannet-api/awvs/server/reports"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/webscan"
-	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
 )
 
@@ -46,19 +45,7 @@ func (this *CreateAction) RunPost(params struct {
 		return
 	}
 
-	userResp, err := this.RPC().UserRPC().FindEnabledUser(this.AdminContext(), &pb.FindEnabledUserRequest{UserId: this.AdminId()})
-
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-	user := userResp.User
-	if user == nil {
-		this.NotFound("user", this.AdminId())
-		return
-	}
-
 	// 日志
-	this.CreateLogInfo("WEB漏洞扫描 - 生成目标扫描报表:%v成功,用户名：%s", params.Ids, userResp.User.Username)
+	this.CreateLogInfo("WEB漏洞扫描 - 生成目标扫描报表:%v成功", params.Ids)
 	this.Success()
 }

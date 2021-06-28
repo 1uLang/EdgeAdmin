@@ -205,7 +205,7 @@ func (this *userMustAuth) modules(adminId int64) ([]maps.Map, []maps.Map) {
 				{
 					"name": "基本设置",
 					"url":  "/settings/server",
-					"code": "advanced",
+					"code": "server",
 				},
 				{
 					"name": "高级设置",
@@ -224,7 +224,7 @@ func (this *userMustAuth) modules(adminId int64) ([]maps.Map, []maps.Map) {
 				{
 					"name": "全局状态",
 					"url":  "/ddos",
-					"code": "global",
+					"code": "ddos",
 				},
 				{
 					"name": "主机状态",
@@ -251,24 +251,29 @@ func (this *userMustAuth) modules(adminId int64) ([]maps.Map, []maps.Map) {
 			"icon":     "setting",
 			"subItems": []maps.Map{
 				{
+					"name": "全局状态",
+					"url":  "/webscan",
+					"code": "webscan",
+				},
+				{
 					"name": "扫描目标",
 					"url":  "/webscan/targets",
-					"code": "global",
+					"code": "targets",
 				},
 				{
 					"name": "漏洞详情",
 					"url":  "/webscan/vulnerabilities",
-					"code": "global",
+					"code": "vulnerabilities",
 				},
 				{
 					"name": "扫描任务",
 					"url":  "/webscan/scans",
-					"code": "global",
+					"code": "scans",
 				},
 				{
 					"name": "扫描报告",
 					"url":  "/webscan/reports",
-					"code": "global",
+					"code": "reports",
 				},
 			},
 		},
@@ -282,32 +287,32 @@ func (this *userMustAuth) modules(adminId int64) ([]maps.Map, []maps.Map) {
 				{
 					"name": "全局状态",
 					"url":  "/hids",
-					"code": "global",
+					"code": "hids",
 				},
 				{
 					"name": "主机体检",
 					"url":  "/hids/examine",
-					"code": "global",
+					"code": "examine",
 				},
 				{
 					"name": "漏洞风险",
 					"url":  "/hids/risk",
-					"code": "global",
+					"code": "risk",
 				},
 				{
 					"name": "入侵威胁",
 					"url":  "/hids/invade",
-					"code": "global",
+					"code": "invade",
 				},
 				{
 					"name": "合规基线",
 					"url":  "/hids/baseline",
-					"code": "global",
+					"code": "baseline",
 				},
 				{
 					"name": "Agent管理",
 					"url":  "/hids/agent",
-					"code": "global",
+					"code": "agent",
 				},
 			},
 		},
@@ -321,27 +326,27 @@ func (this *userMustAuth) modules(adminId int64) ([]maps.Map, []maps.Map) {
 				{
 					"name": "全局状态",
 					"url":  "/nfw",
-					"code": "global",
+					"code": "nfw",
 				},
 				{
 					"name": "NAT规则",
 					"url":  "/nfw/nat",
-					"code": "global",
+					"code": "nat",
 				},
 				{
 					"name": "ACL规则",
 					"url":  "/nfw/acl",
-					"code": "global",
+					"code": "acl",
 				},
 				{
 					"name": "IPS规则",
 					"url":  "/nfw/ips",
-					"code": "global",
+					"code": "ips",
 				},
 				{
 					"name": "统计日志",
 					"url":  "/nfw/logs",
-					"code": "global",
+					"code": "logs",
 				},
 			},
 		},
@@ -355,12 +360,148 @@ func (this *userMustAuth) modules(adminId int64) ([]maps.Map, []maps.Map) {
 				{
 					"name": "监控任务",
 					"url":  "/monitor",
-					"code": "global",
+					"code": "monitor",
 				},
 				{
 					"name": "告警通知",
 					"url":  "/monitor/notice",
-					"code": "global",
+					"code": "notice",
+				},
+			},
+		},
+		{
+			"code":   "waf",
+			"module": configloaders.AdminModuleCodeWAF,
+			"name":   "web防火墙",
+			"icon":   "history",
+			"subItems": []maps.Map{
+				{
+					"name": "全局状态",
+					"url":  "/waf",
+					"code": "waf",
+				},
+				{
+					"name": "网站服务",
+					"code": "servers",
+					"icon": "history",
+					"subItems": []maps.Map{
+						{
+							"name": "服务列表",
+							"url":  "/servers",
+							"code": "servers",
+						},
+						{
+							"name": "通用设置",
+							"url":  "/servers/components",
+							"code": "components",
+						},
+						{
+							"name": "服务分组",
+							"url":  "/servers/components/groups",
+							"code": "groups",
+						},
+						{
+							"name": "缓存策略",
+							"url":  "/servers/components/cache",
+							"code": "cache",
+						},
+						{
+							"name": "WAF策略",
+							"url":  "/servers/components/waf",
+							"code": "waf",
+						},
+						{
+							"name": "证书管理",
+							"url":  "/servers/certs",
+							"code": "certs",
+						},
+					},
+				},
+				{
+					"name": "边缘节点",
+					"code": "clusters",
+					"icon": "history",
+					"subItems": []maps.Map{
+						{
+							"name": "集群列表",
+							"url":  "/clusters",
+							"code": "clusters",
+						},
+						{
+							"name": "节点日志",
+							"url":  "/clusters/logs",
+							"code": "logs",
+						},
+						{
+							"name": "SSH认证",
+							"url":  "/clusters/grants",
+							"code": "grants",
+						},
+						{
+							"name": "区域设置",
+							"url":  "/clusters/regions",
+							"code": "regions",
+						},
+					},
+				},
+				{
+					"name": "域名解析",
+					"code": "dns",
+					"icon": "history",
+					"subItems": []maps.Map{
+						{
+							"name": "集群列表",
+							"url":  "/dns",
+							"code": "dns",
+						},
+						{
+							"name": "问题修复",
+							"url":  "/dns/issues",
+							"code": "issues",
+						},
+						{
+							"name": "DNS服务",
+							"url":  "/dns/providers",
+							"code": "providers",
+						},
+					},
+				},
+				{
+					"name": "域名服务",
+					"code": "ns",
+					"icon": "history",
+					"subItems": []maps.Map{
+						{
+							"name": "域名列表",
+							"url":  "/ns",
+							"code": "ns",
+						},
+						{
+							"name": "集群管理",
+							"url":  "/ns/clusters",
+							"code": "clusters",
+						},
+						{
+							"name": "线路管理",
+							"url":  "/ns/routes",
+							"code": "routes",
+						},
+						{
+							"name": "访问日志",
+							"url":  "/ns/clusters/accessLogs",
+							"code": "accessLogs",
+						},
+						{
+							"name": "运行日志",
+							"url":  "/ns/clusters/logs",
+							"code": "logs",
+						},
+					},
+				},
+				{
+					"name": "通用设置",
+					"url":  "/servers",
+					"code": "servers",
 				},
 			},
 		},
@@ -484,14 +625,14 @@ func (this *userMustAuth) modules(adminId int64) ([]maps.Map, []maps.Map) {
 				{
 					"id":       33,
 					"dropName": "WEB防火墙",
-					"pagePath": "/dashboard",
-					"module":   configloaders.AdminModuleCodeDashboard,
+					"pagePath": "/waf",
+					"module":   configloaders.AdminModuleCodeWAF,
 					"leftMenu": []maps.Map{
 						{
 							"id":       3301,
 							"leftName": "全局状态",
 							"icon":     "",
-							"pagePath": "/dashboard",
+							"pagePath": "/waf",
 						},
 						{
 							"id":       3302,

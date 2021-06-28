@@ -28,6 +28,7 @@ const (
 	AdminModuleCodeHids      AdminModuleCode = "hids"      // hids 主机防护
 	AdminModuleCodeNfw       AdminModuleCode = "nfw"       // 下一代防火墙
 	AdminModuleCodeMonitor   AdminModuleCode = "monitor"   //监控告警
+	AdminModuleCodeWAF       AdminModuleCode = "waf"       //web防火墙
 )
 
 var sharedAdminModuleMapping = map[int64]*AdminModuleList{} // adminId => AdminModuleList

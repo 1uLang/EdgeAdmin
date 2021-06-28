@@ -48,6 +48,6 @@ func (this *DeleteAction) RunPost(params struct {
 	}
 
 	// 日志
-	this.CreateLogInfo("WEB漏洞扫描 - 删除目标扫描报表:%v成功,用户名：%s", params.ReportIds, userResp.User.Username)
+	this.CreateLogInfo("WEB漏洞扫描 - 删除目标扫描报表:%v成功", params.ReportIds)
 	this.Success()
 }

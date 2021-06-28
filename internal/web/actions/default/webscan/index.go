@@ -3,7 +3,6 @@ package webscan
 import (
 	dashboard_server "github.com/1uLang/zhiannet-api/awvs/server/dashboard"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 )
 
 type IndexAction struct {
@@ -26,20 +25,7 @@ func (this *IndexAction) RunGet() {
 		return
 	}
 	this.Data["data"] = info
-
-	userResp, err := this.RPC().UserRPC().FindEnabledUser(this.AdminContext(), &pb.FindEnabledUserRequest{UserId: this.AdminId()})
-
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-	user := userResp.User
-	if user == nil {
-		this.NotFound("user", this.AdminId())
-		return
-	}
-
 	// 日志
-	this.CreateLogInfo("WEB漏洞扫描请求成功,用户名：%s", userResp.User.Username)
+	this.CreateLogInfo("WEB漏洞扫描请求成功")
 	this.Show()
 }

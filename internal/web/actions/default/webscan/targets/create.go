@@ -57,6 +57,6 @@ func (this *CreateAction) RunPost(params struct {
 	}
 
 	// 日志
-	this.CreateLogInfo("WEB漏洞扫描 - 创建任务目标:[%v]成功,用户名：%s", params.Address, userResp.User.Username)
+	this.CreateLogInfo("WEB漏洞扫描 - 创建任务目标:[%v]成功", params.Address)
 	this.Success()
 }
