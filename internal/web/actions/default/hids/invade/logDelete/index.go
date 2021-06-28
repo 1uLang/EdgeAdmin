@@ -1,6 +1,7 @@
 package logDelete
 
 import (
+	"fmt"
 	"github.com/1uLang/zhiannet-api/hids/model/risk"
 	risk_server "github.com/1uLang/zhiannet-api/hids/server/risk"
 	"github.com/1uLang/zhiannet-api/hids/server/server"
@@ -33,14 +34,19 @@ func (this *IndexAction) RunGet(params struct {
 	req.ServerIp = params.ServerIp
 	req.PageSize = params.pageSize
 	req.PageNo = params.PageNo
-	req.UserName = "cysct56"
+
+	req.UserName, err = this.UserName()
+	if err != nil {
+		this.ErrorPage(fmt.Errorf("获取用户信息失败：%v", err))
+		return
+	}
 	list, err := risk_server.LogDeleteList(req)
 	if err != nil {
 		this.ErrorPage(err)
 
 	}
 	for k, v := range list.ReboundshellCountInfoList {
-		os, err := server.Info(v["serverIp"].(string))
+		os, err := server.Info(v["serverIp"].(string), req.UserName)
 		if err != nil {
 			this.ErrorPage(err)
 		}
@@ -136,11 +142,16 @@ func (this *DetailListAction) RunGet(params struct {
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
+		return
 	}
 	req := &risk.DetailReq{}
 	req.Req.PageSize = params.PageSize
 	req.Req.PageNo = params.PageNo
-	req.Req.UserName = "cysct56"
+	req.Req.UserName, err = this.UserName()
+	if err != nil {
+		this.ErrorPage(fmt.Errorf("获取用户信息失败：%v", err))
+		return
+	}
 	req.MacCode = params.MacCode
 
 	//待处理
@@ -148,12 +159,14 @@ func (this *DetailListAction) RunGet(params struct {
 	list1, err := risk_server.LogDeleteDetailList(req)
 	if err != nil {
 		this.ErrorPage(err)
+		return
 	}
 	//已处理
 	req.Req.State = 7
 	list2, err := risk_server.LogDeleteDetailList(req)
 	if err != nil {
 		this.ErrorPage(err)
+		return
 	}
 	//漏洞列表
 	this.Data["datas1"] = list1.LogDeleteInfoList
@@ -165,9 +178,10 @@ func (this *DetailListAction) RunGet(params struct {
 	this.Data["ip"] = params.Ip
 	this.Data["macCode"] = params.MacCode
 	//os
-	os, err := server.Info(params.Ip)
+	os, err := server.Info(params.Ip, req.Req.UserName)
 	if err != nil {
 		this.ErrorPage(err)
+		return
 	}
 	this.Data["os"] = os["osType"]
 	//最后扫描时间

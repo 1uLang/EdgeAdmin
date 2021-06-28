@@ -1,10 +1,10 @@
 package invade
 
 import (
+	"fmt"
 	"github.com/1uLang/zhiannet-api/hids/model/risk"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
-	"sync"
 )
 
 type IndexAction struct {
@@ -19,8 +19,8 @@ func (this *IndexAction) RunGet(params struct{}) {
 	}
 	dashboard := make([]map[string]interface{}, 8)
 
-	invadeLock := sync.RWMutex{}
-	invadeWg := sync.WaitGroup{}
+	//invadeLock := sync.RWMutex{}
+	//invadeWg := sync.WaitGroup{}
 	nameUrls := []map[string]string{
 		{"name": "病毒木马", "url": "virus"},
 		{"name": "网页后门", "url": "webShell"},
@@ -42,24 +42,29 @@ func (this *IndexAction) RunGet(params struct{}) {
 		risk.SystemCmdList,
 	}
 	args := &risk.RiskSearchReq{}
-	args.UserName = "cysct56"
+
+	args.UserName, err = this.UserName()
+	if err != nil {
+		this.ErrorPage(fmt.Errorf("获取用户信息失败：%v", err))
+		return
+	}
 	args.PageSize = 1
 
-	for i, f := range fns {
-		invadeWg.Add(1)
-		go func(idx int, fn func(*risk.RiskSearchReq) (risk.RiskSearchResp, error)) {
-			defer invadeWg.Done()
-			risk, _ := fn(args)
-			invadeLock.Lock()
-			dashboard[idx] = map[string]interface{}{
-				"name":  nameUrls[idx]["name"],
-				"count": risk.TotalData,
-				"url":   nameUrls[idx]["url"],
-			}
-			invadeLock.Unlock()
-		}(i, f)
+	for idx, fn := range fns {
+		//invadeWg.Add(1)
+		//go func(idx int, fn func(*risk.RiskSearchReq) (risk.RiskSearchResp, error)) {
+		//defer invadeWg.Done()
+		risk, _ := fn(args)
+		//invadeLock.Lock()
+		dashboard[idx] = map[string]interface{}{
+			"name":  nameUrls[idx]["name"],
+			"count": risk.TotalData,
+			"url":   nameUrls[idx]["url"],
+		}
+		//invadeLock.Unlock()
+		//}(i, f)
 	}
-	invadeWg.Wait()
+	//invadeWg.Wait()
 	this.Data["dashboard"] = dashboard
 	this.Show()
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/rpc"
 	"github.com/TeaOSLab/EdgeAdmin/internal/utils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/logs"
 	"net/http"
@@ -16,7 +17,7 @@ import (
 
 type ParentAction struct {
 	actions.ActionObject
-
+	userName  string
 	rpcClient *rpc.RPCClient
 }
 
@@ -75,6 +76,22 @@ func (this *ParentAction) TinyMenu(menuItem string) {
 
 func (this *ParentAction) AdminId() int64 {
 	return this.Context.GetInt64("adminId")
+}
+func (this *ParentAction) UserName() (string, error) {
+
+	if this.userName != "" {
+		return this.userName, nil
+	}
+	adminResp, err := this.RPC().AdminRPC().FindEnabledAdmin(this.AdminContext(), &pb.FindEnabledAdminRequest{AdminId: this.AdminId()})
+	if err != nil {
+		return "", err
+	}
+	admin := adminResp.Admin
+	if admin == nil {
+		return "", fmt.Errorf("无效的用户id")
+	}
+	this.userName = admin.Username
+	return admin.Username, nil
 }
 
 func (this *ParentAction) CreateLog(level string, description string, args ...interface{}) {

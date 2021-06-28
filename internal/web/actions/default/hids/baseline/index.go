@@ -1,6 +1,7 @@
 package examine
 
 import (
+	"fmt"
 	"github.com/1uLang/zhiannet-api/hids/model/baseline"
 	baseline_server "github.com/1uLang/zhiannet-api/hids/server/baseline"
 	"github.com/1uLang/zhiannet-api/hids/server/server"
@@ -19,7 +20,6 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	PageNo      int
 	PageSize    int
-	UserName    string
 	State       int
 	ResultState int
 
@@ -32,7 +32,11 @@ func (this *IndexAction) RunGet(params struct {
 		return
 	}
 	req := &baseline.SearchReq{}
-	req.UserName = "luobing"
+	req.UserName, err = this.UserName()
+	if err != nil {
+		this.ErrorPage(fmt.Errorf("获取用户信息失败：%v", err))
+		return
+	}
 	req.PageNo = params.PageNo
 	req.PageSize = params.PageSize
 	req.ResultState = params.ResultState
@@ -48,7 +52,7 @@ func (this *IndexAction) RunGet(params struct {
 		return
 	}
 	for k, v := range list.List {
-		os, err := server.Info(v["serverIp"].(string))
+		os, err := server.Info(v["serverIp"].(string), req.UserName)
 		if err != nil {
 			this.ErrorPage(err)
 		}

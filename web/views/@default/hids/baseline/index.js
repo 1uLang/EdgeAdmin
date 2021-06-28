@@ -25,7 +25,7 @@ Tea.context(function () {
             case 3:
                 return "检查失败"
             default:
-                return "未知"
+                return "未检查"
         }
      }
 
@@ -47,12 +47,12 @@ Tea.context(function () {
     //合规基线
      this.onOpenCheck = function (item) {
         //打开合规基线弹窗
-         teaweb.popup(Tea.url(".template?macCode="+item.macCode), {
+         teaweb.popup(Tea.url(".template?macCode="+item.macCode+"&os="+item.os.osType), {
              height: "30em",
          })
       }
 
-    this.onStartCheck = function (macCode) {
+    this.onStartCheck = function () {
         teaweb.confirm("确定开始体检该主机吗？", function () {
             this.$post(".check").params({
                 Opt: "ignore",

@@ -1,6 +1,7 @@
 package agent
 
 import (
+	"fmt"
 	"github.com/1uLang/zhiannet-api/hids/model/agent"
 	agent_server "github.com/1uLang/zhiannet-api/hids/server/agent"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
@@ -19,7 +20,6 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	PageNo        int
 	PageSize      int
-	UserName      string
 	ServerIp      string
 	ServerLocalIp string
 
@@ -31,9 +31,13 @@ func (this *IndexAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
+
 	req := &agent.SearchReq{}
-	//req.UserName = params.UserName
-	req.UserName = "luobing"
+	req.UserName, err = this.UserName()
+	if err != nil {
+		this.ErrorPage(fmt.Errorf("获取用户信息失败：%v", err))
+		return
+	}
 	req.PageNo = params.PageNo
 	req.PageSize = params.PageSize
 	req.ServerIp = params.ServerIp

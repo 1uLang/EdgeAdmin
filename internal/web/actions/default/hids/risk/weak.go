@@ -1,6 +1,7 @@
 package risk
 
 import (
+	"fmt"
 	"github.com/1uLang/zhiannet-api/hids/model/risk"
 	risk_server "github.com/1uLang/zhiannet-api/hids/server/risk"
 	"github.com/1uLang/zhiannet-api/hids/server/server"
@@ -32,14 +33,19 @@ func (this *WeakAction) RunGet(params struct {
 	req.ServerIp = params.ServerIp
 	req.PageSize = params.PageSize
 	req.PageNo = params.PageNo
-	req.UserName = "luobing"
+
+	req.UserName, err = this.UserName()
+	if err != nil {
+		this.ErrorPage(fmt.Errorf("获取用户信息失败：%v", err))
+		return
+	}
 	list, err := risk_server.WeakList(req)
 	if err != nil {
 		this.ErrorPage(err)
 
 	}
 	for k, v := range list.List {
-		os, err := server.Info(v["serverIp"].(string))
+		os, err := server.Info(v["serverIp"].(string), req.UserName)
 		if err != nil {
 			this.ErrorPage(err)
 		}

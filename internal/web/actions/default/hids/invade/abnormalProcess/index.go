@@ -1,6 +1,7 @@
 package abnormalProcess
 
 import (
+	"fmt"
 	"github.com/1uLang/zhiannet-api/hids/model/risk"
 	risk_server "github.com/1uLang/zhiannet-api/hids/server/risk"
 	"github.com/1uLang/zhiannet-api/hids/server/server"
@@ -33,14 +34,19 @@ func (this *IndexAction) RunGet(params struct {
 	req.ServerIp = params.ServerIp
 	req.PageSize = params.pageSize
 	req.PageNo = params.PageNo
-	req.UserName = "cysct56"
+
+	req.UserName, err = this.UserName()
+	if err != nil {
+		this.ErrorPage(fmt.Errorf("获取用户信息失败：%v", err))
+		return
+	}
 	list, err := risk_server.AbnormalProcessList(req)
 	if err != nil {
 		this.ErrorPage(err)
 
 	}
 	for k, v := range list.AbnormalProcessCountInfoList {
-		os, err := server.Info(v["serverIp"].(string))
+		os, err := server.Info(v["serverIp"].(string), req.UserName)
 		if err != nil {
 			this.ErrorPage(err)
 		}
@@ -140,7 +146,10 @@ func (this *DetailListAction) RunGet(params struct {
 	req := &risk.DetailReq{}
 	req.Req.PageSize = params.PageSize
 	req.Req.PageNo = params.PageNo
-	req.Req.UserName = "cysct56"
+	req.Req.UserName, err = this.UserName()
+	if err != nil {
+		this.ErrorPage(fmt.Errorf("获取用户信息失败：%v", err))
+	}
 	req.MacCode = params.MacCode
 
 	//待处理
@@ -165,7 +174,7 @@ func (this *DetailListAction) RunGet(params struct {
 	this.Data["ip"] = params.Ip
 	this.Data["macCode"] = params.MacCode
 	//os
-	os, err := server.Info(params.Ip)
+	os, err := server.Info(params.Ip, req.Req.UserName)
 	if err != nil {
 		this.ErrorPage(err)
 	}

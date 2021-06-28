@@ -1,9 +1,11 @@
 package risk
 
 import (
+	"fmt"
 	"github.com/1uLang/zhiannet-api/hids/model/risk"
 	risk_server "github.com/1uLang/zhiannet-api/hids/server/risk"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
 )
 
 type IndexAction struct {
@@ -17,8 +19,18 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 }) {
 
+	err := hids.InitAPIServer()
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
 	req := &risk.SearchReq{}
-	req.UserName = "luobing"
+
+	req.UserName, err = this.UserName()
+	if err != nil {
+		this.ErrorPage(fmt.Errorf("获取用户信息失败：%v", err))
+		return
+	}
 
 	//系统漏洞数汇总
 	risk, err := risk_server.SystemDistributed(req)

@@ -1,6 +1,7 @@
 package examine
 
 import (
+	"fmt"
 	"github.com/1uLang/zhiannet-api/hids/model/examine"
 	examine_server "github.com/1uLang/zhiannet-api/hids/server/examine"
 	"github.com/1uLang/zhiannet-api/hids/server/server"
@@ -20,7 +21,6 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	PageNo       int
 	PageSize     int
-	UserName     string
 	State        int
 	Score        int
 	Type         int
@@ -34,7 +34,11 @@ func (this *IndexAction) RunGet(params struct {
 		this.ErrorPage(err)
 	}
 	req := &examine.SearchReq{}
-	req.UserName = "luobing"
+	req.UserName, err = this.UserName()
+	if err != nil {
+		this.ErrorPage(fmt.Errorf("获取当前用户信息失败：%v", err))
+		return
+	}
 	req.PageNo = params.PageNo
 	req.PageSize = params.PageSize
 
@@ -59,7 +63,7 @@ func (this *IndexAction) RunGet(params struct {
 		this.ErrorPage(err)
 	}
 	for k, v := range list.ServerExamineResultInfoList {
-		os, err := server.Info(v["serverExamineResultInfo"].(map[string]interface{})["serverIp"].(string))
+		os, err := server.Info(v["serverExamineResultInfo"].(map[string]interface{})["serverIp"].(string), req.UserName)
 		if err != nil {
 			this.ErrorPage(err)
 		}

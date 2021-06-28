@@ -1,6 +1,7 @@
 package risk
 
 import (
+	"fmt"
 	"github.com/1uLang/zhiannet-api/hids/model/risk"
 	risk_server "github.com/1uLang/zhiannet-api/hids/server/risk"
 	"github.com/1uLang/zhiannet-api/hids/server/server"
@@ -32,7 +33,12 @@ func (this *SystemRiskListAction) RunGet(params struct {
 	req := &risk.SearchReq{}
 	req.PageSize = params.PageSize
 	req.PageNo = params.PageNo
-	req.UserName = "luobing"
+
+	req.UserName, err = this.UserName()
+	if err != nil {
+		this.ErrorPage(fmt.Errorf("获取用户信息失败：%v", err))
+		return
+	}
 
 	//待处理
 	req.ProcessState = 1
@@ -58,7 +64,7 @@ func (this *SystemRiskListAction) RunGet(params struct {
 	this.Data["ip"] = params.Ip
 	this.Data["macCode"] = params.MacCode
 	//os
-	os, err := server.Info(params.Ip)
+	os, err := server.Info(params.Ip, req.UserName)
 	if err != nil {
 		this.ErrorPage(err)
 	}

@@ -35,7 +35,6 @@ func (this *UpdateAction) RunGet(params struct {
 		this.NotFound("user", params.UserId)
 		return
 	}
-
 	this.Data["user"] = maps.Map{
 		"id":       user.Id,
 		"username": user.Username,

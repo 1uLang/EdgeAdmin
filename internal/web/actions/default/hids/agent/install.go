@@ -1,9 +1,11 @@
 package agent
 
 import (
+	"fmt"
 	agent_server "github.com/1uLang/zhiannet-api/hids/server/agent"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
+	"strings"
 )
 
 type InstallAction struct {
@@ -21,18 +23,28 @@ func (this *InstallAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-
-	linux, err := agent_server.Install("luobing", "Linux")
+	username, err := this.UserName()
+	if err != nil {
+		this.ErrorPage(fmt.Errorf("获取当前用户信息失败：%v", err))
+		return
+	}
+	linux, err := agent_server.Install(username, "Linux")
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
 
-	windows, err := agent_server.Install("luobing", "Windows")
+	windows, err := agent_server.Install(username, "Windows")
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
+	//172.18.200.29 替换
+	linux = strings.Replace(linux, "https://172.18.200.29", "https://user.cloudhids.net", 1)
+	linux = strings.ReplaceAll(linux, "172.18.200.29", "52.74.129.144")
+
+	windows = strings.Replace(windows, "172.18.200.29", "52.74.129.144", 1)
+
 	this.Data["linux"] = linux
 	this.Data["windows"] = windows
 	this.Show()

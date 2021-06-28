@@ -6,6 +6,7 @@ import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
 	"github.com/iwind/TeaGo/actions"
+	"strings"
 )
 
 type TemplateAction struct {
@@ -17,8 +18,8 @@ func (this *TemplateAction) Init() {
 }
 
 func (this *TemplateAction) RunGet(params struct {
-	//UserName string
 	MacCode string
+	Os      string
 	Must    *actions.Must
 	//CSRF *actionutils.CSRF
 }) {
@@ -30,7 +31,6 @@ func (this *TemplateAction) RunGet(params struct {
 		return
 	}
 	req := &baseline.TemplateSearchReq{}
-	//req.UserName = "luobing"
 	req.PageNo = 1
 	req.PageSize = 100
 
@@ -39,9 +39,22 @@ func (this *TemplateAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
+	ls := make([]map[string]interface{}, 0, len(list.List))
+	check := func(all, find string) bool {
+		if len(all) < len(find) {
+			all, find = find, all
+		}
+		return strings.Contains(strings.ToUpper(all), strings.ToUpper(find))
+	}
 	//todo:列出当前机器码对应主机系统的模板
-
-	this.Data["templates"] = list.List
+	for _, v := range list.List {
+		if v["type"].(float64) == 4 && check(params.Os, "win") {
+			ls = append(ls, v)
+		} else if v["type"].(float64) == 3 && !check(params.Os, "win") {
+			ls = append(ls, v)
+		}
+	}
+	this.Data["templates"] = ls
 
 	this.Data["macCode"] = params.MacCode
 	this.Show()
