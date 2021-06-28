@@ -132,19 +132,19 @@
     <!-- 左侧主菜单 -->
     <div class="main-menu" v-cloak="">
         <div class="ui labeled menu vertical blue inverted tiny borderless">
-<!-- 
+
             <div v-for="module in teaModules" style="margin-top: 10px;">
                 <div v-if="teaMenu == module.code" class="sub-items">
                     <a class="item" v-for="subItem in module.subItems" v-if="subItem.isOn !== false" :href="subItem.url"
                        :class="{active:subItem.code == teaSubMenu}">{{subItem.name}}</a>
                 </div>
-            </div> -->
+            </div>
 
             <!-- 新布局-->
-            <div v-if="letfMenuData" class="sub-items" style="margin-top: 10px;">
-                <a class="item" v-for="subItem in letfMenuData" :href="subItem.pagePath"
-                       :class="{active:selectLeftMenuId == subItem.id}" @click="onSelectLeftMenu(subItem.id)">{{subItem.leftName}}</a>
-            </div>
+<!--            <div v-if="letfMenuData" class="sub-items" style="margin-top: 10px;">-->
+<!--                <a class="item" v-for="subItem in letfMenuData" :href="subItem.pagePath"-->
+<!--                       :class="{active:selectLeftMenuId == subItem.id}" @click="onSelectLeftMenu(subItem.id)">{{subItem.leftName}}</a>-->
+<!--            </div>-->
         </div>
     </div>
 

@@ -365,7 +365,6 @@ func (this *userMustAuth) modules(adminId int64) ([]maps.Map, []maps.Map) {
 			},
 		},
 	}
-
 	leftResult := []maps.Map{}
 	for _, m := range leftMaps {
 		if m.GetString("code") == "finance" && !configloaders.ShowFinance() {
