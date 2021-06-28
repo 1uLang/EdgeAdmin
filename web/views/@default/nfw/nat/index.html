@@ -14,7 +14,7 @@
             </div>
         </div>
         <div align="right" style="display: inline-flex;">
-            <div style="line-height: 40px;text-align: center;">DDoS防火墙节点：</div>
+            <div style="line-height: 40px;text-align: center;">云防火墙节点：</div>
             <div class="ui field">
                 <div class="ui field">
                     <select class="ui dropdown auto-width" name="nodeId" v-model="selectNode"
@@ -111,7 +111,7 @@
                 <tr>
                     <td class="title">目标*</td>
                     <td>
-                        <nfw-target-selector :v-dst.sync="dst" :v-node-id="selectNode" :v-id="id" :v-dstmask.sync="dstmask"
+                        <nfw-target-selector :v-dst="dst" :v-node-id="selectNode" :v-id="id" :v-dstmask.sync="dstmask"
                                              :v-masks="masks" :v-dsts="dsts" :v-dstinput.sync="dstinput"></nfw-target-selector>
                     </td>
                 </tr>

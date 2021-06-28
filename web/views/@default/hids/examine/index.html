@@ -104,7 +104,7 @@
             </td>
             <td>
                 <div class="Bar">
-                    <div :class="[checkShowColor(item.serverExamineResultInfo.progress,100) ? 'progress-green-bg-style' : '','progress-blue-bg-style']"
+                    <div :class="[checkShowColor(item.serverExamineResultInfo.progress,100) ? 'progress-green-bg-style' : 'progress-blue-bg-style']"
                          :style="{width:getProgressPer(item.serverExamineResultInfo.progress,100)}">
                     </div>
                     <span>{{getProgressPer(item.serverExamineResultInfo.progress,100)}}</span>

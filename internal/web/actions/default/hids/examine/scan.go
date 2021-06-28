@@ -22,7 +22,7 @@ func (this *ScanAction) RunPost(params struct {
 	VirusPath    string
 	WebShellPath string
 	Must         *actions.Must
-	CSRF         *actionutils.CSRF
+	//CSRF         *actionutils.CSRF
 }) {
 
 	params.Must.
@@ -40,7 +40,6 @@ func (this *ScanAction) RunPost(params struct {
 		return
 	}
 	if params.Opt == "now" {
-
 		req := &examine.ScanReq{MacCode: params.MacCode}
 		//去掉 ','
 		params.ScanItems = strings.TrimPrefix(params.ScanItems, ",")
@@ -50,7 +49,6 @@ func (this *ScanAction) RunPost(params struct {
 		}
 		req.ScanConfig.VirusPath = params.VirusPath
 		req.ScanConfig.WebShellPath = params.WebShellPath
-
 		err = examine_server.ScanServerNow(req)
 	} else {
 		err = examine_server.ScanServerCancel(params.MacCode)

@@ -38,27 +38,18 @@ func (this *CreatePopupAction) RunPost(params struct {
 	Must *actions.Must
 	//CSRF *actionutils.CSRF
 }) {
-	this.Data["params"] = params
-	//this.Show()
-	this.Success()
-	return
-	params.Must.
-		Field("nodeId", params.NodeId).
-		Require("没有选择节点").
-		//Field("external", params.External).
-		//Require("请输入外部网络").
-		Field("src", params.Src).
-		Require("请输入源")
-
-	if params.Dst == "" { //目标
-		params.Dst = params.Dstinput
-	}
 	//this.Data["params"] = params
+	////this.Show()
 	//this.Success()
 	//return
 	params.Must.
-		Field("dsts", params.Dst).
-		Require("请选择或输入源")
+		Field("nodeId", params.NodeId).
+		Require("没有选择节点").
+		Field("src", params.Src).
+		Field("srcinput", params.Srcinput).
+		Require("请选择或输入源").
+		Field("dstinput", params.Dstinput).
+		Require("请选择或输入目标")
 
 	data := &acl.SaveAclReq{
 		NodeId:     params.NodeId,
@@ -67,16 +58,20 @@ func (this *CreatePopupAction) RunPost(params struct {
 		Direction:  params.Direction,
 		Ipprotocol: params.Ipprotocol,
 		Protocol:   params.Protocol,
-		Src:        params.Src,
+		Src:        params.Srcinput,
 		Srcmask:    params.Srcmask,
-		Dst:        params.Dst,
+		Dst:        params.Dstinput,
 		Dstmask:    params.Dstmask,
 		Descr:      params.Descr,
 		ID:         params.Id,
 	}
 	tips, err := acl.SaveAcl(data)
 	fmt.Println("err==", err, "tips==", tips)
-	if err != nil || len(tips) > 0 {
+	if err != nil {
+		this.ErrorPage(err)
+	}
+	if len(tips) > 0 {
+		err = fmt.Errorf(tips[0])
 		this.ErrorPage(err)
 	}
 	defer this.CreateLogInfo("编辑acl  %d", params.Id)

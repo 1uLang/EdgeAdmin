@@ -7,6 +7,15 @@ Vue.component("nfw-ipprotocol-selector", {
 		// 	.success(function (resp) {
 		// 		that.idcs = resp.data.idcs
 		// 	})
+	}, watch: {
+		ipprotocol(newVal, oldVale) {
+			// console.log("dstmask-new:", newVal);
+			// console.log("dstmask-old:", oldVale);
+			if (newVal !== oldVale) {
+				this.$emit("update:vIpprotocol", newVal)
+				console.log(1111);
+			}
+		},
 	},
 	props: ["v-ipprotocol","v-ipprotocols"],
 	data: function () {

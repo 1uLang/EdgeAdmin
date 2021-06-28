@@ -26,8 +26,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 	External  string
 	Src       string
 	Srcmask   string
-	Dsts      string
-	Dst       string
+	Dstinput  string
 	Dstmask   string
 	Descr     string
 	Id        string
@@ -35,10 +34,9 @@ func (this *CreatePopupAction) RunPost(params struct {
 	Must *actions.Must
 	//CSRF *actionutils.CSRF
 }) {
-	this.Data["params"] = params
-	//this.Show()
-	this.Success()
-	return
+	//this.Data["params"] = params
+	//this.Success()
+	//return
 	params.Must.
 		Field("nodeId", params.NodeId).
 		Require("没有选择节点").
@@ -46,15 +44,8 @@ func (this *CreatePopupAction) RunPost(params struct {
 		Require("请输入外部网络").
 		Field("src", params.Src).
 		Require("请输入源")
-
-	if params.Dsts == "" { //目标
-		params.Dsts = params.Dst
-	}
-	//this.Data["params"] = params
-	//this.Success()
-	//return
 	params.Must.
-		Field("dsts", params.Dsts).
+		Field("dsts", params.Dstinput).
 		Require("请选择或输入源")
 
 	data := &nat.SaveNat1To1Req{
@@ -64,16 +55,19 @@ func (this *CreatePopupAction) RunPost(params struct {
 		External:  params.External,
 		Src:       params.Src,
 		Srcmask:   params.Srcmask,
-		Dst:       params.Dsts,
+		Dst:       params.Dstinput,
 		Dstmask:   params.Dstmask,
 		Descr:     params.Descr,
 		ID:        params.Id,
 	}
 	tips, err := nat.SaveNat1To1(data)
 	fmt.Println("err==", err, "tips==", tips)
-	if err != nil || len(tips) > 0 {
+	if err != nil {
 		this.ErrorPage(err)
-		return
+	}
+	if len(tips) > 0 {
+		err = fmt.Errorf(tips[0])
+		this.ErrorPage(err)
 	}
 	defer this.CreateLogInfo("编辑nat 1：1  %d", params.Id)
 	//this.Data["tops"] = tops

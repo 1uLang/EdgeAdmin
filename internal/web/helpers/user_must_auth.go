@@ -98,7 +98,364 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 	if !action.Data.Has("teaMenu") {
 		action.Data["teaMenu"] = ""
 	}
+
 	action.Data["teaModules"] = this.modules(adminId)
+	action.Data["mainMenuData"] = []maps.Map{
+		{
+			"id":       1,
+			"menuName": "首页",
+			"pagePath": "/dashboard",
+			"leftMenu": []maps.Map{
+				{
+					"id":       1101,
+					"leftName": "全局状态",
+					"icon":     "",
+					"pagePath": "/dashboard",
+				},
+			},
+		},
+		{
+			"id":       2,
+			"menuName": "节点管理",
+			"pagePath": "/assembly",
+			"leftMenu": []maps.Map{
+				{
+					"id":       2101,
+					"leftName": "节点管理",
+					"icon":     "",
+					"pagePath": "/assembly",
+				},
+			},
+		},
+		{
+			"id":       3,
+			"menuName": "安全服务",
+			"dropItem": []maps.Map{
+				{
+					"id":       31,
+					"dropName": "DDoS防火墙",
+					"pagePath": "/ddos",
+					"leftMenu": []maps.Map{
+						{
+							"id":       3101,
+							"leftName": "全局状态",
+							"icon":     "",
+							"pagePath": "/ddos",
+						},
+						{
+							"id":       3102,
+							"leftName": "主机状态",
+							"icon":     "",
+							"pagePath": "/ddos/host",
+						},
+						{
+							"id":       3103,
+							"leftName": "黑白名单",
+							"icon":     "",
+							"pagePath": "/ddos/whiteblacklist",
+						},
+						{
+							"id":       3104,
+							"leftName": "统计日志",
+							"icon":     "",
+							"pagePath": "/ddos/logs",
+						},
+					},
+				},
+				{
+					"id":       32,
+					"dropName": "云防火墙",
+					"pagePath": "/nfw",
+					"leftMenu": []maps.Map{
+						{
+							"id":       3201,
+							"leftName": "全局状态",
+							"icon":     "",
+							"pagePath": "/nfw",
+						},
+						{
+							"id":       3202,
+							"leftName": "NAT规则",
+							"icon":     "",
+							"pagePath": "/nfw/nat",
+						},
+						{
+							"id":       3203,
+							"leftName": "ACL规则",
+							"icon":     "",
+							"pagePath": "/nfw/acl",
+						},
+						{
+							"id":       3204,
+							"leftName": "IPS规则",
+							"icon":     "",
+							"pagePath": "/nfw/ips",
+						},
+						{
+							"id":       3205,
+							"leftName": "统计日志",
+							"icon":     "",
+							"pagePath": "/nfw/logs",
+						},
+					},
+				},
+				{
+					"id":       33,
+					"dropName": "WEB防火墙",
+					"pagePath": "/dashboard",
+					"leftMenu": []maps.Map{
+						{
+							"id":       3301,
+							"leftName": "全局状态",
+							"icon":     "",
+							"pagePath": "/dashboard",
+						},
+						{
+							"id":       3302,
+							"leftName": "网站服务",
+							"icon":     "",
+							"pagePath": "/servers",
+						},
+						{
+							"id":       3303,
+							"leftName": "通用设置",
+							"icon":     "",
+							"pagePath": "/servers/components",
+						},
+						{
+							"id":       3304,
+							"leftName": "服务分组",
+							"icon":     "",
+							"pagePath": "/servers/components/groups",
+						},
+						{
+							"id":       3305,
+							"leftName": "缓存策略",
+							"icon":     "",
+							"pagePath": "/servers/components/cache",
+						},
+						{
+							"id":       3306,
+							"leftName": "WAF策略",
+							"icon":     "",
+							"pagePath": "/servers/components/waf",
+						},
+						{
+							"id":       3307,
+							"leftName": "证书管理",
+							"icon":     "",
+							"pagePath": "/servers/certs",
+						},
+						{
+							"id":       3308,
+							"leftName": "边缘节点",
+							"icon":     "",
+							"pagePath": "/clusters",
+						},
+						{
+							"id":       3309,
+							"leftName": "节点日志",
+							"icon":     "",
+							"pagePath": "/clusters/logs",
+						},
+						{
+							"id":       3310,
+							"leftName": "SSH认证",
+							"icon":     "",
+							"pagePath": "/clusters/grants",
+						},
+						{
+							"id":       3311,
+							"leftName": "区域设置",
+							"icon":     "",
+							"pagePath": "/clusters/regions",
+						},
+						{
+							"id":       3312,
+							"leftName": "域名解析",
+							"icon":     "",
+							"pagePath": "/dns",
+						},
+						{
+							"id":       3313,
+							"leftName": "问题修复",
+							"icon":     "",
+							"pagePath": "/dns/issues",
+						},
+						{
+							"id":       3314,
+							"leftName": "DNS服务",
+							"icon":     "",
+							"pagePath": "/clusters/providers",
+						},
+					},
+				},
+				{
+					"id":       34,
+					"dropName": "WEB漏洞扫描",
+					"pagePath": "/webscan",
+					"leftMenu": []maps.Map{
+						{
+							"id":       3401,
+							"leftName": "全局状态",
+							"icon":     "",
+							"pagePath": "/webscan",
+						},
+						{
+							"id":       3402,
+							"leftName": "扫描目标",
+							"icon":     "",
+							"pagePath": "/webscan/targets",
+						},
+						{
+							"id":       3403,
+							"leftName": "漏洞详情",
+							"icon":     "",
+							"pagePath": "/webscan/vulnerabilities",
+						},
+						{
+							"id":       3404,
+							"leftName": "扫描任务",
+							"icon":     "",
+							"pagePath": "/webscan/scans",
+						},
+						{
+							"id":       3405,
+							"leftName": "扫描报告",
+							"icon":     "",
+							"pagePath": "/webscan/reports",
+						},
+					},
+				},
+				{
+					"id":       35,
+					"dropName": "主机防护",
+					"pagePath": "/hids",
+					"leftMenu": []maps.Map{
+						{
+							"id":       3501,
+							"leftName": "全局状态",
+							"icon":     "",
+							"pagePath": "/hids",
+						},
+						{
+							"id":       3502,
+							"leftName": "主机体现",
+							"icon":     "",
+							"pagePath": "/hids/examine",
+						},
+						{
+							"id":       3503,
+							"leftName": "漏洞风险",
+							"icon":     "",
+							"pagePath": "/hids/risk",
+						},
+						{
+							"id":       3504,
+							"leftName": "入侵威胁",
+							"icon":     "",
+							"pagePath": "/hids/invade",
+						},
+						{
+							"id":       3505,
+							"leftName": "合规基线",
+							"icon":     "",
+							"pagePath": "/hids/baseline",
+						},
+						{
+							"id":       3506,
+							"leftName": "Agent管理",
+							"icon":     "",
+							"pagePath": "/hids/agent",
+						},
+					},
+				},
+			},
+		},
+		{
+			"id":       4,
+			"menuName": "监控告警",
+			"pagePath": "/monitor",
+			"leftMenu": []maps.Map{
+				{
+					"id":       4101,
+					"leftName": "监控任务",
+					"icon":     "",
+					"pagePath": "/monitor",
+				},
+				{
+					"id":       4102,
+					"leftName": "告警通知",
+					"icon":     "",
+					"pagePath": "/monitor/notice",
+				},
+				//{
+				//	"id":       2101,
+				//	"leftName": "告警设置",
+				//	"icon":     "",
+				//	"pagePath": "/assembly",
+				//},
+			},
+		},
+		{
+			"id":       5,
+			"menuName": "平台用户",
+			"pagePath": "/users",
+			"leftMenu": []maps.Map{
+				{
+					"id":       2101,
+					"leftName": "平台用户",
+					"icon":     "",
+					"pagePath": "/users",
+				},
+			},
+		},
+		{
+			"id":       6,
+			"menuName": "系统用户",
+			"pagePath": "/admins",
+			"leftMenu": []maps.Map{
+				{
+					"id":       6101,
+					"leftName": "系统用户",
+					"icon":     "",
+					"pagePath": "/admins",
+				},
+			},
+		},
+		{
+			"id":       7,
+			"menuName": "操作日志",
+			"pagePath": "/log",
+			"leftMenu": []maps.Map{
+				{
+					"id":       7101,
+					"leftName": "操作日志",
+					"icon":     "",
+					"pagePath": "/log",
+				},
+			},
+		},
+		{
+			"id":       8,
+			"menuName": "系统设置",
+			"pagePath": "/settings/server",
+			"leftMenu": []maps.Map{
+				{
+					"id":       8101,
+					"leftName": "基本设置",
+					"icon":     "",
+					"pagePath": "/settings/server",
+				},
+				{
+					"id":       8102,
+					"leftName": "高级设置",
+					"icon":     "",
+					"pagePath": "/settings/database",
+				},
+			},
+		},
+	}
 	action.Data["teaSubMenus"] = []map[string]interface{}{}
 	action.Data["teaTabbar"] = []map[string]interface{}{}
 	if len(config.Version) == 0 {
@@ -136,130 +493,17 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 func (this *userMustAuth) modules(adminId int64) []maps.Map {
 	allMaps := []maps.Map{
 		{
-			"code":   "dashboard",
-			"module": configloaders.AdminModuleCodeDashboard,
-			"name":   "数据看板",
-			"icon":   "dashboard",
-		},
-		{
-			"code":     "servers",
-			"module":   configloaders.AdminModuleCodeServer,
-			"name":     "网站服务",
-			"subtitle": "服务列表",
-			"icon":     "clone outsize",
-			"subItems": []maps.Map{
-				{
-					"name": "通用设置",
-					"url":  "/servers/components",
-					"code": "global",
-				},
-				{
-					"name": "服务分组",
-					"url":  "/servers/components/groups",
-					"code": "group",
-				},
-				{
-					"name": "缓存策略",
-					"url":  "/servers/components/cache",
-					"code": "cache",
-				},
-				{
-					"name": "WAF策略",
-					"url":  "/servers/components/waf",
-					"code": "waf",
-				},
-				{
-					"name": "证书管理",
-					"url":  "/servers/certs",
-					"code": "cert",
-				},
-			},
-		},
-		{
-			"code":     "clusters",
-			"module":   configloaders.AdminModuleCodeNode,
-			"name":     "边缘节点",
-			"subtitle": "集群列表",
-			"icon":     "cloud",
-			"subItems": []maps.Map{
-				{
-					"name": "运行日志",
-					"url":  "/clusters/logs",
-					"code": "log",
-				},
-				{
-					"name": "SSH认证",
-					"url":  "/clusters/grants",
-					"code": "grant",
-				},
-				{
-					"name": "区域设置",
-					"url":  "/clusters/regions",
-					"code": "region",
-				},
-			},
-		},
-		{
-			"code":     "dns",
-			"module":   configloaders.AdminModuleCodeDNS,
-			"name":     "域名解析",
-			"subtitle": "集群列表",
-			"icon":     "globe",
-			"subItems": []maps.Map{
-				{
-					"name": "问题修复",
-					"url":  "/dns/issues",
-					"code": "issue",
-				},
-				{
-					"name": "DNS服务商",
-					"url":  "/dns/providers",
-					"code": "provider",
-				},
-			},
-		},
-		{
-			"code":     "ns",
-			"module":   configloaders.AdminModuleCodeNS,
-			"name":     "域名服务",
-			"subtitle": "域名列表",
-			"icon":     "cubes",
-			"isOn":     teaconst.IsPlus,
-			"subItems": []maps.Map{
-				{
-					"name": "集群管理",
-					"url":  "/ns/clusters",
-					"code": "cluster",
-				},
-				{
-					"name": "线路管理",
-					"url":  "/ns/routes",
-					"code": "route",
-				},
-				{
-					"name": "访问日志",
-					"url":  "/ns/clusters/accessLogs",
-					"code": "accessLog",
-				},
-				{
-					"name": "运行日志",
-					"url":  "/ns/clusters/logs",
-					"code": "log",
-				},
-			},
-		},
-		{
 			"code":   "users",
 			"module": configloaders.AdminModuleCodeUser,
 			"name":   "平台用户",
 			"icon":   "users",
-		},
-		{
-			"code":   "finance",
-			"module": configloaders.AdminModuleCodeFinance,
-			"name":   "财务管理",
-			"icon":   "yen sign",
-			"isOn":   teaconst.IsPlus,
+			"subItems": []maps.Map{
+				{
+					"name": "平台用户",
+					"url":  "/users",
+					"code": "users",
+				},
+			},
 		},
 		{
 			"code":     "admins",
@@ -268,6 +512,11 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"subtitle": "用户列表",
 			"icon":     "user secret",
 			"subItems": []maps.Map{
+				{
+					"name": "系统用户",
+					"url":  "/admins",
+					"code": "admins",
+				},
 				{
 					"name": "通知媒介",
 					"url":  "/admins/recipients",
@@ -279,22 +528,40 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 		{
 			"code":   "log",
 			"module": configloaders.AdminModuleCodeLog,
-			"name":   "日志审计",
+			"name":   "操作日志",
 			"icon":   "history",
+			"subItems": []maps.Map{
+				{
+					"name": "操作日志",
+					"url":  "/log",
+					"code": "log",
+				},
+			},
 		},
 		{
 			"code":   "assembly",
 			"module": configloaders.AdminModuleCodeAssembly,
-			"name":   "组件管理",
+			"name":   "节点管理",
 			"icon":   "history",
+			"subItems": []maps.Map{
+				{
+					"name": "节点管理",
+					"url":  "/assembly",
+					"code": "assembly",
+				},
+			},
 		},
 		{
-			"code":     "settings",
-			"module":   configloaders.AdminModuleCodeSetting,
-			"name":     "系统设置",
-			"subtitle": "基本设置",
-			"icon":     "setting",
+			"code":   "settings",
+			"module": configloaders.AdminModuleCodeSetting,
+			"name":   "系统设置",
+			"icon":   "setting",
 			"subItems": []maps.Map{
+				{
+					"name": "基本设置",
+					"url":  "/settings/server",
+					"code": "advanced",
+				},
 				{
 					"name": "高级设置",
 					"url":  "/settings/advanced",
@@ -453,7 +720,6 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			},
 		},
 	}
-
 	result := []maps.Map{}
 	for _, m := range allMaps {
 		if m.GetString("code") == "finance" && !configloaders.ShowFinance() {
