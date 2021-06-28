@@ -17,9 +17,9 @@ func (this *TemplateAction) Init() {
 }
 
 func (this *TemplateAction) RunGet(params struct {
-	UserName string
-	MacCode  string
-	Must     *actions.Must
+	//UserName string
+	MacCode string
+	Must    *actions.Must
 	//CSRF *actionutils.CSRF
 }) {
 	params.Must.Field("macCode", params.MacCode).Require("请输入机器码")
@@ -30,7 +30,7 @@ func (this *TemplateAction) RunGet(params struct {
 		return
 	}
 	req := &baseline.TemplateSearchReq{}
-	req.UserName = "luobing"
+	//req.UserName = "luobing"
 	req.PageNo = 1
 	req.PageSize = 100
 
@@ -42,6 +42,7 @@ func (this *TemplateAction) RunGet(params struct {
 	//todo:列出当前机器码对应主机系统的模板
 
 	this.Data["templates"] = list.List
+
 	this.Data["macCode"] = params.MacCode
 	this.Show()
 }

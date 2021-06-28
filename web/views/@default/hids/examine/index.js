@@ -7,9 +7,9 @@ Tea.context(function () {
     this.pCheckDetailData = null
     this.sSelectCheckValue = []
 
-    this.webSearchKey = "%web%"  //网页后门
-    this.searchPath = "%all%"    //病毒木马
-
+    this.webSearchKey = ""  //网页后门
+    this.searchPath = ""    //病毒木马
+    this.MacCode = ""
     this.bTimeOutTip = false
     this.bShowScanPath = false
 
@@ -159,6 +159,7 @@ Tea.context(function () {
     }
 
     this.onOpenCheck = function (item) {
+        this.MacCode = item.macCode
         this.sSelectCheckValue = []
         // .success(
         this.pCheckDetailData = [
@@ -222,14 +223,18 @@ Tea.context(function () {
         this.bShowCheckDetail = false
     }
 
-    this.onStartCheck = function (id) {
+    this.onStartCheck = function (item) {
+        if(this.sSelectCheckValue.length == 0){
+            teaweb.warn("请选择体检项目")
+            return
+        }
         teaweb.confirm("确定立即体检吗？", function () {
-            this.$post(".check").params({
+            this.$post(".scans").params({
                 Opt:'now',
                 VirusPath:this.searchPath,
                 WebShellPath:this.webSearchKey,
-                MacCode: [this.macCode],
-                templateId: this.sSelectCheckValue.join(","),
+                MacCode: [this.MacCode],
+                ScanItems: this.sSelectCheckValue.join(","),
 
             }).refresh()
         })
@@ -238,12 +243,11 @@ Tea.context(function () {
 
         //
     }
-    this.onStopCheck = function (id) {
+    this.onStopCheck = function (item) {
         teaweb.confirm("确定取消体检吗？", function () {
-            this.$post(".check").params({
+            this.$post(".scans").params({
                 Opt:'cancel',
-                MacCode: [this.macCode],
-                templateId: this.sSelectValue,
+                MacCode: [item.macCode],
             }).refresh()
         })
     }
@@ -293,7 +297,6 @@ Tea.context(function () {
     this.onCreateTimeOut = function (timeId) {
         this.onReleaseTimeOut(timeId)
         this[timeId] = createTimer(function () {
-            console.log(timeId + "onStartCheck timer custom alarm");
         }, {timeout: 1000});
         this[timeId].start();
     }
