@@ -47,10 +47,9 @@ func (this *TemplateAction) RunGet(params struct {
 		return strings.Contains(strings.ToUpper(all), strings.ToUpper(find))
 	}
 	//todo:列出当前机器码对应主机系统的模板
+	win := check(params.Os, "win")
 	for _, v := range list.List {
-		if v["type"].(float64) == 4 && check(params.Os, "win") {
-			ls = append(ls, v)
-		} else if v["type"].(float64) == 3 && !check(params.Os, "win") {
+		if win && v["type"].(float64) == 3 || !win && v["type"].(float64) == 4 {
 			ls = append(ls, v)
 		}
 	}

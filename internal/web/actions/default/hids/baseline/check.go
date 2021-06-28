@@ -14,7 +14,7 @@ type CheckAction struct {
 }
 
 func (this *CheckAction) RunPost(params struct {
-	MacCodes   []string `json:"macCodes"`
+	MacCode    []string `json:"macCodes"`
 	TemplateId int      `json:"templateId"`
 
 	Must *actions.Must
@@ -25,7 +25,7 @@ func (this *CheckAction) RunPost(params struct {
 		Field("templateId", params.TemplateId).
 		Require("请输入合规基线模板")
 
-	if len(params.MacCodes) == 0 {
+	if len(params.MacCode) == 0 {
 		this.ErrorPage(fmt.Errorf("请选择机器码"))
 		return
 	}
@@ -35,7 +35,7 @@ func (this *CheckAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	req := &baseline.CheckReq{MacCodes: params.MacCodes, TemplateId: params.TemplateId}
+	req := &baseline.CheckReq{MacCodes: params.MacCode, TemplateId: params.TemplateId}
 	err = baseline_server.Check(req)
 
 	if err != nil {
