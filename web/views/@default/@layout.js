@@ -12,6 +12,8 @@ Tea.context(function () {
             this.$refs.focus.focus()
         }
 
+        this.onSelectTopMenu(getSelectTopMenu(),getSelectTopDropId())
+
         // 检查消息
         this.checkMessages()
 
@@ -20,6 +22,8 @@ Tea.context(function () {
 
         // 检查DNS同步
         this.loadDNSTasks()
+
+
     })
 
     /**
@@ -189,20 +193,29 @@ Tea.context(function () {
     }
 
     this.onSelectTopMenu=function (menuId,dropId) {
+        console.log(menuId)
         if(this.selectTopMenuId !=menuId){
             this.selectTopMenuId = menuId
         }
-        if(dropId){
+        if(dropId && dropId>0){
             this.letfMenuData = this.getDropLeftData(menuId,dropId)
             
         }else{
             this.letfMenuData = this.getLeftData(menuId)
         }
+        onSetTopMenuId(this.selectLeftMenuId)
+        onSetSelectTopDropId(dropId)
         if(this.letfMenuData){
-            this.selectLeftMenuId = this.letfMenuData[0].id
+            this.onSelectLeftMenu(this.letfMenuData[0].id)
         }
         
     }
+    this.onSelectLeftMenu=function (leftMenuId) { 
+        if(this.selectLeftMenuId !=leftMenuId){
+            this.selectLeftMenuId = leftMenuId
+        }
+        onSetLeftMenuId(this.selectLeftMenuId)
+     }
 
     this.mainMenuData=[
         {

@@ -20,6 +20,7 @@
     <script type="text/javascript" src="/js/utils.js"></script>
     <script type="text/javascript" src="/js/sweetalert2/dist/sweetalert2.all.min.js"></script>
     <script type="text/javascript" src="/js/date.tea.js"></script>
+    
     <style>
         .menu1 {
             position: fixed;
@@ -131,19 +132,19 @@
     <!-- 左侧主菜单 -->
     <div class="main-menu" v-cloak="">
         <div class="ui labeled menu vertical blue inverted tiny borderless">
-
+<!-- 
             <div v-for="module in teaModules" style="margin-top: 10px;">
                 <div v-if="teaMenu == module.code" class="sub-items">
                     <a class="item" v-for="subItem in module.subItems" v-if="subItem.isOn !== false" :href="subItem.url"
                        :class="{active:subItem.code == teaSubMenu}">{{subItem.name}}</a>
                 </div>
-            </div>
+            </div> -->
 
             <!-- 新布局-->
-            <!-- <div v-if="letfMenuData" class="sub-items" style="margin-top: 10px;">
+            <div v-if="letfMenuData" class="sub-items" style="margin-top: 10px;">
                 <a class="item" v-for="subItem in letfMenuData" :href="subItem.pagePath"
-                       :class="{active:selectLeftMenuId == subItem.id}" >{{subItem.leftName}}</a>
-            </div> -->
+                       :class="{active:selectLeftMenuId == subItem.id}" @click="onSelectLeftMenu(subItem.id)">{{subItem.leftName}}</a>
+            </div>
         </div>
     </div>
 
@@ -176,6 +177,7 @@
     <!--		<a class="item right" href="http://teaos.cn/doc/donate/Index.md" target="_blank">捐赠作者</a>-->
     <!--	</div>-->
 </div>
+<script src="/js/homeMenuSelect.js"></script>
 <script type="text/javascript">
     function showMenu(index) {
         document.getElementsByClassName('navMain' + index)[0].style.display = 'block'
