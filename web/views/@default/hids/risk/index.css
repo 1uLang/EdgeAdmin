@@ -4,7 +4,7 @@
     border-radius: 10px;
     background-color: #fff;
     border: 1px #f0f0f0 solid;
-    box-shadow: 5px 5px 5px #8c939d;
+    /* box-shadow: 5px 5px 5px #8c939d; */
     padding: 20px 10px;
     display: flex;
     flex-direction: column;
