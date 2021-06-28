@@ -133,7 +133,7 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 			"dropItem": []maps.Map{
 				{
 					"id":       31,
-					"dropName": "节点管理",
+					"dropName": "DDoS防火墙",
 					"pagePath": "/ddos",
 					"leftMenu": []maps.Map{
 						{
