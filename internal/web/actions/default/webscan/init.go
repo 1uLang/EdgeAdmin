@@ -1,6 +1,7 @@
 package webscan
 
 import (
+	"fmt"
 	"github.com/1uLang/zhiannet-api/awvs/request"
 	"github.com/1uLang/zhiannet-api/awvs/server"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
@@ -18,12 +19,6 @@ func init() {
 			Get("", new(IndexAction)).
 			EndAll()
 	})
-	info, err := server.GetWebScan()
-	if err != nil {
-		panic("漏扫节点获取失败")
-	}
-	Key = info.Key
-	ServerUrl = info.Addr
 }
 
 var ServerUrl = "" //"https://scan-web.zhiannet.com"
@@ -31,7 +26,14 @@ var Key = ""
 
 func InitAPIServer() error {
 
-	err := server.SetUrl(ServerUrl)
+	info, err := server.GetWebScan()
+	if err != nil {
+		return fmt.Errorf("漏扫节点获取失败:%v", err)
+	}
+	Key = info.Key
+	ServerUrl = info.Addr
+
+	err = server.SetUrl(ServerUrl)
 	if err != nil {
 		return err
 	}

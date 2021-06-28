@@ -5,8 +5,8 @@ import (
 	targets_server "github.com/1uLang/zhiannet-api/awvs/server/targets"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/webscan"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
-	"github.com/iwind/TeaGo/logs"
 )
 
 //任务目标
@@ -32,15 +32,31 @@ func (this *CreateAction) RunPost(params struct {
 	err := webscan.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
+		return
 	}
 	req := &targets.AddReq{Address: params.Address, AdminUserId: uint64(this.AdminId())}
 	req.Description = params.Desc
 	//req.AdminUserId = uint64(this.AdminId())
 
-	targetId, err := targets_server.Add(req)
+	_, err = targets_server.Add(req)
 	if err != nil {
 		this.ErrorPage(err)
+		return
 	}
-	logs.Infof("新建目标成功 ：%v", targetId)
+
+	userResp, err := this.RPC().UserRPC().FindEnabledUser(this.AdminContext(), &pb.FindEnabledUserRequest{UserId: this.AdminId()})
+
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	user := userResp.User
+	if user == nil {
+		this.NotFound("user", this.AdminId())
+		return
+	}
+
+	// 日志
+	this.CreateLogInfo("WEB漏洞扫描 - 创建任务目标:[%v]成功,用户名：%s", params.Address, userResp.User.Username)
 	this.Success()
 }

@@ -19,9 +19,7 @@ func (this *IndexAction) RunGet(params struct {
 
 	req := &risk.SearchReq{}
 	req.UserName = "luobing"
-	{
 
-	}
 	//系统漏洞数汇总
 	risk, err := risk_server.SystemDistributed(req)
 	if err != nil {

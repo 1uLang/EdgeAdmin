@@ -99,363 +99,8 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 		action.Data["teaMenu"] = ""
 	}
 
-	action.Data["teaModules"] = this.modules(adminId)
-	action.Data["mainMenuData"] = []maps.Map{
-		{
-			"id":       1,
-			"menuName": "首页",
-			"pagePath": "/dashboard",
-			"leftMenu": []maps.Map{
-				{
-					"id":       1101,
-					"leftName": "全局状态",
-					"icon":     "",
-					"pagePath": "/dashboard",
-				},
-			},
-		},
-		{
-			"id":       2,
-			"menuName": "节点管理",
-			"pagePath": "/assembly",
-			"leftMenu": []maps.Map{
-				{
-					"id":       2101,
-					"leftName": "节点管理",
-					"icon":     "",
-					"pagePath": "/assembly",
-				},
-			},
-		},
-		{
-			"id":       3,
-			"menuName": "安全服务",
-			"dropItem": []maps.Map{
-				{
-					"id":       31,
-					"dropName": "DDoS防火墙",
-					"pagePath": "/ddos",
-					"leftMenu": []maps.Map{
-						{
-							"id":       3101,
-							"leftName": "全局状态",
-							"icon":     "",
-							"pagePath": "/ddos",
-						},
-						{
-							"id":       3102,
-							"leftName": "主机状态",
-							"icon":     "",
-							"pagePath": "/ddos/host",
-						},
-						{
-							"id":       3103,
-							"leftName": "黑白名单",
-							"icon":     "",
-							"pagePath": "/ddos/whiteblacklist",
-						},
-						{
-							"id":       3104,
-							"leftName": "统计日志",
-							"icon":     "",
-							"pagePath": "/ddos/logs",
-						},
-					},
-				},
-				{
-					"id":       32,
-					"dropName": "云防火墙",
-					"pagePath": "/nfw",
-					"leftMenu": []maps.Map{
-						{
-							"id":       3201,
-							"leftName": "全局状态",
-							"icon":     "",
-							"pagePath": "/nfw",
-						},
-						{
-							"id":       3202,
-							"leftName": "NAT规则",
-							"icon":     "",
-							"pagePath": "/nfw/nat",
-						},
-						{
-							"id":       3203,
-							"leftName": "ACL规则",
-							"icon":     "",
-							"pagePath": "/nfw/acl",
-						},
-						{
-							"id":       3204,
-							"leftName": "IPS规则",
-							"icon":     "",
-							"pagePath": "/nfw/ips",
-						},
-						{
-							"id":       3205,
-							"leftName": "统计日志",
-							"icon":     "",
-							"pagePath": "/nfw/logs",
-						},
-					},
-				},
-				{
-					"id":       33,
-					"dropName": "WEB防火墙",
-					"pagePath": "/dashboard",
-					"leftMenu": []maps.Map{
-						{
-							"id":       3301,
-							"leftName": "全局状态",
-							"icon":     "",
-							"pagePath": "/dashboard",
-						},
-						{
-							"id":       3302,
-							"leftName": "网站服务",
-							"icon":     "",
-							"pagePath": "/servers",
-						},
-						{
-							"id":       3303,
-							"leftName": "通用设置",
-							"icon":     "",
-							"pagePath": "/servers/components",
-						},
-						{
-							"id":       3304,
-							"leftName": "服务分组",
-							"icon":     "",
-							"pagePath": "/servers/components/groups",
-						},
-						{
-							"id":       3305,
-							"leftName": "缓存策略",
-							"icon":     "",
-							"pagePath": "/servers/components/cache",
-						},
-						{
-							"id":       3306,
-							"leftName": "WAF策略",
-							"icon":     "",
-							"pagePath": "/servers/components/waf",
-						},
-						{
-							"id":       3307,
-							"leftName": "证书管理",
-							"icon":     "",
-							"pagePath": "/servers/certs",
-						},
-						{
-							"id":       3308,
-							"leftName": "边缘节点",
-							"icon":     "",
-							"pagePath": "/clusters",
-						},
-						{
-							"id":       3309,
-							"leftName": "节点日志",
-							"icon":     "",
-							"pagePath": "/clusters/logs",
-						},
-						{
-							"id":       3310,
-							"leftName": "SSH认证",
-							"icon":     "",
-							"pagePath": "/clusters/grants",
-						},
-						{
-							"id":       3311,
-							"leftName": "区域设置",
-							"icon":     "",
-							"pagePath": "/clusters/regions",
-						},
-						{
-							"id":       3312,
-							"leftName": "域名解析",
-							"icon":     "",
-							"pagePath": "/dns",
-						},
-						{
-							"id":       3313,
-							"leftName": "问题修复",
-							"icon":     "",
-							"pagePath": "/dns/issues",
-						},
-						{
-							"id":       3314,
-							"leftName": "DNS服务",
-							"icon":     "",
-							"pagePath": "/clusters/providers",
-						},
-					},
-				},
-				{
-					"id":       34,
-					"dropName": "WEB漏洞扫描",
-					"pagePath": "/webscan",
-					"leftMenu": []maps.Map{
-						{
-							"id":       3401,
-							"leftName": "全局状态",
-							"icon":     "",
-							"pagePath": "/webscan",
-						},
-						{
-							"id":       3402,
-							"leftName": "扫描目标",
-							"icon":     "",
-							"pagePath": "/webscan/targets",
-						},
-						{
-							"id":       3403,
-							"leftName": "漏洞详情",
-							"icon":     "",
-							"pagePath": "/webscan/vulnerabilities",
-						},
-						{
-							"id":       3404,
-							"leftName": "扫描任务",
-							"icon":     "",
-							"pagePath": "/webscan/scans",
-						},
-						{
-							"id":       3405,
-							"leftName": "扫描报告",
-							"icon":     "",
-							"pagePath": "/webscan/reports",
-						},
-					},
-				},
-				{
-					"id":       35,
-					"dropName": "主机防护",
-					"pagePath": "/hids",
-					"leftMenu": []maps.Map{
-						{
-							"id":       3501,
-							"leftName": "全局状态",
-							"icon":     "",
-							"pagePath": "/hids",
-						},
-						{
-							"id":       3502,
-							"leftName": "主机体现",
-							"icon":     "",
-							"pagePath": "/hids/examine",
-						},
-						{
-							"id":       3503,
-							"leftName": "漏洞风险",
-							"icon":     "",
-							"pagePath": "/hids/risk",
-						},
-						{
-							"id":       3504,
-							"leftName": "入侵威胁",
-							"icon":     "",
-							"pagePath": "/hids/invade",
-						},
-						{
-							"id":       3505,
-							"leftName": "合规基线",
-							"icon":     "",
-							"pagePath": "/hids/baseline",
-						},
-						{
-							"id":       3506,
-							"leftName": "Agent管理",
-							"icon":     "",
-							"pagePath": "/hids/agent",
-						},
-					},
-				},
-			},
-		},
-		{
-			"id":       4,
-			"menuName": "监控告警",
-			"pagePath": "/monitor",
-			"leftMenu": []maps.Map{
-				{
-					"id":       4101,
-					"leftName": "监控任务",
-					"icon":     "",
-					"pagePath": "/monitor",
-				},
-				{
-					"id":       4102,
-					"leftName": "告警通知",
-					"icon":     "",
-					"pagePath": "/monitor/notice",
-				},
-				//{
-				//	"id":       2101,
-				//	"leftName": "告警设置",
-				//	"icon":     "",
-				//	"pagePath": "/assembly",
-				//},
-			},
-		},
-		{
-			"id":       5,
-			"menuName": "平台用户",
-			"pagePath": "/users",
-			"leftMenu": []maps.Map{
-				{
-					"id":       2101,
-					"leftName": "平台用户",
-					"icon":     "",
-					"pagePath": "/users",
-				},
-			},
-		},
-		{
-			"id":       6,
-			"menuName": "系统用户",
-			"pagePath": "/admins",
-			"leftMenu": []maps.Map{
-				{
-					"id":       6101,
-					"leftName": "系统用户",
-					"icon":     "",
-					"pagePath": "/admins",
-				},
-			},
-		},
-		{
-			"id":       7,
-			"menuName": "操作日志",
-			"pagePath": "/log",
-			"leftMenu": []maps.Map{
-				{
-					"id":       7101,
-					"leftName": "操作日志",
-					"icon":     "",
-					"pagePath": "/log",
-				},
-			},
-		},
-		{
-			"id":       8,
-			"menuName": "系统设置",
-			"pagePath": "/settings/server",
-			"leftMenu": []maps.Map{
-				{
-					"id":       8101,
-					"leftName": "基本设置",
-					"icon":     "",
-					"pagePath": "/settings/server",
-				},
-				{
-					"id":       8102,
-					"leftName": "高级设置",
-					"icon":     "",
-					"pagePath": "/settings/database",
-				},
-			},
-		},
-	}
+	action.Data["teaModules"], action.Data["mainMenuData"] = this.modules(adminId)
+
 	action.Data["teaSubMenus"] = []map[string]interface{}{}
 	action.Data["teaTabbar"] = []map[string]interface{}{}
 	if len(config.Version) == 0 {
@@ -490,8 +135,8 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 }
 
 // 菜单配置
-func (this *userMustAuth) modules(adminId int64) []maps.Map {
-	allMaps := []maps.Map{
+func (this *userMustAuth) modules(adminId int64) ([]maps.Map, []maps.Map) {
+	leftMaps := []maps.Map{
 		{
 			"code":   "users",
 			"module": configloaders.AdminModuleCodeUser,
@@ -720,6 +365,388 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			},
 		},
 	}
+
+	leftResult := []maps.Map{}
+	for _, m := range leftMaps {
+		if m.GetString("code") == "finance" && !configloaders.ShowFinance() {
+			continue
+		}
+
+		module := m.GetString("module")
+		if configloaders.AllowModule(adminId, module) {
+			leftResult = append(leftResult, m)
+		}
+	}
+
+	allMaps := []maps.Map{
+		{
+			"id":       1,
+			"menuName": "首页",
+			"pagePath": "/dashboard",
+			"module":   configloaders.AdminModuleCodeDashboard,
+			"leftMenu": []maps.Map{
+				{
+					"id":       1101,
+					"leftName": "全局状态",
+					"icon":     "",
+					"pagePath": "/dashboard",
+				},
+			},
+		},
+		{
+			"id":       2,
+			"menuName": "节点管理",
+			"pagePath": "/assembly",
+			"module":   configloaders.AdminModuleCodeAssembly,
+			"leftMenu": []maps.Map{
+				{
+					"id":       2101,
+					"leftName": "节点管理",
+					"icon":     "",
+					"pagePath": "/assembly",
+				},
+			},
+		},
+		{
+			"id":       3,
+			"menuName": "安全服务",
+			"module":   "safeServer",
+			"dropItem": []maps.Map{
+				{
+					"id":       31,
+					"dropName": "DDoS防火墙",
+					"pagePath": "/ddos",
+					"module":   configloaders.AdminModuleCodeDdos,
+					"leftMenu": []maps.Map{
+						{
+							"id":       3101,
+							"leftName": "全局状态",
+							"icon":     "",
+							"pagePath": "/ddos",
+						},
+						{
+							"id":       3102,
+							"leftName": "主机状态",
+							"icon":     "",
+							"pagePath": "/ddos/host",
+						},
+						{
+							"id":       3103,
+							"leftName": "黑白名单",
+							"icon":     "",
+							"pagePath": "/ddos/whiteblacklist",
+						},
+						{
+							"id":       3104,
+							"leftName": "统计日志",
+							"icon":     "",
+							"pagePath": "/ddos/logs",
+						},
+					},
+				},
+				{
+					"id":       32,
+					"dropName": "云防火墙",
+					"pagePath": "/nfw",
+					"module":   configloaders.AdminModuleCodeNfw,
+					"leftMenu": []maps.Map{
+						{
+							"id":       3201,
+							"leftName": "全局状态",
+							"icon":     "",
+							"pagePath": "/nfw",
+						},
+						{
+							"id":       3202,
+							"leftName": "NAT规则",
+							"icon":     "",
+							"pagePath": "/nfw/nat",
+						},
+						{
+							"id":       3203,
+							"leftName": "ACL规则",
+							"icon":     "",
+							"pagePath": "/nfw/acl",
+						},
+						{
+							"id":       3204,
+							"leftName": "IPS规则",
+							"icon":     "",
+							"pagePath": "/nfw/ips",
+						},
+						{
+							"id":       3205,
+							"leftName": "统计日志",
+							"icon":     "",
+							"pagePath": "/nfw/logs",
+						},
+					},
+				},
+				{
+					"id":       33,
+					"dropName": "WEB防火墙",
+					"pagePath": "/dashboard",
+					"module":   configloaders.AdminModuleCodeDashboard,
+					"leftMenu": []maps.Map{
+						{
+							"id":       3301,
+							"leftName": "全局状态",
+							"icon":     "",
+							"pagePath": "/dashboard",
+						},
+						{
+							"id":       3302,
+							"leftName": "网站服务",
+							"icon":     "",
+							"pagePath": "/servers",
+						},
+						{
+							"id":       3303,
+							"leftName": "通用设置",
+							"icon":     "",
+							"pagePath": "/servers/components",
+						},
+						{
+							"id":       3304,
+							"leftName": "服务分组",
+							"icon":     "",
+							"pagePath": "/servers/components/groups",
+						},
+						{
+							"id":       3305,
+							"leftName": "缓存策略",
+							"icon":     "",
+							"pagePath": "/servers/components/cache",
+						},
+						{
+							"id":       3306,
+							"leftName": "WAF策略",
+							"icon":     "",
+							"pagePath": "/servers/components/waf",
+						},
+						{
+							"id":       3307,
+							"leftName": "证书管理",
+							"icon":     "",
+							"pagePath": "/servers/certs",
+						},
+						{
+							"id":       3308,
+							"leftName": "边缘节点",
+							"icon":     "",
+							"pagePath": "/clusters",
+						},
+						{
+							"id":       3309,
+							"leftName": "节点日志",
+							"icon":     "",
+							"pagePath": "/clusters/logs",
+						},
+						{
+							"id":       3310,
+							"leftName": "SSH认证",
+							"icon":     "",
+							"pagePath": "/clusters/grants",
+						},
+						{
+							"id":       3311,
+							"leftName": "区域设置",
+							"icon":     "",
+							"pagePath": "/clusters/regions",
+						},
+						{
+							"id":       3312,
+							"leftName": "域名解析",
+							"icon":     "",
+							"pagePath": "/dns",
+						},
+						{
+							"id":       3313,
+							"leftName": "问题修复",
+							"icon":     "",
+							"pagePath": "/dns/issues",
+						},
+						{
+							"id":       3314,
+							"leftName": "DNS服务",
+							"icon":     "",
+							"pagePath": "/clusters/providers",
+						},
+					},
+				},
+				{
+					"id":       34,
+					"dropName": "WEB漏洞扫描",
+					"pagePath": "/webscan",
+					"module":   configloaders.AdminModuleCodeWebScan,
+					"leftMenu": []maps.Map{
+						{
+							"id":       3401,
+							"leftName": "全局状态",
+							"icon":     "",
+							"pagePath": "/webscan",
+						},
+						{
+							"id":       3402,
+							"leftName": "扫描目标",
+							"icon":     "",
+							"pagePath": "/webscan/targets",
+						},
+						{
+							"id":       3403,
+							"leftName": "漏洞详情",
+							"icon":     "",
+							"pagePath": "/webscan/vulnerabilities",
+						},
+						{
+							"id":       3404,
+							"leftName": "扫描任务",
+							"icon":     "",
+							"pagePath": "/webscan/scans",
+						},
+						{
+							"id":       3405,
+							"leftName": "扫描报告",
+							"icon":     "",
+							"pagePath": "/webscan/reports",
+						},
+					},
+				},
+				{
+					"id":       35,
+					"dropName": "主机防护",
+					"pagePath": "/hids",
+					"module":   configloaders.AdminModuleCodeHids,
+					"leftMenu": []maps.Map{
+						{
+							"id":       3501,
+							"leftName": "全局状态",
+							"icon":     "",
+							"pagePath": "/hids",
+						},
+						{
+							"id":       3502,
+							"leftName": "主机体现",
+							"icon":     "",
+							"pagePath": "/hids/examine",
+						},
+						{
+							"id":       3503,
+							"leftName": "漏洞风险",
+							"icon":     "",
+							"pagePath": "/hids/risk",
+						},
+						{
+							"id":       3504,
+							"leftName": "入侵威胁",
+							"icon":     "",
+							"pagePath": "/hids/invade",
+						},
+						{
+							"id":       3505,
+							"leftName": "合规基线",
+							"icon":     "",
+							"pagePath": "/hids/baseline",
+						},
+						{
+							"id":       3506,
+							"leftName": "Agent管理",
+							"icon":     "",
+							"pagePath": "/hids/agent",
+						},
+					},
+				},
+			},
+		},
+		{
+			"id":       4,
+			"menuName": "监控告警",
+			"pagePath": "/monitor",
+			"module":   configloaders.AdminModuleCodeMonitor,
+			"leftMenu": []maps.Map{
+				{
+					"id":       4101,
+					"leftName": "监控任务",
+					"icon":     "",
+					"pagePath": "/monitor",
+				},
+				{
+					"id":       4102,
+					"leftName": "告警通知",
+					"icon":     "",
+					"pagePath": "/monitor/notice",
+				},
+				//{
+				//	"id":       2101,
+				//	"leftName": "告警设置",
+				//	"icon":     "",
+				//	"pagePath": "/assembly",
+				//},
+			},
+		},
+		{
+			"id":       5,
+			"menuName": "平台用户",
+			"pagePath": "/users",
+			"module":   configloaders.AdminModuleCodeUser,
+			"leftMenu": []maps.Map{
+				{
+					"id":       2101,
+					"leftName": "平台用户",
+					"icon":     "",
+					"pagePath": "/users",
+				},
+			},
+		},
+		{
+			"id":       6,
+			"menuName": "系统用户",
+			"pagePath": "/admins",
+			"module":   configloaders.AdminModuleCodeAdmin,
+			"leftMenu": []maps.Map{
+				{
+					"id":       6101,
+					"leftName": "系统用户",
+					"icon":     "",
+					"pagePath": "/admins",
+				},
+			},
+		},
+		{
+			"id":       7,
+			"menuName": "操作日志",
+			"pagePath": "/log",
+			"module":   configloaders.AdminModuleCodeLog,
+			"leftMenu": []maps.Map{
+				{
+					"id":       7101,
+					"leftName": "操作日志",
+					"icon":     "",
+					"pagePath": "/log",
+				},
+			},
+		},
+		{
+			"id":       8,
+			"menuName": "系统设置",
+			"pagePath": "/settings/server",
+			"module":   configloaders.AdminModuleCodeSetting,
+			"leftMenu": []maps.Map{
+				{
+					"id":       8101,
+					"leftName": "基本设置",
+					"icon":     "",
+					"pagePath": "/settings/server",
+				},
+				{
+					"id":       8102,
+					"leftName": "高级设置",
+					"icon":     "",
+					"pagePath": "/settings/database",
+				},
+			},
+		},
+	}
 	result := []maps.Map{}
 	for _, m := range allMaps {
 		if m.GetString("code") == "finance" && !configloaders.ShowFinance() {
@@ -727,11 +754,29 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 		}
 
 		module := m.GetString("module")
-		if configloaders.AllowModule(adminId, module) {
+		if module == "safeServer" { //安全服务
+			safe := maps.Map{
+				"id":       3,
+				"menuName": "安全服务",
+				"module":   "safeServer",
+				"dropItem": []maps.Map{},
+			}
+			safeFlags := false
+			for _, v := range m.GetSlice("dropItem") {
+				md := v.(maps.Map)
+				if configloaders.AllowModule(adminId, md.GetString("module")) {
+					safeFlags = true
+					safe["dropItem"] = append(safe.GetSlice("dropItem"), md)
+				}
+			}
+			if safeFlags {
+				result = append(result, safe)
+			}
+		} else if configloaders.AllowModule(adminId, module) {
 			result = append(result, m)
 		}
 	}
-	return result
+	return leftResult, result
 }
 
 // 跳转到登录页
