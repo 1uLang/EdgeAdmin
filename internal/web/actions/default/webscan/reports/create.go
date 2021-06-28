@@ -6,7 +6,6 @@ import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/webscan"
 	"github.com/iwind/TeaGo/actions"
-	"github.com/iwind/TeaGo/logs"
 )
 
 //任务目标
@@ -40,11 +39,13 @@ func (this *CreateAction) RunPost(params struct {
 		TemplateId:  "11111111-1111-1111-1111-111111111112", //快速
 		AdminUserId: uint64(this.AdminId()),
 	}
-	info, err := reports_server.Create(req)
+	_, err = reports_server.Create(req)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	logs.Infof("生成目标扫描报表成功 ：%v", info["report_id"])
+
+	// 日志
+	this.CreateLogInfo("WEB漏洞扫描 - 生成目标扫描报表:%v成功", params.Ids)
 	this.Success()
 }

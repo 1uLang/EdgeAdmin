@@ -25,5 +25,7 @@ func (this *IndexAction) RunGet() {
 		return
 	}
 	this.Data["data"] = info
+	// 日志
+	this.CreateLogInfo("WEB漏洞扫描请求成功")
 	this.Show()
 }

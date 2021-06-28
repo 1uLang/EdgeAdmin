@@ -28,6 +28,7 @@ const (
 	AdminModuleCodeHids      AdminModuleCode = "hids"      // hids 主机防护
 	AdminModuleCodeNfw       AdminModuleCode = "nfw"       // 下一代防火墙
 	AdminModuleCodeMonitor   AdminModuleCode = "monitor"   //监控告警
+	AdminModuleCodeWAF       AdminModuleCode = "waf"       //web防火墙
 )
 
 var sharedAdminModuleMapping = map[int64]*AdminModuleList{} // adminId => AdminModuleList
@@ -102,7 +103,6 @@ func AllowModule(adminId int64, module string) bool {
 	if len(sharedAdminModuleMapping) == 0 {
 		_, _ = loadAdminModuleMapping()
 	}
-
 	list, ok := sharedAdminModuleMapping[adminId]
 	if ok {
 		return list.Allow(module)
@@ -196,9 +196,29 @@ func AllModuleMaps() []maps.Map {
 			"url":  "/settings",
 		},
 		{
-			"name": "ddos",
+			"name": "DDoS防火墙",
 			"code": AdminModuleCodeDdos,
 			"url":  "/ddos",
+		},
+		{
+			"name": "云防火墙",
+			"code": AdminModuleCodeNfw,
+			"url":  "/ddos",
+		},
+		{
+			"name": "WEB防火墙",
+			"code": AdminModuleCodeDashboard,
+			"url":  "/dashboard",
+		},
+		{
+			"name": "WEB漏洞扫描",
+			"code": AdminModuleCodeWebScan,
+			"url":  "/webscan",
+		},
+		{
+			"name": "主机防护",
+			"code": AdminModuleCodeHids,
+			"url":  "/hids",
 		},
 	}...)
 	return m

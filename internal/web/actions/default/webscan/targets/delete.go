@@ -32,5 +32,8 @@ func (this *DeleteAction) RunPost(params struct {
 		}
 	}
 
+	// 日志
+	this.CreateLogInfo("WEB漏洞扫描 - 删除任务目标:%v成功", params.TargetIds)
+
 	this.Success()
 }

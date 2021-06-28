@@ -1,7 +1,6 @@
 package invade
 
 import (
-	"fmt"
 	"github.com/1uLang/zhiannet-api/hids/model/risk"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
@@ -58,7 +57,6 @@ func (this *IndexAction) RunGet(params struct{}) {
 				"url":   nameUrls[idx]["url"],
 			}
 			invadeLock.Unlock()
-			fmt.Println(idx, nameUrls[idx]["name"], "=============", risk)
 		}(i, f)
 	}
 	invadeWg.Wait()
