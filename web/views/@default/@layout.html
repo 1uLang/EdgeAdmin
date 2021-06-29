@@ -60,13 +60,13 @@
             <div v-for="(menuItem,index) in mainMenuData">
                 <div v-if="menuItem.dropItem && menuItem.dropItem.length>0" @mouseenter="showMenu(index)"
                      @mouseleave="hideMenu(index)">
-                    <div class="item navHead" :class="'navHead' + index">
+                    <div class="item navHead" :class="'navHead' + index" style="height: 50px;font-size: 12px;">
                         {{menuItem.menuName}} ▼
                     </div>
                     <ul v-if="menuItem.dropItem && menuItem.dropItem.length>0" class="navMain"
                         :class="'navMain' + index">
                         <li v-for="subItem in menuItem.dropItem">
-                            <a :href="subItem.pagePath" @click="onSelectTopMenu(menuItem.id,subItem.id)">{{subItem.dropName}}</a>
+                            <a :href="subItem.pagePath" @click="onSelectTopMenu(menuItem.id,subItem.id)" style="color: #fff;font-size: 12px;">{{subItem.dropName}}</a>
                         </li>
                     </ul>
                 </div>
