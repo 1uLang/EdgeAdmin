@@ -14,11 +14,11 @@ func (this *IDCOptionsAction) RunPost(params struct{}) {
 	//	{"id": 1, "name": "杭州IDC"},
 	//	{"id": 2, "name": "济南IDC"},
 	//}
-	data := make([]map[string]interface{}, len(idcMap))
+	data := make([]map[string]interface{}, 0)
 	for k, v := range idcMap {
-		data[k] = map[string]interface{}{
+		data = append(data, map[string]interface{}{
 			"id": k, "name": v,
-		}
+		})
 	}
 	this.Data["idcs"] = data
 	this.Success()

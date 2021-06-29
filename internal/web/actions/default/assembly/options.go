@@ -16,11 +16,12 @@ func (this *OptionsAction) RunPost(params struct{}) {
 	//	{"id": 3, "name": "WEB漏洞扫描"},
 	//	{"id": 4, "name": "主机漏洞扫描"},
 	//}
-	data := make([]map[string]interface{}, len(typeMap))
+	data := make([]map[string]interface{}, 0)
 	for k, v := range typeMap {
-		data[k] = map[string]interface{}{
+		data = append(data, map[string]interface{}{
 			"id": k, "name": v,
-		}
+		})
+
 	}
 	this.Data["assemblys"] = data
 	this.Success()

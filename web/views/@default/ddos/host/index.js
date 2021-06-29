@@ -89,6 +89,7 @@ Tea.context(function () {
     };
     this.onOpenConfig = function (addr) {
         this.address = addr
+        this.src_ip = addr
         let node = this.getNodeId()
         let that = this
         //ip直通 防护策略
