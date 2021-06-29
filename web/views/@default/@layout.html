@@ -47,7 +47,7 @@
 
 <div>
     <!-- 顶部导航 -->
-    <div class="ui menu top-nav blue inverted small borderless" v-cloak="">
+    <div class="ui menu top-nav blue inverted small borderless" v-cloak="" style="height: 50px;">
         <a href="/" class="item">
             <i class="ui icon leaf" v-if="teaLogoFileId == 0"></i><img v-if="teaLogoFileId > 0"
                                                                        :src="'/ui/image/' + teaLogoFileId"
@@ -70,8 +70,8 @@
                         </li>
                     </ul>
                 </div>
-                <a v-else class="item" :class="{active:selectTopMenuId === menuItem.id}"
-                   @click="onSelectTopMenu(menuItem.id)" :href="menuItem.pagePath">{{menuItem.menuName}}</a>
+                <a v-else class="item" :class="{active:selectTopMenuId === menuItem.id}" 
+                   @click="onSelectTopMenu(menuItem.id)" :href="menuItem.pagePath" style="font-size: 12px;height: 50px;">{{menuItem.menuName}}</a>
             </div>
             <!--            <div @mouseenter="showMenu(index)" @mouseleave="hideMenu(index)" class="navHead" :class="'navHead' + index" v-for="(module,index) in teaModules">-->
             <!--                <a class="item" :href="Tea.url(module.code)"-->
