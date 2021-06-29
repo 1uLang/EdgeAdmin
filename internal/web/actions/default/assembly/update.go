@@ -33,13 +33,14 @@ func (this *UpdateAction) RunGet(params struct {
 	}
 
 	this.Data["node"] = maps.Map{
-		"id":     info.Id,
-		"name":   info.Name,
-		"addr":   info.Addr,
-		"port":   info.Port,
-		"type":   info.Type,
-		"idc":    info.Idc,
-		"Status": info.Status,
+		"id":        info.Id,
+		"name":      info.Name,
+		"addr":      info.Addr,
+		"port":      info.Port,
+		"argeement": info.IsSsl,
+		"type":      info.Type,
+		"idc":       info.Idc,
+		//"Status": info.Status,
 		"State":  info.State,
 		"key":    info.Key,
 		"secret": info.Secret,
@@ -59,6 +60,7 @@ func (this *UpdateAction) RunPost(params struct {
 	State        int
 	Key          string
 	Secret       string
+	Argeement    int
 
 	Must *actions.Must
 	CSRF *actionutils.CSRF
@@ -89,6 +91,7 @@ func (this *UpdateAction) RunPost(params struct {
 		State:  params.State,
 		Key:    params.Key,
 		Secret: params.Secret,
+		IsSsl:  params.Argeement,
 	})
 	if err != nil {
 		this.ErrorPage(err)

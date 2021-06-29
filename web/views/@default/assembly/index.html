@@ -21,7 +21,10 @@
         <tr v-for="node in list">
             <td>{{node.name}}</td>
             <td>{{node.addr}}</td>
-            <td>{{node.port}}</td>
+            <td>
+                <div v-show="node.is_ssl==1" >https</div>
+                <div v-show="node.is_ssl==0" >http</div>
+            </td>
             <td>{{node.type_name}}</td>
             <td>{{node.idc_name }}</td>
             <td class="center">

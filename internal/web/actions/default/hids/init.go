@@ -1,6 +1,7 @@
 package hids
 
 import (
+	"fmt"
 	"github.com/1uLang/zhiannet-api/hids/request"
 	"github.com/1uLang/zhiannet-api/hids/server"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
@@ -21,14 +22,20 @@ func init() {
 	})
 }
 func InitAPIServer() error {
-	err := server.SetUrl("https://user.cloudhids.net")
+
+	info, err := server.GetHideInfo()
+	if err != nil {
+		return fmt.Errorf("主机防护节点获取失败:%v", err)
+	}
+
+	err = server.SetUrl(info.Addr)
 	if err != nil {
 		return err
 	}
 	//初始化 awvs 系统管理员账号apikeys
 	err = server.SetAPIKeys(&request.APIKeys{
-		AppId:  "39rkz",
-		Secret: "tkvgpvjuht2625mo",
+		AppId:  info.AppId,  //"39rkz",
+		Secret: info.Secret, //"tkvgpvjuht2625mo",
 	})
 	if err != nil {
 		return err

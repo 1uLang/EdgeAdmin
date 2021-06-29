@@ -27,6 +27,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 	Key          string
 	Secret       string
 	AssemblyType int
+	Argeement    int
 
 	Must *actions.Must
 	CSRF *actionutils.CSRF
@@ -95,6 +96,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 		State:  1,
 		Key:    params.Key,
 		Secret: params.Secret,
+		IsSsl:  params.Argeement,
 	}
 	id, err := subassemblynode.Add(req)
 	if err != nil {
