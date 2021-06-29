@@ -172,6 +172,7 @@ Tea.context(function () {
 
     this.selectTopMenuId = 1    //选择顶部导航id
     this.selectLeftMenuId = 1   //选择左侧的菜单id
+    this.selectDropName = ""
     this.letfMenuData = []
 
 
@@ -190,6 +191,7 @@ Tea.context(function () {
                 if(this.mainMenuData[i].dropItem && this.mainMenuData[i].dropItem.length>0){
                     for(var j=0;j<this.mainMenuData[i].dropItem.length;j++){
                         if(this.mainMenuData[i].dropItem[j].id==dropId){
+                            this.selectDropName=this.mainMenuData[i].dropItem[j].dropName
                             return this.mainMenuData[i].dropItem[j].leftMenu
                         }
                     }
@@ -200,9 +202,10 @@ Tea.context(function () {
     }
 
     this.onSelectTopMenu=function (menuId,dropId) {
-        console.log(menuId)
+        
         if(this.selectTopMenuId !=menuId){
             this.selectTopMenuId = menuId
+            this.selectDropName = ""
         }
         if(dropId && dropId>0){
             this.letfMenuData = this.getDropLeftData(menuId,dropId)
