@@ -27,7 +27,7 @@ func (this *WeakAction) RunGet(params struct {
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	req := &risk.SearchReq{}
 	req.ServerIp = params.ServerIp
@@ -42,12 +42,13 @@ func (this *WeakAction) RunGet(params struct {
 	list, err := risk_server.WeakList(req)
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	for k, v := range list.List {
 		os, err := server.Info(v["serverIp"].(string), req.UserName)
 		if err != nil {
 			this.ErrorPage(err)
+			return
 		}
 		list.List[k]["os"] = os
 	}
@@ -66,7 +67,7 @@ func (this *WeakAction) RunPost(params struct {
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	req := &risk.ProcessReq{Opt: params.Opt}
 	req.Req.MacCode = params.MacCode
@@ -75,7 +76,7 @@ func (this *WeakAction) RunPost(params struct {
 	err = risk_server.ProcessWeak(req)
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	this.Success()
 }
@@ -101,7 +102,7 @@ func (this *WeakListAction) RunGet(params struct {
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	req := &risk.DetailReq{}
 	req.MacCode = params.MacCode
@@ -114,14 +115,14 @@ func (this *WeakListAction) RunGet(params struct {
 	list1, err := risk_server.WeakDetailList(req)
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	//已处理
 	req.Req.ProcessState = 2
 	list2, err := risk_server.WeakDetailList(req)
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	//漏洞列表
 	this.Data["weak1"] = list1.WeakInfoList

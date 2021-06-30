@@ -40,6 +40,7 @@ func (this *DetailAction) RunGet(params struct {
 	list, err := examine_server.List(&examine.SearchReq{UserName: userName, Type: -1, Score: -1, State: -1})
 	if err != nil {
 		this.ErrorPage(err)
+		return
 	}
 	this.Data["details"] = info
 	this.Data["otherDetails"] = list.ServerExamineResultInfoList[0]

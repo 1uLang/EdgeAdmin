@@ -502,6 +502,84 @@ func (this *userMustAuth) modules(adminId int64) ([]maps.Map, []maps.Map) {
 					"code": "servers",
 				},
 			},
+		}, {
+			"code":   "audit",
+			"module": configloaders.AdminModuleCodeAudit,
+			"name":   "审计系统",
+			"icon":   "",
+			"subItems": []maps.Map{
+				{
+					"name": "全局状态",
+					"url":  "/audit",
+					"code": "",
+				},
+				{
+					"name": "资产管理",
+					"icon": "",
+					"url":  "audit/assets",
+					"subItems": []maps.Map{
+						{
+							"name": "数据库管理",
+							"icon": "",
+							"url":  "/audit/assets/db",
+						},
+						{
+							"name": "主机管理",
+							"icon": "",
+							"url":  "/audit/assets/host",
+						},
+						{
+							"name": "应用管理",
+							"icon": "",
+							"url":  "/audit/assets/app",
+						},
+						{
+							"name": "agent管理",
+							"icon": "",
+							"url":  "/audit/assets/agent",
+						},
+					},
+				},
+				{
+					"name": "查询分析",
+					"icon": "",
+					"url":  "/audit/query",
+					"subItems": []maps.Map{
+						{
+							"name": "审计日志",
+							"icon": "",
+							"url":  "/audit/query/logs",
+						},
+						{
+							"name": "风险查询",
+							"icon": "",
+							"url":  "/audit/query/risk",
+						},
+					},
+				},
+				{
+					"name": "报表中心",
+					"icon": "",
+					"url":  "/audit/form",
+					"subItems": []maps.Map{
+						{
+							"name": "报表预览",
+							"icon": "",
+							"url":  "/audit/form/preview",
+						},
+						{
+							"name": "报表订阅",
+							"icon": "",
+							"url":  "/audit/form/subscribe",
+						},
+						{
+							"name": "审计归档",
+							"icon": "",
+							"url":  "/audit/form/file",
+						},
+					},
+				},
+			},
 		},
 		{
 			"code":   "fort",
@@ -624,6 +702,12 @@ func (this *userMustAuth) modules(adminId int64) ([]maps.Map, []maps.Map) {
 					"dropName": "主机防护",
 					"pagePath": "/hids",
 					"module":   configloaders.AdminModuleCodeHids,
+				},
+				{
+					"id":       36,
+					"dropName": "审计系统",
+					"pagePath": "/audit",
+					"module":   configloaders.AdminModuleCodeAudit,
 				},
 				{
 					"id":       37,

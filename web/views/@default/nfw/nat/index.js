@@ -29,7 +29,7 @@ Tea.context(function () {
     this.getStatus = function (status) {
         switch (status) {
             case '1':
-                return "启已用"
+                return "已启用"
             case '0':
                 return "已停用"
             default:

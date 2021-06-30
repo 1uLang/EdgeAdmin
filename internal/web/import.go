@@ -109,6 +109,9 @@ import (
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/server/settings/websocket"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/server/stat"
 
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/iplists"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/metrics"
+
 	// 设置相关
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/authority"
@@ -189,4 +192,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/invade/virus"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/invade/webShell"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/risk"
+
+	//审计系统
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit"
 )

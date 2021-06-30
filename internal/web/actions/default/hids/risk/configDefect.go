@@ -39,12 +39,13 @@ func (this *ConfigDefectAction) RunGet(params struct {
 	list, err := risk_server.ConfigDefectList(req)
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	for k, v := range list.List {
 		os, err := server.Info(v["serverIp"].(string), req.UserName)
 		if err != nil {
 			this.ErrorPage(err)
+			return
 		}
 		list.List[k]["os"] = os
 	}
@@ -63,7 +64,7 @@ func (this *ConfigDefectAction) RunPost(params struct {
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	req := &risk.ProcessReq{Opt: params.Opt}
 	req.Req.MacCode = params.MacCode
@@ -73,7 +74,7 @@ func (this *ConfigDefectAction) RunPost(params struct {
 	err = risk_server.ProcessConfigDefect(req)
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	this.Success()
 }
@@ -99,7 +100,7 @@ func (this *ConfigDefectListAction) RunGet(params struct {
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	req := &risk.DetailReq{}
 	req.MacCode = params.MacCode
@@ -112,14 +113,14 @@ func (this *ConfigDefectListAction) RunGet(params struct {
 	list1, err := risk_server.ConfigDefectDetailList(req)
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	//已处理
 	req.Req.ProcessState = 2
 	list2, err := risk_server.ConfigDefectDetailList(req)
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	//漏洞列表
 	this.Data["configDefect1"] = list1.ConfigDefectList
@@ -162,13 +163,13 @@ func (this *ConfigDefectDetailAction) RunGet(params struct {
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 
 	info, err := risk_server.ConfigDefectDetail(params.MacCode, params.RiskId, params.ProcessState == 2)
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	this.Data["ConfigDefectDetails"] = info
 	this.Show()
