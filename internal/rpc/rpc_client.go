@@ -228,6 +228,10 @@ func (this *RPCClient) HTTPFastcgiRPC() pb.HTTPFastcgiServiceClient {
 	return pb.NewHTTPFastcgiServiceClient(this.pickConn())
 }
 
+func (this *RPCClient) HTTPAuthPolicyRPC() pb.HTTPAuthPolicyServiceClient {
+	return pb.NewHTTPAuthPolicyServiceClient(this.pickConn())
+}
+
 func (this *RPCClient) SSLCertRPC() pb.SSLCertServiceClient {
 	return pb.NewSSLCertServiceClient(this.pickConn())
 }
@@ -382,6 +386,14 @@ func (this *RPCClient) NSRouteRPC() pb.NSRouteServiceClient {
 
 func (this *RPCClient) NSAccessLogRPC() pb.NSAccessLogServiceClient {
 	return pb.NewNSAccessLogServiceClient(this.pickConn())
+}
+
+func (this *RPCClient) MetricItemRPC() pb.MetricItemServiceClient {
+	return pb.NewMetricItemServiceClient(this.pickConn())
+}
+
+func (this *RPCClient) NodeClusterMetricItemRPC() pb.NodeClusterMetricItemServiceClient {
+	return pb.NewNodeClusterMetricItemServiceClient(this.pickConn())
 }
 
 // Context 构造Admin上下文
