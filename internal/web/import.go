@@ -165,6 +165,15 @@ import (
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/monitor"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/monitor/notice"
 
+	//堡垒机
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fort"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fort/assets"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fort/assets/admin-users"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fort/assets/system-users"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fort/perms"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fort/session"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fort/session/common"
+
 	//主机安全防护
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/agent"
