@@ -1,4 +1,4 @@
-package common
+package command
 
 import "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 

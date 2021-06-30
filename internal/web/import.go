@@ -175,7 +175,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fort/assets/system-users"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fort/perms"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fort/session"
-	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fort/session/common"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fort/session/command"
 
 	//主机安全防护
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
