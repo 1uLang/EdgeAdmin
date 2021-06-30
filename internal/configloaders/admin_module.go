@@ -29,6 +29,7 @@ const (
 	AdminModuleCodeNfw       AdminModuleCode = "nfw"       // 下一代防火墙
 	AdminModuleCodeMonitor   AdminModuleCode = "monitor"   //监控告警
 	AdminModuleCodeWAF       AdminModuleCode = "waf"       //web防火墙
+	AdminModuleCodeFort      AdminModuleCode = "fort"      //堡垒机
 )
 
 var sharedAdminModuleMapping = map[int64]*AdminModuleList{} // adminId => AdminModuleList
