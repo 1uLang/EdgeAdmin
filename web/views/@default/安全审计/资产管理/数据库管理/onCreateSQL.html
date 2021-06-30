@@ -1,0 +1,39 @@
+{$layout "layout_popup"}
+
+
+<form class="ui form" method="post" data-tea-action="$" data-tea-success="success"  style="margin-top: 20px;">
+	<table class="ui table definition selectable">
+        <tr>
+            <td class="title">数据库名称*</td>
+            <td>
+                <input type="text" name="name" maxlength="100" ref="focus"/>
+            </td>
+        </tr>
+        <tr>
+            <td>数据库类型*</td>
+            <td>
+                <sql-type-selector></sql-type-selector>
+            </td>
+        </tr>
+        <tr>
+            <td>版本*</td>
+            <td>
+                <sql-ver-selector></sql-ver-selector>
+            </td>
+        </tr>
+        <tr>
+            <td>IP端口*</td>
+            <td>
+                <input type="text" name="post" maxlength="100"/>
+            </td>
+        </tr>
+        <tr>
+            <td>操作系统*</td>
+            <td>
+                <label style="margin-right: 30px;"><input type="radio" name="White" checked="checked" value="Linux">Linux</label>
+                <label><input type="radio" name="White" value="Windows">Windows</label>
+            </td>
+        </tr>
+	</table>
+	<submit-btn></submit-btn>
+</form>
