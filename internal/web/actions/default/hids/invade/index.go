@@ -16,6 +16,7 @@ func (this *IndexAction) RunGet(params struct{}) {
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
+		return
 	}
 	dashboard := make([]map[string]interface{}, 8)
 

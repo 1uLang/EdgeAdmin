@@ -28,7 +28,7 @@ func (this *IndexAction) RunGet(params struct {
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	req := &risk.RiskSearchReq{}
 	req.ServerIp = params.ServerIp
@@ -43,12 +43,13 @@ func (this *IndexAction) RunGet(params struct {
 	list, err := risk_server.SystemCmdList(req)
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	for k, v := range list.AbnormalProcessCountInfoList {
 		os, err := server.Info(v["serverIp"].(string), req.UserName)
 		if err != nil {
 			this.ErrorPage(err)
+			return
 		}
 		list.AbnormalProcessCountInfoList[k]["os"] = os
 	}
@@ -67,7 +68,7 @@ func (this *IndexAction) RunPost(params struct {
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	req := &risk.ProcessReq{Opt: params.Opt}
 	req.Req.MacCode = params.MacCode
@@ -77,7 +78,7 @@ func (this *IndexAction) RunPost(params struct {
 	err = risk_server.ProcessSystemCmd(req)
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	this.Success()
 }

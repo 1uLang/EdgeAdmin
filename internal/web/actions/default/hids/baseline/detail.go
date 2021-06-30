@@ -24,6 +24,7 @@ func (this *DetailAction) RunGet(params struct {
 
 	if err := hids.InitAPIServer(); err != nil {
 		this.ErrorPage(err)
+		return
 	}
 
 	req := &baseline.DetailReq{}
@@ -41,6 +42,7 @@ func (this *DetailAction) RunGet(params struct {
 		info, err := baseline_server.Detail(req)
 		if err != nil {
 			this.ErrorPage(err)
+			return
 		}
 		for _, v := range info.List {
 			if v["typeName"].(string) == "操作系统安全" {

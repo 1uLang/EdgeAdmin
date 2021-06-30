@@ -32,6 +32,7 @@ func (this *IndexAction) RunGet(params struct {
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
+		return
 	}
 	req := &examine.SearchReq{}
 	req.UserName, err = this.UserName()
@@ -61,11 +62,13 @@ func (this *IndexAction) RunGet(params struct {
 	list, err := examine_server.List(req)
 	if err != nil {
 		this.ErrorPage(err)
+		return
 	}
 	for k, v := range list.ServerExamineResultInfoList {
 		os, err := server.Info(v["serverExamineResultInfo"].(map[string]interface{})["serverIp"].(string), req.UserName)
 		if err != nil {
 			this.ErrorPage(err)
+			return
 		}
 		list.ServerExamineResultInfoList[k]["os"] = os
 	}
