@@ -29,6 +29,7 @@ const (
 	AdminModuleCodeNfw       AdminModuleCode = "nfw"       // 下一代防火墙
 	AdminModuleCodeMonitor   AdminModuleCode = "monitor"   //监控告警
 	AdminModuleCodeWAF       AdminModuleCode = "waf"       //web防火墙
+	AdminModuleCodeAudit     AdminModuleCode = "audit"     //审计系统
 	AdminModuleCodeFort      AdminModuleCode = "fort"      //堡垒机
 )
 
@@ -204,7 +205,7 @@ func AllModuleMaps() []maps.Map {
 		{
 			"name": "云防火墙",
 			"code": AdminModuleCodeNfw,
-			"url":  "/ddos",
+			"url":  "/nfw",
 		},
 		{
 			"name": "WEB防火墙",
@@ -220,6 +221,11 @@ func AllModuleMaps() []maps.Map {
 			"name": "主机防护",
 			"code": AdminModuleCodeHids,
 			"url":  "/hids",
+		},
+		{
+			"name": "审计系统",
+			"code": AdminModuleCodeAudit,
+			"url":  "audit",
 		},
 	}...)
 	return m

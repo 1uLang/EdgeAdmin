@@ -192,4 +192,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/invade/virus"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/invade/webShell"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/risk"
+
+	//审计系统
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit"
 )
