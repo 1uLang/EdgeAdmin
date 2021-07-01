@@ -13,5 +13,5 @@ func (this *Helper) BeforeAction(action *actions.ActionObject) {
 		return
 	}
 
-	action.Data["teaMenu"] = "dns"
+	action.Data["teaMenu"] = "waf"
 }

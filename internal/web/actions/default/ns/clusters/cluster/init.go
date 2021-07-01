@@ -13,7 +13,6 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeNS)).
 			Helper(new(clusterutils.ClusterHelper)).
-			Data("teaMenu", "ns").
 			Data("teaSubMenu", "cluster").
 			Prefix("/ns/clusters/cluster").
 			Get("", new(IndexAction)).
@@ -30,7 +29,6 @@ func init() {
 			GetPost("/install", new(node.InstallAction)).
 			Post("/status", new(node.StatusAction)).
 			Post("/updateInstallStatus", new(node.UpdateInstallStatusAction)).
-
 			EndAll()
 	})
 }

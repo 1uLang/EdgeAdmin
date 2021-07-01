@@ -11,6 +11,7 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
 			Helper(NewHelper()).
+			Data("teaMenu", "waf").
 			Prefix("/servers/components/log").
 			Get("", new(IndexAction)).
 			EndAll()
