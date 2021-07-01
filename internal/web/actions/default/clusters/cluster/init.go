@@ -15,7 +15,7 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeNode)).
-			Helper(clusters.NewClusterHelper()).
+			Helper(clusters.NewClusterHelper()).Data("teaMenu", "waf").
 			Prefix("/clusters/cluster").
 			Get("", new(IndexAction)).
 			GetPost("/installNodes", new(InstallNodesAction)).
@@ -55,7 +55,6 @@ func init() {
 			Post("/groups/delete", new(groups.DeleteAction)).
 			Post("/groups/sort", new(groups.SortAction)).
 			GetPost("/groups/selectPopup", new(groups.SelectPopupAction)).
-
 			EndAll()
 	})
 }

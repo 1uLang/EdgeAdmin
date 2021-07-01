@@ -10,7 +10,7 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
-			Prefix("/servers/server/settings/origins").
+			Prefix("/servers/server/settings/origins").Data("teaMenu", "waf").
 			GetPost("/addPopup", new(AddPopupAction)).
 			Post("/delete", new(DeleteAction)).
 			GetPost("/updatePopup", new(UpdatePopupAction)).

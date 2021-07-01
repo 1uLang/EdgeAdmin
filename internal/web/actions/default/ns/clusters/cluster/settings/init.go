@@ -12,7 +12,6 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeNS)).
 			Helper(new(clusterutils.ClusterHelper)).
-			Data("teaMenu", "ns").
 			Data("teaSubMenu", "cluster").
 			Prefix("/ns/clusters/cluster/settings").
 			GetPost("", new(IndexAction)).

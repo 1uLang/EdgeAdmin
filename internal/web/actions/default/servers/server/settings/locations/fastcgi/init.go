@@ -14,6 +14,7 @@ func init() {
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
 			Helper(locationutils.NewLocationHelper()).
 			Helper(serverutils.NewServerHelper()).
+			Data("teaMenu", "waf").
 			Data("tinyMenuItem", "fastcgi").
 			Prefix("/servers/server/settings/locations/fastcgi").
 			GetPost("", new(IndexAction)).

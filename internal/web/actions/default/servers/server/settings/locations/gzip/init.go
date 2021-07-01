@@ -14,6 +14,7 @@ func init() {
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
 			Helper(locationutils.NewLocationHelper()).
 			Helper(serverutils.NewServerHelper()).
+			Data("teaMenu", "waf").
 			Data("tinyMenuItem", "gzip").
 			Prefix("/servers/server/settings/locations/gzip").
 			GetPost("", new(IndexAction)).

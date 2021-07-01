@@ -10,7 +10,7 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
-			Data("teaMenu", "servers").
+			Data("teaMenu", "waf").
 			Data("teaSubMenu", "iplist").
 			Prefix("/servers/iplists").
 			Get("", new(IndexAction)).
@@ -33,7 +33,6 @@ func init() {
 			GetPost("/bindHTTPFirewallPopup", new(BindHTTPFirewallPopupAction)).
 			Post("/unbindHTTPFirewall", new(UnbindHTTPFirewallAction)).
 			Post("/httpFirewall", new(HttpFirewallAction)).
-
 			EndAll()
 	})
 }

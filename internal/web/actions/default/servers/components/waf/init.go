@@ -12,7 +12,7 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
 			Helper(NewHelper()).
-			Data("teaMenu", "servers").
+			Data("teaMenu", "waf").
 			Data("teaSubMenu", "waf").
 			Prefix("/servers/components/waf").
 			Get("", new(IndexAction)).
@@ -49,7 +49,6 @@ func init() {
 			GetPost("/ipadmin/updateIPPopup", new(ipadmin.UpdateIPPopupAction)).
 			Post("/ipadmin/deleteIP", new(ipadmin.DeleteIPAction)).
 			GetPost("/ipadmin/test", new(ipadmin.TestAction)).
-
 			EndAll()
 	})
 }
