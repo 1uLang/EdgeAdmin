@@ -11,7 +11,7 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeAudit)).
 			Data("teaMenu", "audit").
-			Prefix("/audit").
+			Prefix("/audit/assets/db").
 			Get("", new(IndexAction)).
 			GetPost("/createPopup", new(CreatePopupAction)).
 			EndAll()

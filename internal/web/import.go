@@ -195,4 +195,13 @@ import (
 
 	//审计系统
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/assets/agent"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/assets/app"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/assets/db"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/assets/host"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/form/file"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/form/preview"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/form/subscribe"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/query/logs"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/query/risk"
 )

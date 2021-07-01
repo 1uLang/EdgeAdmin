@@ -1,4 +1,4 @@
-package agent
+package logs
 
 import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
@@ -11,9 +11,10 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeAudit)).
 			Data("teaMenu", "audit").
-			Prefix("/audit/assets/agent").
+			Prefix("/audit/query/logs").
 			Get("", new(IndexAction)).
 			//GetPost("/createPopup", new(CreatePopupAction)).
+			//GetPost("/ddos/host/shield_list", new(UpdatePopupAction)).
 			EndAll()
 	})
 }

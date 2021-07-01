@@ -516,7 +516,7 @@ func (this *userMustAuth) modules(adminId int64) ([]maps.Map, []maps.Map) {
 				{
 					"name": "资产管理",
 					"icon": "",
-					"url":  "audit/assets",
+					"url":  "audit/assets/db",
 					"subItems": []maps.Map{
 						{
 							"name": "数据库管理",
@@ -543,7 +543,7 @@ func (this *userMustAuth) modules(adminId int64) ([]maps.Map, []maps.Map) {
 				{
 					"name": "查询分析",
 					"icon": "",
-					"url":  "/audit/query",
+					"url":  "/audit/query/logs",
 					"subItems": []maps.Map{
 						{
 							"name": "审计日志",
@@ -560,7 +560,7 @@ func (this *userMustAuth) modules(adminId int64) ([]maps.Map, []maps.Map) {
 				{
 					"name": "报表中心",
 					"icon": "",
-					"url":  "/audit/form",
+					"url":  "/audit/form/preview",
 					"subItems": []maps.Map{
 						{
 							"name": "报表预览",
