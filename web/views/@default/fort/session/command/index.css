@@ -1,34 +1,19 @@
-.card-div {
-    width: 30%;
-    height: 160px;
-    background-color: #fff;
-    /* box-shadow: 5px 5px 5px #8c939d; */
-    padding: 20px 10px;
-    display: flex;
-    flex-direction: column;
+.table-head-bg{
+    height: 32px;
+    background: #f0f0f0;
 }
 
-.menu-define-color{
+.meun-define-color{
     color: #000;
     cursor: pointer;
-    margin-right: 15px;
-    font-weight: bold;
-}
-.menu-select-color{
-    color: #0090cb;
-    cursor: pointer;
-    margin-right: 15px;
-    font-weight: bold;
+    margin-right: 10px;
 }
 
-.time-define-color{
-    color: #000;
+.meun-select-color{
+    background-color: #0090cb;
+    color: #fff;
+    padding: 2px 5px;
     cursor: pointer;
-    margin-right: 15px;
-}
+    margin-right: 10px;
 
-.time-select-color{
-    color: #0090cb;
-    cursor: pointer;
-    margin-right: 15px;
 }

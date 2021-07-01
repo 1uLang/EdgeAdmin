@@ -1,166 +1,67 @@
 Tea.context(function () {
+    
+    this.curIndex = -1
 
-    this.nShowState = 1
-    this.nTimeSelect = 1
-    this.dayFrom = ""
-    this.dayTo = ""
+    this.pageState = 1
 
-    this.$delay(function () {
-        teaweb.datepicker("day-from-picker")
-        teaweb.datepicker("day-to-picker")
-        this.reloadFindTableChart()
-        // this.reloadDetailTableChart()
-    })
+    this.mouseLeave = function () { 
+        this.curIndex = -1
+    }
 
-    this.onChangeShowState = function (state){
-        if(this.nShowState!=state){
-            this.nShowState = state
-  
-            if(this.nShowState ==1){
-                this.$delay(function () {
-                    this.reloadFindTableChart()
-                })
-            }else{
-                this.$delay(function () {
-                    this.reloadDetailTableChart()
-                })
-            }
-            
+    this.mouseEnter = function (index) { 
+        this.curIndex = index
+    }
+    this.onChangeState = function (id) { 
+        if( this.pageState!=id) {
+            this.pageState = id
         }
     }
 
-    this.onChangeTimeSelect = function(index){
-        if(this.nTimeSelect!=index){
-            this.nTimeSelect = index
+    this.onOpenDetail = function (id) { 
+        this.onChangeState(3)
+     }
+
+    this.onEdit = function (id) { 
+
+    }
+    this.onDelete = function (id) {
+        
+    }
+
+    this.getLinkStatus = function (status) { 
+        switch (status) {
+            case 1:
+                return "可连接"
+            case 0:
+                return "不可连接"
+            default:
+                return "未知"
         }
     }
 
-    this.reloadFindTableChart = function () {
-		let chartBox = document.getElementById("find-chart-box")
-		let chart = echarts.init(chartBox)
-		let option = {
-            //  图表距边框的距离,可选值：'百分比'¦ {number}（单位px）
-            // top: '16%',   // 等价于 y: '16%'
-            grid: {
-                top: 30,   // 等价于 y: '16%'
-                left: 40, 
-                right: 60,
-                bottom: 30,
-                containLabel: true
-            },
-			xAxis: {
-                // name: 'Hour',
-                // boundaryGap值为false的时候，折线第一个点在y轴上
-                // boundaryGap: false,
-				data: this.findTableData.lineValue
-			},
-			yAxis: {
-                // name: 'GB',
-                min:0, // 设置y轴刻度的最小值
-                // max:8,  // 设置y轴刻度的最大值
-                splitNumber:4,  // 设置y轴刻度间隔个数
-                // axisLine: {
-                //     lineStyle: {
-                //         // 设置y轴颜色
-                //         color: '#fff'
-                //     }
-                // },
-            },
-			tooltip: {
-				trigger: "axis",
-			},
-			series: [
-				{
-                    name:"漏洞总数",
-					type: "line",
-					data: this.findTableData.lineData,
-					itemStyle: {
-						color: "#0085fa"
-					},
-					lineStyle: {
-						color: "#0085fa"
-					}
-				},
-			],
-			animation: false
-		}
-		chart.setOption(option)
-		chart.resize()
-	}
+    this.onChangeTimeFormat = function (time) {
+        var resultTime = "";
+        if (time) {
+          var tempTime = time.substring(0, time.indexOf("."));
+          resultTime = tempTime.replace("T", " ");
+        }
+        return resultTime;
+      };
 
-    this.reloadDetailTableChart = function () {
-		let chartBox = document.getElementById("detail-chart-box")
-		let chart = echarts.init(chartBox)
-		let option = {
-            //  图表距边框的距离,可选值：'百分比'¦ {number}（单位px）
-            // top: '16%',   // 等价于 y: '16%'
-            grid: {
-                top: 30,   // 等价于 y: '16%'
-                left: 40, 
-                right: 60,
-                bottom: 30,
-                containLabel: true
-            },
-			xAxis: {
-                // name: 'Hour',
-                // boundaryGap值为false的时候，折线第一个点在y轴上
-                // boundaryGap: false,
-				data: this.detailTableData.lineValue
-			},
-			yAxis: {
-                // name: 'GB',
-                min:0, // 设置y轴刻度的最小值
-                // max:8,  // 设置y轴刻度的最大值
-                splitNumber:4,  // 设置y轴刻度间隔个数
-                // axisLine: {
-                //     lineStyle: {
-                //         // 设置y轴颜色
-                //         color: '#fff'
-                //     }
-                // },
-            },
-			tooltip: {
-				trigger: "axis",
-			},
-			series: [
-				{
-                    name:"漏洞总数",
-					type: "line",
-					data: this.detailTableData.lineData,
-					itemStyle: {
-						color: "#0085fa"
-					},
-					lineStyle: {
-						color: "#0085fa"
-					}
-				},
-			],
-			animation: false
-		}
-		chart.setOption(option)
-		chart.resize()
-	}
+    this.tableData1=[
+        {id:1,value1:"等保云demo服务器root账号",value2:"root",value3:"2",value4:1},
+        {id:2,value1:"等保云demo服务器root账号",value2:"root",value3:"2",value4:2},
+        {id:3,value1:"等保云demo服务器root账号",value2:"root",value3:"2",value4:0}
+    ]
 
-    this.data = {
-        hostCount:5,
-        hostOnline:1,
-        detailAttCount:10,
-        detailAttTodayCount:1,
-        detailloopholeCount:120,
-        detailloopholeTodayCount:12,
+    this.tableData2=[
+        {id:1,value1:"智安-安全审计系统服务器",value2:"192.168.1.1",value3:"智安-安全审计服务器",value4:1,value5:"2021-06-24T12:20:50.361"},
+        {id:2,value1:"智安-安全审计系统服务器",value2:"192.168.1.1",value3:"智安-安全审计服务器",value4:1,value5:"2021-06-24T12:20:50.361"},
+        {id:3,value1:"智安-安全审计系统服务器",value2:"192.168.1.1",value3:"智安-安全审计服务器",value4:1,value5:"2021-06-24T12:20:50.361"}
+    ]
+
+    this.baseInfo={
+        id:1,value1:"42f167c2-d91a-4f20-99b1-3d56dabd896a",
+        value2:"智安-安全审计系统服务器",value3:"root",value4:"指纹信息",value5:"2021-06-24T12:20:50.361",value6:"Administrator"
     }
-
-    this.findTableData={
-        lineValue:["05-08","05-10","05-12","05-14","05-16","05-18","05-20","05-22","05-24","05-26","05-28"],
-        lineData:[20,21,1,21,31,25,15,12,13,16,9]
-    }
-
-    this.detailTableData={
-        lineValue:["05-08","05-10","05-12","05-14","05-16","05-18","05-20","05-22","05-24","05-26","05-28"],
-        lineData:[2,5,10,1,11,5,13,17,5,6,9]
-    }
-
-
-
-});
-  
+})

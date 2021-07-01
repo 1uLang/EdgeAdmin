@@ -38,7 +38,7 @@ Tea.context(function () {
                 // name: 'GB',
                 min:0, // 设置y轴刻度的最小值
                 // max:8,  // 设置y轴刻度的最大值
-                splitNumber:7,  // 设置y轴刻度间隔个数
+                splitNumber:8,  // 设置y轴刻度间隔个数
             },
 			tooltip: {
 				trigger: "axis",
@@ -94,7 +94,7 @@ Tea.context(function () {
                 x: 'center',
                 // y 设置垂直安放位置，默认全图顶端，可选值：'top' ¦ 'bottom' ¦ 'center' ¦ {number}（y坐标，单位px）
                 y: 'bottom',
-                data: [this.tableData2.title1,this.tableData2.title2,this.tableData2.title3,this.tableData2.title4,this.this.tableData2.title5]
+                data: [this.tableData2.title1,this.tableData2.title2,this.tableData2.title3,this.tableData2.title4,this.tableData2.title5]
             },
             //  图表距边框的距离,可选值：'百分比'¦ {number}（单位px）
             // top: '16%',   // 等价于 y: '16%'
@@ -108,14 +108,14 @@ Tea.context(function () {
 			xAxis: {
                 // name: 'Hour',
                 // boundaryGap值为false的时候，折线第一个点在y轴上
-                boundaryGap: false,
+                // boundaryGap: false,
 				data: this.tableData2.lineValue
 			},
 			yAxis: {
                 // name: 'GB',
                 min:0, // 设置y轴刻度的最小值
                 // max:8,  // 设置y轴刻度的最大值
-                splitNumber:7,  // 设置y轴刻度间隔个数
+                splitNumber:8,  // 设置y轴刻度间隔个数
             },
 			tooltip: {
 				trigger: "axis",
@@ -194,7 +194,7 @@ Tea.context(function () {
                 x: 'center',
                 // y 设置垂直安放位置，默认全图顶端，可选值：'top' ¦ 'bottom' ¦ 'center' ¦ {number}（y坐标，单位px）
                 y: 'bottom',
-                data: [this.tableData3.title1,this.tableData3.title2,this.tableData3.title3,this.tableData3.title4,this.this.tableData3.title5]
+                data: [this.tableData3.title1,this.tableData3.title2]
             },
             //  图表距边框的距离,可选值：'百分比'¦ {number}（单位px）
             // top: '16%',   // 等价于 y: '16%'
@@ -215,7 +215,7 @@ Tea.context(function () {
                 // name: 'GB',
                 min:0, // 设置y轴刻度的最小值
                 // max:8,  // 设置y轴刻度的最大值
-                splitNumber:7,  // 设置y轴刻度间隔个数
+                splitNumber:8,  // 设置y轴刻度间隔个数
             },
 			tooltip: {
 				trigger: "axis",

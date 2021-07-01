@@ -1,34 +1,27 @@
-.card-div {
-    width: 30%;
-    height: 160px;
-    background-color: #fff;
-    /* box-shadow: 5px 5px 5px #8c939d; */
-    padding: 20px 10px;
-    display: flex;
-    flex-direction: column;
-}
-
 .menu-define-color{
     color: #000;
     cursor: pointer;
     margin-right: 15px;
-    font-weight: bold;
+    margin-top: 10px;
 }
 .menu-select-color{
     color: #0090cb;
     cursor: pointer;
     margin-right: 15px;
-    font-weight: bold;
+    margin-top: 10px;
 }
 
-.time-define-color{
-    color: #000;
-    cursor: pointer;
-    margin-right: 15px;
+.table-head-bg{
+    height: 32px;
+    background: #f0f0f0;
 }
 
-.time-select-color{
+.edit_btn{
     color: #0090cb;
     cursor: pointer;
-    margin-right: 15px;
+}
+
+.red-edit-btn{
+    color: #db2828;
+    cursor: pointer;
 }

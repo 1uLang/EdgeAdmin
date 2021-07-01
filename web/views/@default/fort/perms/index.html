@@ -1,2 +1,111 @@
 {$layout}
-堡垒机 - 资产授权
+<!-- 堡垒机 - 资产授权 -->
+
+
+<div v-if="pageState===1">
+    <div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
+        <div style="cursor: pointer;margin-top: 10px;" @click="onChangeState(2)">[添加授权规则]</div>
+    </div>
+    
+    <div style="width: 100%;height: 650px;overflow-x: auto; overflow-y: auto;">
+        <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <thead>
+                <tr align="center">
+                    <th class='table-head-bg' style="width: 622px;" >主机名</th>
+                    <th class='table-head-bg' style="width: 103px;" >用户</th>
+                    <th class='table-head-bg' style="width: 100px;" >资产</th>
+                    <th class='table-head-bg' style="width: 100px;" >系统用户</th>
+                    <th class='table-head-bg' style="width: 117px;" >状态</th>
+                    <th class='table-head-bg' style="width: 144px;" >操作</th>
+                </tr>
+            </thead>
+            <tbody id='tableBody'>
+                <tr align="center" style="height: 40px;" v-for="(item,index) in tableData" >
+                    <td @mouseenter="mouseEnter(index)" @mouseleave="mouseLeave(index)">
+                        <u v-show="index===curIndex" @click="onShowDetail(item.id)" style="color: #169BD5;cursor: pointer;">{{item.value1}}</u>
+                        <span v-show="index!=curIndex" style="color: #169BD5;">{{item.value1}}</span>
+                    </td>
+                    <td>{{item.value2}}</td>
+                    <td>{{item.value3}}</td>
+                    <td>{{item.value4}}</td>
+                    <td>
+                        <div :class="{'status-open':item.value5=='1','status-close':item.value5=='0'}">
+                            {{getStatus(item.value5)}}
+                        </div>
+                    </td>
+                    <td>
+                        <div style="display: flex;justify-content: space-around;">
+                            <div class="edit_btn" @click="onEdit(item.id)">编辑</div>
+                            <div class="edit_btn" @click="onDelete(item.id)">删除</div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>    
+</div>
+<div v-if="pageState===2">
+    <div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
+        <div style="display: inline-flex;margin-top: 10px;">
+            <span class="menu-define-color" @click="onChangeState(1)">资产列表</span>
+            <span class="menu-select-color">[添加授权规则]</span>
+        </div>
+    </div>
+</div>
+<div v-if="pageState===3">
+    <div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
+        <div style="display: inline-flex;margin-top: 10px;">
+            <span class="menu-define-color" @click="onChangeState(1)">资产列表</span>
+            <span class="menu-select-color">资产详情</span>
+        </div>
+    </div>
+    <div style="width: 100%;height: 650px;border: 1px solid #f1f1f1;display: flex;flex-direction: column;">
+        <div>
+            <img src="/images/icon_warring.png" width="15px" height="15px"> 基本信息
+        </div>
+        <div style="display: inline-flex;justify-content: space-between;margin-top: 5px;">
+            <span style="width: 50%;padding-left: 10px;">ID:</span>
+            <span style="width: 50%;padding-left: 10px;">{{baseInfo.value1}}</span>
+        </div>
+        <div style="display: inline-flex;justify-content: space-between;margin-top: 5px;">
+            <span style="width: 50%;padding-left: 10px;">名称:</span>
+            <span style="width: 50%;padding-left: 10px;">{{baseInfo.value2}}</span>
+        </div>
+        <div style="display: inline-flex;justify-content: space-between;margin-top: 5px;">
+            <span style="width: 50%;padding-left: 10px;">用户数量:</span>
+            <span style="width: 50%;padding-left: 10px;">{{baseInfo.value3}}</span>
+        </div>
+        <div style="display: inline-flex;justify-content: space-between;margin-top: 5px;">
+            <span style="width: 50%;padding-left: 10px;">资产数量:</span>
+            <span style="width: 50%;padding-left: 10px;">{{baseInfo.value4}}</span>
+        </div>
+        <div style="display: inline-flex;justify-content: space-between;margin-top: 5px;">
+            <span style="width: 50%;padding-left: 10px;">系统用户数量:</span>
+            <span style="width: 50%;padding-left: 10px;">{{baseInfo.value5}}</span>
+        </div>
+        <div style="display: inline-flex;justify-content: space-between;margin-top: 5px;">
+            <span style="width: 50%;padding-left: 10px;">权限:</span>
+            <span style="width: 50%;padding-left: 10px;">{{baseInfo.value6}}</span>
+        </div>
+        <div style="display: inline-flex;justify-content: space-between;margin-top: 5px;">
+            <span style="width: 50%;padding-left: 10px;">开始日期:</span>
+            <span style="width: 50%;padding-left: 10px;">{{onChangeTimeFormat(baseInfo.value7)}}</span>
+        </div>
+        <div style="display: inline-flex;justify-content: space-between;margin-top: 5px;">
+            <span style="width: 50%;padding-left: 10px;">失效日期:</span>
+            <span style="width: 50%;padding-left: 10px;">{{onChangeTimeFormat(baseInfo.value8)}}</span>
+        </div>
+        <div style="display: inline-flex;justify-content: space-between;margin-top: 5px;">
+            <span style="width: 50%;padding-left: 10px;">创建日期:</span>
+            <span style="width: 50%;padding-left: 10px;">{{onChangeTimeFormat(baseInfo.value9)}}</span>
+        </div>
+        <div style="display: inline-flex;justify-content: space-between;margin-top: 5px;">
+            <span style="width: 50%;padding-left: 10px;">创建人:</span>
+            <span style="width: 50%;padding-left: 10px;">{{baseInfo.value10}}</span>
+        </div>
+        <div style="display: inline-flex;justify-content: space-between;margin-top: 5px;">
+            <span style="width: 50%;padding-left: 10px;">备注:</span>
+            <span style="width: 50%;padding-left: 10px;">{{baseInfo.value11}}</span>
+        </div>
+    </div>
+</div>

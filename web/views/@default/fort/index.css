@@ -1,34 +1,16 @@
-.card-div {
-    width: 30%;
-    height: 160px;
-    background-color: #fff;
-    /* box-shadow: 5px 5px 5px #8c939d; */
-    padding: 20px 10px;
+.item-box-style{
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    width: 25%;
+    height: auto;
+    margin: 10px 0;
+    /* padding: 10px; */
+    align-items: center;
+    justify-content: space-around;
+    border-right: solid 1px #666;
 }
 
-.menu-define-color{
-    color: #000;
-    cursor: pointer;
-    margin-right: 15px;
-    font-weight: bold;
-}
-.menu-select-color{
-    color: #0090cb;
-    cursor: pointer;
-    margin-right: 15px;
-    font-weight: bold;
-}
-
-.time-define-color{
-    color: #000;
-    cursor: pointer;
-    margin-right: 15px;
-}
-
-.time-select-color{
-    color: #0090cb;
-    cursor: pointer;
-    margin-right: 15px;
+.item-box-style:last-child{
+    border-right: none;
 }
