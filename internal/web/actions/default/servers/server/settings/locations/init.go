@@ -11,7 +11,7 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
-			Helper(serverutils.NewServerHelper()).
+			Helper(serverutils.NewServerHelper()).Data("teaMenu", "waf").
 			Prefix("/servers/server/settings/locations").
 			Get("", new(IndexAction)).
 			GetPost("/create", new(CreateAction)).

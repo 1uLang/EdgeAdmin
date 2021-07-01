@@ -1,4 +1,4 @@
-package common
+package command
 
 import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
@@ -11,7 +11,7 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeFort)).
 			Data("teaMenu", "fort").
-			Prefix("/fort/session/common").
+			Prefix("/fort/session/command").
 			Get("", new(IndexAction)).
 			EndAll()
 	})

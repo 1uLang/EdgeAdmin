@@ -10,7 +10,7 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeNS)).
-			Data("teaMenu", "ns").
+			Data("teaMenu", "waf").
 			Data("teaSubMenu", "domain").
 			Prefix("/ns/users").
 			Post("/options", new(OptionsAction)).

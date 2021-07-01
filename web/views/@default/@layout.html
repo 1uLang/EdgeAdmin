@@ -71,7 +71,7 @@
                         </li>
                     </ul>
                 </div>
-                <a v-else class="item" :class="{active:selectTopMenuId === menuItem.id}"
+                <a v-else class="item" :class="{'active':getBoolenValue(menuItem.id)}"
                    @click="onSelectTopMenu(menuItem.id)" :href="menuItem.pagePath"
                    style="font-size: 12px;height: 50px;">{{menuItem.menuName}}</a>
             </div>
@@ -141,17 +141,22 @@
                      style="width: 100%;height: 35px;font-size: 16px;color: #fff;line-height: 35px;text-align: center;">
                     {{this.selectDropName}}
                 </div>
+
                 <div v-for="module in teaModules" style="margin-top: 10px;">
                     <div v-if="teaMenu == module.code" class="sub-items">
-                        <a class="item" v-for="subItem in module.subItems" v-if="subItem.isOn !== false"
-                           :href="subItem.url"
-                           :class="{active:subItem.code == teaSubMenu}">{{subItem.name}}</a>
+                        <div class="item" v-for="subItem in module.subItems" >
+                            <a :href="subItem.url">
+                                {{subItem.name}}
+                            </a>
+                            <!-- <div v-if="subItem.subItems && subItem.code === teaSubMenu" class="sub-items" style="margin-top: 5px;"> -->
+                            <div v-if="subItem.subItems" class="sub-items" style="margin-top: 5px;">
+                                <a v-for="subChildItem in subItem.subItems" :href="subChildItem.url" style="display: block;margin-top: 12px;">
+                                    {{subChildItem.name}}
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <!--                <div v-if="letfMenuData" class="sub-items" >-->
-                <!--                    <a class="item" v-for="subItem in letfMenuData" :href="subItem.pagePath"-->
-                <!--                           :class="{active:selectLeftMenuId == subItem.id}" @click="onSelectLeftMenu(subItem.id)">{{subItem.leftName}}</a>-->
-                <!--                </div>-->
             </div>
             <div v-else>
                 <div v-for="module in teaModules" style="margin-top: 10px;">
@@ -161,12 +166,19 @@
                            :class="{active:subItem.code == teaSubMenu}">{{subItem.name}}</a>
                     </div>
                 </div>
-                <!--                <div v-if="letfMenuData" class="sub-items" >-->
-                <!--                    <a class="item" v-for="subItem in letfMenuData" :href="subItem.pagePath"-->
-                <!--                           :class="{active:selectLeftMenuId == subItem.id}" @click="onSelectLeftMenu(subItem.id)">{{subItem.leftName}}</a>-->
-                <!--                </div>-->
+                
             </div>
 
+                           <!-- <div v-if="letfMenuData" class="sub-items" >
+                                <a class="item" v-for="subItem in letfMenuData" :href="subItem.pagePath"
+                                        :class="{active:selectLeftMenuId == subItem.id}" @click="onSelectLeftMenu(subItem.id)">{{subItem.leftName}}</a>
+                            </div>
+
+                                    <div v-if="subItem.subItems && teaSubMenu == subItem.code" class="sub-items">
+                                <a class="item" v-for="subChildItem in subItem.subItems" :href="subChildItem.url">
+                                    {{subChildItem.name}}
+                                </a>
+                            </div> -->
         </div>
     </div>
 
@@ -183,6 +195,7 @@
                 </var>
             </a>
         </div>
+        <div style="margin-top: 20px;"></div>
 
         <!-- 功能区 -->
         {$TEA.VIEW}

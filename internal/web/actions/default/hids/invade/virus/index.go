@@ -28,7 +28,7 @@ func (this *IndexAction) RunGet(params struct {
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	req := &risk.RiskSearchReq{}
 	req.ServerIp = params.ServerIp
@@ -43,11 +43,13 @@ func (this *IndexAction) RunGet(params struct {
 	list, err := risk_server.VirusList(req)
 	if err != nil {
 		this.ErrorPage(err)
+		return
 	}
 	for k, v := range list.AbnormalProcessCountInfoList {
 		os, err := server.Info(v["serverIp"].(string), req.UserName)
 		if err != nil {
 			this.ErrorPage(err)
+			return
 		}
 		list.AbnormalProcessCountInfoList[k]["os"] = os
 	}
@@ -66,7 +68,7 @@ func (this *IndexAction) RunPost(params struct {
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	req := &risk.ProcessReq{Opt: params.Opt}
 	req.Req.MacCode = params.MacCode
@@ -76,7 +78,7 @@ func (this *IndexAction) RunPost(params struct {
 	err = risk_server.ProcessVirus(req)
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	this.Success()
 }
@@ -106,12 +108,13 @@ func (this *DetailAction) RunGet(params struct {
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 
 	info, err := risk_server.VirusDetail(params.MacCode, params.RiskId, params.IsProcess)
 	if err != nil {
 		this.ErrorPage(err)
+		return
 	}
 	this.Data["details"] = info
 
@@ -141,6 +144,7 @@ func (this *DetailListAction) RunGet(params struct {
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
+		return
 	}
 	req := &risk.DetailReq{}
 	req.Req.PageSize = params.PageSize
@@ -157,6 +161,7 @@ func (this *DetailListAction) RunGet(params struct {
 	list1, err := risk_server.VirusDetailList(req)
 	if err != nil {
 		this.ErrorPage(err)
+		return
 	}
 	//已处理 - 隔离
 	req.Req.IsProcessed = true
@@ -164,6 +169,7 @@ func (this *DetailListAction) RunGet(params struct {
 	list2, err := risk_server.VirusDetailList(req)
 	if err != nil {
 		this.ErrorPage(err)
+		return
 	}
 	//已处理 - 信任
 	req.Req.IsProcessed = true
@@ -171,6 +177,7 @@ func (this *DetailListAction) RunGet(params struct {
 	list3, err := risk_server.VirusDetailList(req)
 	if err != nil {
 		this.ErrorPage(err)
+		return
 	}
 	//已处理 - 删除
 	req.Req.IsProcessed = true
@@ -178,6 +185,7 @@ func (this *DetailListAction) RunGet(params struct {
 	list4, err := risk_server.VirusDetailList(req)
 	if err != nil {
 		this.ErrorPage(err)
+		return
 	}
 	//漏洞列表
 	this.Data["datas1"] = list1.ServerVirusInfoList
@@ -196,6 +204,7 @@ func (this *DetailListAction) RunGet(params struct {
 	os, err := server.Info(params.Ip, req.Req.UserName)
 	if err != nil {
 		this.ErrorPage(err)
+		return
 	}
 	this.Data["os"] = os["osType"]
 	//最后扫描时间

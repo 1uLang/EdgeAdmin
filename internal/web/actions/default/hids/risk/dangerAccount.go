@@ -28,7 +28,7 @@ func (this *DangerAccountAction) RunGet(params struct {
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	req := &risk.SearchReq{}
 	req.ServerIp = params.ServerIp
@@ -43,12 +43,13 @@ func (this *DangerAccountAction) RunGet(params struct {
 	list, err := risk_server.DangerAccountList(req)
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	for k, v := range list.List {
 		os, err := server.Info(v["serverIp"].(string), req.UserName)
 		if err != nil {
 			this.ErrorPage(err)
+			return
 		}
 		list.List[k]["os"] = os
 	}

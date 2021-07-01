@@ -11,7 +11,7 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
 			Helper(NewHelper()).
-			Data("teaMenu", "servers").
+			Data("teaMenu", "waf").
 			Data("teaSubMenu", "cache").
 			Prefix("/servers/components/cache").
 			Get("", new(IndexAction)).
@@ -28,7 +28,6 @@ func init() {
 			Post("/testWrite", new(TestWriteAction)).
 			Get("/selectPopup", new(SelectPopupAction)).
 			Post("/count", new(CountAction)).
-
 			EndAll()
 	})
 }

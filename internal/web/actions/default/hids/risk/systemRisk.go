@@ -26,7 +26,7 @@ func (this *SystemRiskAction) RunGet(params struct {
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	req := &risk.SearchReq{}
 	req.Level = params.Level
@@ -44,6 +44,7 @@ func (this *SystemRiskAction) RunGet(params struct {
 	risk, err := risk_server.SystemDistributed(req)
 	if err != nil {
 		this.ErrorPage(err)
+		return
 	}
 	this.Data["risks"] = risk.List
 	this.Data["serverIp"] = params.ServerIp
@@ -61,7 +62,7 @@ func (this *SystemRiskAction) RunPost(params struct {
 	err := hids.InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	req := &risk.ProcessReq{Opt: params.Opt}
 	req.Req.MacCode = params.MacCode
@@ -72,7 +73,7 @@ func (this *SystemRiskAction) RunPost(params struct {
 	fmt.Println(err)
 	if err != nil {
 		this.ErrorPage(err)
-
+		return
 	}
 	this.Success()
 }

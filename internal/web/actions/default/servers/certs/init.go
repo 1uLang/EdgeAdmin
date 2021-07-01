@@ -13,9 +13,7 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
 			Helper(NewHelper()).
-
 			Data("teaSubMenu", "cert").
-
 			Prefix("/servers/certs").
 			Data("leftMenuItem", "cert").
 			Get("", new(IndexAction)).
@@ -39,14 +37,12 @@ func init() {
 			Post("/run", new(acme.RunAction)).
 			GetPost("/updateTaskPopup", new(acme.UpdateTaskPopupAction)).
 			Post("/deleteTask", new(acme.DeleteTaskAction)).
-
 			Prefix("/servers/certs/acme/users").
 			Get("", new(users.IndexAction)).
 			GetPost("/createPopup", new(users.CreatePopupAction)).
 			GetPost("/updatePopup", new(users.UpdatePopupAction)).
 			Post("/delete", new(users.DeleteAction)).
 			GetPost("/selectPopup", new(users.SelectPopupAction)).
-
 			EndAll()
 	})
 }

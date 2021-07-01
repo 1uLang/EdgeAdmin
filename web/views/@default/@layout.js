@@ -13,11 +13,9 @@ Tea.context(function () {
         }
 
         let curSelectValue = sessionStorage.getItem("topSelctMenuId")
-        console.log(curSelectValue)
         if( !curSelectValue){
             curSelectValue = 1
         }
-        console.log(curSelectValue)
         let curSelectDropValue = sessionStorage.getItem("topSelctMenuDropId")
         this.onSelectTopMenu(curSelectValue,curSelectDropValue)
 
@@ -219,9 +217,11 @@ Tea.context(function () {
         }
         sessionStorage.setItem("topSelctMenuId", this.selectTopMenuId);
         sessionStorage.setItem("topSelctMenuDropId",dropId)
-        
-        
     }
+
+    this.getBoolenValue = function (menuId) {
+        return this.selectTopMenuId==menuId
+      }
 
     this.onSelectLeftMenu=function (leftMenuId) { 
         if(this.selectLeftMenuId !=leftMenuId){

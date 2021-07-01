@@ -1,2 +1,124 @@
 {$layout}
-堡垒机 - 资产管理 - 系统用户
+<!-- 堡垒机 - 资产管理 - 系统用户 -->
+
+<div v-if="pageState===1">
+    <div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
+        <div style="cursor: pointer;margin-top: 10px;" @click="onChangeState(2)">[添加账号]</div>
+    </div>
+    
+    <div style="width: 100%;height: 650px;overflow-x: auto; overflow-y: auto;">
+        <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <thead>
+                <tr align="center">
+                    <th class='table-head-bg' style="width: 213px;" >名称</th>
+                    <th class='table-head-bg' style="width: 154px;" >用户名</th>
+                    <th class='table-head-bg' style="width: 169px;" >协议</th>
+                    <th class='table-head-bg' style="width: 169px;" >登录模式</th>
+                    <th class='table-head-bg' style="width: 74px;" >资产</th>
+                    <th class='table-head-bg' style="width: 264px;" >备注</th>
+                    <th class='table-head-bg' style="width: 129px;" >操作</th>
+                </tr>
+            </thead>
+            <tbody id='tableBody'>
+                <tr align="center" style="height: 40px;" v-for="(item,index) in tableData1" >
+                    <td @mouseenter="mouseEnter(index)" @mouseleave="mouseLeave(index)">
+                        <u v-show="index===curIndex" @click="onShowDetail(item)" style="color: #169BD5;cursor: pointer;">{{item.value1}}</u>
+                        <span v-show="index!=curIndex" style="color: #169BD5;">{{item.value1}}</span>
+                    </td>
+                    <td>{{item.value2}}</td>
+                    <td>{{item.value3}}</td>
+                    <td>{{item.value4}}</td>
+                    <td>{{item.value5}}</td>
+                    <td>{{getLinkStatus(item.value6)}}</td>
+                    <td>
+                        <div style="display: flex;justify-content: space-around;">
+                            <div class="edit_btn" @click="onEdit(item.id)">编辑</div>
+                            <div class="edit_btn" @click="onDelete(item.id)">删除</div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>    
+</div>
+<div v-if="pageState===2">
+    <div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
+        <div style="display: inline-flex;margin-top: 10px;">
+            <span class="menu-define-color" @click="onChangeState(1)">账号列表</span>
+            <span class="menu-select-color">[添加账号]</span>
+        </div>
+    </div>
+</div>
+<div v-if="pageState===3 || pageState===4">
+    <div style="display: inline-flex;margin-top: 10px;">
+        <span class="menu-define-color" @click="onChangeState(1)">账号列表</span>
+        <span :class="{'menu-select-color':pageState===3,'menu-define-color':pageState!=3}" @click="onChangeState(3)">账号详情</span>
+        <span :class="{'menu-select-color':pageState===4,'menu-define-color':pageState!=4}" @click="onChangeState(4)">资产列表</span>
+    </div>
+    <div v-if="pageState===3">
+        <div style="width: 100%;height: 650px;border: 1px solid #f1f1f1;display: flex;flex-direction: column;">
+            <div>
+                <img src="/images/icon_warring.png" width="15px" height="15px"> 基本信息
+            </div>
+            <div style="display: inline-flex;justify-content: space-between;margin-top: 5px;">
+                <span style="width: 50%;padding-left: 10px;">ID:</span>
+                <span style="width: 50%;padding-left: 10px;">{{baseInfo.value1}}</span>
+            </div>
+            <div style="display: inline-flex;justify-content: space-between;margin-top: 5px;">
+                <span style="width: 50%;padding-left: 10px;">名称:</span>
+                <span style="width: 50%;padding-left: 10px;">{{baseInfo.value2}}</span>
+            </div>
+            <div style="display: inline-flex;justify-content: space-between;margin-top: 5px;">
+                <span style="width: 50%;padding-left: 10px;">用户名:</span>
+                <span style="width: 50%;padding-left: 10px;">{{baseInfo.value3}}</span>
+            </div>
+            <div style="display: inline-flex;justify-content: space-between;margin-top: 5px;">
+                <span style="width: 50%;padding-left: 10px;">登录模式:</span>
+                <span style="width: 50%;padding-left: 10px;">{{baseInfo.value4}}</span>
+            </div>
+            <div style="display: inline-flex;justify-content: space-between;margin-top: 5px;">
+                <span style="width: 50%;padding-left: 10px;">Sudo:</span>
+                <span style="width: 50%;padding-left: 10px;">{{baseInfo.value5}}</span>
+            </div>
+            <div style="display: inline-flex;justify-content: space-between;margin-top: 5px;">
+                <span style="width: 50%;padding-left: 10px;">Shell:</span>
+                <span style="width: 50%;padding-left: 10px;">{{baseInfo.value6}}</span>
+            </div>
+            <div style="display: inline-flex;justify-content: space-between;margin-top: 5px;">
+                <span style="width: 50%;padding-left: 10px;">创建日期:</span>
+                <span style="width: 50%;padding-left: 10px;">{{onChangeTimeFormat(baseInfo.value7)}}</span>
+            </div>
+            <div style="display: inline-flex;justify-content: space-between;margin-top: 5px;">
+                <span style="width: 50%;padding-left: 10px;">创建人:</span>
+                <span style="width: 50%;padding-left: 10px;">{{baseInfo.value8}}</span>
+            </div>
+        </div>
+    </div>
+    <div v-if="pageState===4">
+        <div style="width: 100%;height: 650px;overflow-x: auto; overflow-y: auto;">
+            <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+                <thead>
+                    <tr align="center">
+                        <th class='table-head-bg' style="width: 295px;" >主机名</th>
+                        <th class='table-head-bg' style="width: 295px;" >IP</th>
+                        <th class='table-head-bg' style="width: 438px;" >系统用户</th>
+                        <th class='table-head-bg' style="width: 155px;" >操作</th>
+                    </tr>
+                </thead>
+                <tbody id='tableBody'>
+                    <tr align="center" style="height: 40px;" v-for="item in tableData2" >
+                        <td>{{item.value1}}</td>
+                        <td>{{item.value2}}</td>
+                        <td>{{item.value3}}</td>
+                        <td>
+                            <div style="display: flex;justify-content: space-around;">
+                                <div class="edit_btn" @click="onPush(item.id)">推送</div>
+                                <div class="edit_btn" @click="onDeleteSource(item.id)">删除</div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>    
+    </div>
+</div>

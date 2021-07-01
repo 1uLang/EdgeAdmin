@@ -635,7 +635,7 @@ func (this *userMustAuth) modules(adminId int64) ([]maps.Map, []maps.Map) {
 						},
 						{
 							"name": "命令记录",
-							"url":  "/fort/command",
+							"url":  "/fort/session/command",
 							"code": "command",
 						},
 					},

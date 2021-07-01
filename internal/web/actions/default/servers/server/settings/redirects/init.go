@@ -12,7 +12,7 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
 			Helper(serverutils.NewServerHelper()).
-			Prefix("/servers/server/settings/redirects").
+			Prefix("/servers/server/settings/redirects").Data("teaMenu", "waf").
 			GetPost("", new(IndexAction)).
 			GetPost("/createPopup", new(CreatePopupAction)).
 			EndAll()

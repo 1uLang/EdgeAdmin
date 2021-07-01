@@ -1,166 +1,73 @@
 Tea.context(function () {
+    
+    this.curIndex = -1
 
-    this.nShowState = 1
-    this.nTimeSelect = 1
-    this.dayFrom = ""
-    this.dayTo = ""
+    this.pageState = 1
 
-    this.$delay(function () {
-        teaweb.datepicker("day-from-picker")
-        teaweb.datepicker("day-to-picker")
-        this.reloadFindTableChart()
-        // this.reloadDetailTableChart()
-    })
-
-    this.onChangeShowState = function (state){
-        if(this.nShowState!=state){
-            this.nShowState = state
-  
-            if(this.nShowState ==1){
-                this.$delay(function () {
-                    this.reloadFindTableChart()
-                })
-            }else{
-                this.$delay(function () {
-                    this.reloadDetailTableChart()
-                })
-            }
-            
+    this.getLinkStatus = function (status) { 
+        switch (status) {
+            case 1:
+                return "可连接"
+            case 0:
+                return "不可连接"
+            default:
+                return "未知"
+        }
+    }
+    this.getStatus = function (status) {
+        switch (status) {
+            case 1:
+                return "启已用"
+            case 0:
+                return "已停用"
+            default:
+                return "已停用"
         }
     }
 
-    this.onChangeTimeSelect = function(index){
-        if(this.nTimeSelect!=index){
-            this.nTimeSelect = index
+    this.onChangeTimeFormat = function (time) {
+        var resultTime = "";
+        if (time) {
+          var tempTime = time.substring(0, time.indexOf("."));
+          resultTime = tempTime.replace("T", " ");
+        }
+        return resultTime;
+      };
+
+    this.mouseLeave = function () { 
+        this.curIndex = -1
+    }
+
+    this.mouseEnter = function (index) { 
+        this.curIndex = index
+    }
+    this.onChangeState = function (id) { 
+        if( this.pageState!=id) {
+            this.pageState = id
         }
     }
 
-    this.reloadFindTableChart = function () {
-		let chartBox = document.getElementById("find-chart-box")
-		let chart = echarts.init(chartBox)
-		let option = {
-            //  图表距边框的距离,可选值：'百分比'¦ {number}（单位px）
-            // top: '16%',   // 等价于 y: '16%'
-            grid: {
-                top: 30,   // 等价于 y: '16%'
-                left: 40, 
-                right: 60,
-                bottom: 30,
-                containLabel: true
-            },
-			xAxis: {
-                // name: 'Hour',
-                // boundaryGap值为false的时候，折线第一个点在y轴上
-                // boundaryGap: false,
-				data: this.findTableData.lineValue
-			},
-			yAxis: {
-                // name: 'GB',
-                min:0, // 设置y轴刻度的最小值
-                // max:8,  // 设置y轴刻度的最大值
-                splitNumber:4,  // 设置y轴刻度间隔个数
-                // axisLine: {
-                //     lineStyle: {
-                //         // 设置y轴颜色
-                //         color: '#fff'
-                //     }
-                // },
-            },
-			tooltip: {
-				trigger: "axis",
-			},
-			series: [
-				{
-                    name:"漏洞总数",
-					type: "line",
-					data: this.findTableData.lineData,
-					itemStyle: {
-						color: "#0085fa"
-					},
-					lineStyle: {
-						color: "#0085fa"
-					}
-				},
-			],
-			animation: false
-		}
-		chart.setOption(option)
-		chart.resize()
-	}
+    this.onOpenDetail = function (id) { 
+        this.onChangeState(3)
+     }
 
-    this.reloadDetailTableChart = function () {
-		let chartBox = document.getElementById("detail-chart-box")
-		let chart = echarts.init(chartBox)
-		let option = {
-            //  图表距边框的距离,可选值：'百分比'¦ {number}（单位px）
-            // top: '16%',   // 等价于 y: '16%'
-            grid: {
-                top: 30,   // 等价于 y: '16%'
-                left: 40, 
-                right: 60,
-                bottom: 30,
-                containLabel: true
-            },
-			xAxis: {
-                // name: 'Hour',
-                // boundaryGap值为false的时候，折线第一个点在y轴上
-                // boundaryGap: false,
-				data: this.detailTableData.lineValue
-			},
-			yAxis: {
-                // name: 'GB',
-                min:0, // 设置y轴刻度的最小值
-                // max:8,  // 设置y轴刻度的最大值
-                splitNumber:4,  // 设置y轴刻度间隔个数
-                // axisLine: {
-                //     lineStyle: {
-                //         // 设置y轴颜色
-                //         color: '#fff'
-                //     }
-                // },
-            },
-			tooltip: {
-				trigger: "axis",
-			},
-			series: [
-				{
-                    name:"漏洞总数",
-					type: "line",
-					data: this.detailTableData.lineData,
-					itemStyle: {
-						color: "#0085fa"
-					},
-					lineStyle: {
-						color: "#0085fa"
-					}
-				},
-			],
-			animation: false
-		}
-		chart.setOption(option)
-		chart.resize()
-	}
+    this.onEdit = function (id) { 
 
-    this.data = {
-        hostCount:5,
-        hostOnline:1,
-        detailAttCount:10,
-        detailAttTodayCount:1,
-        detailloopholeCount:120,
-        detailloopholeTodayCount:12,
     }
+    this.onEnabled = function (id) { 
 
-    this.findTableData={
-        lineValue:["05-08","05-10","05-12","05-14","05-16","05-18","05-20","05-22","05-24","05-26","05-28"],
-        lineData:[20,21,1,21,31,25,15,12,13,16,9]
     }
+    this.onDisabled =function (id) {
 
-    this.detailTableData={
-        lineValue:["05-08","05-10","05-12","05-14","05-16","05-18","05-20","05-22","05-24","05-26","05-28"],
-        lineData:[2,5,10,1,11,5,13,17,5,6,9]
     }
-
-
-
-});
-  
+    this.onDelete = function (id) { 
+        
+     }
+ 
+    this.tableData = [
+        {id:1,value1:"智安安全审计系统服务器",value2:"47.108.234.195",value3:"8 Core 7.82 G 49.0 G",value4:1,value5:1,value6:"2021-06-16T09:29:23.140"},
+        {id:2,value1:"智安安全审计系统服务器",value2:"47.108.234.195",value3:"8 Core 7.82 G 49.0 G",value4:2,value5:0,value6:"2021-06-16T09:29:23.140"},
+        {id:3,value1:"智安安全审计系统服务器",value2:"47.108.234.195",value3:"8 Core 7.82 G 49.0 G",value4:0,value5:1,value6:"2021-06-16T09:29:23.140"},
+        {id:4,value1:"智安安全审计系统服务器",value2:"47.108.234.195",value3:"8 Core 7.82 G 49.0 G",value4:1,value5:0,value6:"2021-06-16T09:29:23.140"},
+    ]
+})

@@ -12,5 +12,5 @@ func NewHelper() *Helper {
 }
 
 func (this *Helper) BeforeAction(action *actions.ActionObject) {
-	action.Data["teaMenu"] = "servers"
+	action.Data["teaMenu"] = "waf"
 }
