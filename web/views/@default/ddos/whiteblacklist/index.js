@@ -1,5 +1,13 @@
 Tea.context(function () {
 
+
+    this.$delay(function () {
+        if (this.errorMessage !== "" && this.errorMessage !== undefined) {
+            teaweb.warn(this.errorMessage, function () {
+            })
+        }
+    })
+
     this.onAddNameList = function () {
         let node = this.getNodeId()
         teaweb.popup(Tea.url(".createPopup?nodeId=" + node), {
@@ -13,7 +21,6 @@ Tea.context(function () {
 
     this.getNodeId = function () {
         let node = this.nodeId
-
         return node
     }
     this.onDelete = function (item) {

@@ -1,5 +1,12 @@
 Tea.context(function () {
 
+    this.$delay(function () {
+        if (this.errorMessage !== "" && this.errorMessage !== undefined) {
+            teaweb.warn(this.errorMessage, function () {
+            })
+        }
+    })
+
     this.level = "1"//防护策略等级
     this.ignore = false //ip直通
     this.dropNode = ''
@@ -8,11 +15,13 @@ Tea.context(function () {
     this.linkList = []
     this.nShowState = 1 //当前显示的页面
 
+    this.searchAddress = ''//当前策略配置 地址
+
     this.tableState = 1 //只有在nShowState==2时生效 屏蔽和连接列表的切换
 
     this.onAddNodeIP = function () {
         let node = this.getNodeId()
-        teaweb.popup(Tea.url(".createPopup?nodeId="+node), {
+        teaweb.popup(Tea.url(".createPopup?nodeId=" + node), {
             callback: function () {
                 teaweb.success("保存成功", function () {
                     teaweb.reload();
@@ -32,35 +41,25 @@ Tea.context(function () {
     }
     this.setHost = function (notice) {
 
-        if(notice !== true && notice !== false)
+        if (notice !== true && notice !== false)
             return;
         let ignore = document.getElementById('btn-switch-ignore').checked
-        let level = document.getElementById('ddosLevel').value
         let that = this
         let msg = !this.ignore ? '开启' : '关闭'
-        let node = this.getNodeId()
-        if (notice) {
-            teaweb.confirm("确定要" + msg + "IP直通吗？", function () {
-                that.$post(".set").params({
-                    Addr: that.address,
-                    ignore: ignore,
-                    NodeId: node,
-                    set: level,
-                }).refresh()
-                document.getElementById("switch-btn").checked = !ignore
+        let node = this.nodeId
+
+        teaweb.confirm("确定要" + msg + "IP直通吗？", function () {
+            that.$post(".set").params({
+                Addr: that.searchAddress,
+                ignore: ignore,
+                NodeId: node,
+                set: level,
+            }).success(resp => {
+                if (resp.code === 200)
+                    document.getElementById("btn-switch-ignore").checked = !ignore
             })
-        } else {
-            if (this.level === level) {
-                return
-            }
-            that.$post(".set")
-                .params({
-                    Addr: that.address,
-                    ignore: ignore,
-                    set: level,
-                    NodeId: node,
-                }).refresh()
-        }
+        })
+
     }
     //分页切换
     this.changeState = function (state) {
@@ -73,10 +72,10 @@ Tea.context(function () {
         return node
     }
     this.shieldSearchList = function (state) {
-        let searchIp = this.src_ip === '' ? 'all' : this.src_ip
+        let searchIp = this.src_ip === '' ? this.searchAddress : this.searchAddress + '-' + this.src_ip
         let node = this.getNodeId()
         //屏蔽列表
-        this.$get(".shield").params({Addr:searchIp, NodeId: node}).success(resp => {
+        this.$get(".shield").params({Addr: searchIp, NodeId: node}).success(resp => {
             if (resp.code === 200) {
                 if (resp.data.shield)
                     this.shieldList = resp.data.shield
@@ -88,8 +87,8 @@ Tea.context(function () {
 
     };
     this.onOpenConfig = function (addr) {
-        this.address = addr
-        this.src_ip = addr
+        this.searchAddress = addr
+
         let node = this.getNodeId()
         let that = this
         //ip直通 防护策略
@@ -98,7 +97,7 @@ Tea.context(function () {
                 that.ignore = resp.data.ignore
                 that.level = resp.data.level
                 //屏蔽列表
-                that.$get(".shield").params({Addr: that.address, NodeId: node}).success(resp => {
+                that.$get(".shield").params({Addr: addr, NodeId: node}).success(resp => {
                     if (resp.code === 200) {
                         if (resp.data.shield)
                             that.shieldList = resp.data.shield
@@ -124,10 +123,10 @@ Tea.context(function () {
 
     //连接列表查询
     this.linkSearchList = function (state) {
-        let searchIp = this.src_ip === '' ? 'all' : this.src_ip
+        let searchIp = this.src_ip === '' ? this.searchAddress : this.searchAddress + '-' + this.src_ip
         let node = this.getNodeId()
         //屏蔽列表
-        this.$get(".link").params({Addr:searchIp, NodeId: node}).success(resp => {
+        this.$get(".link").params({Addr: searchIp, NodeId: node}).success(resp => {
             if (resp.code === 200) {
                 this.linkList = resp.data.list
                 this.tableState = state
@@ -171,11 +170,26 @@ Tea.context(function () {
     //策略切换回调
     this.onChangeHandle = function () {
         let curLevel = document.getElementById('ddosLevel').value
+        let addr = this.searchAddress
+        let node = this.nodeId
+        let ignore = this.ignore
+        if (this.level === curLevel)
+            return
+
         document.getElementById('ddosLevel').value = this.level
         teaweb.confirm("确定更改防护策略？", function () {
-            this.level  = curLevel
-            this.setHost(false)
+            this.$post(".set")
+                .params({
+                    Addr: addr,
+                    ignore: ignore,
+                    set: curLevel,
+                    NodeId: node,
+                }).success(resp => {
+                if (resp.code === 200) {
+                    this.level = curLevel
+                }
+            })
         })
-        
+
     }
 })

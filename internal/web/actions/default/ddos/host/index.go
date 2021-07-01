@@ -1,6 +1,7 @@
 package host
 
 import (
+	"fmt"
 	"github.com/1uLang/zhiannet-api/ddos/model/ddos_host_ip"
 	host_status_server "github.com/1uLang/zhiannet-api/ddos/server/host_status"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
@@ -10,10 +11,6 @@ type IndexAction struct {
 	actionutils.ParentAction
 }
 
-func (this *IndexAction) Init() {
-	this.Nav("", "", "")
-}
-
 func (this *IndexAction) RunGet(params struct {
 	Address  string
 	NodeId   uint64
@@ -21,14 +18,25 @@ func (this *IndexAction) RunGet(params struct {
 	PageSize int
 }) {
 
+	defer this.Show()
+
+	this.Data["list"] = "[]"
+	this.Data["total"] = 0
+	this.Data["ddos"] = "[]"
+	this.Data["nodeId"] = ""
+	this.Data["address"] = ""
+
 	//ddos节点
 	ddos, _, err := host_status_server.GetDdosNodeList()
-
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = err.Error()
 		return
 	}
-	if len(ddos) > 0 && params.NodeId == 0 {
+	if len(ddos) == 0 {
+		this.Data["errorMessage"] = "未配置DDoS防火墙节点"
+		return
+	}
+	if params.NodeId == 0 {
 		params.NodeId = ddos[0].Id
 	}
 	list, total, err := host_status_server.GetHostList(&ddos_host_ip.HostReq{
@@ -38,7 +46,7 @@ func (this *IndexAction) RunGet(params struct {
 		PageNum:  params.PageNum,
 	})
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = fmt.Sprintf("获取DDoS防火墙主机状态列表失败：%v", err.Error())
 		return
 	}
 	this.Data["list"] = list
@@ -46,6 +54,4 @@ func (this *IndexAction) RunGet(params struct {
 	this.Data["ddos"] = ddos
 	this.Data["nodeId"] = params.NodeId
 	this.Data["address"] = params.Address
-	this.Show()
-	//this.Success()
 }
