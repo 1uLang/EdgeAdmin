@@ -26,17 +26,19 @@ func (this *SetAction) RunGet(params struct {
 		Require("请输入主机IP地址")
 
 	if params.NodeId == 0 {
-		this.ErrorPage(fmt.Errorf("请选择节点"))
-		return
+		params.Must.
+			Field("NodeId", params.NodeId).
+			Require("请选择所属DDoS防火墙节点")
 	}
 	res, err := host_status_server.GetHostInfo(&host_status_server.HostGetReq{
 		Addr:   params.Addr,
 		NodeId: params.NodeId,
 	})
 	if err != nil {
-		this.ErrorPage(err)
+		this.Error(err.Error(), 400)
 		return
 	}
+	fmt.Println("==============", res)
 	this.Data["ignore"] = res.Ignore == "checked"
 	this.Data["level"] = res.ParamSet
 	this.Success()

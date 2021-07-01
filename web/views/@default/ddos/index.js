@@ -253,6 +253,4 @@ Tea.context(function () {
 		{id:2,direction:"内网",flow:"295.61 / 299.79 Mbps",msg:"158644 / 164913 pps ",anyKey:"0.05 / 0.05 Mbps"},
 		{id:3,direction:"内网",flow:"295.61 / 299.79 Mbps",msg:"158644 / 164913 pps ",anyKey:"0.05 / 0.05 Mbps"},
 	]
-
-
 })

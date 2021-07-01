@@ -4,9 +4,9 @@
     <div style="display: inline-flex;margin-top: 10px;">
         <span style="margin-right: 15px;" :class="{'mouse-style':nShowState===2}" @click="changeState(1)">主机列表</span>
         <div v-show="nShowState===1" class="mouse-style" @click="onAddNodeIP">[添加高防IP]</div>
-        <div v-show="nShowState===2" style="color: #0090cb;">策略配置 ({{address}})</div>
+        <div v-show="nShowState===2" style="color: #0090cb;">策略配置 ({{searchAddress}})</div>
     </div>
-    <div align="right" style="display: inline-flex;">
+    <div align="right" style="display: inline-flex;" v-show="nShowState===1">
         <div style="line-height: 40px;text-align: center;">DDoS防火墙节点：</div>
         <div class="ui field">  
             <div class="ui field">
@@ -112,25 +112,17 @@
         </div>
     </div>
     <div v-if="tableState===1" style="border:1px solid #000;height: 530px;padding: 15px 15px;">
-        <div class="ui fields inline" style="display:inline-flex;justify-content: space-between;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;align-items: center;">
-            <form class="ui form">
-                <div class="ui margin"></div>
-                <div class="ui menu basic text">
-                    <div class="item">
-                        <div class="ui fields inline">
-                            <div class="ui field">
-                                <input type="text" id="linkHostInput" name="src_ip" placeholder="请输入主机IP" v-model="src_ip"/>
-                            </div>
-                            <div class="ui field">
-                                <button class="ui button" @click="shieldSearchList(1)">查询</button>
-                            </div>
-                        </div>
-                    </div>
+        <div class="ui fields inline" style="display:inline-flex;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
+            <div style="display:inline-flex;padding: 0 10px;">
+                <div class="ui field" style="margin: 10px 0;">
+                    <input type="text" name="src_ip" placeholder="请输入主机源IP" v-model="src_ip"/>
                 </div>
-            </form>
-            <button class="ui button" style="width: 100px;height: 36px;background-color:red;color: #fff;" @click="onRelease('all')">全部释放</button>
+                <button class="ui button" style="margin: 0px 20px" @click="shieldSearchList(1)">查询</button>
+                <button class="ui button" style="width: 100px;height: 36px;background-color:red;color: #fff;" @click="onRelease('all')">全部释放</button>
+            </div>
         </div>
-        <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+
+        <table  class="ui table selectable celled" border="1" style="border-collapse: collapse;">
             <thead>
                 <tr align="center">
                     <th class='table-head-bg' style="width: 214px;" >主机IP</th>
