@@ -1,5 +1,6 @@
 Tea.context(function () {
     this.severity=1
+    // this.selectNode = 0
 
     this.strCPUPer = "0%"
     this.strStatusPer = "0%"
@@ -54,10 +55,10 @@ Tea.context(function () {
         
 
     this.hostData = [
-        {id:1,hostAddress:"成都-ddos-192.168.1.1",},
-        {id:2,hostAddress:"成都-ddos-192.168.1.2",},
-        {id:3,hostAddress:"成都-ddos-192.168.1.3",},
-        {id:4,hostAddress:"成都-ddos-192.168.1.4",},
+        // {id:1,hostAddress:"成都-ddos-192.168.1.1",},
+        // {id:2,hostAddress:"成都-ddos-192.168.1.2",},
+        // {id:3,hostAddress:"成都-ddos-192.168.1.3",},
+        // {id:4,hostAddress:"成都-ddos-192.168.1.4",},
     ]
 
     this.tableDatas = {
@@ -73,5 +74,12 @@ Tea.context(function () {
         RAMPer:{maxValue:2048,useValue:1024,unit:"MB"},
         SWAPPer:{maxValue:2048,useValue:512,unit:"MB"},
         diskPer:30,
+    }
+
+    this.GetSelectNode = function (event) {
+        this.selectNode = event.target.value; //获取option对应的value值
+        let node = this.selectNode
+        window.location.href = '/nfw/acl?nodeId=' + node
+
     }
 })

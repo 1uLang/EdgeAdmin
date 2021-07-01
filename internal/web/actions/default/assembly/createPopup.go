@@ -48,10 +48,6 @@ func (this *CreatePopupAction) RunPost(params struct {
 		Field("idcId", params.IdcId).
 		Require("请选择数据中心")
 
-	if params.Port <= 0 {
-		this.Fail("请选择端口")
-	}
-
 	switch params.AssemblyType {
 	case 0: //ddos防火墙
 		params.Must.

@@ -1,112 +1,115 @@
 {$layout}
 
-<div style="width: 100%;height: 40px;display: flex;justify-content: flex-end;">
+<p class="comment" v-if="nodes.length == 0">请先添加云防火墙节点。</p>
+<div style="width: 100%;height: 40px;display: flex;justify-content: flex-end;" v-if="nodes.length> 0">
     <div style="display: inline-flex;align-items: center;">
         <div style="text-align: center;">云防火墙节点：</div>
-        <div class="ui field">  
+        <div class="ui field">
             <div class="ui field">
-                <select class="ui dropdown auto-width" name="severity" v-model="severity">
-                    <option v-for="item in hostData" :value="item.id">{{item.hostAddress}}</option>
+                <select class="ui dropdown auto-width" name="selectNode" v-model="selectNode" @change="GetSelectNode">
+                    <option v-for="item in nodes" :value="item.id">{{item.addr}}</option>
                 </select>
             </div>
         </div>
     </div>
 </div>
-<div style="margin-top: 20px;">
-    <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+<div style="margin-top: 20px;" v-if="tableData.verInfo != ''">
+
+
+    <table id="tab" class="ui table selectable celled" border="1"  style="border-collapse: collapse;">
         <thead>
-            <tr>
-                <th class='table-head-bg' style="width: 415px;" >名称</th>
-                <th class='table-head-bg' style="width: 694px;" >dengbao.cloud</th>
-            </tr>
+        <tr>
+            <th class='table-head-bg' style="width: 415px;">名称</th>
+            <th class='table-head-bg' style="width: 694px;">dengbao.cloud</th>
+        </tr>
         </thead>
         <tbody id='tableBody'>
-            <tr>
-                <td class="title">版本</td>
-                <td>{{tableData.verInfo}}</td>
-            </tr>
-            <tr>
-                <td class="title">CPU type</td>
-                <td>{{tableData.cpuInfo}}</td>
-            </tr>
-            <tr>
-                <td class="title">平均负载</td>
-                <td>{{tableData.slbInfo}}</td>
-            </tr>
-            <tr>
-                <td class="title">运行时间</td>
-                <td>{{tableData.runTime}}</td>
-            </tr>
-            <tr>
-                <td class="title">当前日期/时间</td>
-                <td>{{tableData.timeNow}}</td>
-            </tr>
-            <tr>
-                <td class="title">最近一次配置</td>
-                <td>{{tableData.lastConfigTime}}</td>
-            </tr>
-            <tr>
-                <td class="title">CPU使用率</td>
-                <td>
-                    <div class="Bar">
-                        <div id="CPUItem">
-                        </div>
-                        <span>{{strCPUPer}}</span>
+        <tr>
+            <td class="title">版本</td>
+            <td>{{tableData.verInfo}}</td>
+        </tr>
+        <tr>
+            <td class="title">CPU type</td>
+            <td>{{tableData.cpuInfo}}</td>
+        </tr>
+        <tr>
+            <td class="title">平均负载</td>
+            <td>{{tableData.slbInfo}}</td>
+        </tr>
+        <tr>
+            <td class="title">运行时间</td>
+            <td>{{tableData.runTime}}</td>
+        </tr>
+        <tr>
+            <td class="title">当前日期/时间</td>
+            <td>{{tableData.timeNow}}</td>
+        </tr>
+        <tr>
+            <td class="title">最近一次配置</td>
+            <td>{{tableData.lastConfigTime}}</td>
+        </tr>
+        <tr>
+            <td class="title">CPU使用率</td>
+            <td>
+                <div class="Bar">
+                    <div id="CPUItem">
                     </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="title">状态表大小</td>
-                <td>
-                    <div class="Bar">
-                        <div id="statusItem">
-                        </div>
-                        <span>{{strStatusPer}}</span>
+                    <span>{{strCPUPer}}</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="title">状态表大小</td>
+            <td>
+                <div class="Bar">
+                    <div id="statusItem">
                     </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="title">MBUF usage</td>
-                <td>
-                    <div class="Bar">
-                        <div id="MBUFItem">
-                        </div>
-                        <span>{{getShowPerText(strMBUFPer,tableData.MBUFCount.maxValue,tableData.MBUFCount.useValue)}}</span>
+                    <span>{{strStatusPer}}</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="title">MBUF usage</td>
+            <td>
+                <div class="Bar">
+                    <div id="MBUFItem">
                     </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="title">内存使用率</td>
-                <td>
-                    <div class="Bar">
-                        <div id="RAMItem">
-                        </div>
-                        <span>{{getShowPerText(strRAMPer,tableData.RAMPer.maxValue,tableData.RAMPer.useValue,tableData.RAMPer.unit)}}</span>
+                    <span>{{getShowPerText(strMBUFPer,tableData.MBUFCount.maxValue,tableData.MBUFCount.useValue)}}</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="title">内存使用率</td>
+            <td>
+                <div class="Bar">
+                    <div id="RAMItem">
                     </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="title">SWAP使用率</td>
-                <td>
-                    <div class="Bar">
-                        <div id="SWAPItem">
-                        </div>
-                        <span>{{getShowPerText(strSWAPPer,tableData.SWAPPer.maxValue,tableData.SWAPPer.useValue,tableData.SWAPPer.unit)}}</span>
+                    <span>{{getShowPerText(strRAMPer,tableData.RAMPer.maxValue,tableData.RAMPer.useValue,tableData.RAMPer.unit)}}</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="title">SWAP使用率</td>
+            <td>
+                <div class="Bar">
+                    <div id="SWAPItem">
                     </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="title">磁盘使用率</td>
-                <td>
-                    <div class="Bar">
-                        <div id="diskItem">
-                        </div>
-                        <span>{{tableData.diskPer}}</span>
+                    <span>{{getShowPerText(strSWAPPer,tableData.SWAPPer.maxValue,tableData.SWAPPer.useValue,tableData.SWAPPer.unit)}}</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="title">磁盘使用率</td>
+            <td>
+                <div class="Bar">
+                    <div id="diskItem">
                     </div>
-                </td>
-            </tr>
-            
+                    <span>{{tableData.diskPer}}</span>
+                </div>
+            </td>
+        </tr>
+
         </tbody>
-            
+
     </table>
 </div>

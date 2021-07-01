@@ -1,5 +1,6 @@
 {$layout}
-<div style="height: 90vh;">
+<p class="comment" v-if="nodes.length == 0">请先添加云防火墙节点。</p>
+<div style="height: 90vh;" v-if="nodes.length > 0">
 
     <div style="display: flex;justify-content: space-between;height: 45px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;margin-bottom: 30px;">
         <div style="display: inline-flex;margin-top: 10px;">
@@ -26,9 +27,9 @@
             </div>
         </div>
     </div>
-
     <div v-if="nShowState===1" style="margin-top: 20px;">
-        <table id="tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+       <!-- <p class="comment" v-if="nodes.length == 0 >">请先添加云防火墙节点。</p>-->
+        <table id="tab" class="ui table selectable celled" border="1"  style="border-collapse: collapse;">
             <thead>
             <tr align="center">
                 <th class='table-head-bg' style="width: 138px;">接口</th>
@@ -40,7 +41,7 @@
                 <th class='table-head-bg' style="width: 208px;">操作</th>
             </tr>
             </thead>
-            <tbody id='tableBody'>
+            <tbody id='tableBody' >
             <tr align="center" style="height: 40px;" v-for="item in tableDataList">
                 <td>{{item.interface}}</td>
                 <td>{{item.external}}</td>

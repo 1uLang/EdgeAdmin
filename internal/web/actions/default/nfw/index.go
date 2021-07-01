@@ -2,6 +2,7 @@ package nfw
 
 import (
 	"fmt"
+	"github.com/1uLang/zhiannet-api/common/model/subassemblynode"
 	opnsense_server "github.com/1uLang/zhiannet-api/opnsense/server"
 	"github.com/1uLang/zhiannet-api/opnsense/server/global_status"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
@@ -21,9 +22,10 @@ func (this *IndexAction) RunGet(params struct {
 	NodeId uint64
 }) {
 	node, _, err := opnsense_server.GetOpnsenseNodeList()
-	if err != nil {
-		this.ErrorPage(err)
-		return
+	if err != nil || node == nil {
+		node = make([]*subassemblynode.Subassemblynode, 0)
+		//this.ErrorPage(err)
+		//return
 	}
 	//nat 规则列表
 	if params.NodeId == 0 && len(node) > 0 {
@@ -32,9 +34,11 @@ func (this *IndexAction) RunGet(params struct {
 	status, err := global_status.GetGlobalStatus(&global_status.GlobalReq{
 		NodeId: params.NodeId,
 	})
-	if err != nil {
-		this.ErrorPage(err)
-		return
+	if err != nil || status == nil {
+		//this.Show()
+		//this.ErrorPage(err)
+		//return
+		status = &global_status.GlobalResp{}
 	}
 	global := map[string]interface{}{}
 	global["verInfo"] = strings.Join(status.Versions, " ") //版本信息
@@ -61,7 +65,11 @@ func (this *IndexAction) RunGet(params struct {
 		swapUse = swapUse / 1024 / 1024
 	}
 	global["SWAPPer"] = map[string]string{"maxValue": fmt.Sprintf("%v", swapTotal), "useValue": fmt.Sprintf("%v", swapUse), "uint": "MB"}
-	global["diskPer"] = strings.Replace(status.Disk.Devices[0].Capacity, "%", "", -1)
+	diskPer := "0"
+	if len(status.Disk.Devices) > 0 {
+		diskPer = strings.Replace(status.Disk.Devices[0].Capacity, "%", "", -1)
+	}
+	global["diskPer"] = diskPer
 
 	this.Data["tableData"] = global
 	this.Data["nodes"] = node
