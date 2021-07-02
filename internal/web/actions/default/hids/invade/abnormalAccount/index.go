@@ -25,9 +25,14 @@ func (this *IndexAction) RunGet(params struct {
 	pageSize int
 }) {
 
+	defer this.Show()
+
+	this.Data["datas"] = nil
+	this.Data["serverIp"] = params.ServerIp
+
 	err := hids.InitAPIServer()
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = err.Error()
 		return
 	}
 	req := &risk.RiskSearchReq{}
@@ -36,25 +41,28 @@ func (this *IndexAction) RunGet(params struct {
 	req.PageNo = params.PageNo
 	req.UserName, err = this.UserName()
 	if err != nil {
-		this.ErrorPage(fmt.Errorf("获取用户信息失败：%v", err))
+		this.Data["errorMessage"] = fmt.Sprintf("获取用户信息失败：%v", err)
 		return
 	}
 	list, err := risk_server.AbnormalAccountList(req)
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = fmt.Sprintf("获取异常账号入侵威胁列表失败：%v", err)
 		return
 	}
-	for k, v := range list.ReboundshellCountInfoList {
+	for k, v := range list.AbnormalAccountCountInfoList {
+
+		if v["userName"] != req.UserName {
+			continue
+		}
 		os, err := server.Info(v["serverIp"].(string), req.UserName)
 		if err != nil {
-			this.ErrorPage(err)
+			this.Data["errorMessage"] = fmt.Sprintf("获取主机信息失败：%v", err)
 			return
 		}
-		list.ReboundshellCountInfoList[k]["os"] = os
+		list.AbnormalAccountCountInfoList[k]["os"] = os
 	}
-	this.Data["datas"] = list.ReboundshellCountInfoList
+	this.Data["datas"] = list.AbnormalAccountCountInfoList
 	this.Data["serverIp"] = params.ServerIp
-	this.Show()
 }
 
 // 异常进程 忽略

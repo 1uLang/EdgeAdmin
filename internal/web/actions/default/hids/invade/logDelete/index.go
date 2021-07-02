@@ -24,37 +24,44 @@ func (this *IndexAction) RunGet(params struct {
 	PageNo   int
 	pageSize int
 }) {
+	defer this.Show()
+
+	this.Data["datas"] = nil
+	this.Data["serverIp"] = params.ServerIp
 
 	err := hids.InitAPIServer()
 	if err != nil {
-		this.ErrorPage(err)
-
+		this.Data["errorMessage"] = err.Error()
+		return
 	}
 	req := &risk.RiskSearchReq{}
 	req.ServerIp = params.ServerIp
 	req.PageSize = params.pageSize
 	req.PageNo = params.PageNo
-
 	req.UserName, err = this.UserName()
 	if err != nil {
-		this.ErrorPage(fmt.Errorf("获取用户信息失败：%v", err))
+		this.Data["errorMessage"] = fmt.Sprintf("获取用户信息失败：%v", err)
 		return
 	}
 	list, err := risk_server.LogDeleteList(req)
 	if err != nil {
-		this.ErrorPage(err)
-
+		this.Data["errorMessage"] = fmt.Sprintf("获取日志异常删除入侵威胁列表失败：%v", err)
+		return
 	}
-	for k, v := range list.ReboundshellCountInfoList {
+	for k, v := range list.LogDeleteCountInfoList {
+
+		if v["userName"] != req.UserName {
+			continue
+		}
 		os, err := server.Info(v["serverIp"].(string), req.UserName)
 		if err != nil {
-			this.ErrorPage(err)
+			this.Data["errorMessage"] = fmt.Sprintf("获取主机信息失败：%v", err)
+			return
 		}
-		list.ReboundshellCountInfoList[k]["os"] = os
+		list.LogDeleteCountInfoList[k]["os"] = os
 	}
-	this.Data["datas"] = list.ReboundshellCountInfoList
+	this.Data["datas"] = list.LogDeleteCountInfoList
 	this.Data["serverIp"] = params.ServerIp
-	this.Show()
 }
 
 // 异常进程 忽略

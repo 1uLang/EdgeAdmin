@@ -10,6 +10,13 @@ Tea.context(function () {
     this.enters = function (index) {
         this.curIndex = index;
     }
+    this.$delay(function () {
+
+        if (this.errorMessage !== "" && this.errorMessage !== undefined) {
+            teaweb.warn(this.errorMessage, function () {
+            })
+        }
+    })
 
     this.leaver = function () {
         this.curIndex = -1;

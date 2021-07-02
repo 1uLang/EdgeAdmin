@@ -22,7 +22,8 @@
         </form>
     </div>
 
-    <div class="card-div" style="height: 600px;;display: flex;flex-direction: row;margin-top: 15px;">
+    <p class="comment" v-if="!dangerAccounts || dangerAccounts.length == 0">暂时还没有风险账号漏洞风险信息。</p>
+    <div class="card-div" style="height: 600px;;display: flex;flex-direction: row;margin-top: 15px;" v-else>
         <table  height="40px" class="ui table selectable celled" border="1" style="border-collapse: collapse;margin:15px;">
             <thead>
                 <tr align="center">
