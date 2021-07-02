@@ -32,8 +32,8 @@
     </div>
 
     <p class="comment" v-if="!risks || risks.length == 0">暂时还没有系统漏洞风险信息。</p>
-    <div class="card-div" style="height: 600px;;display: flex;flex-direction: row;margin-top: 15px;" v-else>
-        <table class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+    <div class="card-div" style="height: 600px;display: flex;flex-direction: row;margin-top: 15px;padding: 15px;" v-else>
+        <table height="40px" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
             <thead>
             <tr align="center">
                 <th class='table-head-bg' style="width: 377px;">主机IP</th>
@@ -42,7 +42,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr align="center" style="height: 40px;" v-for="item in risks">
+            <tr align="center"  v-for="item in risks">
                 <td>{{item.serverIp}}|{{parseServerLocalIp(item.serverLocalIp)}}</td>
                 <td>
                     <div class="model-background" style="display: flex;flex-direction: row;">
