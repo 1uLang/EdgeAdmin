@@ -21,10 +21,10 @@
             </div>
         </form>
     </div>
-    <p class="comment" v-if="!weaks || weaks.length == 0">暂时还没有弱口令漏洞风险信息。</p>
-    <div class="card-div" style="height: 600px;;display: flex;flex-direction: row;margin-top: 15px;" v-else>
+    <!-- <p class="comment" v-if="!weaks || weaks.length == 0">暂时还没有弱口令漏洞风险信息。</p> -->
+    <div style="width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;margin-top: 20px;">
         <table id="tab" height="40px" class="ui table selectable celled" border="1"
-               style="border-collapse: collapse;margin:15px;">
+               style="border-collapse: collapse;">
             <thead>
             <tr align="center">
                 <th class='table-head-bg' style="width: 500px;">主机IP</th>

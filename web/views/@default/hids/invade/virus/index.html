@@ -20,9 +20,9 @@
         </form>
     </div>
 
-    <p class="comment" v-if="!datas || datas.length == 0">暂时还没有病毒木马入侵威胁信息。</p>
-    <div class="card-div" style="height: 600px;;display: flex;flex-direction: row;margin-top: 15px;" v-else>
-        <table id = "tab" height="40px" class="ui table selectable celled" border="1" style="border-collapse: collapse;margin:15px;">
+    <!-- <p class="comment" v-if="!datas || datas.length == 0">暂时还没有病毒木马入侵威胁信息。</p> -->
+    <div style="width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;margin-top: 20px;">
+        <table id = "tab" height="40px" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
             <thead>
                 <tr align="center">
                     <th v-for="item in tableTitle" class='table-head-bg' :style="{width: item.width}" >{{item.name}}</th>
