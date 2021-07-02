@@ -8,17 +8,20 @@
     cursor: pointer;
     margin-right: 15px;
 }
-
 .status-open{
     display: inline-block;
     color: #21ba45;
-    padding: 5px 2px;
+    font-weight: 700;
+    padding: 4px 6px;
+    border-radius: 5px;
     border: 1px solid #21ba45;
 }
 .status-close{
     display: inline-block;
     color: #db2828;
-    padding: 5px 2px;
+    font-weight: 700;
+    padding: 4px 6px;
+    border-radius: 5px;
     border: 1px solid #db2828;
 }
 .edit_btn{
