@@ -13,6 +13,9 @@ Tea.context(function () {
     this.bTimeOutTip = false
     this.bShowScanPath = false
 
+    this.dayFrom = ""
+    this.dayTo = ""
+
     this.sTopSelectItem = [
         {id: "01", value: "系统漏洞"},
         {id: "02", value: "弱口令"},
