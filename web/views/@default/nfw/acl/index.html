@@ -1,18 +1,27 @@
 {$layout}
 {$layout}
 
+<p class="comment" v-if="nodes.length == 0">请先添加云防火墙节点。</p>
+<div style="height: 90vh;" v-if="nodes.length > 0">
 
     <div style="display: flex;justify-content: space-between;height: 45px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;margin-bottom: 30px;">
         <div style="display: inline-flex;margin-top: 10px;">
-            <div :class="{'menu-select-color':nShowState===1,'menu-define-color':nShowState!=1}" @click="onChangeShowState(1)">规则列表</div>
-            <div v-show="nShowState!=3" :class="{'menu-select-color':nShowState===2,'menu-define-color':nShowState!=2}" @click="onOpenChangeView('')">添加规则</div>
-            <div v-show="nShowState===3" :class="{'menu-select-color':nShowState===3,'menu-define-color':nShowState!=3}">修改规则</div>
+            <div :class="{'menu-select-color':nShowState===1,'menu-define-color':nShowState!=1}"
+                 @click="onChangeShowState(1)">规则列表
+            </div>
+            <div v-show="nShowState!=3" :class="{'menu-select-color':nShowState===2,'menu-define-color':nShowState!=2}"
+                 @click="onOpenChangeView('')">添加规则
+            </div>
+            <div v-show="nShowState===3"
+                 :class="{'menu-select-color':nShowState===3,'menu-define-color':nShowState!=3}">修改规则
+            </div>
         </div>
         <div align="right" style="display: inline-flex;">
             <div style="line-height: 40px;text-align: center;">云防火墙节点：</div>
-            <div class="ui field">  
+            <div class="ui field">
                 <div class="ui field">
-                    <select class="ui dropdown auto-width" name="SelectNode" v-model="selectNode" @change="GetSelectNode">
+                    <select class="ui dropdown auto-width" name="SelectNode" v-model="selectNode"
+                            @change="GetSelectNode">
                         <option v-for="item in nodes" :value="item.id">{{item.addr}}</option>
                     </select>
                 </div>
@@ -21,51 +30,55 @@
     </div>
 
     <div v-if="nShowState===1" style="margin-top: 20px;">
-        <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+        <table id="tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
             <thead>
-                <tr align="center">
-                    <th class='table-head-bg' style="width: 68px;" rowspan="2">接口</th>
-                    <th class='table-head-bg' style="width: 60px;" rowspan="2">方向</th>
-                    <th class='table-head-bg' style="width: 98px;" rowspan="2">协议</th>
-                    <th class='table-head-bg' style="width: 216px;" colspan="2">源</th>
-                    <th class='table-head-bg' style="width: 250px;" colspan="2">目标</th>
-                    <th class='table-head-bg' style="width: 101px;" rowspan="2">描述</th>
-                    <th class='table-head-bg' style="width: 67px;" rowspan="2">策略</th>
-                    <th class='table-head-bg' style="width: 96px;" rowspan="2">状态</th>
-                    <th class='table-head-bg' style="width: 152px;" rowspan="2">操作</th>
-                </tr>
-                <tr align="center">   
-                    <th>IP</th> 
-                    <th>端口</th>
-                    <th>IP</th> 
-                    <th>端口</th>
-                </tr> 
+            <tr align="center">
+                <th class='table-head-bg' style="width: 68px;" rowspan="2">接口</th>
+                <th class='table-head-bg' style="width: 60px;" rowspan="2">方向</th>
+                <th class='table-head-bg' style="width: 98px;" rowspan="2">协议</th>
+                <th class='table-head-bg' style="width: 216px;" colspan="2">源</th>
+                <th class='table-head-bg' style="width: 250px;" colspan="2">目标</th>
+                <th class='table-head-bg' style="width: 101px;" rowspan="2">描述</th>
+                <th class='table-head-bg' style="width: 67px;" rowspan="2">策略</th>
+                <th class='table-head-bg' style="width: 96px;" rowspan="2">状态</th>
+                <th class='table-head-bg' style="width: 152px;" rowspan="2">操作</th>
+            </tr>
+            <tr align="center">
+                <th>IP</th>
+                <th>端口</th>
+                <th>IP</th>
+                <th>端口</th>
+            </tr>
             </thead>
             <tbody id='tableBody'>
-                <tr align="center" style="height: 40px;" v-for="item in tableData" >
-                    <td>{{getInterfaceName(item.interface)}}</td>
-                    <td>{{getDirection(item.direction)}}</td>
-                    <td>{{item.protocol}}</td>
-                    <td>{{item.src}}</td>
-                    <td>{{item.src_port}}</td>
-                    <td>{{item.dst}}</td>
-                    <td>{{item.dst_port}}</td>
-                    <td>{{item.descr}}</td>
-                    <td>{{item.type}}</td> <!--getTactics-->
-                    <td>
-                        <div :class="{'status-open':item.disabled==1,'status-close':item.disabled==0}">
-                            {{getStatus(item.disabled)}}
+            <tr align="center" style="height: 40px;" v-for="item in tableData">
+                <td>{{getInterfaceName(item.interface)}}</td>
+                <td>{{getDirection(item.direction)}}</td>
+                <td>{{item.protocol}}</td>
+                <td>{{item.src}}</td>
+                <td>{{item.src_port}}</td>
+                <td>{{item.dst}}</td>
+                <td>{{item.dst_port}}</td>
+                <td>{{item.descr}}</td>
+                <td>{{item.type}}</td> <!--getTactics-->
+                <td>
+                    <div :class="{'status-open':item.disabled==1,'status-close':item.disabled==0}">
+                        {{getStatus(item.disabled)}}
+                    </div>
+                </td>
+                <td>
+                    <div style="display: flex;justify-content: space-around;">
+                        <div class="edit_btn" @click="onOpenChangeView(item.id)">修改</div>
+                        <div v-show="item.disabled==1" class="edit_btn"
+                             @click="onOpenConfig(item.id,item.disabled,item.interface)">禁用
                         </div>
-                    </td>
-                    <td>
-                        <div style="display: flex;justify-content: space-around;">
-                            <div class="edit_btn" @click="onOpenChangeView(item.id)">修改</div>
-                            <div v-show="item.disabled==1" class="edit_btn" @click="onOpenConfig(item.id,item.disabled,item.interface)">禁用</div>
-                            <div v-show="item.disabled==0" class="edit_btn" @click="onOpenConfig(item.id,item.disabled,item.interface)">启用</div>
-                            <div class="edit_btn" @click="onDelConfig(item.id)">删除</div>
+                        <div v-show="item.disabled==0" class="edit_btn"
+                             @click="onOpenConfig(item.id,item.disabled,item.interface)">启用
                         </div>
-                    </td>
-                </tr>
+                        <div class="edit_btn" @click="onDelConfig(item.id)">删除</div>
+                    </div>
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>
@@ -106,21 +119,24 @@
                     <td>
                         <!-- <nfw-httpType-selector :v-idc-id="agreementTypeId"></nfw-httpType-selector> -->
                         <!-- 不知道为啥上面的显示不出来可能服务器认为我在攻击他 先用下面的显示-->
-                        <nfw-ipprotocol-selector :v-ipprotocol.sync="ipprotocol.sync" :v-ipprotocols="ipprotocols"></nfw-ipprotocol-selector>
+                        <nfw-ipprotocol-selector :v-ipprotocol.sync="ipprotocol.sync"
+                                                 :v-ipprotocols="ipprotocols"></nfw-ipprotocol-selector>
                     </td>
                 </tr>
                 <tr>
                     <td class="title">协议*</td>
                     <td>
-                        <nfw-protocol-selector :v-protocol.sync="protocol" :v-protocols="protocols"></nfw-protocol-selector>
+                        <nfw-protocol-selector :v-protocol.sync="protocol"
+                                               :v-protocols="protocols"></nfw-protocol-selector>
                     </td>
                 </tr>
-                <tr >
-                    <td class="title" >源*</td>
+                <tr>
+                    <td class="title">源*</td>
                     <td>
                         <!-- <nfw-sourceNetType-selector :v-idc-id="sourceTypeId"></nfw-sourceNetType-selector> -->
                         <!-- 不知道为啥上面的显示不出来可能服务器认为我在攻击他 先用下面的显示-->
-                        <nfw-agreement-selector :v-src="src" :v-srcs="srcs" :v-masks="masks" :v-srcmask.sync="srcmask" :v-srcinput.sync="srcinput"></nfw-agreement-selector>
+                        <nfw-agreement-selector :v-src="src" :v-srcs="srcs" :v-masks="masks" :v-srcmask.sync="srcmask"
+                                                :v-srcinput.sync="srcinput"></nfw-agreement-selector>
                     </td>
                 </tr>
                 <!--<tr v-show="nShowState===3">
@@ -147,7 +163,8 @@
                     <td class="title">目标*</td>
                     <td>
                         <nfw-target-selector :v-dst="dst" :v-node-id="selectNode" :v-id="id" :v-dstmask.sync="dstmask"
-                                             :v-masks="masks" :v-dsts="dsts" :v-dstinput.sync="dstinput"></nfw-target-selector>
+                                             :v-masks="masks" :v-dsts="dsts"
+                                             :v-dstinput.sync="dstinput"></nfw-target-selector>
                     </td>
                 </tr>
 
@@ -165,3 +182,4 @@
             </button>
         </form>
     </div>
+</div>

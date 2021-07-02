@@ -1,6 +1,8 @@
 package acl
 
 import (
+	"github.com/1uLang/zhiannet-api/common/model/subassemblynode"
+	req_acl "github.com/1uLang/zhiannet-api/opnsense/request/acl"
 	opnsense_server "github.com/1uLang/zhiannet-api/opnsense/server"
 	"github.com/1uLang/zhiannet-api/opnsense/server/acl"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
@@ -21,24 +23,23 @@ func (this *IndexAction) RunGet(params struct {
 	PageSize int
 }) {
 	node, _, err := opnsense_server.GetOpnsenseNodeList()
-	if err != nil {
-		this.ErrorPage(err)
-		return
+	if err != nil || node == nil {
+		//this.ErrorPage(err)
+		//return
+		node = make([]*subassemblynode.Subassemblynode, 0)
 	}
 	// 规则列表
 	if params.NodeId == 0 && len(node) > 0 {
 		params.NodeId = node[0].Id
 	}
 	list, err := acl.GetAclList(params.NodeId)
-	if err != nil {
-		this.ErrorPage(err)
-		return
+	if err != nil || list == nil {
+		//this.ErrorPage(err)
+		//return
+		list = make([]*req_acl.AclListResp, 0)
 	}
-	if len(list) > 0 {
-		this.Data["tableData"] = list
 
-	}
-	//this.Data["tableDataList"] = list
+	this.Data["tableData"] = list
 	this.Data["nodes"] = node
 	this.Data["selectNode"] = params.NodeId
 	this.Show()
