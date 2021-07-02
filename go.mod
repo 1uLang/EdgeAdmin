@@ -11,7 +11,8 @@ require (
 	github.com/cespare/xxhash v1.1.0
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/go-yaml/yaml v2.1.0+incompatible
-	github.com/iwind/TeaGo v0.0.0-20210411134150-ddf57e240c2f
+	github.com/golang/protobuf v1.4.2
+	github.com/iwind/TeaGo v0.0.0-20210628135026-38575a4ab060
 	github.com/miekg/dns v1.1.35
 	github.com/sirupsen/logrus v1.8.1
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
