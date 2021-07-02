@@ -30,7 +30,7 @@ Vue.component("nfw-ipprotocol-selector", {
 		}
 	},
 	template: `<div>
-	<select class="ui dropdown auto-width" name="ipprotocol" v-model="ipprotocol">
+	<select class="ui dropdown auto-width" name="ipprotocol" v-model="ipprotocol" style="min-width: 180px;">
 <!--		<option value="-1">[选择数据中心]</option>-->
 		<option v-for="idc in ipprotocols" :value="idc.value">{{idc.name}}</option>
 	</select>

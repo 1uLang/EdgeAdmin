@@ -46,7 +46,7 @@ Vue.component("nfw-interface-selector", {
         }
     },
     template: `<div>
-	<select class="ui dropdown auto-width" name="interface"  v-model="interface"> 
+	<select class="ui dropdown auto-width" name="interface"  v-model="interface" style="min-width: 180px;"> 
 <!--		<option value="-1">[选择接口]</option>-->
 		<option v-for="idc in interfaces" :value="idc.value" >{{idc.name}}</option>
 <!--		<option :value="idc.value" v-else>{{idc.name}}</option>-->

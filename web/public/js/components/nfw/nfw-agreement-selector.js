@@ -65,16 +65,16 @@ Vue.component("nfw-agreement-selector", {
         }
     },
     template: `<div>
-	<select class="ui dropdown auto-width" name="src" v-model="src" @change="selectSrc($event)">
+	<select class="ui dropdown auto-width" name="src" v-model="src" @change="selectSrc($event)" style="min-width: 180px;">
 <!--		<option value="-1">[选择数据中心]</option>-->
 		<option v-for="idc in srcs" :value="idc.value">{{idc.name}}</option>
 	</select>
-	 <div style="display: flex;justify-content: start;flex-direction: row;" :class="{'hide':hide==true}">
-        <input type="text" name="srcinput" maxlength="50" v-model="srcinput"/>
+	 <div style="display: flex;justify-content: start;flex-direction: row;margin-top: 5px;" :class="{'hide':hide==true}">
+        <input type="text" name="srcinput" maxlength="50" v-model="srcinput" style="width: 180px;"/>
         <!-- 网络请求用这个 -->
         <!-- <nfw-source-selector :v-idc-id="sourceId"></nfw-source-selector> -->
         <!-- 本地数据用这个 -->
-        <select class="ui dropdown auto-width" name="srcmask" v-model="srcmask">
+        <select class="ui dropdown auto-width" name="srcmask" v-model="srcmask" style="min-width: 80px;margin-left: 10px;">
             <option v-for="item in masks" :value="item.id">{{item.value}}</option>
         </select>
     </div>
