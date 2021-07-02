@@ -24,9 +24,13 @@ func (this *IndexAction) RunGet(params struct {
 
 	List bool
 }) {
+	this.Data["nodeErr"] = ""
+	this.Data["vulnerabilities"] = make([]interface{}, 0)
 	err := webscan.InitAPIServer()
 	if err != nil {
-		this.ErrorPage(err)
+		//this.ErrorPage(err)
+		this.Data["nodeErr"] = "获取web扫描节点错误"
+		this.Show()
 		return
 	}
 	if params.PageNo < 0 {
@@ -46,8 +50,9 @@ func (this *IndexAction) RunGet(params struct {
 	}
 
 	list, err := vulnerabilities_server.List(&vulnerabilities.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, Query: query, AdminUserId: uint64(this.AdminId())})
-	if err != nil {
-		this.ErrorPage(err)
+	if err != nil && list != nil {
+		//this.ErrorPage(err)
+		this.Show()
 		return
 	}
 	//this.Data["vulnerabilities"] = list["vulnerabilities"]

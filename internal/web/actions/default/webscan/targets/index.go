@@ -1,6 +1,7 @@
 package targets
 
 import (
+	"fmt"
 	"github.com/1uLang/zhiannet-api/awvs/model/targets"
 	targets_server "github.com/1uLang/zhiannet-api/awvs/server/targets"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
@@ -22,9 +23,15 @@ func (this *IndexAction) RunGet(params struct {
 
 	Show int
 }) {
+	data := make([]interface{}, 0)
+	this.Data["nodeErr"] = ""
+	this.Data["targets"] = data
 	err := webscan.InitAPIServer()
 	if err != nil {
-		this.ErrorPage(err)
+		//this.ErrorPage(err)
+
+		this.Data["nodeErr"] = fmt.Errorf("获取扫描节点信息失败")
+		this.Show()
 		return
 	}
 	if params.PageNo < 0 {
@@ -34,8 +41,10 @@ func (this *IndexAction) RunGet(params struct {
 		params.PageSize = 20
 	}
 	list, err := targets_server.List(&targets.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, AdminUserId: uint64(this.AdminId())})
-	if err != nil {
-		this.ErrorPage(err)
+	if err != nil && list != nil {
+		//this.ErrorPage(err)
+		this.Data["targets"] = data
+		this.Show()
 		return
 	}
 	if lists, ok := list["targets"]; ok {
