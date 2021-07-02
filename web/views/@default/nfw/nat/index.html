@@ -20,7 +20,7 @@
                 <div class="ui field">
                     <select class="ui dropdown auto-width" name="nodeId" v-model="selectNode"
                             @change="GetSelectNode($event)">
-                        <option v-for="item in nodes" :value="item.id" >{{item.addr}}</option>
+                        <option v-for="item in nodes" :value="item.id" >{{item.name}}-{{item.addr}}</option>
 
                     </select>
                 </div>

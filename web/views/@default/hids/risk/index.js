@@ -5,7 +5,10 @@ Tea.context(function () {
     this.lowPer = "0%"
 
     this.$delay(function () {
-        
+        if (this.errorMessage !== "" && this.errorMessage !== undefined) {
+            teaweb.warn(this.errorMessage, function () {
+            })
+        }
     })
 
     this.onOpenDetail = function(type){

@@ -2,6 +2,13 @@ Tea.context(function () {
     this.curIndex = -1
     this.sSelectValue = 0
 
+    this.$delay(function () {
+
+        if (this.errorMessage !== "" && this.errorMessage !== undefined) {
+            teaweb.warn(this.errorMessage, function () {
+            })
+        }
+    })
     this.onChangeCheckState = function (state) {
         window.location = "/hids/baseline?State="+state+'&ResultState='+this.ResultState
      }

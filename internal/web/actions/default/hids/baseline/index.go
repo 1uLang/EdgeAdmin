@@ -26,15 +26,20 @@ func (this *IndexAction) RunGet(params struct {
 	//Must *actions.Must
 	//CSRF *actionutils.CSRF
 }) {
+	defer this.Show()
+	this.Data["baselines"] = nil
+	this.Data["State"] = params.State
+	this.Data["ResultState"] = params.ResultState
+
 	err := hids.InitAPIServer()
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = err.Error()
 		return
 	}
 	req := &baseline.SearchReq{}
 	req.UserName, err = this.UserName()
 	if err != nil {
-		this.ErrorPage(fmt.Errorf("获取用户信息失败：%v", err))
+		this.Data["errorMessage"] = fmt.Sprintf("获取用户信息失败：%v", err)
 		return
 	}
 	req.PageNo = params.PageNo
@@ -48,13 +53,17 @@ func (this *IndexAction) RunGet(params struct {
 	}
 	list, err := baseline_server.List(req)
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = fmt.Sprintf("获取主机合规基线列表失败：%v", err)
 		return
 	}
 	for k, v := range list.List {
+		if v["userName"] != req.UserName {
+			continue
+		}
 		os, err := server.Info(v["serverIp"].(string), req.UserName)
 		if err != nil {
-			this.ErrorPage(err)
+			this.Data["errorMessage"] = fmt.Sprintf("获取主机信息失败：%v", err)
+			return
 		}
 		list.List[k]["os"] = os
 	}
@@ -62,5 +71,4 @@ func (this *IndexAction) RunGet(params struct {
 	this.Data["State"] = params.State
 	this.Data["ResultState"] = params.ResultState
 
-	this.Show()
 }

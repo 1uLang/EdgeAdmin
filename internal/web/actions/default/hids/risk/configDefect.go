@@ -20,10 +20,14 @@ func (this *ConfigDefectAction) RunGet(params struct {
 	PageNo   int
 	PageSize int
 }) {
+	defer this.Show()
+
+	this.Data["configDefects"] = nil
+	this.Data["serverIp"] = params.ServerIp
 
 	err := hids.InitAPIServer()
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = err.Error()
 		return
 	}
 	req := &risk.SearchReq{}
@@ -33,25 +37,29 @@ func (this *ConfigDefectAction) RunGet(params struct {
 
 	req.UserName, err = this.UserName()
 	if err != nil {
-		this.ErrorPage(fmt.Errorf("获取用户信息失败：%v", err))
+		this.Data["errorMessage"] =fmt.Sprintf("获取用户信息失败：%v", err)
 		return
 	}
 	list, err := risk_server.ConfigDefectList(req)
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] =fmt.Sprintf("获取缺陷配置详细列表信息失败：%v", err)
 		return
 	}
 	for k, v := range list.List {
+
+		if v["userName"] != req.UserName {
+			continue
+		}
 		os, err := server.Info(v["serverIp"].(string), req.UserName)
 		if err != nil {
-			this.ErrorPage(err)
+			this.Data["errorMessage"] =fmt.Sprintf("获取主机信息失败：%v", err)
 			return
 		}
 		list.List[k]["os"] = os
 	}
 	this.Data["configDefects"] = list.List
 	this.Data["serverIp"] = params.ServerIp
-	this.Show()
+
 }
 
 // 配置缺陷 忽略
@@ -63,7 +71,7 @@ func (this *ConfigDefectAction) RunPost(params struct {
 }) {
 	err := hids.InitAPIServer()
 	if err != nil {
-		this.ErrorPage(err)
+		this.Error(err.Error(),400)
 		return
 	}
 	req := &risk.ProcessReq{Opt: params.Opt}
@@ -73,7 +81,7 @@ func (this *ConfigDefectAction) RunPost(params struct {
 
 	err = risk_server.ProcessConfigDefect(req)
 	if err != nil {
-		this.ErrorPage(err)
+		this.Error(err.Error(),400)
 		return
 	}
 	this.Success()
@@ -97,9 +105,24 @@ func (this *ConfigDefectListAction) RunGet(params struct {
 
 	params.Must.Field("macCode", params.MacCode).Require("请输入机器码")
 
+	defer this.Show()
+
+	this.Data["configDefect1"] = nil
+	this.Data["configDefect2"] = nil
+
+	this.Data["total1"] = 0
+	this.Data["total2"] = 0
+
+	this.Data["ip"] = params.Ip
+	this.Data["macCode"] = params.MacCode
+
+	this.Data["os"] = params.Os
+	//最后扫描时间
+	this.Data["lastUpdateTime"] = params.LastUpdateTime
+
 	err := hids.InitAPIServer()
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = err.Error()
 		return
 	}
 	req := &risk.DetailReq{}
@@ -113,13 +136,14 @@ func (this *ConfigDefectListAction) RunGet(params struct {
 	list1, err := risk_server.ConfigDefectDetailList(req)
 	if err != nil {
 		this.ErrorPage(err)
+		this.Data["errorMessage"] = fmt.Sprintf("获取缺陷配置详细列表失败：%v",err)
 		return
 	}
 	//已处理
 	req.Req.ProcessState = 2
 	list2, err := risk_server.ConfigDefectDetailList(req)
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = fmt.Sprintf("获取缺陷配置详细列表失败：%v",err)
 		return
 	}
 	//漏洞列表
@@ -136,7 +160,6 @@ func (this *ConfigDefectListAction) RunGet(params struct {
 	//最后扫描时间
 	this.Data["lastUpdateTime"] = params.LastUpdateTime
 
-	this.Show()
 }
 
 type ConfigDefectDetailAction struct {
@@ -159,18 +182,21 @@ func (this *ConfigDefectDetailAction) RunGet(params struct {
 	params.Must.
 		Field("macCode", params.MacCode).
 		Require("请输入机器码")
+	defer this.Show()
+
+	this.Data["ConfigDefectDetails"] = nil
 
 	err := hids.InitAPIServer()
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = err.Error()
 		return
 	}
 
 	info, err := risk_server.ConfigDefectDetail(params.MacCode, params.RiskId, params.ProcessState == 2)
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = fmt.Sprintf("获取缺陷配置详情信息失败：%v",err)
 		return
 	}
 	this.Data["ConfigDefectDetails"] = info
-	this.Show()
+
 }

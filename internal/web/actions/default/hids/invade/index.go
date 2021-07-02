@@ -5,6 +5,7 @@ import (
 	"github.com/1uLang/zhiannet-api/hids/model/risk"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
+	"sync"
 )
 
 type IndexAction struct {
@@ -13,25 +14,30 @@ type IndexAction struct {
 
 func (this *IndexAction) RunGet(params struct{}) {
 
+	defer this.Show()
+
+	dashboard := []map[string]interface{}{
+		{"name": "病毒木马", "url": "virus", "count": 0},
+		{"name": "网页后门", "url": "webShell", "count": 0},
+		{"name": "反弹shell", "url": "reboundShell", "count": 0},
+		{"name": "异常账号", "url": "abnormalAccount", "count": 0},
+		{"name": "日志异常删除", "url": "logDelete", "count": 0},
+		{"name": "异常登录", "url": "abnormalLogin", "count": 0},
+		{"name": "异常进程", "url": "abnormalProcess", "count": 0},
+		{"name": "系统命令篡改", "url": "systemCmd", "count": 0},
+	}
+
+	this.Data["dashboard"] = dashboard
+
 	err := hids.InitAPIServer()
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = err.Error()
 		return
 	}
-	dashboard := make([]map[string]interface{}, 8)
 
-	//invadeLock := sync.RWMutex{}
-	//invadeWg := sync.WaitGroup{}
-	nameUrls := []map[string]string{
-		{"name": "病毒木马", "url": "virus"},
-		{"name": "网页后门", "url": "webShell"},
-		{"name": "反弹shell", "url": "reboundShell"},
-		{"name": "异常账号", "url": "abnormalAccount"},
-		{"name": "日志异常删除", "url": "logDelete"},
-		{"name": "异常登录", "url": "abnormalLogin"},
-		{"name": "异常进程", "url": "abnormalProcess"},
-		{"name": "系统命令篡改", "url": "systemCmd"},
-	}
+	invadeLock := sync.RWMutex{}
+	invadeWg := sync.WaitGroup{}
+
 	fns := []func(*risk.RiskSearchReq) (risk.RiskSearchResp, error){
 		risk.VirusList,
 		risk.WebShellList,
@@ -46,26 +52,23 @@ func (this *IndexAction) RunGet(params struct{}) {
 
 	args.UserName, err = this.UserName()
 	if err != nil {
-		this.ErrorPage(fmt.Errorf("获取用户信息失败：%v", err))
+		this.Data["errorMessage"] = fmt.Sprintf("获取用户信息失败：%v", err)
 		return
 	}
 	args.PageSize = 1
 
-	for idx, fn := range fns {
-		//invadeWg.Add(1)
-		//go func(idx int, fn func(*risk.RiskSearchReq) (risk.RiskSearchResp, error)) {
-		//defer invadeWg.Done()
-		risk, _ := fn(args)
-		//invadeLock.Lock()
-		dashboard[idx] = map[string]interface{}{
-			"name":  nameUrls[idx]["name"],
-			"count": risk.TotalData,
-			"url":   nameUrls[idx]["url"],
-		}
-		//invadeLock.Unlock()
-		//}(i, f)
+	for i, f := range fns {
+		invadeWg.Add(1)
+		go func(idx int, fn func(*risk.RiskSearchReq) (risk.RiskSearchResp, error)) {
+			defer invadeWg.Done()
+			risk, _ := fn(args)
+			invadeLock.Lock()
+			dashboard[idx]["count"] = risk.TotalData
+			invadeLock.Unlock()
+		}(i, f)
 	}
-	//invadeWg.Wait()
+	invadeWg.Wait()
+
 	this.Data["dashboard"] = dashboard
-	this.Show()
+
 }

@@ -14,18 +14,34 @@ func (this *IndexAction) Init() {
 }
 
 func (this *IndexAction) RunGet() {
-	err := InitAPIServer()
-	if err != nil {
-		this.ErrorPage(err)
+	nodeErr := InitAPIServer()
+	data := map[string]interface{}{
+		"nodeErr":                 "",
+		"scans_running_count":     0,
+		"scans_waiting_count":     0,
+		"scans_conducted_count":   0,
+		"vuln_count":              map[string]interface{}{"low": 0, "med": 0, "high": 0},
+		"targets_count":           0,
+		"most_vulnerable_targets": []interface{}{},
+		"top_vulnerabilities":     []interface{}{},
+	}
+	if nodeErr != nil {
+		//this.ErrorPage(err)
+		data["nodeErr"] = nodeErr
+		this.Data["data"] = data
+		this.Show()
 		return
 	}
 	info, err := dashboard_server.MeState()
-	if err != nil {
-		this.ErrorPage(err)
+	if err != nil || info == nil {
+		//this.ErrorPage(err)
+		this.Data["data"] = data
+		this.Show()
 		return
 	}
+	info["nodeErr"] = ""
 	this.Data["data"] = info
 	// 日志
-	this.CreateLogInfo("WEB漏洞扫描请求成功")
+	this.CreateLogInfo("WEB漏洞扫描请求")
 	this.Show()
 }

@@ -34,7 +34,8 @@
     </form>
 </div>
 
-<div style="margin-top: 20px;">
+<p class="comment" v-if="!baselines || baselines.length == 0">暂时还没有主机合规基线信息。</p>
+<div style="margin-top: 20px;" v-else>
     <table class="ui table selectable celled" border="1" style="border-collapse: collapse;">
         <thead>
             <tr align="center">

@@ -9,6 +9,11 @@ Tea.context(function () {
     this.$delay(function () {
         teaweb.datepicker("day-from-picker")
         teaweb.datepicker("day-to-picker")
+
+        if (this.errorMessage !== "" && this.errorMessage !== undefined) {
+            teaweb.warn(this.errorMessage, function () {
+            })
+        }
     })
 
 
@@ -16,14 +21,12 @@ Tea.context(function () {
         let node = this.nodeId
         window.location.href = '/ddos/logs?nodeId=' + node
     }
-    this.onDelete = function (id) {
-
-    }
 
     this.onChangeShowState = function (state) {
+        this.level = 1
         if (this.nShowState != state) {
             if (state === 2) {
-                this.$get(".traffic").params({NodeId: this.nodeId}).success(resp => {
+                this.$get(".traffic").params({NodeId: this.nodeId,level:this.level}).success(resp => {
                     if (resp.code === 200) {
                         if (resp.data.traffics)
                             this.traffics = resp.data.traffics
@@ -34,7 +37,7 @@ Tea.context(function () {
                     }
                 })
             } else {
-                this.$get(".link").params({NodeId: this.nodeId}).success(resp => {
+                this.$get(".link").params({NodeId: this.nodeId,level:this.level}).success(resp => {
                     if (resp.code === 200) {
                         if (resp.data.links)
                             this.links = resp.data.links
@@ -49,8 +52,12 @@ Tea.context(function () {
         }
     }
     this.search = function () {
-        if(this.nShowState ==2){
-            this.$get(".traffic").params({NodeId: this.nodeId,Address:this.address,Level:this.level}).success(resp => {
+        if (this.nShowState == 2) {
+            this.$get(".traffic").params({
+                NodeId: this.nodeId,
+                Address: this.address,
+                Level: this.level
+            }).success(resp => {
                 if (resp.code === 200) {
                     if (resp.data.traffics)
                         this.traffics = resp.data.traffics
@@ -59,8 +66,8 @@ Tea.context(function () {
                     this.level = resp.data.level
                 }
             })
-        }else if(this.nShowState == 3){
-            this.$get(".link").params({NodeId: this.nodeId,Address:this.address,Level:this.level}).success(resp => {
+        } else if (this.nShowState == 3) {
+            this.$get(".link").params({NodeId: this.nodeId, Address: this.address, Level: this.level}).success(resp => {
                 if (resp.code === 200) {
                     if (resp.data.links)
                         this.links = resp.data.links

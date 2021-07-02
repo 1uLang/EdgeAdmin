@@ -5,6 +5,13 @@ Tea.context(function () {
         teaweb.popup(Tea.url(".install"));
     }
 
+    this.$delay(function () {
+
+        if (this.errorMessage !== "" && this.errorMessage !== undefined) {
+            teaweb.warn(this.errorMessage, function () {
+            })
+        }
+    })
     this.onStartConfig = function (item) {
         teaweb.confirm("确定要启动吗？", function () {
             this.$post(".disport")

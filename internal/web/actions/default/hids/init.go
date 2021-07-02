@@ -32,7 +32,6 @@ func InitAPIServer() error {
 	if err != nil {
 		return err
 	}
-	fmt.Println("info====", info)
 	//初始化 awvs 系统管理员账号apikeys
 	err = server.SetAPIKeys(&request.APIKeys{
 		AppId:  info.AppId,  //"39rkz",

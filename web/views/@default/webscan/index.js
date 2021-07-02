@@ -1,6 +1,9 @@
 Tea.context(function () {
 
 	this.$delay(function () {
+		if(this.data.nodeErr != ""){
+			return
+		}
 		this.reloadHighVulnerabilitiesChart()
 		this.reloadMedVulnerabilitiesChart()
 		this.reloadLowVulnerabilitiesChart()
@@ -40,7 +43,7 @@ Tea.context(function () {
 					radius: [15, 95],
 					center: ['50%', '48%'],
 					data: [
-						{ value: 320, name: '高危漏洞',itemStyle:{normal:{color:'#ec808d'}} },
+						{ value: this.data.vuln_count.high, name: '高危漏洞',itemStyle:{normal:{color:'#ec808d'}} },
 					],
 					animationEasing: 'cubicInOut',
 					animationDuration: 2600
@@ -78,7 +81,7 @@ Tea.context(function () {
 					radius: [15, 95],
 					center: ['50%', '48%'],
 					data: [
-						{ value: 240, name: '中危漏洞',itemStyle:{normal:{color:'#fcc77d'}} }
+						{ value: this.data.vuln_count.med, name: '中危漏洞',itemStyle:{normal:{color:'#fcc77d'}} }
 					],
 					animationEasing: 'cubicInOut',
 					animationDuration: 2600
@@ -116,7 +119,7 @@ Tea.context(function () {
 					radius: [15, 95],
 					center: ['50%', '48%'],
 					data: [
-						{ value: 59, name: '低危漏洞',itemStyle:{normal:{color:'#3abee8'}} }
+						{ value: this.data.vuln_count.low, name: '低危漏洞',itemStyle:{normal:{color:'#3abee8'}} }
 					],
 					animationEasing: 'cubicInOut',
 					animationDuration: 2600
