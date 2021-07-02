@@ -10,13 +10,15 @@
 }
 
 .status-open{
+    display: inline-block;
     color: #21ba45;
-    padding: 2px 2px;
+    padding: 5px 2px;
     border: 1px solid #21ba45;
 }
 .status-close{
+    display: inline-block;
     color: #db2828;
-    padding: 2px 2px;
+    padding: 5px 2px;
     border: 1px solid #db2828;
 }
 .edit_btn{
@@ -30,4 +32,11 @@
 
 .hide {
     display: none!important;
+}
+
+.line-limit-length {
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; 
 }

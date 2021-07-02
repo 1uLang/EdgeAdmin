@@ -29,19 +29,19 @@
         </div>
     </div>
 
-    <div v-if="nShowState===1" style="margin-top: 20px;">
+    <div v-if="nShowState===1" style="margin-top: 20px;width: 100%;height: 650px;overflow-x: auto; overflow-y: auto;">
         <table id="tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
             <thead>
             <tr align="center">
-                <th class='table-head-bg' style="width: 68px;" rowspan="2">接口</th>
-                <th class='table-head-bg' style="width: 60px;" rowspan="2">方向</th>
-                <th class='table-head-bg' style="width: 98px;" rowspan="2">协议</th>
-                <th class='table-head-bg' style="width: 216px;" colspan="2">源</th>
-                <th class='table-head-bg' style="width: 250px;" colspan="2">目标</th>
-                <th class='table-head-bg' style="width: 101px;" rowspan="2">描述</th>
-                <th class='table-head-bg' style="width: 67px;" rowspan="2">策略</th>
-                <th class='table-head-bg' style="width: 96px;" rowspan="2">状态</th>
-                <th class='table-head-bg' style="width: 152px;" rowspan="2">操作</th>
+                <th class='table-head-bg' style="min-width: 68px;" rowspan="2">接口</th>
+                <th class='table-head-bg' style="min-width: 60px;" rowspan="2">方向</th>
+                <th class='table-head-bg' style="min-width: 98px;" rowspan="2">协议</th>
+                <th class='table-head-bg' style="min-width: 200px;" colspan="2">源</th>
+                <th class='table-head-bg' style="min-width: 200px;" colspan="2">目标</th>
+                <th class='table-head-bg' style="min-width: 160px;" rowspan="2">描述</th>
+                <th class='table-head-bg' style="min-width: 67px;" rowspan="2">策略</th>
+                <th class='table-head-bg' style="min-width: 100px;" rowspan="2">状态</th>
+                <th class='table-head-bg' style="min-width: 140px;" rowspan="2">操作</th>
             </tr>
             <tr align="center">
                 <th>IP</th>
@@ -59,7 +59,7 @@
                 <td>{{item.src_port}}</td>
                 <td>{{item.dst}}</td>
                 <td>{{item.dst_port}}</td>
-                <td>{{item.descr}}</td>
+                <td class="line-limit-length">{{item.descr}}</td>
                 <td>{{item.type}}</td> <!--getTactics-->
                 <td>
                     <div :class="{'status-open':item.disabled==1,'status-close':item.disabled==0}">
@@ -83,13 +83,13 @@
         </table>
     </div>
     <div v-else>
-        <form method="post" class="ui form" data-tea-action="$" data-tea-success="success" style="margin-top: 50px;">
+        <form method="post" class="ui form" data-tea-action="$" data-tea-success="success" style="margin-top: 20px;">
             <table class="ui table definition selectable">
                 <tr>
                     <td class="title">操作*</td>
                     <td>
                         <div>
-                            <select class="ui dropdown auto-width" name="type" v-model="type">
+                            <select class="ui dropdown auto-width" name="type" v-model="type" style="min-width: 180px;">
 
                                 <option v-for="item in types" :value="item.value">{{item.name}}</option>
                             </select>
@@ -107,7 +107,7 @@
                     <td class="title">方向*</td>
                     <td>
                         <div>
-                            <select class="ui dropdown auto-width" name="direction" v-model="direction">
+                            <select class="ui dropdown auto-width" name="direction" v-model="direction" style="min-width: 180px;">
 
                                 <option v-for="item in directions" :value="item.value">{{item.value}}</option>
                             </select>
@@ -171,7 +171,7 @@
                 <tr>
                     <td class="title">描述</td>
                     <td>
-                        <input type="text" name="descr" maxlength="50" v-model="descr"/>
+                        <input type="text" name="descr" maxlength="50" v-model="descr" />
                     </td>
                 </tr>
                 <input type="hidden" name="id" v-model="id">
