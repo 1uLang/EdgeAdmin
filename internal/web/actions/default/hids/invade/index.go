@@ -5,7 +5,6 @@ import (
 	"github.com/1uLang/zhiannet-api/hids/model/risk"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
-	"sync"
 )
 
 type IndexAction struct {
@@ -35,8 +34,8 @@ func (this *IndexAction) RunGet(params struct{}) {
 		return
 	}
 
-	invadeLock := sync.RWMutex{}
-	invadeWg := sync.WaitGroup{}
+	//invadeLock := sync.RWMutex{}
+	//invadeWg := sync.WaitGroup{}
 
 	fns := []func(*risk.RiskSearchReq) (risk.RiskSearchResp, error){
 		risk.VirusList,
@@ -57,17 +56,17 @@ func (this *IndexAction) RunGet(params struct{}) {
 	}
 	args.PageSize = 1
 
-	for i, f := range fns {
-		invadeWg.Add(1)
-		go func(idx int, fn func(*risk.RiskSearchReq) (risk.RiskSearchResp, error)) {
-			defer invadeWg.Done()
+	for idx, fn := range fns {
+		//invadeWg.Add(1)
+		//go func(idx int, fn func(*risk.RiskSearchReq) (risk.RiskSearchResp, error)) {
+		//	defer invadeWg.Done()
 			risk, _ := fn(args)
-			invadeLock.Lock()
+			//invadeLock.Lock()
 			dashboard[idx]["count"] = risk.TotalData
-			invadeLock.Unlock()
-		}(i, f)
+			//invadeLock.Unlock()
+		//}(i, f)
 	}
-	invadeWg.Wait()
+	//invadeWg.Wait()
 
 	this.Data["dashboard"] = dashboard
 

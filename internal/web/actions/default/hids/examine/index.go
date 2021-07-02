@@ -36,6 +36,8 @@ func (this *IndexAction) RunGet(params struct {
 	this.Data["Type"] = 0
 	this.Data["score"] = 0
 	this.Data["examineItems"] = ""
+	this.Data["startTime"] = params.StartTime
+	this.Data["endTime"] = params.EndTime
 
 	err := hids.InitAPIServer()
 	if err != nil {
@@ -59,8 +61,8 @@ func (this *IndexAction) RunGet(params struct {
 		req.Type = params.Type
 	}
 
-	//req.StartTime = params.StartTime
-	//req.EndTime = params.EndTime
+	req.StartTime = params.StartTime
+	req.EndTime = params.EndTime
 	//去掉 ','
 	params.ExamineItems = strings.TrimPrefix(params.ExamineItems, ",")
 	params.ExamineItems = strings.TrimSuffix(params.ExamineItems, ",")
@@ -90,5 +92,7 @@ func (this *IndexAction) RunGet(params struct {
 	this.Data["Type"] = params.Type
 	this.Data["score"] = params.Score
 	this.Data["examineItems"] = params.ExamineItems
+	this.Data["startTime"] = params.StartTime
+	this.Data["endTime"] = params.EndTime
 
 }
