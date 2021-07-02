@@ -16,7 +16,7 @@
                  :class="{'menu-select-color':nShowState===3,'menu-define-color':nShowState!=3}">修改规则
             </div>
         </div>
-        <div align="right" style="display: inline-flex;">
+        <div align="right" v-show="nShowState===1" style="display: inline-flex;">
             <div style="line-height: 40px;text-align: center;">云防火墙节点：</div>
             <div class="ui field">
                 <div class="ui field">
