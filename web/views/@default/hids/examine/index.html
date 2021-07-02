@@ -137,6 +137,7 @@
         </tr>
         </tbody>
     </table>
+    <div @click="onOpenCheck()">开始体检</div>
 </div>
 
 <div v-if="bShowCheckDetail" class="dialog-style" @click.stop>
@@ -165,14 +166,14 @@
                                 <img :src="getShowSelectValueImage(11)" width="10px" height="10px">
                                 <span style="margin-left: 10px;">病毒木马</span>
                                 <div v-show="onCheckSelectItem(11)" style="display: inline-flex;align-items: center;">
-                                    <div style="width: 15px;height: 15px;border-radius: 50%;border: 1px red solid;text-align: center;line-height: 14px;color: red;font-size: 14px;">
+                                    <div style="width: 15px;height: 15px;border-radius: 50%;border: 1px red solid;text-align: center;line-height: 14px;color: red;font-size: 14px;margin: 0 10px;">
                                         !
                                     </div>
-                                    <span style="margin-left: 10px;color: red;">资源消耗高</span>
+                                    <span style="color: red;">资源消耗高</span>
                                 </div>
                             </div>
                             <div v-show="onCheckSelectItem(11)"
-                                 style="border: 1px #666 solid;height: 130px;width: 220px;display: flex;flex-direction: column;padding: 5px;"
+                                 style="border: 1px #d7d7d7 solid;height: 130px;width: 220px;display: flex;flex-direction: column;padding: 5px;"
                                  @click="onCheckSelectValue">
                                 <label style="align-items: center;margin-bottom: 5px;">
                                     <input name="customScan" type="radio" value="1"
@@ -196,15 +197,15 @@
                                 <img :src="getShowSelectValueImage(12)" width="10px" height="10px">
                                 <span style="margin-left: 10px;">网页后门</span>
                                 <div v-show="onCheckSelectItem(12)" style="display: inline-flex;align-items: center;">
-                                    <div style="width: 15px;height: 15px;border-radius: 50%;border: 1px red solid;text-align: center;line-height: 14px;color: red;font-size: 14px;">
+                                    <div style="width: 15px;height: 15px;border-radius: 50%;border: 1px red solid;text-align: center;line-height: 14px;color: red;font-size: 14px;margin: 0 10px;">
                                         !
                                     </div>
-                                    <span style="margin-left: 10px;color: red;">资源消耗高</span>
+                                    <span style="color: red;">资源消耗高</span>
                                 </div>
                             </div>
                             <div v-show="onCheckSelectItem(12)">
                                 <textarea name="webSearchKey" v-model="webSearchKey"
-                                          style="resize: none;height: 130px;width: 220px;">%web%</textarea>
+                                          style="resize: none;height: 130px;width: 220px;border: 1px #d7d7d7 solid;">%web%</textarea>
                             </div>
                         </div>
                     </div>

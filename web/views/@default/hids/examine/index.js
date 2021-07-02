@@ -5,7 +5,7 @@ Tea.context(function () {
 
     this.bShowCheckDetail = false
     this.pCheckDetailData = null
-    this.sSelectCheckValue = []
+    this.sSelectCheckValue = ["01","02","03","04","13","14","15"]
 
     this.webSearchKey = ""  //网页后门
     this.searchPath = ""    //病毒木马
@@ -169,7 +169,6 @@ Tea.context(function () {
     this.onOpenCheck = function (item) {
         this.MacCode = item.macCode
         this.sSelectCheckValue = []
-        // .success(
         this.pCheckDetailData = [
             {
                 checkName: "漏洞风险检查项：",
@@ -190,7 +189,6 @@ Tea.context(function () {
         } else {
             this.bShowCheckDetail = false
         }
-        // )
     }
 
     this.onSelectCheckValue = function (index) {
