@@ -1,9 +1,5 @@
 {$layout}
 <!-- 漏洞风险 -->
-<!-- <a href="/hids/risk/systemRisk" class="item">系统漏洞</a><br>
- <a href="/hids/risk/weak" class="item">弱口令</a><br>
- <a href="/hids/risk/dangerAccount" class="item">风险账号</a><br>
- <a href="/hids/risk/configDefect" class="item">缺陷配置</a><br> -->
  <div class="card-div" style="width: 100%;margin-top: 50px;" @click="onOpenDetail(1)">
     <div style="height: 60%;display: flex;justify-content: space-between;margin-bottom: 10px;">
         <div style="width: 30%;margin-right: 5%;display: flex;flex-direction: row;">
@@ -37,14 +33,6 @@
             <span>影响主机数：</span>
             <span style="color: #0090cb;">{{risk.host}}</span>
         </div>
-<!--        <div style="width: 30%;margin-right: 5%;">-->
-<!--            <span>影响windows主机数：</span>-->
-<!--            <span style="color: #0090cb;">20</span>-->
-<!--        </div>-->
-<!--        <div style="width: 30%;">-->
-<!--            <span>影响linux主机数：</span>-->
-<!--            <span style="color: #0090cb;">30</span>-->
-<!--        </div>-->
     </div>
  </div>
 

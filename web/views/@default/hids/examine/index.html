@@ -75,7 +75,9 @@
     </form>
 </div>
 
-<div class="card-div" style="height: 500px; margin-top: 20px;">
+
+<p class="comment" v-if="!datas || datas.length == 0">暂时还没有主机体检信息。</p>
+<div class="card-div" style="height: 500px; margin-top: 20px;" v-if="datas && datas.length > 0">
     <table id="tab" height="40px" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
         <thead>
         <tr align="center">

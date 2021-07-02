@@ -32,6 +32,11 @@ Tea.context(function () {
     this.$delay(function () {
         teaweb.datepicker("day-from-picker")
         teaweb.datepicker("day-to-picker")
+
+        if (this.errorMessage !== "" && this.errorMessage !== undefined) {
+            teaweb.warn(this.errorMessage, function () {
+            })
+        }
     })
 
     this.onChangeCheckState = function (state) {

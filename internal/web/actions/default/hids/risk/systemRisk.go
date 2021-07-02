@@ -23,9 +23,15 @@ func (this *SystemRiskAction) RunGet(params struct {
 	PageNo   int
 	PageSize int
 }) {
+	defer this.Show()
+
+	this.Data["risks"] = nil
+	this.Data["serverIp"] = params.ServerIp
+	this.Data["level"] = params.Level
+
 	err := hids.InitAPIServer()
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = err.Error()
 		return
 	}
 	req := &risk.SearchReq{}
@@ -36,20 +42,19 @@ func (this *SystemRiskAction) RunGet(params struct {
 
 	req.UserName, err = this.UserName()
 	if err != nil {
-		this.ErrorPage(fmt.Errorf("获取用户信息失败：%v", err))
+		this.Data["errorMessage"] = fmt.Errorf("获取用户信息失败：%v", err)
 		return
 	}
 
 	//系统漏洞数汇总
 	risk, err := risk_server.SystemDistributed(req)
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = fmt.Errorf("获取系统漏洞信息失败：%v", err)
 		return
 	}
 	this.Data["risks"] = risk.List
 	this.Data["serverIp"] = params.ServerIp
 	this.Data["level"] = params.Level
-	this.Show()
 }
 
 // 系统漏洞 忽略
@@ -61,7 +66,7 @@ func (this *SystemRiskAction) RunPost(params struct {
 }) {
 	err := hids.InitAPIServer()
 	if err != nil {
-		this.ErrorPage(err)
+		this.Error(err.Error(), 400)
 		return
 	}
 	req := &risk.ProcessReq{Opt: params.Opt}
@@ -70,9 +75,9 @@ func (this *SystemRiskAction) RunPost(params struct {
 	req.Req.ItemIds = params.ItemIds
 
 	err = risk_server.ProcessRisk(req)
-	fmt.Println(err)
+
 	if err != nil {
-		this.ErrorPage(err)
+		this.Error(err.Error(), 400)
 		return
 	}
 	this.Success()
