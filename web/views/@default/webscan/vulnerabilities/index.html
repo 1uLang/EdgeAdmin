@@ -1,7 +1,9 @@
 <!-- 漏洞详情 -->
 
 {$layout}
-<div style="width: 100%;display: inline-flex;height: 100vh;">
+<p class="comment" v-if="nodeErr != ''">请先添加web漏洞扫描节点</p>
+
+<div style="width: 100%;display: inline-flex;height: 100vh;" v-if="nodeErr == ''">
     <div style="flex: 1;width: 100%;">
         <form method="get" class="ui form" action="vulnerabilities">
             <div class="ui margin"></div>
@@ -33,6 +35,7 @@
             </div>
         </form>
         <div style="width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;">
+            <p class="comment" v-if="vulnerabilities.length == 0 && nodeErr == ''">暂时还没有目标。</p>
             <table class="ui table selectable celled" border="1" style="border-collapse: collapse;" v-if="vulnerabilities.length > 0">
                 <thead>
                 <tr align="center">

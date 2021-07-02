@@ -19,10 +19,13 @@ func (this *IndexAction) RunGet(params struct {
 	PageSize int
 	PageNo   int
 }) {
-
+	this.Data["nodeErr"] = ""
+	this.Data["scans"] = make([]interface{}, 0)
 	err := webscan.InitAPIServer()
 	if err != nil {
-		this.ErrorPage(err)
+		//this.ErrorPage(err)
+		this.Data["nodeErr"] = "web扫描节点错误"
+		this.Show()
 		return
 	}
 	if params.PageNo <= 0 {
@@ -32,8 +35,9 @@ func (this *IndexAction) RunGet(params struct {
 		params.PageSize = 20
 	}
 	list, err := scans_server.List(&scans.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, AdminUserId: uint64(this.AdminId())})
-	if err != nil {
-		this.ErrorPage(err)
+	if err != nil && list != nil {
+		//this.ErrorPage(err)
+		this.Show()
 		return
 	}
 	//this.Data["scans"] = list["scans"]

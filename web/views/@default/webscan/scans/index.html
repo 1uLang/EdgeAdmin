@@ -3,6 +3,7 @@
 
 <!-- 漏洞详情js-->
 <script type="text/javascript" src="/_/@default/webscan/vulnerabilities/index.js"></script>
+<p class="comment" v-if="nodeErr != ''">请先添加web漏洞扫描节点</p>
 
 <div class="btn-contain" v-if="scans.length > 0">
     <div id="stop-btn" @click="onStopScan()">停止扫描</div>
@@ -17,7 +18,7 @@
 </div>
 
 <div v-if="nShowState===1">
-    <p class="comment" v-if="scans.length === 0">暂时还没有目标。</p>
+    <p class="comment" v-if="scans.length === 0 && nodeErr == ''">暂时还没有目标。</p>
 
     <div style="width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;">
         <table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;" v-if="scans.length > 0">
