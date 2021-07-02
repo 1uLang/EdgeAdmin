@@ -11,9 +11,9 @@
 </div>
 
 <div v-if="nShowState!=1" style="display: inline-flex;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
-    <div class="define-menu" @click.prevent="onChangeState(1)" style="cursor: pointer;">任务列表</div>
-    <div :class="{'select-menu':nShowState===2, 'define-menu':nShowState!=2}" @click.prevent="onChangeState(2)" style="cursor: pointer;">扫描信息</div>
-    <div :class="{'select-menu':nShowState===3, 'define-menu':nShowState!=3}" @click.prevent="onChangeState(3)" style="cursor: pointer;">漏洞</div>
+    <div class="define-menu" @click.prevent="onChangeState(1)" style="cursor: pointer;font-size: 16px;">任务列表</div>
+    <div :class="{'select-menu':nShowState===2, 'define-menu':nShowState!=2}" @click.prevent="onChangeState(2)" style="cursor: pointer;font-size: 16px;">扫描信息</div>
+    <div :class="{'select-menu':nShowState===3, 'define-menu':nShowState!=3}" @click.prevent="onChangeState(3)" style="cursor: pointer;font-size: 16px;">漏洞</div>
 </div>
 
 <div v-if="nShowState===1">
@@ -197,10 +197,10 @@
                 <div class="ui menu basic text">
                     <div class="item">
                         <div class="ui fields inline">
-                            <div class="ui field">
+                            <!-- <div class="ui field">
                                 <span class="ui field">目标：</span>
                                 <input type="text" name="address" placeholder="请输入目标地址" v-model="address"/>
-                            </div>
+                            </div> -->
                             <span>严重性：</span>
                             <div class="ui field">
                                 <div class="ui field">
