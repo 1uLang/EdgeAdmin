@@ -9,7 +9,7 @@
     <div class="ui field">
         <div class="ui field">
             <select class="ui dropdown auto-width">
-                <option :value="item.id" v-for="(item,idx) in ddos" :selected="idx === 0">{{item.name}}-ddos-{{item.addr}}</option>
+                <option :value="item.id" v-for="(item,idx) in ddos" :selected="idx === 0">{{item.name}}-{{item.addr}}</option>
             </select>
         </div>
     </div>

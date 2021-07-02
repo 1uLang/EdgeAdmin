@@ -29,15 +29,23 @@ func (this *IndexAction) RunGet(params struct {
 	ExamineItems string //体检项目集合
 
 }) {
+	defer this.Show()
+
+	this.Data["datas"] = nil
+	this.Data["state"] = 0
+	this.Data["Type"] = 0
+	this.Data["score"] = 0
+	this.Data["examineItems"] = ""
+
 	err := hids.InitAPIServer()
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = err.Error()
 		return
 	}
 	req := &examine.SearchReq{}
 	req.UserName, err = this.UserName()
 	if err != nil {
-		this.ErrorPage(fmt.Errorf("获取当前用户信息失败：%v", err))
+		this.Data["errorMessage"] = fmt.Sprintf("获取当前用户信息失败：%v", err)
 		return
 	}
 	req.PageNo = params.PageNo
@@ -61,7 +69,7 @@ func (this *IndexAction) RunGet(params struct {
 	}
 	list, err := examine_server.List(req)
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = fmt.Sprintf("获取主机体检信息列表失败：%v", err)
 		return
 	}
 	datas := make([]map[string]interface{}, 0)
@@ -71,7 +79,7 @@ func (this *IndexAction) RunGet(params struct {
 		}
 		os, err := server.Info(v["serverExamineResultInfo"].(map[string]interface{})["serverIp"].(string), req.UserName)
 		if err != nil {
-			this.ErrorPage(err)
+			this.Data["errorMessage"] = fmt.Sprintf("获取主机信息失败：%v", err)
 			return
 		}
 		list.ServerExamineResultInfoList[k]["os"] = os
@@ -82,5 +90,5 @@ func (this *IndexAction) RunGet(params struct {
 	this.Data["Type"] = params.Type
 	this.Data["score"] = params.Score
 	this.Data["examineItems"] = params.ExamineItems
-	this.Show()
+
 }

@@ -24,10 +24,14 @@ func (this *DangerAccountAction) RunGet(params struct {
 	PageNo   int
 	PageSize int
 }) {
+	defer this.Show()
+
+	this.Data["dangerAccounts"] = nil
+	this.Data["serverIp"] = params.ServerIp
 
 	err := hids.InitAPIServer()
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = err.Error()
 		return
 	}
 	req := &risk.SearchReq{}
@@ -37,25 +41,28 @@ func (this *DangerAccountAction) RunGet(params struct {
 
 	req.UserName, err = this.UserName()
 	if err != nil {
-		this.ErrorPage(fmt.Errorf("获取用户信息失败：%v", err))
+		this.Data["errorMessage"] = fmt.Errorf("获取用户信息失败：%v", err)
 		return
 	}
 	list, err := risk_server.DangerAccountList(req)
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = fmt.Errorf("获取风险账号信息失败：%v", err)
 		return
 	}
 	for k, v := range list.List {
+
+		if v["userName"] != req.UserName {
+			continue
+		}
 		os, err := server.Info(v["serverIp"].(string), req.UserName)
 		if err != nil {
-			this.ErrorPage(err)
+			this.Data["errorMessage"] = fmt.Errorf("获取主机信息失败：%v", err)
 			return
 		}
 		list.List[k]["os"] = os
 	}
 	this.Data["dangerAccounts"] = list.List
 	this.Data["serverIp"] = params.ServerIp
-	this.Show()
 }
 
 // 危险账号 忽略
@@ -67,8 +74,8 @@ func (this *DangerAccountAction) RunPost(params struct {
 }) {
 	err := hids.InitAPIServer()
 	if err != nil {
-		this.ErrorPage(err)
-
+		this.Error(err.Error(),400)
+		return
 	}
 	req := &risk.ProcessReq{Opt: params.Opt}
 	req.Req.MacCode = params.MacCode
@@ -77,8 +84,8 @@ func (this *DangerAccountAction) RunPost(params struct {
 
 	err = risk_server.ProcessDangerAccount(req)
 	if err != nil {
-		this.ErrorPage(err)
-
+		this.Error(err.Error(),400)
+		return
 	}
 	this.Success()
 }
@@ -100,11 +107,25 @@ func (this *DangerAccountListAction) RunGet(params struct {
 	PageNo         int
 	PageSize       int
 }) {
+	defer this.Show()
+
+	this.Data["dangerAccount1"] = nil
+	this.Data["dangerAccount2"] = nil
+
+	this.Data["total1"] = 0
+	this.Data["total2"] = 0
+
+	this.Data["ip"] = params.Ip
+	this.Data["macCode"] = params.MacCode
+
+	this.Data["os"] = params.Os
+	//最后扫描时间
+	this.Data["lastUpdateTime"] = params.LastUpdateTime
 
 	err := hids.InitAPIServer()
 	if err != nil {
-		this.ErrorPage(err)
-
+		this.Data["errorMessage"] = err.Error()
+		return
 	}
 	req := &risk.DetailReq{}
 	req.MacCode = params.MacCode
@@ -116,15 +137,15 @@ func (this *DangerAccountListAction) RunGet(params struct {
 	req.Req.ProcessState = 1
 	list1, err := risk_server.DangerAccountDetailList(req)
 	if err != nil {
-		this.ErrorPage(err)
-
+		this.Data["errorMessage"] = fmt.Sprintf("获取风险账号详细列表失败：%v",err)
+		return
 	}
 	//已处理
 	req.Req.ProcessState = 2
 	list2, err := risk_server.DangerAccountDetailList(req)
 	if err != nil {
-		this.ErrorPage(err)
-
+		this.Data["errorMessage"] = fmt.Sprintf("获取风险账号详细列表失败：%v",err)
+		return
 	}
 	//漏洞列表
 	this.Data["dangerAccount1"] = list1.DangerAccountList
@@ -140,7 +161,6 @@ func (this *DangerAccountListAction) RunGet(params struct {
 	//最后扫描时间
 	this.Data["lastUpdateTime"] = params.LastUpdateTime
 
-	this.Show()
 }
 
 type DangerAccountDetailAction struct {
@@ -163,19 +183,20 @@ func (this *DangerAccountDetailAction) RunGet(params struct {
 	params.Must.
 		Field("macCode", params.MacCode).
 		Require("请输入机器码")
+	defer this.Show()
+
+	this.Data["ConfigDefectDetails"] = nil
 
 	err := hids.InitAPIServer()
 	if err != nil {
-		this.ErrorPage(err)
-
+		this.Data["errorMessage"] = err.Error()
+		return
 	}
 
 	info, err := risk_server.DangerAccountDetail(params.MacCode, params.RiskId, params.ProcessState == 2)
 	if err != nil {
-		this.ErrorPage(err)
-
+		this.Data["errorMessage"] = fmt.Sprintf("获取风险账号详情信息失败：%v",err)
+		return
 	}
-	this.Data["DangerAccountDetails"] = info
-
-	this.Show()
+	this.Data["ConfigDefectDetails"] = info
 }

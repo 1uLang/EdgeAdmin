@@ -11,6 +11,13 @@ Tea.context(function () {
         window.location = "/hids/risk";
     }
 
+    this.$delay(function () {
+        if (this.errorMessage !== "" && this.errorMessage !== undefined) {
+            teaweb.warn(this.errorMessage, function () {
+            })
+        }
+    })
+
     this.parseServerLocalIp = function (ip){
         let ips = ip.split(";")
         return ips.slice(-1)[0]
