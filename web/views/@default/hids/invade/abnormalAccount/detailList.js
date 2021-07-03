@@ -20,7 +20,7 @@ Tea.context(function () {
     };
     this.onClose = function (item) {
         teaweb.confirm("确定关闭该事件吗？", function () {
-            this.$post(".abnormalAccount").params({
+            this.$post("/hids/invade/abnormalAccount").params({
                 Opt: "close",
                 MacCode: this.macCode,
                 ItemIds: [item.itemId],
@@ -30,7 +30,7 @@ Tea.context(function () {
     };
     this.onCancelClose = function (item) {
         teaweb.confirm("确定取消关闭该事件吗？", function () {
-            this.$post(".abnormalAccount").params({
+            this.$post("/hids/invade/abnormalAccount").params({
                 Opt: "cancel_close",
                 MacCode: this.macCode,
                 ItemIds: [item.itemId],
