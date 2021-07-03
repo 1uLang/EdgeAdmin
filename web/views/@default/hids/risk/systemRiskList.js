@@ -64,7 +64,7 @@ Tea.context(function () {
             case 3:
                 return "高危";
             case 4:
-                return "危机";
+                return "危急";
             default:
                 "未评级";
         }

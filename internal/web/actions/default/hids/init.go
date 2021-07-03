@@ -40,5 +40,8 @@ func InitAPIServer() error {
 	if err != nil {
 		return err
 	}
+	//统计各用户下的入侵威胁
+	//目前只统计系统用户下的 主机防护 入侵威胁
+
 	return nil
 }
