@@ -26,107 +26,45 @@ Tea.context(function () {
         let chartBox = document.getElementById("line-chart-box")
         let chart = echarts.init(chartBox)
         let option = {
-            legend: {
-                // orient 设置布局方式，默认水平布局，可选值：'horizontal'（水平） ¦ 'vertical'（垂直）
-                orient: 'horizontal',
-                // x 设置水平安放位置，默认全图居中，可选值：'center' ¦ 'left' ¦ 'right' ¦ {number}（x坐标，单位px）
-                x: 'center',
-                // y 设置垂直安放位置，默认全图顶端，可选值：'top' ¦ 'bottom' ¦ 'center' ¦ {number}（y坐标，单位px）
-                y: 'bottom',
-                data: [this.pageData[0].itemData.name, this.pageData[1].itemData.name, this.pageData[2].itemData.name, this.pageData[3].itemData.name]
-            },
             //  图表距边框的距离,可选值：'百分比'¦ {number}（单位px）
             // top: '16%',   // 等价于 y: '16%'
             grid: {
                 top: 30,   // 等价于 y: '16%'
-                left: 40,
-                right: 60,
+                left: 15, 
+                right: 15,
                 bottom: 30,
-                containLabel: true
             },
-            xAxis: {
-                // name: 'Hour',
-                // boundaryGap值为false的时候，折线第一个点在y轴上
-                boundaryGap: false,
-                data: this.tableData1.lineValue
+            legend: {
+                orient : 'horizontal',
+                x : 'center',
+                y : 'bottom',
+                data:this.tableData1.itemName,
             },
-            yAxis: {
-                // name: 'GB',
-                min: 0, // 设置y轴刻度的最小值
-                // max:8,  // 设置y轴刻度的最大值
-                splitNumber: 5,  // 设置y轴刻度间隔个数
-                // axisLine: {
-                //     lineStyle: {
-                //         // 设置y轴颜色
-                //         color: '#fff'
-                //     }
-                // },
+			tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
             },
-            tooltip: {
-                trigger: "axis",
-            },
-            series: [
+            color:['#2698fb','#26c4c3','#26c46f','#ffce51','#f95c74','#8f59dd','#474fc5','#3d4c7d'],
+			series: [
                 {
-                    name: this.tableData1.itemData[0].name,
-                    type: "line",
-                    data: this.tableData1.itemData[0].lineTableData,
-                    itemStyle: {
-                        color: "#a5d9fd"
-                    },
-                    lineStyle: {
-                        color: "#a5d9fd"
-                    }
-                    // areaStyle: {
-                    // 	color: "#a5d9fd"
-                    // }
-                },
-                {
-                    name: this.tableData1.itemData[1].name,
-                    type: "line",
-                    data: this.tableData1.itemData[1].lineTableData,
-                    itemStyle: {
-                        color: "#a8ebcc"
-                    },
-                    lineStyle: {
-                        color: "#a8ebcc"
-                    }
-                    // areaStyle: {
-                    // 	color: "#a8ebcc"
-                    // }
-                },
-                {
-                    name: this.tableData1.itemData[2].name,
-                    type: "line",
-                    data: this.tableData1.itemData[2].lineTableData,
-                    itemStyle: {
-                        color: "#dfdfdf"
-                    },
-                    lineStyle: {
-                        color: "#dfdfdf"
-                    }
-                    // areaStyle: {
-                    // 	color: "#a8ebcc"
-                    // }
-                },
-                {
-                    name: this.tableData1.itemData[3].name,
-                    type: "line",
-                    data: this.tableData1.itemData[3].lineTableData,
-                    itemStyle: {
-                        color: "#000"
-                    },
-                    lineStyle: {
-                        color: "#000"
-                    }
-                    // areaStyle: {
-                    // 	color: "#a8ebcc"
-                    // }
-                },
-
-
+                    name:"占比情况",
+                    type: 'pie',
+                    radius: "55%",
+                    center: ['50%', '50%'],
+                    data: this.tableData1.itemValue,
+                    itemStyle:{ 
+                        normal:{ 
+                            label:{ 
+                                show: true, 
+                                formatter: '{b} : {c} ({d}%)' 
+                            }, 
+                            labelLine :{show:true} 
+                        } 
+                    } 
+                }
             ],
-            animation: false
-        }
+			animation: false
+		}
         chart.setOption(option)
         chart.resize()
     }
@@ -147,9 +85,9 @@ Tea.context(function () {
             xAxis: {
                 // name: 'Hour',
                 // boundaryGap值为false的时候，折线第一个点在y轴上
-                data: this.tableData2.lineValue,
+                data: this.tableData1.lineValue,
                 axisLabel: {
-                    rotate: -30, // 旋转角度
+                    rotate: 0, // 旋转角度
                     interval: 0  //设置X轴数据间隔几个显示一个，为0表示都显示
                 },
             },
@@ -166,14 +104,14 @@ Tea.context(function () {
                 // },
             },
             tooltip: {
-                trigger: "axis",
+                trigger: "item",
             },
             series: [
                 {
                     type: "bar",
-                    data: this.tableData2.itemvalue,
-                    barWidth: "20px",
-                    color: "#a8ebcc"
+                    data: this.tableData1.itemValue,
+                    barWidth: "70px",
+                    color: "#2698fb"
                 },
 
             ],
@@ -184,30 +122,19 @@ Tea.context(function () {
     }
 
     this.tableData1 = {
-        lineValue: ["2020-06-01", "2020-06-02", "2020-06-03", "2020-06-04", "2020-06-05", "2020-06-06", "2020-06-07"],
-        itemData: [
-            {
-                name: "病毒木马",
-                lineTableData: [10, 12, 11, 12, 15, 8, 5]
-            },
-            {
-                name: "网页后门",
-                lineTableData: [1, 2, 3, 4, 5, 6, 7]
-            },
-            {
-                name: "反弹shell",
-                lineTableData: [7, 6, 5, 4, 3, 2, 1]
-            },
-            {
-                name: "日志异常删除",
-                lineTableData: [5, 15, 25, 35, 20, 30, 10]
-            },
+        itemName:["病毒木马", "网页后门", "反弹shell", "异常账号", "日志异常删除", "异常登录", "异常进程", "系统命令篡改"],
+        itemValue:[
+            {value:20,name:'病毒木马'}, 
+            {value:15,name:'网页后门'}, 
+            {value:10,name:'反弹shell'},
+            {value:18,name:'异常账号'},
+            {value:4,name:'日志异常删除'},
+            {value:8,name:'异常登录'},
+            {value:35,name:'异常进程'},
+            {value:50,name:'系统命令篡改'}
         ]
     }
-    this.tableData2 = {
-        lineValue: ["病毒木马", "网页后门", "反弹shell", "异常账号", "日志异常删除", "异常登录", "异常进程", "系统命令篡改", "文件篡改", "注册表篡改", "入侵扫描", "暴力破解", "进程异常操作", "非授权进程", "溢出攻击", "进程行为监控"],
-        itemvalue: [20, 12, 15, 16, 18, 20, 30, 40, 50, 12, 1, 19, 16, 30, 15, 12]
-    }
+
     this.pageData = [
         {
             id: 1,
