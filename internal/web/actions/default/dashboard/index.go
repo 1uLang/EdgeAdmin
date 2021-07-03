@@ -1,6 +1,8 @@
 package dashboard
 
 import (
+	"github.com/1uLang/zhiannet-api/awvs/server/targets"
+	"github.com/1uLang/zhiannet-api/common/server/subassemblynode"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	"github.com/TeaOSLab/EdgeAdmin/internal/utils/numberutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
@@ -160,5 +162,46 @@ func (this *IndexAction) RunGet(params struct{}) {
 		}
 	}
 
+	//节点数据统计 1.ddos、2.下一代防火墙、3.主机漏扫 4.web漏扫 5主机防护 6安全审计 7堡垒机
+	ddos_total, _ := subassemblynode.GetNodeNum(&subassemblynode.NodeNumReq{
+		Type: 1, State: "1", //
+	})
+	allTotal := ddos_total
+
+	nfw_total, _ := subassemblynode.GetNodeNum(&subassemblynode.NodeNumReq{
+		Type: 2, State: "1", //
+	})
+	allTotal += nfw_total
+
+	//host_scan_total, _ := subassemblynode.GetNodeNum(&subassemblynode.NodeNumReq{
+	//	Type: 3,State: "1", //
+	//})
+	//allTotal += host_scan_total
+
+	web_scan_total, _ := subassemblynode.GetNodeNum(&subassemblynode.NodeNumReq{
+		Type: 4, State: "1", //
+	})
+	allTotal += web_scan_total
+
+	host_total, _ := subassemblynode.GetNodeNum(&subassemblynode.NodeNumReq{
+		Type: 5, State: "1", //
+	})
+	allTotal += host_total
+
+	this.Data["all_total"] = allTotal
+	this.Data["node"] = maps.Map{
+		"nodeCount": allTotal,
+		"ddosCount": ddos_total,
+		"nfwCount":  nfw_total,
+		"scanCount": web_scan_total,
+		"hidsCount": host_total,
+	}
+	//资产数据
+	var scan_goal int64
+	scan_goal, _ = targets.GetTargetsNum(nil)
+	this.Data["assets"] = maps.Map{
+		"host":      0,
+		"scan_goal": scan_goal,
+	}
 	this.Show()
 }
