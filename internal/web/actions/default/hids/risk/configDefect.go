@@ -37,12 +37,12 @@ func (this *ConfigDefectAction) RunGet(params struct {
 
 	req.UserName, err = this.UserName()
 	if err != nil {
-		this.Data["errorMessage"] =fmt.Sprintf("获取用户信息失败：%v", err)
+		this.Data["errorMessage"] = fmt.Sprintf("获取用户信息失败：%v", err)
 		return
 	}
 	list, err := risk_server.ConfigDefectList(req)
 	if err != nil {
-		this.Data["errorMessage"] =fmt.Sprintf("获取缺陷配置详细列表信息失败：%v", err)
+		this.Data["errorMessage"] = fmt.Sprintf("获取缺陷配置详细列表信息失败：%v", err)
 		return
 	}
 	for k, v := range list.List {
@@ -52,7 +52,7 @@ func (this *ConfigDefectAction) RunGet(params struct {
 		}
 		os, err := server.Info(v["serverIp"].(string), req.UserName)
 		if err != nil {
-			this.Data["errorMessage"] =fmt.Sprintf("获取主机信息失败：%v", err)
+			this.Data["errorMessage"] = fmt.Sprintf("获取主机信息失败：%v", err)
 			return
 		}
 		list.List[k]["os"] = os
@@ -71,7 +71,7 @@ func (this *ConfigDefectAction) RunPost(params struct {
 }) {
 	err := hids.InitAPIServer()
 	if err != nil {
-		this.Error(err.Error(),400)
+		this.Error(err.Error(), 400)
 		return
 	}
 	req := &risk.ProcessReq{Opt: params.Opt}
@@ -81,7 +81,7 @@ func (this *ConfigDefectAction) RunPost(params struct {
 
 	err = risk_server.ProcessConfigDefect(req)
 	if err != nil {
-		this.Error(err.Error(),400)
+		this.Error(err.Error(), 400)
 		return
 	}
 	this.Success()
@@ -129,21 +129,25 @@ func (this *ConfigDefectListAction) RunGet(params struct {
 	req.MacCode = params.MacCode
 	req.Req.PageSize = params.PageSize
 	req.Req.PageNo = params.PageNo
-	req.Req.UserName = "luobing"
+	req.Req.UserName,err = this.UserName()
+	if err != nil {
+		this.Data["errorMessage"] = fmt.Sprintf("获取用户信息失败：%v", err)
+		return
+	}
 
 	//待处理
 	req.Req.ProcessState = 1
 	list1, err := risk_server.ConfigDefectDetailList(req)
 	if err != nil {
 		this.ErrorPage(err)
-		this.Data["errorMessage"] = fmt.Sprintf("获取缺陷配置详细列表失败：%v",err)
+		this.Data["errorMessage"] = fmt.Sprintf("获取缺陷配置详细列表失败：%v", err)
 		return
 	}
 	//已处理
 	req.Req.ProcessState = 2
 	list2, err := risk_server.ConfigDefectDetailList(req)
 	if err != nil {
-		this.Data["errorMessage"] = fmt.Sprintf("获取缺陷配置详细列表失败：%v",err)
+		this.Data["errorMessage"] = fmt.Sprintf("获取缺陷配置详细列表失败：%v", err)
 		return
 	}
 	//漏洞列表
@@ -194,7 +198,7 @@ func (this *ConfigDefectDetailAction) RunGet(params struct {
 
 	info, err := risk_server.ConfigDefectDetail(params.MacCode, params.RiskId, params.ProcessState == 2)
 	if err != nil {
-		this.Data["errorMessage"] = fmt.Sprintf("获取缺陷配置详情信息失败：%v",err)
+		this.Data["errorMessage"] = fmt.Sprintf("获取缺陷配置详情信息失败：%v", err)
 		return
 	}
 	this.Data["ConfigDefectDetails"] = info

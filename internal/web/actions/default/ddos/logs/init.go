@@ -10,7 +10,7 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeDdos)).
-			Data("teaMenu", "ddos").
+			Data("teaMenu", "logs").
 			Prefix("/ddos/logs").
 			Get("", new(IndexAction)).
 			Get("/traffic", new(TrafficAction)).

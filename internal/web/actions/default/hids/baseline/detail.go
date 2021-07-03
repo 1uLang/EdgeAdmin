@@ -13,9 +13,11 @@ type DetailAction struct {
 }
 
 func (this *DetailAction) RunGet(params struct {
-	MacCode  string
-	PageSize int
-	Must     *actions.Must
+	MacCode    string
+	PageSize   int
+	CheckCount int
+	Time       string
+	Must       *actions.Must
 	//CSRF *actionutils.CSRF
 }) {
 	params.Must.
@@ -61,6 +63,9 @@ func (this *DetailAction) RunGet(params struct {
 	this.Data["systemSafeCount"] = len(systemSafe)
 	this.Data["middleSafeCount"] = len(middleSafe)
 	this.Data["middleSafe"] = middleSafe
+	this.Data["checkCount"] = params.CheckCount
+	this.Data["totalCount"] = params.PageSize
+	this.Data["checkTime"] = params.Time
 
 	this.Show()
 }

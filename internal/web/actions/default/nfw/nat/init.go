@@ -10,7 +10,7 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeNfw)).
-			Data("teaMenu", "nfw").
+			Data("teaMenu", "nat").
 			Prefix("/nfw/nat").
 			GetPost("", new(IndexAction)).
 			Get("/detail/options", new(DetailAction)).

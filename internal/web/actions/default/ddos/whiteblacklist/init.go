@@ -10,7 +10,7 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeDdos)).
-			Data("teaMenu", "ddos").
+			Data("teaMenu", "whiteblacklist").
 			Prefix("/ddos/whiteblacklist").
 			Get("", new(IndexAction)).
 			GetPost("/del", new(DelAction)). //添删除ip

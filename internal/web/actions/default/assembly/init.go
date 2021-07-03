@@ -10,7 +10,7 @@ import (
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
-			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeAssembly)).
+			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeConfig)).
 			Data("teaMenu", "assembly").
 			Prefix("/assembly").
 			Get("", new(IndexAction)).

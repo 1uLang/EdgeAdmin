@@ -1,7 +1,6 @@
 package configloaders
 
 import (
-	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
 	"github.com/TeaOSLab/EdgeAdmin/internal/rpc"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/systemconfigs"
@@ -23,14 +22,17 @@ const (
 	AdminModuleCodeSetting   AdminModuleCode = "setting"   // 设置
 	AdminModuleCodeAssembly  AdminModuleCode = "assembly"  // 只要登录就可以访问的模块
 	AdminModuleCodeCommon    AdminModuleCode = "common"    // 只要登录就可以访问的模块
-	AdminModuleCodeDdos      AdminModuleCode = "ddos"      // ddos
-	AdminModuleCodeWebScan   AdminModuleCode = "webscan"   // webscan
-	AdminModuleCodeHids      AdminModuleCode = "hids"      // hids 主机防护
-	AdminModuleCodeNfw       AdminModuleCode = "nfw"       // 下一代防火墙
-	AdminModuleCodeMonitor   AdminModuleCode = "monitor"   //监控告警
-	AdminModuleCodeWAF       AdminModuleCode = "waf"       //web防火墙
-	AdminModuleCodeAudit     AdminModuleCode = "audit"     //审计系统
-	AdminModuleCodeFort      AdminModuleCode = "fort"      //堡垒机
+	AdminModuleCodeConfig    AdminModuleCode = "config"    // 平台管理
+	AdminModuleCodeClusters  AdminModuleCode = "clusters"  // 边缘节点
+
+	AdminModuleCodeDdos    AdminModuleCode = "ddos"    // ddos
+	AdminModuleCodeWebScan AdminModuleCode = "webscan" // webscan
+	AdminModuleCodeHids    AdminModuleCode = "hids"    // hids 主机防护
+	AdminModuleCodeNfw     AdminModuleCode = "nfw"     // 下一代防火墙
+	AdminModuleCodeMonitor AdminModuleCode = "monitor" //监控告警
+	AdminModuleCodeWAF     AdminModuleCode = "waf"     //web防火墙
+	AdminModuleCodeAudit   AdminModuleCode = "audit"   //审计系统
+	AdminModuleCodeFort    AdminModuleCode = "fort"    //堡垒机
 )
 
 var sharedAdminModuleMapping = map[int64]*AdminModuleList{} // adminId => AdminModuleList
@@ -144,9 +146,24 @@ func FindAdminFullname(adminId int64) string {
 func AllModuleMaps() []maps.Map {
 	m := []maps.Map{
 		{
-			"name": "看板",
+			"name": "平台首页",
 			"code": AdminModuleCodeDashboard,
 			"url":  "/dashboard",
+		},
+		{
+			"name": "平台管理",
+			"code": AdminModuleCodeConfig,
+			"url":  "/assembly",
+		},
+		{
+			"name": "DDos防护",
+			"code": AdminModuleCodeDdos,
+			"url":  "/ddos/host",
+		},
+		{
+			"name": "云防火墙",
+			"code": AdminModuleCodeNfw,
+			"url":  "/nfw/nat",
 		},
 		{
 			"name": "网站服务",
@@ -155,7 +172,7 @@ func AllModuleMaps() []maps.Map {
 		},
 		{
 			"name": "边缘节点",
-			"code": AdminModuleCodeNode,
+			"code": AdminModuleCodeClusters,
 			"url":  "/clusters",
 		},
 		{
@@ -163,70 +180,26 @@ func AllModuleMaps() []maps.Map {
 			"code": AdminModuleCodeDNS,
 			"url":  "/dns",
 		},
-	}
-	if teaconst.IsPlus {
-		m = append(m, maps.Map{
-			"name": "域名服务",
-			"code": AdminModuleCodeNS,
-			"url":  "/ns",
-		})
-	}
-	m = append(m, []maps.Map{
 		{
-			"name": "平台用户",
-			"code": AdminModuleCodeUser,
-			"url":  "/users",
+			"name": "主机防护",
+			"code": AdminModuleCodeHids,
+			"url":  "/hids/examine",
 		},
 		{
-			"name": "系统用户",
-			"code": AdminModuleCodeAdmin,
-			"url":  "/admins",
+			"name": "漏洞扫描",
+			"code": AdminModuleCodeWebScan,
+			"url":  "/webscan/targets",
 		},
 		{
-			"name": "财务管理",
-			"code": AdminModuleCodeFinance,
-			"url":  "/finance",
-		},
-		{
-			"name": "日志审计",
-			"code": AdminModuleCodeLog,
-			"url":  "/log",
+			"name": "监控告警",
+			"code": AdminModuleCodeMonitor,
+			"url":  "/monitor",
 		},
 		{
 			"name": "系统设置",
 			"code": AdminModuleCodeSetting,
-			"url":  "/settings",
+			"url":  "/settings/server",
 		},
-		{
-			"name": "DDoS防火墙",
-			"code": AdminModuleCodeDdos,
-			"url":  "/ddos",
-		},
-		{
-			"name": "云防火墙",
-			"code": AdminModuleCodeNfw,
-			"url":  "/nfw",
-		},
-		{
-			"name": "WEB防火墙",
-			"code": AdminModuleCodeDashboard,
-			"url":  "/dashboard",
-		},
-		{
-			"name": "WEB漏洞扫描",
-			"code": AdminModuleCodeWebScan,
-			"url":  "/webscan",
-		},
-		{
-			"name": "主机防护",
-			"code": AdminModuleCodeHids,
-			"url":  "/hids",
-		},
-		{
-			"name": "审计系统",
-			"code": AdminModuleCodeAudit,
-			"url":  "audit",
-		},
-	}...)
+	}
 	return m
 }

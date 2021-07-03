@@ -28,8 +28,6 @@ func (this *IndexAction) RunGet(params struct {
 	this.Data["targets"] = data
 	err := webscan.InitAPIServer()
 	if err != nil {
-		//this.ErrorPage(err)
-
 		this.Data["nodeErr"] = fmt.Errorf("获取扫描节点信息失败")
 		this.Show()
 		return

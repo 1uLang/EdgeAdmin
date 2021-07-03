@@ -12,6 +12,7 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeCommon)).
 			Helper(settingutils.NewHelper("profile")).
+			Data("teaMenu","server").
 			Prefix("/settings/profile").
 			GetPost("", new(IndexAction)).
 			EndAll()

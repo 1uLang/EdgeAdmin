@@ -14,7 +14,7 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeHids)).
-			Data("teaMenu", "hids").
+			Data("teaMenu", "agent").
 			Prefix("/hids/agent").
 			Get("", new(IndexAction)).
 			Get("/download", new(DownloadAction)).

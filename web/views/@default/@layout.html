@@ -180,7 +180,7 @@
                 </div>
                 <div v-if="module.subItems && module.subItems.length>0 && curSelectCode == module.code" class="sub-items">
 					<a class="item" v-for="subItem in module.subItems" v-if="subItem.isOn !== false" :href="subItem.url" style="width: 120px;">
-                        <i class="icon angle right" v-if="subItem.code == teaSubMenu"></i> {{subItem.name}}</a>
+                        <i class="icon angle right" v-if="subItem.code == teaMenu"></i> {{subItem.name}}</a>
                 </div>
                 <a v-if="!module.subItems ||module.subItems.length==0" class="item" :href="Tea.url(module.code)" style="width: 130px;"
                     :class="{active:teaMenu===module.code}">

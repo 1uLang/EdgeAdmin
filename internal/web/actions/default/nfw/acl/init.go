@@ -10,7 +10,7 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeNfw)).
-			Data("teaMenu", "nfw").
+			Data("teaMenu", "acl").
 			Prefix("/nfw/acl").
 			Get("", new(IndexAction)).
 			GetPost("/createPopup", new(CreatePopupAction)). //修改创建

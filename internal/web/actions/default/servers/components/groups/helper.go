@@ -17,7 +17,7 @@ func (this *Helper) BeforeAction(action *actions.ActionObject) {
 		return
 	}
 
-	action.Data["teaMenu"] = "waf"
+	action.Data["teaMenu"] = "groups"
 	action.Data["mainTab"] = "component"
 	action.Data["secondMenuItem"] = "group"
 }

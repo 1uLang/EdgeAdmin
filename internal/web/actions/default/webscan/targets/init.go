@@ -10,7 +10,7 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeWebScan)).
-			Data("teaMenu", "webscan").
+			Data("teaMenu", "targets").
 			Prefix("/webscan/targets").
 			Get("", new(IndexAction)).
 			GetPost("/create", new(CreateAction)).

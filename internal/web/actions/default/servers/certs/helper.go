@@ -18,7 +18,7 @@ func (this *Helper) BeforeAction(action *actions.ActionObject) {
 		return
 	}
 
-	action.Data["teaMenu"] = "waf"
+	action.Data["teaMenu"] = "certs"
 
 	action.Data["leftMenuItems"] = []maps.Map{
 		{

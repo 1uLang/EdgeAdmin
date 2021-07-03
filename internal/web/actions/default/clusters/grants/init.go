@@ -12,7 +12,6 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeNode)).
 			Helper(clusterutils.NewClustersHelper()).
-			Data("teaMenu", "waf").
 			Data("teaSubMenu", "grant").
 			Prefix("/clusters/grants").
 

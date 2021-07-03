@@ -10,7 +10,7 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeDdos)).
-			Data("teaMenu", "ddos").
+			Data("teaMenu", "host").
 			Prefix("/ddos/host").
 			Get("", new(IndexAction)).
 			GetPost("/createPopup", new(CreatePopupAction)). //添加高防ip

@@ -4,8 +4,6 @@ import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/dns/clusters"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/dns/domains"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/dns/issues"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/dns/providers"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/helpers"
 	"github.com/iwind/TeaGo"
 )
@@ -14,8 +12,9 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeDNS)).
-			Helper(new(Helper)).
+			//Helper(new(Helper)).
 			Prefix("/dns").
+			Data("teaMenu", "dns").
 			Get("", new(IndexAction)).
 			GetPost("/updateClusterPopup", new(UpdateClusterPopupAction)).
 			Post("/providerOptions", new(ProviderOptionsAction)).
@@ -25,16 +24,6 @@ func init() {
 			Prefix("/dns/clusters").
 			Get("/cluster", new(clusters.ClusterAction)).
 			Post("/sync", new(clusters.SyncAction)).
-
-			// 服务商
-			Prefix("/dns/providers").
-			Data("teaSubMenu", "provider").
-			Get("", new(providers.IndexAction)).
-			GetPost("/createPopup", new(providers.CreatePopupAction)).
-			GetPost("/updatePopup", new(providers.UpdatePopupAction)).
-			Post("/delete", new(providers.DeleteAction)).
-			Get("/provider", new(providers.ProviderAction)).
-			EndData().
 
 			// 域名
 			Prefix("/dns/domains").
@@ -48,13 +37,6 @@ func init() {
 			Get("/clustersPopup", new(domains.ClustersPopupAction)).
 			Get("/nodesPopup", new(domains.NodesPopupAction)).
 			Get("/serversPopup", new(domains.ServersPopupAction)).
-			EndData().
-
-			// 问题修复
-			Prefix("/dns/issues").
-			Data("teaSubMenu", "issue").
-			GetPost("", new(issues.IndexAction)).
-			GetPost("/updateNodePopup", new(issues.UpdateNodePopupAction)).
 			EndData().
 
 			EndAll()

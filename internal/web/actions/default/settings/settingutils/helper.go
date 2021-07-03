@@ -22,7 +22,7 @@ func (this *Helper) BeforeAction(actionPtr actions.ActionWrapper) (goNext bool) 
 	action := actionPtr.Object()
 
 	// 左侧菜单
-	action.Data["teaMenu"] = "settings"
+	action.Data["teaMenu"] = "server"
 
 	// 标签栏
 	tabbar := actionutils.NewTabbar()

@@ -1,6 +1,6 @@
 Tea.context(function () {
 	this.username = "admin"
-	this.password = "admin"
+	this.password = "123456"
 	this.passwordMd5 = ""
 	this.encodedFrom = window.encodeURIComponent(this.from)
 

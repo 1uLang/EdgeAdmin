@@ -10,7 +10,7 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeNode)).
-			Data("teaMenu", "waf").
+			Data("teaMenu", "logs").
 			Data("teaSubMenu", "log").
 			Prefix("/clusters/logs").
 			Get("", new(IndexAction)).

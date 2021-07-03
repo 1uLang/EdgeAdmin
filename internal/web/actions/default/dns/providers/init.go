@@ -1,4 +1,4 @@
-package regions
+package providers
 
 import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
@@ -9,18 +9,18 @@ import (
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
-			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeNode)).
-			Data("teaMenu", "regions").
-			Data("teaSubMenu", "region").
-			Prefix("/clusters/regions").
+			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeDNS)).
+			// 服务商
+			Prefix("/dns/providers").
+			Data("teaMenu", "providers").
+			Data("teaSubMenu", "providers").
 			Get("", new(IndexAction)).
 			GetPost("/createPopup", new(CreatePopupAction)).
 			GetPost("/updatePopup", new(UpdatePopupAction)).
 			Post("/delete", new(DeleteAction)).
-			Post("/sort", new(SortAction)).
-			GetPost("/selectPopup", new(SelectPopupAction)).
-			GetPost("/prices", new(PricesAction)).
-			GetPost("/updatePricePopup", new(UpdatePricePopupAction)).
+			Get("/provider", new(ProviderAction)).
+			EndData().
+
 			EndAll()
 	})
 }

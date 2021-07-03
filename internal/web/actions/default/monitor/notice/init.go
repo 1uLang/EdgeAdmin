@@ -10,7 +10,7 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeMonitor)).
-			Data("teaMenu", "monitor").
+			Data("teaMenu", "notice").
 			Prefix("/monitor/notice").
 			Get("", new(IndexAction)).
 			GetPost("/delete", new(DeleteAction)). //删除

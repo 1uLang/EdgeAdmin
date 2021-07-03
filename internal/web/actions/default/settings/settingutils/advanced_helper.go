@@ -23,7 +23,7 @@ func (this *AdvancedHelper) BeforeAction(actionPtr actions.ActionWrapper) (goNex
 	action := actionPtr.Object()
 
 	// 左侧菜单
-	action.Data["teaMenu"] = "settings"
+	action.Data["teaMenu"] = "advanced"
 	action.Data["teaSubMenu"] = "advanced"
 
 	// 标签栏

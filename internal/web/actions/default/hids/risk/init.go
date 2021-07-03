@@ -12,7 +12,7 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeHids)).
-			Data("teaMenu", "hids").
+			Data("teaMenu", "risk").
 			Prefix("/hids/risk").
 			Get("", new(IndexAction)).
 			//系统漏洞

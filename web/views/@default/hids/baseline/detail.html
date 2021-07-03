@@ -1,40 +1,36 @@
 {$layout}
 <!-- 合规基线详情 -->
 
-<!--<div class="title-content-style bottom-line-style">-->
-<!--    <div>-->
-<!--        <span>当前基线模板：</span>-->
-<!--        <span>{{details.checkFunc}}</span>-->
-<!--    </div>-->
-<!--    <div class="edit_btn" @click="onGoBack">返回</div>-->
-<!--</div>-->
-<!--<div class="bottom-line-style" style="width:100%;display: inline-flex;padding: 20px 30px;align-items: center;">-->
-<!--    <div class="out-circular-style" style="margin-right: 40px;">无异常项</div>-->
-<!--    <div style="display: flex;flex-direction: column;justify-content: start;">-->
-<!--        <div style="display: inline-flex;">-->
-<!--            <span>本次共检测{{details.checkCount}}项，共发现</span>-->
-<!--            <span style="color: red;">{{details.exceptionCount}}</span>-->
-<!--            <span>项异常，异常项占比</span>-->
-<!--            <span style="color: red;">{{getProgressPer(details.exceptionCount,details.checkCount)}}</span>-->
-<!--        </div>-->
-<!--        <div style="display: inline-flex;margin-top: 10px;">-->
-<!--            <span style="font-weight: bold;margin-right: 10px;">检测时间：</span>-->
-<!--            <span>{{onChangeTimeFormat(details.checkTime)}}</span>-->
-<!--        </div>-->
-<!--        <div style="display: inline-flex;margin-top: 10px;">-->
-<!--            <span style="font-weight: bold;margin-right: 10px;">检测项目：</span>-->
-<!--            <span>{{details.checkProject}}</span>-->
-<!--        </div>-->
-<!--        <div style="display: inline-flex;margin-top: 10px;">-->
-<!--            <span style="font-weight: bold;margin-right: 10px;">基线模板：</span>-->
-<!--            <span>{{details.modelName}}</span>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+<div class="bottom-line-style" style="width:100%;display: inline-flex;padding: 20px 30px;align-items: center;">
+    <div class="out-circular-style" style="margin-right: 40px;" v-if="checkCount ==0 ">无异常项</div>
+    <div class="out-circular-style" style="margin-right: 40px;" v-else>
+        <span style="color: red;font-size: 19px">{{getProgressPer(checkCount,totalCount)}}
+        <span style="color: red;font-size: 14px">异常项占比</span>
+        </span>
+
+    </div>
+    <div style="display: flex;flex-direction: column;justify-content: start;">
+        <div style="display: inline-flex;">
+            <span>本次共检测{{totalCount}}项，共发现</span>
+            <span style="color: red;">{{checkCount}}</span>
+            <span>项异常，异常项占比</span>
+            <span style="color: red;">{{getProgressPer(checkCount,totalCount)}}</span>
+        </div>
+        <div style="display: inline-flex;margin-top: 10px;">
+            <span style="font-weight: bold;margin-right: 10px;">检测时间：</span>
+            <span>{{checkTime}}</span>
+        </div>
+        <div style="display: inline-flex;margin-top: 10px;">
+            <span style="font-weight: bold;margin-right: 10px;">检测项目：</span>
+            <span v-if="systemSafeCount > 0">操作系统安全</span>
+            <span v-if="middleSafeCount > 0">中间件安全</span>
+        </div>
+    </div>
+</div>
 <div style="margin-top: 10px;">
     <div style="display: inline-flex;margin-bottom: 10px;">
         <div :class="{'menu-select-color':nTableState===1,'menu-define-color':nTableState!=1}" @click="onChangeTableState(1)">操作系统安全 | 异常{{systemSafeCount}}项</div>
-        <div :class="{'menu-select-color':nTableState===2,'menu-define-color':nTableState!=2}" @click="onChangeTableState(2)">中间件安全  | 异常{{middleSafeCount}}项</div>
+        <div :class="{'menu-select-color':nTableState===2,'menu-define-color':nTableState!=2}" @click="onChangeTableState(2)" v-if="middleSafeCount > 0">中间件安全  | 异常{{middleSafeCount}}项</div>
     </div>
     <div v-if="nTableState===1">
         <table class="ui table selectable celled" border="1" style="border-collapse: collapse;">

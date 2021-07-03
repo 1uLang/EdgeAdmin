@@ -12,7 +12,7 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeHids)).
-			Data("teaMenu", "hids").
+			Data("teaMenu", "invade").
 			Prefix("/hids/invade").
 			Get("", new(IndexAction)).
 			EndAll()
