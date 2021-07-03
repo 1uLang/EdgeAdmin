@@ -12,12 +12,18 @@ Tea.context(function () {
             this.$refs.focus.focus()
         }
 
-        let curSelectValue = sessionStorage.getItem("topSelctMenuId")
-        if( !curSelectValue){
-            curSelectValue = 1
+        // let curSelectValue = sessionStorage.getItem("topSelctMenuId")
+        // if( !curSelectValue){
+        //     curSelectValue = 1
+        // }
+        // let curSelectDropValue = sessionStorage.getItem("topSelctMenuDropId")
+        // this.onSelectTopMenu(curSelectValue,curSelectDropValue)
+
+        let curSelectCode = sessionStorage.getItem("leftSelectCode")
+        if(curSelectCode){
+            this.onSetLeftTouchCode(curSelectCode)
         }
-        let curSelectDropValue = sessionStorage.getItem("topSelctMenuDropId")
-        this.onSelectTopMenu(curSelectValue,curSelectDropValue)
+        
 
         // 检查消息
         this.checkMessages()
@@ -173,6 +179,13 @@ Tea.context(function () {
     this.selectDropName = ""
     this.letfMenuData = []
 
+    this.curSelectCode = null
+    this.onSetLeftTouchCode = function (code) {
+        if(this.curSelectCode!=code){
+            this.curSelectCode = code
+        }
+        sessionStorage.setItem("leftSelectCode",this.curSelectCode)
+    }
 
     this.getLeftData = function (id) {
         for(var i=0;i<this.mainMenuData.length;i++){
