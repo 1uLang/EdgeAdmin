@@ -30,4 +30,18 @@
 .chart-box {
   height: 20em;
 }
+
+.row-item-style{
+  display: flex;
+  flex-direction: column;
+  width: 33%;
+  height: 100px;
+  justify-content: space-around;
+  align-items: center;
+}
+.col-item-style{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
 /*# sourceMappingURL=index.css.map */

@@ -142,4 +142,12 @@ Tea.context(function () {
 			}
 		}
 	}
+
+	this.testData = {
+		nodeCount:20,
+		ddosCount:10,
+		scanCount:5,
+		nfwCount:12,
+		hidsCount:16,
+	}
 })
