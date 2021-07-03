@@ -57,7 +57,8 @@ Tea.context(function () {
             '&riskId=' + item.riskId +
             '&state=' + this.nTableState
         ), {
-            height: "30em",
+            height: "50em",
+            width: "800px",
         })
     };
     this.onIgnore = function (item) {

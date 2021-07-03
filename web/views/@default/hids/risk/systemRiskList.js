@@ -82,7 +82,7 @@ Tea.context(function () {
             '&os=' + this.os
         ),{
             height: "50em",
-            weight: "70em",
+            width: "800px",
         })
     };
     this.onFix = function (item) {
