@@ -185,7 +185,7 @@ func (this *DangerAccountDetailAction) RunGet(params struct {
 		Require("请输入机器码")
 	defer this.Show()
 
-	this.Data["ConfigDefectDetails"] = nil
+	this.Data["DangerAccountDetails"] = nil
 
 	err := hids.InitAPIServer()
 	if err != nil {
@@ -198,5 +198,5 @@ func (this *DangerAccountDetailAction) RunGet(params struct {
 		this.Data["errorMessage"] = fmt.Sprintf("获取风险账号详情信息失败：%v",err)
 		return
 	}
-	this.Data["ConfigDefectDetails"] = info
+	this.Data["DangerAccountDetails"] = info
 }
