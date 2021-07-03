@@ -49,8 +49,9 @@ Tea.context(function () {
             // top: '16%',   // 等价于 y: '16%'
             grid: {
                 top: 60,   // 等价于 y: '16%'
-                left: 15,
+                left: 30,
                 right: 30,
+                bottom: 15,
                 containLabel: true
             },
             xAxis: {

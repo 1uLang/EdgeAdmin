@@ -7,7 +7,7 @@ Tea.context(function () {
         window.location = "/hids/invade/abnormalProcess/detailList?macCode="+item.macCode+"&ip="+item.serverIp
     }
     this.enters = function (index) {
-        this.curIndex = index;
+        // this.curIndex = index;
     }
 
     this.$delay(function () {

@@ -2,7 +2,9 @@ Tea.context(function () {
 
 
     this.onOpenCommand = function () {
-        teaweb.popup(Tea.url(".install"));
+        teaweb.popup(Tea.url(".install"),{
+            height: "350px",
+        });
     }
 
     this.$delay(function () {
