@@ -16,17 +16,18 @@ func (this *IndexAction) RunGet(params struct{}) {
 	defer this.Show()
 
 	dashboard := []map[string]interface{}{
-		{"name": "病毒木马", "url": "virus", "count": 0},
-		{"name": "网页后门", "url": "webShell", "count": 0},
-		{"name": "反弹shell", "url": "reboundShell", "count": 0},
-		{"name": "异常账号", "url": "abnormalAccount", "count": 0},
-		{"name": "日志异常删除", "url": "logDelete", "count": 0},
-		{"name": "异常登录", "url": "abnormalLogin", "count": 0},
-		{"name": "异常进程", "url": "abnormalProcess", "count": 0},
-		{"name": "系统命令篡改", "url": "systemCmd", "count": 0},
+		{"name": "病毒木马", "url": "virus", "value": 0},
+		{"name": "网页后门", "url": "webShell", "value": 0},
+		{"name": "反弹shell", "url": "reboundShell", "value": 0},
+		{"name": "异常账号", "url": "abnormalAcvalue", "value": 0},
+		{"name": "日志异常删除", "url": "logDelete", "value": 0},
+		{"name": "异常登录", "url": "abnormalLogin", "value": 0},
+		{"name": "异常进程", "url": "abnormalProcess", "value": 0},
+		{"name": "系统命令篡改", "url": "systemCmd", "value": 0},
 	}
-
+	names := []string{"病毒木马", "网页后门", "反弹shell", "异常账号", "日志异常删除", "异常登录", "异常进程", "系统命令篡改"}
 	this.Data["dashboard"] = dashboard
+	this.Data["names"] = names
 
 	err := hids.InitAPIServer()
 	if err != nil {
@@ -62,7 +63,7 @@ func (this *IndexAction) RunGet(params struct{}) {
 		//	defer invadeWg.Done()
 			risk, _ := fn(args)
 			//invadeLock.Lock()
-			dashboard[idx]["count"] = risk.TotalData
+			dashboard[idx]["value"] = risk.TotalData
 			//invadeLock.Unlock()
 		//}(i, f)
 	}

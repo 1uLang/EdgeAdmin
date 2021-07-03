@@ -26,6 +26,13 @@ func (this *IndexAction) RunGet(params struct {
 	this.Data["weak"] = weak
 	this.Data["dangerAccount"] = dangerAccount
 	this.Data["configDefect"] = configDefect
+	this.Data["names"] = []string{"系统漏洞", "弱口令", "风险账号", "配置缺陷"}
+	this.Data["datas"] = []map[string]interface{}{
+		{"name": "系统漏洞","value":0},
+		{"name": "弱口令","value":0},
+		{"name": "风险账号","value":0},
+		{"name": "配置缺陷","value":0},
+	}
 
 	err := hids.InitAPIServer()
 	if err != nil {
@@ -71,5 +78,11 @@ func (this *IndexAction) RunGet(params struct {
 	this.Data["weak"] = weak
 	this.Data["dangerAccount"] = dangerAccount
 	this.Data["configDefect"] = configDefect
+	this.Data["datas"] = []map[string]interface{}{
+		{"name": "系统漏洞","value":risk.Total},
+		{"name": "弱口令","value":weak.Total},
+		{"name": "风险账号","value":dangerAccount.Total},
+		{"name": "配置缺陷","value":configDefect.Total},
+	}
 
 }

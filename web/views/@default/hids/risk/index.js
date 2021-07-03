@@ -29,29 +29,6 @@ Tea.context(function () {
             default:
                 break
         }
-       
-    }
-
-    this.data = {
-        seriousCount:10,
-        heightCount:20,
-        middleCount:10,
-        lowCount:1,
-        errHostCount:10,
-        errWinCount:5,
-        errLinuxCount:12,
-        value1:{//弱口令
-            allCount:206,
-            errCount:15
-        },
-        value2:{//风险账号
-            allCount:206,
-            errCount:15
-        },
-        value3:{//缺陷配置
-            allCount:206,
-            errCount:15
-        },
     }
 
     this.reloadBarTableChart = function () {
@@ -74,7 +51,7 @@ Tea.context(function () {
             xAxis: {
                 // name: 'Hour',
                 // boundaryGap值为false的时候，折线第一个点在y轴上
-                data: this.tableData1.itemName,
+                data: this.names,
                 axisLabel: {
                     rotate: 0, // 旋转角度
                     interval: 0  //设置X轴数据间隔几个显示一个，为0表示都显示
@@ -98,7 +75,7 @@ Tea.context(function () {
             series: [
                 {
                     type: "bar",
-                    data: this.tableData1.itemValue,
+                    data: this.datas,
                     barWidth: "70px",
                     color: "#2698fb"
                 },
@@ -109,16 +86,5 @@ Tea.context(function () {
         chart.setOption(option)
         chart.resize()
     }
-
-    this.tableData1 = {
-        itemName:["系统漏洞", "弱口令", "风险账号", "配置缺陷"],
-        itemValue:[
-            {value:20,name:'系统漏洞'}, 
-            {value:15,name:'弱口令'}, 
-            {value:10,name:'风险账号'},
-            {value:18,name:'配置缺陷'},
-        ]
-    }
-
 });
   
