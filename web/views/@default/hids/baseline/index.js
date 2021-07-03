@@ -2,7 +2,12 @@ Tea.context(function () {
     this.curIndex = -1
     this.sSelectValue = 0
 
+    this.dayFrom = ""
+    this.dayTo = ""
+
     this.$delay(function () {
+        teaweb.datepicker("day-from-picker")
+        teaweb.datepicker("day-to-picker")
 
         if (this.errorMessage !== "" && this.errorMessage !== undefined) {
             teaweb.warn(this.errorMessage, function () {
@@ -37,7 +42,7 @@ Tea.context(function () {
      }
 
      this.enters = function (index) {
-        this.curIndex = index;
+        // this.curIndex = index;
       }
     
       this.leaver = function (index) {
@@ -85,6 +90,10 @@ Tea.context(function () {
           return "/images/select_select.png";
         }
         return "/images/select_box.png";
+      }
+
+      this.onTimeChange = function () {
+      
       }
 });
   
