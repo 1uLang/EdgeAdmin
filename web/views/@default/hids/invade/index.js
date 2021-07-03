@@ -26,6 +26,11 @@ Tea.context(function () {
         let chartBox = document.getElementById("line-chart-box")
         let chart = echarts.init(chartBox)
         let option = {
+            title:{
+                text: '当前入侵威胁分布情况',
+                x:'left',
+                y: 'top'
+            },
             //  图表距边框的距离,可选值：'百分比'¦ {number}（单位px）
             // top: '16%',   // 等价于 y: '16%'
             grid: {

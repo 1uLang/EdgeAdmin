@@ -1,9 +1,10 @@
 {$layout}
+<script type="text/javascript" src="/js/echarts/echarts.min.js"></script>
 <!-- 漏洞风险 -->
  <div class="card-div" style="width: 100%;margin-top: 50px;" @click="onOpenDetail(1)">
     <div style="height: 60%;display: flex;justify-content: space-between;margin-bottom: 10px;">
         <div style="width: 30%;margin-right: 5%;display: flex;flex-direction: row;">
-            <img src="/images/danget_icon_3_blue.png" width="40px" height="40px">
+            <img src="/images/system_risk.svg" width="50px" height="50px">
             <div style="margin-left: 15px;">
                 <div style="margin-bottom: 10px;">系统漏洞总数</div>
                 <div style="font-size: 30px;">{{risk.total}}</div>
@@ -39,7 +40,7 @@
  <div style="width: 100%;margin-top: 50px;display: flex;flex-direction: row;">
     <div class="card-div" style="margin-right: 5%;" @click="onOpenDetail(2)">
         <div style="height: 60%;display: flex;justify-content: center;margin-bottom: 10px;">
-            <img src="/images/danget_icon_3_blue.png" width="50px" height="50px">
+            <img src="/images/weak_cmd.svg" width="50px" height="50px">
             <div style="margin-left: 10px;">
                 <div style="margin-bottom: 10px;">弱口令</div>
                 <div style="font-size: 30px;">{{weak.total}}</div>
@@ -53,7 +54,7 @@
     </div>
     <div class="card-div" style="margin-right: 5%;" @click="onOpenDetail(3)">
         <div style="height: 60%;display: flex;justify-content: center;margin-bottom: 10px;">
-            <img src="/images/danget_icon_3_blue.png" width="50px" height="50px">
+            <img src="/images/danger_account.svg" width="50px" height="50px">
             <div style="margin-left: 10px;">
                 <div style="margin-bottom: 10px;">风险账号</div>
                 <div style="font-size: 30px;">{{dangerAccount.total}}</div>
@@ -67,7 +68,7 @@
     </div>
     <div class="card-div" @click="onOpenDetail(4)">
         <div style="height: 60%;display: flex;justify-content: center;margin-bottom: 10px;">
-            <img src="/images/danget_icon_3_blue.png" width="50px" height="50px">
+            <img src="/images/config_defect.svg" width="50px" height="50px">
             <div style="margin-left: 10px;">
                 <div style="margin-bottom: 10px;">缺陷配置</div>
                 <div style="font-size: 30px;">{{configDefect.total}}</div>
@@ -79,4 +80,8 @@
             <span style="color: #0090cb;">{{configDefect.host}}</span>
         </div>
     </div>
+</div>
+
+<div style="margin-top: 20px;border: 1px solid #d7d7d7;">
+    <div style="height:18em;width: 100%;" id="bar-chart-box"></div>
 </div>
