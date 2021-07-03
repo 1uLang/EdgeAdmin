@@ -3,6 +3,11 @@ Tea.context(function () {
     this.globalMessageBadge = 0
     this.showAPIAUTHVisible = -1
 
+    this.curSelectCode = sessionStorage.getItem("leftSelectCode")? sessionStorage.getItem("leftSelectCode"):"dashboard"
+    
+    
+
+
     if (typeof this.leftMenuItemIsDisabled == "undefined") {
         this.leftMenuItemIsDisabled = false
     }
@@ -34,9 +39,15 @@ Tea.context(function () {
         // 检查DNS同步
         this.loadDNSTasks()
 
-
     })
 
+    this.onSetLeftTouchCode = function (code) {
+        if(this.curSelectCode!=code){
+            this.curSelectCode = code
+        }
+        sessionStorage.setItem("leftSelectCode",this.curSelectCode)
+    }
+    
     /**
      * 左侧子菜单
      */
@@ -178,14 +189,6 @@ Tea.context(function () {
     this.selectLeftMenuId = 1   //选择左侧的菜单id
     this.selectDropName = ""
     this.letfMenuData = []
-
-    this.curSelectCode = null
-    this.onSetLeftTouchCode = function (code) {
-        if(this.curSelectCode!=code){
-            this.curSelectCode = code
-        }
-        sessionStorage.setItem("leftSelectCode",this.curSelectCode)
-    }
 
     this.getLeftData = function (id) {
         for(var i=0;i<this.mainMenuData.length;i++){

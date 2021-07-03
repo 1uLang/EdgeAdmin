@@ -168,7 +168,7 @@ Tea.context(function () {
 
     this.onOpenCheck = function (item) {
         this.MacCode = item.macCode
-        this.sSelectCheckValue = []
+        this.sSelectCheckValue = ["01","02","03","04","13","14","15"]
         this.pCheckDetailData = [
             {
                 checkName: "漏洞风险检查项：",

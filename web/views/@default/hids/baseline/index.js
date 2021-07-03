@@ -60,7 +60,7 @@ Tea.context(function () {
      this.onOpenCheck = function (item) {
         //打开合规基线弹窗
          teaweb.popup(Tea.url(".template?macCode="+item.macCode+"&os="+item.os.osType), {
-             height: "30em",
+             height: "500px",
          })
       }
 

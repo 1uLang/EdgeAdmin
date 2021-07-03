@@ -61,7 +61,12 @@ Tea.context(function () {
             title:{
                 text: '当前漏洞风险分布情况',
                 x:'left',
-                y: 'top'
+                y: 'top',
+                textStyle: { 
+                    fontSize: 16,
+                    color: '#333',
+                    fontWeight:"normal"
+                },
             },
             //  图表距边框的距离,可选值：'百分比'¦ {number}（单位px）
             // top: '16%',   // 等价于 y: '16%'
