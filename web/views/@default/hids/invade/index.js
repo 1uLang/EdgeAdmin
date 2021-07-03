@@ -7,6 +7,7 @@ Tea.context(function () {
     this.$delay(function () {
         teaweb.datepicker("day-from-picker")
         teaweb.datepicker("day-to-picker")
+
         this.reloadLineTableChart()
         this.reloadBarTableChart()
 
@@ -16,7 +17,6 @@ Tea.context(function () {
         }
 
     })
-
     this.onOpenVirusPage = function (url) {
 
         //向服务器请求获取需要显示的数据
@@ -48,7 +48,7 @@ Tea.context(function () {
                 orient : 'horizontal',
                 x : 'center',
                 y : 'bottom',
-                data:this.tableData1.itemName,
+                data:this.names,
             },
 			tooltip : {
                 trigger: 'item',
@@ -61,7 +61,7 @@ Tea.context(function () {
                     type: 'pie',
                     radius: "55%",
                     center: ['50%', '50%'],
-                    data: this.tableData1.itemValue,
+                    data: this.dashboard,
                     itemStyle:{ 
                         normal:{ 
                             label:{ 
@@ -95,7 +95,7 @@ Tea.context(function () {
             xAxis: {
                 // name: 'Hour',
                 // boundaryGap值为false的时候，折线第一个点在y轴上
-                data: this.tableData1.itemName,
+                data: this.names,
                 axisLabel: {
                     rotate: 0, // 旋转角度
                     interval: 0  //设置X轴数据间隔几个显示一个，为0表示都显示
@@ -119,7 +119,7 @@ Tea.context(function () {
             series: [
                 {
                     type: "bar",
-                    data: this.tableData1.itemValue,
+                    data: this.dashboard,
                     barWidth: "70px",
                     color: "#2698fb"
                 },
@@ -129,20 +129,6 @@ Tea.context(function () {
         }
         chart.setOption(option)
         chart.resize()
-    }
-
-    this.tableData1 = {
-        itemName:["病毒木马", "网页后门", "反弹shell", "异常账号", "日志异常删除", "异常登录", "异常进程", "系统命令篡改"],
-        itemValue:[
-            {value:20,name:'病毒木马'}, 
-            {value:15,name:'网页后门'}, 
-            {value:10,name:'反弹shell'},
-            {value:18,name:'异常账号'},
-            {value:4,name:'日志异常删除'},
-            {value:8,name:'异常登录'},
-            {value:35,name:'异常进程'},
-            {value:50,name:'系统命令篡改'}
-        ]
     }
 });
   
