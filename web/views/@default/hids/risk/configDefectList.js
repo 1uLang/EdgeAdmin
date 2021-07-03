@@ -64,7 +64,7 @@ Tea.context(function () {
             '&riskId=' + item.riskId +
             '&state=' + this.nTableState
         ), {
-            height: "50em",
+            height: "350px",
             width: "800px",
         })
     };
