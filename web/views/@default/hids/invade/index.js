@@ -78,14 +78,14 @@ Tea.context(function () {
             grid: {
                 top: 30,   // 等价于 y: '16%'
                 left: 15,
-                right: 60,
+                right: 30,
                 bottom: 30,
                 containLabel: true
             },
             xAxis: {
                 // name: 'Hour',
                 // boundaryGap值为false的时候，折线第一个点在y轴上
-                data: this.tableData1.lineValue,
+                data: this.tableData1.itemName,
                 axisLabel: {
                     rotate: 0, // 旋转角度
                     interval: 0  //设置X轴数据间隔几个显示一个，为0表示都显示
@@ -134,67 +134,5 @@ Tea.context(function () {
             {value:50,name:'系统命令篡改'}
         ]
     }
-
-    this.pageData = [
-        {
-            id: 1,
-            itemData: {
-                name: "病毒木马",
-                count: 2,
-            }
-        },
-        {
-            id: 2,
-            itemData: {
-                name: "网页后门",
-                count: 2,
-            }
-        },
-        {
-            id: 3,
-            itemData: {
-                name: "反弹shell",
-                count: 2,
-
-            }
-        },
-        {
-            id: 4,
-            itemData: {
-                name: "异常账号",
-                count: 2,
-            }
-        },
-        {
-            id: 5,
-            itemData: {
-                name: "日志异常删除",
-                count: 2,
-
-            }
-        },
-        {
-            id: 6,
-            itemData: {
-                name: "异常登录",
-                count: 2,
-            }
-        },
-        {
-            id: 7, itemData: {
-                name: "异常进程",
-                count: 2,
-            }
-        },
-        {
-            id: 8,
-            itemData: {
-                name: "系统命令篡改",
-                count: 2,
-            }
-        },
-
-    ]
-
 });
   
