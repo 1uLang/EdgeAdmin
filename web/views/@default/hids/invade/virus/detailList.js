@@ -20,7 +20,7 @@ Tea.context(function () {
     };
     this.onTrust = function (item) {
         teaweb.confirm("确定信任该事件吗？", function () {
-            this.$post(".virus").params({
+            this.$post("/hids/invade/virus").params({
                 Opt: "add_trust",
                 MacCode: this.macCode,
                 ItemIds: [item.itemId],
@@ -30,7 +30,7 @@ Tea.context(function () {
     };
     this.onIsolate = function (item) {
         teaweb.confirm("确定隔离该事件吗？", function () {
-            this.$post(".virus").params({
+            this.$post("/hids/invade/virus").params({
                 Opt: "isolate",
                 MacCode: this.macCode,
                 ItemIds: [item.itemId],
@@ -40,7 +40,7 @@ Tea.context(function () {
     };
     this.onRevert = function (item) {
         teaweb.confirm("确定恢复该事件吗？", function () {
-            this.$post(".virus").params({
+            this.$post("/hids/invade/virus").params({
                 Opt: "revert",
                 MacCode: this.macCode,
                 ItemIds: [item.itemId],
@@ -50,7 +50,7 @@ Tea.context(function () {
     };
     this.onDelete = function (item) {
         teaweb.confirm("确定删除该事件吗？", function () {
-            this.$post(".virus").params({
+            this.$post("/hids/invade/virus").params({
                 Opt: "delete",
                 MacCode: this.macCode,
                 ItemIds: [item.itemId],
@@ -60,7 +60,7 @@ Tea.context(function () {
     };
     this.onCancelTrust = function (item) {
         teaweb.confirm("确定取消信任该事件吗？", function () {
-            this.$post(".virus").params({
+            this.$post("/hids/invade/virus").params({
                 Opt: "cancel_trust",
                 MacCode: this.macCode,
                 ItemIds: [item.itemId],

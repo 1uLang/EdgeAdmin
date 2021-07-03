@@ -108,7 +108,7 @@ Tea.context(function () {
     this.cancelOnIgnore = function (item) {
         teaweb.confirm("确定取消忽略该系统漏洞吗？", function () {
             this.$post(".systemRisk").params({
-                Opt: "cancel_oignore",
+                Opt: "cancel_ignore",
                 MacCode: this.macCode,
                 ItemIds: [item.itemId],
                 RiskIds: [item.riskId],

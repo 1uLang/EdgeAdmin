@@ -65,7 +65,7 @@ Tea.context(function () {
             '&riskId=' + item.riskId +
             '&state=' + this.nTableState
         ),{
-            height: "350px",
+            height: "50em",
             width: "800px",
         })
     };
@@ -82,7 +82,7 @@ Tea.context(function () {
     this.cancelOnIgnore = function (item) {
         teaweb.confirm("确定取消忽略该弱口令吗？", function () {
             this.$post(".weak").params({
-                Opt: "cancel_oignore",
+                Opt: "cancel_ignore",
                 MacCode: this.macCode,
                 ItemIds: [item.itemId],
                 RiskIds: [item.riskId],
