@@ -24,6 +24,7 @@
                         <div v-show="risk.high>0" class="model-child-background height-bg-color" :style="{flex:risk.high}">{{risk.high}}</div>
                         <div v-show="risk.middle>0" class="model-child-background middle-bg-color" :style="{flex:risk.middle}">{{risk.middle}}</div>
                         <div v-show="risk.low>0" class="model-child-background low-bg-color" :style="{flex:risk.low}">{{risk.low}}</div>
+                        <div v-show="risk.critical===0 && risk.high===0 && risk.middle===0 && risk.low===0" class="model-child-background none-bg-color">0</div>
                     </div>
 
                 </div>

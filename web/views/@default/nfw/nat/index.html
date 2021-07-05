@@ -43,18 +43,38 @@
             </thead>
             <tbody id='tableBody' >
             <tr align="center" style="height: 40px;" v-for="item in tableDataList">
-                <td>{{item.interface}}</td>
-                <td>{{item.external}}</td>
-                <td>{{item.src}}</td>
-                <td>{{item.dst}}</td>
-                <td class="line-limit-length">{{item.descr}}</td>
                 <td>
-                    <div :class="{'status-open':item.status=='1','status-close':item.status=='0'}">
+                    <div style="padding: 4px 0;">
+                        {{item.interface}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.external}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.src}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.dst}}
+                    </div>
+                </td>
+                <td>
+                    <div class="line-limit-length" style="padding: 4px 0;">
+                        {{item.descr}}
+                    </div>
+                </td>
+                <td>
+                    <div :class="{'status-open':item.status=='1','status-close':item.status=='0'}" style="display: inline-block;">
                         {{getStatus(item.status)}}
                     </div>
                 </td>
                 <td>
-                    <div style="display: flex;justify-content: space-around;">
+                    <div style="display: flex;justify-content: space-around;padding: 4px 0">
                         <div class="edit_btn" @click="onOpenChangeView(item.id)">修改</div>
 
                         <div class="edit_btn" @click="onOpenConfig(item.id,item.status)" v-if="item.status=='0'">启用

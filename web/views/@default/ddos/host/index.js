@@ -109,6 +109,11 @@ Tea.context(function () {
             }
         })
     }
+    
+    //删除
+    this.onDeleteConfig = function (addr) {
+        
+    }
 
     //配置里面的列表切换
     this.changeListState = function (state) {

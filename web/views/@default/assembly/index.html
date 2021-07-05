@@ -8,7 +8,7 @@
 <div style="width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;margin-top: 15px;">
     <table class="ui table selectable celled" v-if="list.length > 0">
         <thead>
-            <tr>
+            <tr align="center">
                 <th>节点名称</th>
                 <th>节点地址</th>
                 <th>协议</th>
@@ -18,21 +18,41 @@
                 <th class="two op">操作</th>
             </tr>
         </thead>
-        <tr v-for="node in list">
-            <td>{{node.name}}</td>
-            <td>{{node.addr}}</td>
+        <tr align="center" v-for="node in list">
             <td>
-                <div v-show="node.is_ssl==1" >https</div>
-                <div v-show="node.is_ssl==0" >http</div>
+                <div style="padding: 3px 0;">
+                    {{node.name}}
+                </div>
             </td>
-            <td>{{node.type_name}}</td>
-            <td>{{node.idc_name }}</td>
+            <td>
+                <div style="padding: 3px 0;">
+                    {{node.addr}}
+                </div>
+            </td>
+            <td>
+                <div style="padding: 3px 0;">
+                    <div v-show="node.is_ssl==1" >https</div>
+                    <div v-show="node.is_ssl==0" >http</div>
+                </div>
+            </td>
+            <td>
+                <div style="padding: 3px 0;">
+                    {{node.type_name}}
+                </div>
+            </td>
+            <td>
+                <div style="padding: 3px 0;">
+                    {{node.idc_name}}
+                </div>
+            </td>
             <td class="center">
                 <label-on :v-is-on="node.state"></label-on>
             </td>
             <td>
-                <a @click.prevent="updateNode(node.id)" style="cursor: pointer;">修改</a> &nbsp;
-                <a href="" style="cursor: pointer;" @click.prevent="deleteNode(node.id)">删除</a>
+                <div style="padding: 3px 0;">
+                    <a @click.prevent="updateNode(node.id)" style="cursor: pointer;">修改</a> &nbsp;
+                    <a href="" style="cursor: pointer;" @click.prevent="deleteNode(node.id)">删除</a>
+                </div>
             </td>
         </tr>
     </table>

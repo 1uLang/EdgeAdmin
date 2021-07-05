@@ -23,8 +23,8 @@
         </div>
     </div>
 </div>
-<div v-if="nShowState===1">
-    <form method="get" action="logs" class="ui form" autocomplete="off">
+<div>
+    <form v-show="nShowState===1" method="get" action="logs" class="ui form" autocomplete="off">
         <div class="ui fields inline">
             <div class="ui field">
                 <input type="text" name="startTime" placeholder="开始日期" v-model="startTime" value="" style="width:8em"
@@ -51,7 +51,7 @@
                 <select class="ui dropdown auto-width" name="status" v-model="status">
                     <option value="0">全部</option>
                     <option value="1">保护中</option>
-                    <option value="2">停止</option>
+                    <option value="2">结束</option>
                 </select>
             </div>
             <div class="ui field">目的主机：</div>
@@ -63,7 +63,7 @@
             </div>
         </div>
     </form>
-    <div style="margin-top: 30px;width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;">
+    <div v-if="nShowState===1" style="margin-top: 30px;width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;">
         <table class="ui table selectable celled" border="1" style="border-collapse: collapse;">
             <thead>
             <tr align="center">
@@ -96,7 +96,7 @@
         </table>
     </div>
 </div>
-<div v-else>
+<div v-if="nShowState!=1">
     <form method="get" action="logs/traffic" class="ui form" autocomplete="off">
         <div class="ui fields inline">
             <div class="ui field">

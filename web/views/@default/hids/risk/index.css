@@ -21,7 +21,7 @@
     width: 500px;
     height: 20px;
     background-color: #fff;
-    border: 1px #000 solid;
+    /* border: 1px #000 solid; */
     border-radius: 10px;
     overflow: hidden;
 }
@@ -67,3 +67,10 @@
     color: #fff;
     text-align: center;
 }
+.none-bg-color{
+    background-color: #D7D7D7;
+    color: #fff;
+    text-align: center;
+    flex:1;
+}
+

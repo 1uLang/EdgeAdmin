@@ -52,22 +52,58 @@
             </thead>
             <tbody id='tableBody'>
             <tr align="center" style="height: 40px;" v-for="item in tableData">
-                <td>{{getInterfaceName(item.interface)}}</td>
-                <td>{{getDirection(item.direction)}}</td>
-                <td>{{item.protocol}}</td>
-                <td>{{item.src}}</td>
-                <td>{{item.src_port}}</td>
-                <td>{{item.dst}}</td>
-                <td>{{item.dst_port}}</td>
-                <td class="line-limit-length">{{item.descr}}</td>
-                <td>{{item.type}}</td> <!--getTactics-->
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{getInterfaceName(item.interface)}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{getDirection(item.direction)}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.protocol}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.src}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.src_port}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.dst}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.dst_port}}
+                    </div>
+                </td>
+                <td>
+                    <div class="line-limit-length" style="padding: 4px 0;">
+                        {{item.descr}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.type}}
+                    </div>
+                </td> <!--getTactics-->
                 <td>
                     <div :class="{'status-open':item.disabled==1,'status-close':item.disabled==0}">
                         {{getStatus(item.disabled)}}
                     </div>
                 </td>
                 <td>
-                    <div style="display: flex;justify-content: space-around;">
+                    <div style="display: flex;justify-content: space-around;padding: 4px 0;">
                         <div class="edit_btn" @click="onOpenChangeView(item.id)">修改</div>
                         <div v-show="item.disabled==1" class="edit_btn"
                              @click="onOpenConfig(item.id,item.disabled,item.interface)">禁用

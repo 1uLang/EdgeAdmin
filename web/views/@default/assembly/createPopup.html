@@ -20,7 +20,12 @@
         <tr>
             <td>节点地址 *</td>
             <td>
-                <input type="text" name="addr" maxlength="100"/>
+                <div style="display: flex;flex-direction: column;">
+                    <input type="text" name="addr" maxlength="100"/>
+                    <span style="font-size: 12px;color: #aaa;margin-top: 5px;">
+                        可以是"IP:端口"或者"域名"
+                    </span>
+                </div>
 <!--                <p class="comment">节点访问域名或地址（https[http]://ip:port）。</p>-->
             </td>
         </tr>
