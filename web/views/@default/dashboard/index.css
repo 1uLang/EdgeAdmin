@@ -37,11 +37,22 @@
   width: 33%;
   height: 100px;
   justify-content: space-around;
-  align-items: center;
+  align-items: start;
+  padding-left: 40px;
 }
 .col-item-style{
   display: flex;
   flex-direction: row;
   align-items: center;
 }
+.content-style{
+  border: 1px solid #d7d7d7;
+  width: 50%;
+  height: 170px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding-left: 40px;
+}
+
 /*# sourceMappingURL=index.css.map */
