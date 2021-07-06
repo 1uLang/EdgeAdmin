@@ -45,3 +45,26 @@
     border-radius: 50%;
     border: 1px #000 solid;
 }
+
+.pdf-style{
+    border: 1px solid #21BA45;
+    font-size: 12px;
+    color: #21BA45;
+    width: 54px;
+    height: 22px;
+    line-height: 22px;
+    text-align: center;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.html-style{
+    border: 1px solid #169BD5;
+    font-size: 12px;
+    color: #169BD5;
+    width: 54px;
+    height: 22px;
+    line-height: 22px;
+    text-align: center;
+    cursor: pointer;
+}

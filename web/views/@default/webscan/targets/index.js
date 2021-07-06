@@ -1,10 +1,12 @@
 Tea.context(function () {
   this.checkValues = []; //选中的ID
 
+  this.scanValues = []  //需要扫描的ID
+
   this.onScan = function () {
-    if (this.checkValues.length > 0) {
+    if (this.scanValues.length>0) {
       let that = this
-      let target_ids = JSON.parse(JSON.stringify(this.checkValues))
+      let target_ids = JSON.parse(JSON.stringify(this.scanValues))
       teaweb.confirm("确定要扫描这个目标吗？", function () {
         that.$post("/webscan/scans/create")
             .params({
@@ -108,21 +110,48 @@ Tea.context(function () {
     this.updateBtnStatus();
   };
 
+
+  this.getItemInfo = function (id) {
+    if(this.targets && this.targets.length > 0){
+      for(var i=0;i<this.targets.length;i++){
+        if(this.targets[i].target_id == id){
+          return this.targets[i]
+        }
+      }
+    }
+    return null
+  }
+
+  this.checkCanScan = function () {
+    this.scanValues = []
+    for(id of this.checkValues){
+      let itemInfo = this.getItemInfo(id)
+      if(itemInfo && (itemInfo.status=="aborted" ||itemInfo.status=="completed")){
+        scanValues.push(id)
+      }
+    }
+  }
+
   this.updateBtnStatus = function () {
+    this.checkCanScan()
     const scanBtn = document.getElementById("scan-btn");
     const delBtn = document.getElementById("del-btn");
     if (this.checkValues.length > 0) {
-      scanBtn.style.backgroundColor = "#14539A";
-      scanBtn.style.cursor = "pointer";
-
+      
       delBtn.style.backgroundColor = "#D9001B";
       delBtn.style.cursor = "pointer";
     } else {
-      scanBtn.style.backgroundColor = "#AAAAAA";
-      scanBtn.style.cursor = null;
 
       delBtn.style.backgroundColor = "#AAAAAA";
       delBtn.style.cursor = null;
+    }
+
+    if(this.scanValues.length>0){
+      scanBtn.style.backgroundColor = "#14539A";
+      scanBtn.style.cursor = "pointer";
+    }else{
+      scanBtn.style.backgroundColor = "#AAAAAA";
+      scanBtn.style.cursor = null;
     }
   };
 

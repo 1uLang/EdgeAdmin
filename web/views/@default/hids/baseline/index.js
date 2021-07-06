@@ -49,11 +49,23 @@ Tea.context(function () {
         this.curIndex = -1;
       }
     
+    this.getProgressPerStr = function (curValue,maxValue) { 
+    if(curValue && maxValue && maxValue >= curValue){
+        let value = parseInt(curValue/maxValue * 100)
+        if(value>=100){
+            return "已完成"
+        }
+        return value+"%"
+    }
+    return "1%"
+    }
+
     this.getProgressPer = function (curValue,maxValue) { 
         if(curValue && maxValue && maxValue >= curValue){
-            return parseInt(curValue/maxValue * 100)+"%"
+            let value = parseInt(curValue/maxValue * 100)
+            return value+"%"
         }
-        return "0%"
+        return "1%"
      }
 
     //合规基线

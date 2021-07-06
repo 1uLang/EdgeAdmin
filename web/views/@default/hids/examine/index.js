@@ -155,7 +155,7 @@ Tea.context(function () {
     }
 
     this.enters = function (index) {
-        this.curIndex = index;
+        // this.curIndex = index;
     }
 
     this.leaver = function (index) {
@@ -287,13 +287,24 @@ Tea.context(function () {
         }
         return false
     }
+    
+    this.getProgressPerStr = function (curValue, maxValue) {
+        if(curValue && maxValue){
+            var tempValue = ((curValue / maxValue) * 100).toFixed(1)
+            if(tempValue>=100){
+                return "已完成"
+            }
+            return tempValue + "%"
+        }
+        return "1%"
+    }
 
     this.getProgressPer = function (curValue, maxValue) {
         if(curValue && maxValue){
             var tempValue = ((curValue / maxValue) * 100).toFixed(1)
             return tempValue + "%"
         }
-        return "0%"
+        return "1%"
     }
 
     //计时器

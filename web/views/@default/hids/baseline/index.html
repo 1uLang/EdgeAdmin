@@ -29,11 +29,11 @@
             <div class="ui fields inline" style="width: 50%;">
                 <div class="title-style">检查时间</div>
                 <div class="ui field">
-                   <input type="text" name="dayFrom" placeholder="开始日期" v-model="dayFrom" value="" style="width:8em" id="day-from-picker" @change="onTimeChange"/>
+                   <input type="text" name="dayFrom" placeholder="开始日期" v-model="dayFrom" value="" style="width:8em;height: 28px;font-size: 13px;" id="day-from-picker" @change="onTimeChange"/>
                </div>
                <div style="margin-right: 10px;"></div>
                <div class="ui field">
-                   <input type="text" name="dayTo" placeholder="结束日期" v-model="dayTo" value="" style="width:8em" id="day-to-picker" @change="onTimeChange"/>
+                   <input type="text" name="dayTo" placeholder="结束日期" v-model="dayTo" value="" style="width:8em;height: 28px;font-size: 13px;" id="day-to-picker" @change="onTimeChange"/>
                </div>
             </div>
         </div>
@@ -70,7 +70,7 @@
                     <div class="Bar" style="display: inline-flex;">
                         <div id="MBUFItem" :style="{width: getProgressPer(item.progress,100)}">
                         </div>
-                        <span>{{getProgressPer(item.progress,100)}}</span>
+                        <span>{{getProgressPerStr(item.progress,100)}}</span>
                     </div>
                 </td>
                 <td>{{getStateName(item.state)}}</td>

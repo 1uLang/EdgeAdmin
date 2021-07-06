@@ -53,12 +53,20 @@ Tea.context(function () {
       }
 
     this.onStartCheck = function (macCode) {
-        teaweb.confirm("确定开始体检该主机吗？", function () {
-            this.$post(".check").params({
-                MacCode: [this.macCode],
-                templateId: this.sSelectValue,
-            }).refresh()
+        this.$post(".check").params({
+            MacCode: [this.macCode],
+            templateId: this.sSelectValue,
+        }).done(function () {
+            teaweb.closePopup()
         })
+        
+
+        // teaweb.confirm("确定开始体检该主机吗？", function () {
+        //     this.$post(".check").params({
+        //         MacCode: [this.macCode],
+        //         templateId: this.sSelectValue,
+        //     }).refresh()
+        // })
     }
 
     this.onOpenDetail = function (item) {

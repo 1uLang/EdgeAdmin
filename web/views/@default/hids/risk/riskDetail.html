@@ -8,7 +8,8 @@
                 <div :class="{'low-bg-color':riskDetails.level===1,'middle-bg-color':riskDetails.level===2,'height-bg-color':riskDetails.level===3,'serious-bg-color':riskDetails.level===4}">
                     {{getDangerName(riskDetails.level)}}
                 </div>
-                <div style="margin-left: 20px;">{{riskDetails.name}} &nbsp; {{detailName}} &nbsp;  （操作系统内部版本 {{os}}）</div>
+                <!-- <div style="margin-left: 20px;">{{riskDetails.name}} &nbsp; {{detailName}} &nbsp;  （操作系统内部版本 {{os}}）</div> -->
+                <div style="margin-left: 20px;">{{riskDetails.name}} &nbsp; {{detailName}}</div>
             </div>
         </div>
         <div style="flex: 5;padding-left: 15px;">
