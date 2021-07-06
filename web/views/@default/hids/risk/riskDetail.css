@@ -6,7 +6,7 @@
     background-color: #e41e36;
     color: #fff;
     text-align: center;
-    border: 1px #000 solid;
+    /* border: 1px #000 solid; */
 }
 
 .height-bg-color{
@@ -16,7 +16,7 @@
     background-color: #ff431d;
     color: #fff;
     text-align: center;
-    border: 1px #000 solid;
+    /* border: 1px #000 solid; */
 }
 
 .middle-bg-color{
@@ -26,7 +26,7 @@
     background-color: #fc8f31;
     color: #fff;
     text-align: center;
-    border: 1px #000 solid;
+    /* border: 1px #000 solid; */
 }
 
 .low-bg-color{
@@ -36,7 +36,7 @@
     background-color: #0091cc;
     color: #fff;
     text-align: center;
-    border: 1px #000 solid;
+    /* border: 1px #000 solid; */
 }
 
 .grey-bg-color{
@@ -46,5 +46,5 @@
     background-color: #818181;
     color: #fff;
     text-align: center;
-    border: 1px #000 solid;
+    /* border: 1px #000 solid; */
 }

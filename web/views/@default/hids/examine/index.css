@@ -137,7 +137,7 @@
 .Bar { 
     width: 250px;/* 宽度 */ 
     background:#f0f0f0;/* 进度框背景颜色 */ 
-    border: 1px solid #f0f0f0;
+    /* border: 1px solid #f0f0f0; */
     padding: 1px;
     display: flex;
     justify-content: space-between;
