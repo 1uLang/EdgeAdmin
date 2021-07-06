@@ -1,6 +1,5 @@
 Tea.context(function () {
     this.curIndex = -1
-    this.sSelectValue = 0
 
     this.onChangeCheckState = function (state) {
         window.location = "/hids/baseline?State="+state+'&ResultState='+this.ResultState

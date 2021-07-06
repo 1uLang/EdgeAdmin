@@ -84,6 +84,9 @@ Tea.context(function () {
       }
 
     this.onStartCheck = function () {
+        if (this.sSelectValue == 0 ){
+            teaweb.warn("请设置合规基线模板", function () {})
+        }
         teaweb.confirm("确定开始体检该主机吗？", function () {
             this.$post(".check").params({
                 Opt: "ignore",

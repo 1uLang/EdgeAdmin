@@ -128,6 +128,7 @@ Tea.context(function () {
     };
 
     this.getStatusName = function (status) {
+        console.log(status)
         switch (status) {
             case 0:
                 return "未体检"
@@ -135,6 +136,8 @@ Tea.context(function () {
                 return "体检中"
             case 2:
                 return "已完成"
+            case 6:
+                return "已取消"
             default:
                 return "未知"
         }
