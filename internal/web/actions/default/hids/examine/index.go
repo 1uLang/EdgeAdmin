@@ -85,6 +85,10 @@ func (this *IndexAction) RunGet(params struct {
 			return
 		}
 		list.ServerExamineResultInfoList[k]["os"] = os
+		if req.State  != -1{
+			list.ServerExamineResultInfoList[k]["state"] = req.State
+		}
+
 		datas = append(datas, list.ServerExamineResultInfoList[k])
 	}
 	this.Data["datas"] = datas

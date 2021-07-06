@@ -54,6 +54,11 @@ func (this *TemplateAction) RunGet(params struct {
 		}
 	}
 	this.Data["templates"] = ls
+	if len(ls) >0 {
+		this.Data["sSelectValue"] = ls[0]["id"]
+	}else{
+		this.Data["sSelectValue"] = ""
+	}
 
 	this.Data["macCode"] = params.MacCode
 	this.Show()

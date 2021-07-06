@@ -140,7 +140,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 		{
 			"code":   "dashboard",
 			"module": configloaders.AdminModuleCodeDashboard,
-			"name":   "平台首页",
+			"name":   "概览",
 			"icon":   "dashboard",
 			"url":    "/dashboard",
 		},
@@ -221,7 +221,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 		{
 			"code":   "servers",
 			"module": configloaders.AdminModuleCodeServer,
-			"name":   "网站服务",
+			"name":   "WAF服务",
 			"icon":   "cloud",
 			"subItems": []maps.Map{
 				{
@@ -253,57 +253,6 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"name": "证书管理",
 					"url":  "/servers/certs",
 					"code": "certs",
-				},
-			},
-		},
-		{
-			"code":   "clusters",
-			"module": configloaders.AdminModuleCodeClusters,
-			"name":   "边缘节点",
-			"icon":   "instagram",
-			"subItems": []maps.Map{
-				{
-					"name": "集群列表",
-					"url":  "/clusters",
-					"code": "clusters",
-				},
-				{
-					"name": "节点日志",
-					"url":  "/clusters/logs",
-					"code": "logs",
-				},
-				{
-					"name": "SSH认证",
-					"url":  "/clusters/grants",
-					"code": "grants",
-				},
-				{
-					"name": "区域设置",
-					"url":  "/clusters/regions",
-					"code": "regions",
-				},
-			},
-		},
-		{
-			"code":   "dns",
-			"module": configloaders.AdminModuleCodeDNS,
-			"name":   "域名解析",
-			"icon":   "soundcloud",
-			"subItems": []maps.Map{
-				{
-					"name": "集群列表",
-					"url":  "/dns",
-					"code": "dns",
-				},
-				{
-					"name": "问题修复",
-					"url":  "/dns/issues",
-					"code": "issues",
-				},
-				{
-					"name": "DNS服务商",
-					"url":  "/dns/providers",
-					"code": "providers",
 				},
 			},
 		},
@@ -361,6 +310,57 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"name": "扫描报告",
 					"url":  "/webscan/reports",
 					"code": "reports",
+				},
+			},
+		},
+		{
+			"code":   "clusters",
+			"module": configloaders.AdminModuleCodeClusters,
+			"name":   "边缘节点",
+			"icon":   "instagram",
+			"subItems": []maps.Map{
+				{
+					"name": "集群列表",
+					"url":  "/clusters",
+					"code": "clusters",
+				},
+				{
+					"name": "节点日志",
+					"url":  "/clusters/logs",
+					"code": "logs",
+				},
+				{
+					"name": "SSH认证",
+					"url":  "/clusters/grants",
+					"code": "grants",
+				},
+				{
+					"name": "区域设置",
+					"url":  "/clusters/regions",
+					"code": "regions",
+				},
+			},
+		},
+		{
+			"code":   "dns",
+			"module": configloaders.AdminModuleCodeDNS,
+			"name":   "域名解析",
+			"icon":   "soundcloud",
+			"subItems": []maps.Map{
+				{
+					"name": "集群列表",
+					"url":  "/dns",
+					"code": "dns",
+				},
+				{
+					"name": "问题修复",
+					"url":  "/dns/issues",
+					"code": "issues",
+				},
+				{
+					"name": "DNS服务商",
+					"url":  "/dns/providers",
+					"code": "providers",
 				},
 			},
 		},
