@@ -7,6 +7,10 @@ Tea.context(function () {
         }
     };
 
+    this.parseServerLocalIp = function (ip) {
+        let ips = ip.split(";")
+        return ips.slice(-1)[0]
+    }
     this.onGoBack = function () {
         window.location = "/hids/invade/logDelete"
     };

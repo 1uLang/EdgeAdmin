@@ -141,14 +141,14 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"code":   "dashboard",
 			"module": configloaders.AdminModuleCodeDashboard,
 			"name":   "平台首页",
-			"icon":   "users",
+			"icon":   "dashboard",
 			"url":    "/dashboard",
 		},
 		{
 			"code":   "users",
 			"module": configloaders.AdminModuleCodeConfig,
 			"name":   "平台管理",
-			"icon":   "users",
+			"icon":   "sitemap",
 			"subItems": []maps.Map{
 				{
 					"name": "安全组件",
@@ -176,7 +176,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"code":   "ddos",
 			"module": configloaders.AdminModuleCodeDdos,
 			"name":   "DDoS防护",
-			"icon":   "history",
+			"icon":   "joomla",
 			"subItems": []maps.Map{
 				{
 					"name": "主机状态",
@@ -199,7 +199,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"code":     "nfw",
 			"module":   configloaders.AdminModuleCodeNfw,
 			"name":     "云防火墙",
-			"icon":     "history",
+			"icon":     "bars",
 			"subItems": []maps.Map{
 				{
 					"name": "NAT规则",
@@ -222,7 +222,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"code":   "servers",
 			"module": configloaders.AdminModuleCodeServer,
 			"name":   "网站服务",
-			"icon":   "history",
+			"icon":   "cloud",
 			"subItems": []maps.Map{
 				{
 					"name": "服务列表",
@@ -260,7 +260,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"code":   "clusters",
 			"module": configloaders.AdminModuleCodeClusters,
 			"name":   "边缘节点",
-			"icon":   "history",
+			"icon":   "instagram",
 			"subItems": []maps.Map{
 				{
 					"name": "集群列表",
@@ -288,7 +288,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"code":   "dns",
 			"module": configloaders.AdminModuleCodeDNS,
 			"name":   "域名解析",
-			"icon":   "history",
+			"icon":   "soundcloud",
 			"subItems": []maps.Map{
 				{
 					"name": "集群列表",
@@ -312,7 +312,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"module":   configloaders.AdminModuleCodeHids,
 			"name":     "主机防护",
 			"subtitle": "全局状态",
-			"icon":     "history",
+			"icon":     "linux",
 			"subItems": []maps.Map{
 				{
 					"name": "主机体检",
@@ -345,7 +345,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"code": "webscan",
 			"module": configloaders.AdminModuleCodeWebScan,
 			"name": "漏洞扫描",
-			"icon": "setting",
+			"icon": "ioxhost",
 			"subItems": []maps.Map{
 				{
 					"name": "扫描目标",
@@ -368,7 +368,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"code":   "monitor",
 			"module": configloaders.AdminModuleCodeMonitor,
 			"name":   "监控告警",
-			"icon":   "history",
+			"icon":   "flickr ",
 			"subItems": []maps.Map{
 				{
 					"name": "监控任务",

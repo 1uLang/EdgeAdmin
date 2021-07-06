@@ -49,38 +49,38 @@ func (this *CreatePopupAction) RunPost(params struct {
 		Require("请选择数据中心")
 
 	switch params.AssemblyType {
-	case 0: //ddos防火墙
+	case 1: //ddos防火墙
 		params.Must.
 			Field("key", params.Key).
 			Require("请输入username")
 		params.Must.
 			Field("secret", params.Secret).
 			Require("请输入password")
-	case 1: //云防火墙
+	case 2: //云防火墙
 		params.Must.
 			Field("key", params.Key).
 			Require("请输入key")
 		params.Must.
 			Field("secret", params.Secret).
 			Require("请输入secret")
-	case 2: //主机防护
-		params.Must.
-			Field("key", params.Key).
-			Require("请输入appid")
-		params.Must.
-			Field("secret", params.Secret).
-			Require("请输入secret")
-	case 3: //web漏扫
-		params.Must.
-			Field("key", params.Key).
-			Require("请输入XAuth")
-	case 4: //主机漏扫
+	case 3: //主机漏洞扫描
 		params.Must.
 			Field("key", params.Key).
 			Require("请输入accessKey")
 		params.Must.
 			Field("secret", params.Secret).
 			Require("请输入secretKey")
+		case 4: //web漏扫
+		params.Must.
+			Field("key", params.Key).
+			Require("请输入XAuth")
+	case 5: //主机防护
+		params.Must.
+			Field("key", params.Key).
+			Require("请输入appid")
+		params.Must.
+			Field("secret", params.Secret).
+			Require("请输入secret")
 
 	}
 	req := &subassemblynode_model.Subassemblynode{

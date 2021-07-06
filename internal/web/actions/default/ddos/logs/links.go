@@ -1,6 +1,7 @@
 package logs
 
 import (
+	"fmt"
 	host_status_server "github.com/1uLang/zhiannet-api/ddos/server/host_status"
 	logs_server "github.com/1uLang/zhiannet-api/ddos/server/logs"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
@@ -15,10 +16,16 @@ func (this *LinkAction) RunGet(params struct {
 	NodeId  uint64
 	Level   int
 }) {
+	defer this.Success()
+
 	//ddos节点
 	ddos, _, err := host_status_server.GetDdosNodeList()
 	if err != nil {
-		this.ErrorPage(err)
+		this.Error(err.Error(),400)
+		return
+	}
+	if len(ddos) == 0 {
+		this.Error("未配置DDoS防火墙节点",400)
 		return
 	}
 	if params.NodeId == 0 {
@@ -31,7 +38,7 @@ func (this *LinkAction) RunGet(params struct {
 	}
 	list, err := logs_server.GetLinkLogList(req)
 	if err != nil {
-		this.ErrorPage(err)
+		this.Error(fmt.Sprintf("获取流量分析列表失败：%v",err),400)
 		return
 	}
 	this.Data["links"] = list.Report
@@ -41,5 +48,4 @@ func (this *LinkAction) RunGet(params struct {
 	this.Data["nodeId"] = params.NodeId
 	this.Data["address"] = params.Address
 	this.Data["level"] = params.Level
-	this.Success()
 }

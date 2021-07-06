@@ -41,7 +41,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 	_, err := black_white_list_server.AddBW(&black_white_list_server.EditBWReq{
 		Addr:   []string{params.Addr},
 		NodeId: params.NodeId,
-		White:  !(params.White == "白名单"),
+		White:  params.White == "白名单",
 	})
 	if err != nil {
 		this.ErrorPage(err)

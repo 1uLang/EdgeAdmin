@@ -40,7 +40,6 @@ Tea.context(function () {
         window.location.href = '/ddos/host?nodeId=' + node
     }
     this.setHost = function (notice) {
-
         if (notice !== true && notice !== false)
             return;
         let ignore = document.getElementById('btn-switch-ignore').checked
@@ -53,10 +52,10 @@ Tea.context(function () {
                 Addr: that.searchAddress,
                 ignore: ignore,
                 NodeId: node,
-                set: level,
+                set: that.level,
             }).success(resp => {
                 if (resp.code === 200)
-                    document.getElementById("btn-switch-ignore").checked = !ignore
+                    document.getElementById("btn-switch-ignore").checked = ignore
             })
         })
 
@@ -111,8 +110,13 @@ Tea.context(function () {
     }
     
     //删除
-    this.onDeleteConfig = function (addr) {
-        
+    this.onDeleteConfig = function (host_id) {
+
+        teaweb.confirm("确定删除该高防ip吗？", function () {
+            this.$post(".delete").params({
+                hostIds: [host_id],
+            }).refresh()
+        })
     }
 
     //配置里面的列表切换

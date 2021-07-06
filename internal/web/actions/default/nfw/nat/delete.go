@@ -5,6 +5,7 @@ import (
 	"github.com/1uLang/zhiannet-api/opnsense/server/nat"
 	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/iwind/TeaGo/actions"
 )
 
 type DeleteAction struct {
@@ -14,8 +15,13 @@ type DeleteAction struct {
 func (this *DeleteAction) RunPost(params struct {
 	NodeId uint64
 	Id     string
+
+	Must *actions.Must
 }) {
-	res, err := nat.DelNat1To1(&nat.DelNat1To1Req{
+	params.Must.Field("id",params.Id).Require("请输入规则id").
+		Field("nodeId",params.NodeId).Require("请选择当前DDoS防护节点")
+
+		res, err := nat.DelNat1To1(&nat.DelNat1To1Req{
 		NodeId: params.NodeId,
 		Id:     params.Id,
 	})

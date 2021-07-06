@@ -162,48 +162,35 @@ func (this *DetailListAction) RunGet(params struct {
 	}
 	req.MacCode = params.MacCode
 
-	//待处理
-	req.Req.IsProcessed = false
-	req.Req.State = 0
-	list1, err := risk_server.VirusDetailList(req)
+	var list1,list2,list3,list4 risk.DetailResp
+
+	details, err := risk_server.VirusDetailList(req)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	//已处理 - 隔离
-	req.Req.IsProcessed = true
-	req.Req.State = 1
-	list2, err := risk_server.VirusDetailList(req)
-	if err != nil {
-		this.ErrorPage(err)
-		return
+	for _,v := range details.ServerVirusInfoList {
+		if v["state"].(float64) == 1 || v["state"].(float64) == -1{
+			list2.ServerVirusInfoList = append(list2.ServerVirusInfoList, v)
+		}else if v["state"].(float64) == 2 || v["state"].(float64) == -2{
+			list3.ServerVirusInfoList = append(list3.ServerVirusInfoList, v)
+		}else if v["state"].(float64) == 3 || v["state"].(float64) == -3{
+			list4.ServerVirusInfoList = append(list4.ServerVirusInfoList, v)
+		}else{
+			list1.ServerVirusInfoList = append(list1.ServerVirusInfoList, v)
+		}
 	}
-	//已处理 - 信任
-	req.Req.IsProcessed = true
-	req.Req.State = 2
-	list3, err := risk_server.VirusDetailList(req)
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-	//已处理 - 删除
-	req.Req.IsProcessed = true
-	req.Req.State = 3
-	list4, err := risk_server.VirusDetailList(req)
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
+
 	//漏洞列表
 	this.Data["datas1"] = list1.ServerVirusInfoList
 	this.Data["datas2"] = list2.ServerVirusInfoList
 	this.Data["datas3"] = list3.ServerVirusInfoList
 	this.Data["datas4"] = list4.ServerVirusInfoList
 
-	this.Data["total1"] = list1.TotalData
-	this.Data["total2"] = list2.TotalData
-	this.Data["total3"] = list3.TotalData
-	this.Data["total4"] = list4.TotalData
+	this.Data["total1"] = len(list1.ServerVirusInfoList)
+	this.Data["total2"] = len(list2.ServerVirusInfoList)
+	this.Data["total3"] = len(list3.ServerVirusInfoList)
+	this.Data["total4"] = len(list4.ServerVirusInfoList)
 
 	this.Data["ip"] = params.Ip
 	this.Data["macCode"] = params.MacCode
