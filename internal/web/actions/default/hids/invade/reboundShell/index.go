@@ -162,19 +162,23 @@ func (this *DetailListAction) RunGet(params struct {
 	}
 	req.MacCode = params.MacCode
 
-	//待处理
-	req.Req.State = 0
-	list1, err := risk_server.ReboundShellDetailList(req)
+	var list1,list2,list3,list4 risk.DetailResp
+
+	details, err := risk_server.ReboundShellDetailList(req)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	//已处理
-	req.Req.State = 7
-	list2, err := risk_server.ReboundShellDetailList(req)
-	if err != nil {
-		this.ErrorPage(err)
-		return
+	for _,v := range details.ReboundshellInfoList {
+		if v["state"].(float64) == 1 || v["state"].(float64) == -1{
+			list2.ReboundshellInfoList = append(list2.ReboundshellInfoList, v)
+		}else if v["state"].(float64) == 2 || v["state"].(float64) == -2{
+			list3.ReboundshellInfoList = append(list3.ReboundshellInfoList, v)
+		}else if v["state"].(float64) == 3 || v["state"].(float64) == -3{
+			list4.ReboundshellInfoList = append(list4.ReboundshellInfoList, v)
+		}else{
+			list1.ReboundshellInfoList = append(list1.ReboundshellInfoList, v)
+		}
 	}
 	//漏洞列表
 	this.Data["datas1"] = list1.ReboundshellInfoList

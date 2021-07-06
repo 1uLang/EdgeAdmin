@@ -162,26 +162,26 @@ func (this *DetailListAction) RunGet(params struct {
 	}
 	req.MacCode = params.MacCode
 
-	//待处理
-	req.Req.State = 0
-	list1, err := risk_server.AbnormalAccountDetailList(req)
+	var list1,list2 risk.DetailResp
+
+	details, err := risk_server.DangerAccountDetailList(req)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	//已处理
-	req.Req.State = 7
-	list2, err := risk_server.AbnormalAccountDetailList(req)
-	if err != nil {
-		this.ErrorPage(err)
-		return
+	for _,v := range details.AbnormalAccountInfoList {
+		if v["state"].(float64) == 7 {
+			list2.AbnormalAccountInfoList = append(list2.AbnormalAccountInfoList, v)
+		}else{
+			list1.AbnormalAccountInfoList = append(list1.AbnormalAccountInfoList, v)
+		}
 	}
 	//漏洞列表
 	this.Data["datas1"] = list1.AbnormalAccountInfoList
 	this.Data["datas2"] = list2.AbnormalAccountInfoList
 
-	this.Data["total1"] = list1.TotalData
-	this.Data["total2"] = list2.TotalData
+	this.Data["total1"] = len(list1.AbnormalAccountInfoList)
+	this.Data["total2"] = len(list2.AbnormalAccountInfoList)
 
 	this.Data["ip"] = params.Ip
 	this.Data["macCode"] = params.MacCode

@@ -94,7 +94,7 @@ Tea.context(function () {
     }
 
     this.onOpenDetail = function (item) {
-        window.location = "/hids/baseline/detail?macCode="+item.macCode+'&pageSize='+item.totalItemCount
+        window.location = "/hids/baseline/detail?macCode="+item.macCode+'&pageSize='+item.totalItemCount+'&time='+item.overTime+'&checkCount='+item.riskItemCount
     }
 
     //添加/删除元素

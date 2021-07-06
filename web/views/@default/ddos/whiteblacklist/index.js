@@ -40,9 +40,9 @@ Tea.context(function () {
     }
     this.toShowFlags = function (flags) {
         if (flags === "blacklist") {
-            return "白名单"
-        } else {
             return "黑名单"
+        } else {
+            return "白名单"
         }
     }
 })

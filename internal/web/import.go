@@ -46,7 +46,6 @@ import (
 	// 域名服务
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/ns"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/ns/clusters"
-	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/ns/clusters/accessLogs"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/ns/clusters/cluster"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/ns/clusters/cluster/settings"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/ns/clusters/cluster/settings/accessLog"

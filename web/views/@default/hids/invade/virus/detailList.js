@@ -68,6 +68,11 @@ Tea.context(function () {
             }).refresh()
         })
     };
+
+    this.parseServerLocalIp = function (ip) {
+        let ips = ip.split(";")
+        return ips.slice(-1)[0]
+    }
     this.getStateName = function (state) {
         if (state == 0){
             return "未处理"

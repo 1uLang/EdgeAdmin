@@ -26,7 +26,7 @@ func init() {
 var typeMap = map[int]string{
 	1: "DDoS防护",
 	2: "云防火墙",
-	3: "主机漏洞扫描",
+	//3: "主机漏洞扫描",
 	4: "WEB漏洞扫描",
 	5: "主机防护",
 }

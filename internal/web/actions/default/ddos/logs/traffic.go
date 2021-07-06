@@ -15,16 +15,20 @@ func (this *TrafficAction) RunGet(params struct {
 	NodeId  uint64
 	Level   int
 }) {
+	defer this.Success()
 	//ddos节点
 	ddos, _, err := host_status_server.GetDdosNodeList()
 	if err != nil {
-		this.ErrorPage(err)
+		this.Error(err.Error(),400)
+		return
+	}
+	if len(ddos) == 0 {
+		this.Error("未配置DDoS防火墙节点",400)
 		return
 	}
 	if params.NodeId == 0 {
 		params.NodeId = ddos[0].Id
 	}
-
 	//流量分析
 
 	req := &logs_server.TrafficLogReq{
@@ -34,7 +38,7 @@ func (this *TrafficAction) RunGet(params struct {
 	}
 	list, err := logs_server.GetTrafficLogList(req)
 	if err != nil {
-		this.ErrorPage(err)
+		this.Error(err.Error(),400)
 		return
 	}
 	this.Data["traffics"] = list.Report
@@ -44,5 +48,5 @@ func (this *TrafficAction) RunGet(params struct {
 	this.Data["nodeId"] = params.NodeId
 	this.Data["address"] = params.Address
 	this.Data["level"] = params.Level
-	this.Success()
+
 }

@@ -5,7 +5,7 @@
     <div style="flex: 6;">
         <div class="detail-box-style" style="margin-top: 50px;">
             <div class="title-box-f">主机IP：</div>
-            <div class="title-box-h">{{details.serverIp}}({{details.serverLocalIp}})</div>
+            <div class="title-box-h">{{details.serverIp}}({{parseServerLocalIp(details.serverLocalIp)}})</div>
         </div>
         <div class="detail-box-style">
             <div class="title-box-f">类型：</div>

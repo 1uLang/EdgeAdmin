@@ -35,7 +35,8 @@ func (this *DetailAction) RunGet(params struct {
 	this.Data["interface"] = info.Interface
 	this.Data["type"] = info.Type
 	this.Data["external"] = info.External
-	this.Data["src"] = info.Src
+	//this.Data["src"] = info.Src
+	this.Data["src"] = ""
 	this.Data["dst"] = info.Dst
 	this.Data["dstmask"] = info.Dstmask
 	this.Data["srcmask"] = info.Srcmask
