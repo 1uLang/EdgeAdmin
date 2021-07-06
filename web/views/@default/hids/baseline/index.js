@@ -50,22 +50,29 @@ Tea.context(function () {
       }
     
     this.getProgressPerStr = function (curValue,maxValue) { 
-    if(curValue && maxValue && maxValue >= curValue){
-        let value = parseInt(curValue/maxValue * 100)
-        if(value>=100){
-            return "已完成"
+        if(curValue && maxValue && maxValue>0 && maxValue >= curValue){
+            var tempValue = ((curValue / maxValue) * 100).toFixed(1)
+            if(tempValue>=100){
+                return "已完成"
+            }else if(tempValue<1){
+                return "1%"
+            }
+            
+            return tempValue + "%"
         }
-        return value+"%"
-    }
-    return "1%"
+        return "0%"
     }
 
     this.getProgressPer = function (curValue,maxValue) { 
-        if(curValue && maxValue && maxValue >= curValue){
-            let value = parseInt(curValue/maxValue * 100)
-            return value+"%"
+
+        if(curValue && maxValue && maxValue>0 && maxValue >= curValue){
+            var tempValue = ((curValue / maxValue) * 100).toFixed(1)
+            if(tempValue<1){
+                return "1%"
+            }
+            return tempValue + "%"
         }
-        return "1%"
+        return "0%"
      }
 
     //合规基线

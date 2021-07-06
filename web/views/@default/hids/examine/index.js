@@ -289,22 +289,28 @@ Tea.context(function () {
     }
     
     this.getProgressPerStr = function (curValue, maxValue) {
-        if(curValue && maxValue){
+        if(curValue && maxValue && maxValue>0){
             var tempValue = ((curValue / maxValue) * 100).toFixed(1)
             if(tempValue>=100){
                 return "已完成"
+            }else if(tempValue<1){
+                return "1%"
             }
+            
             return tempValue + "%"
         }
-        return "1%"
+        return "0%"
     }
 
     this.getProgressPer = function (curValue, maxValue) {
-        if(curValue && maxValue){
+        if(curValue && maxValue && maxValue>0){
             var tempValue = ((curValue / maxValue) * 100).toFixed(1)
+            if(tempValue<1){
+                return "1%"
+            }
             return tempValue + "%"
         }
-        return "1%"
+        return "0%"
     }
 
     //计时器
