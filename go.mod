@@ -5,7 +5,7 @@ go 1.15
 replace github.com/TeaOSLab/EdgeCommon => ../EdgeCommon
 
 require (
-	github.com/1uLang/zhiannet-api v0.0.0-20210703103714-e02ad47de91e
+	github.com/1uLang/zhiannet-api v0.0.0-20210706091744-4fddd95a8b76
 	github.com/PuerkitoBio/goquery v1.7.0 // indirect
 	github.com/TeaOSLab/EdgeCommon v0.0.0-00010101000000-000000000000
 	github.com/cespare/xxhash v1.1.0
