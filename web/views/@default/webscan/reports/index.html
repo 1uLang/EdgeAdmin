@@ -24,7 +24,7 @@
                 <td>
                     <input type="checkbox" name="select" :value="item.report_id" @click="clickCheckbox">
                 </td>
-                <td>{{item.source.description}}</td>
+                <td>{{parseDesc(item.source.description)}}</td>
                 <td>{{onChangeTimeFormat(item.generation_date)}}</td>
                 <td>{{onChangeStatusFormat(item.status)}}</td>
                 <td>

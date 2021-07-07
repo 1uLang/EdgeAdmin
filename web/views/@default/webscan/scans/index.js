@@ -1,6 +1,11 @@
 Tea.context(function () {
     this.checkValues = []; //选中的ID
+    this.stopValues = []; //选中的ID 停止扫描
+    this.createValues = []; //选中的ID 生成报表
+
     this.checkTargetValues = []; //选中的targetID
+    this.stopTargetValues = []; //选中的targetID
+    this.createTargetValues = []; //选中的targetID
 
     this.nShowState = 1   //三个界面的状态控制 1 2 3
     this.vulnerabilities = []
@@ -19,31 +24,32 @@ Tea.context(function () {
         this.bShowDetail = false
     };
     this.onStopScan = function () {
-        if (this.checkValues.length > 0) {
+        if (this.stopValues.length > 0) {
             let that = this
-            let scan_ids = JSON.parse(JSON.stringify(this.checkValues))
+            let scan_ids = JSON.parse(JSON.stringify(this.stopValues))
             teaweb.confirm("确定要停止这个扫描吗？", function () {
                 that.$post(".stop")
                     .params({
-                        Ids: scan_ids
+                        ScanIds: scan_ids
                     })
-                    .refresh()
+                    // .refresh()
             })
         }
     };
 
     this.onCreateReport = function () {
-        if (this.checkValues.length > 0) {
+        if (this.createValues.length > 0) {
             let that = this
-            let scan_ids = JSON.parse(JSON.stringify(this.checkValues))
-            let tarId = JSON.parse(JSON.stringify(this.checkTargetValues))
+            let scan_ids = JSON.parse(JSON.stringify(this.createValues))
+            let tarId = JSON.parse(JSON.stringify(this.createTargetValues))
             teaweb.confirm("确定要生成这个扫描的报表吗？", function () {
                 that.$post("/webscan/reports/create")
                     .params({
                         Ids: scan_ids,
                         TarIds: tarId,
-                    })
-                    .refresh()
+                    }).success(function () {
+                    window.location = "/webscan/reports"
+                })
             })
         }
     };
@@ -71,7 +77,6 @@ Tea.context(function () {
         for (var i = 0, len = checkDomArr.length; i < len; i++) {
             this.checkValues.push(checkDomArr[i].value);
             let tar = checkDomArr[i].getAttribute("data")
-            console.log("1targetid=" + tar);
             this.checkTargetValues.push(tar);
         }
         var allCheckDomArr = document.querySelectorAll(
@@ -110,34 +115,66 @@ Tea.context(function () {
                 if (!checkStatus) allCheckDomArr[i].checked = true;
                 this.checkValues.push(allCheckDomArr[i].value);
                 let tar = allCheckDomArr[i].getAttribute("data")
-                console.log("2targetid=" + tar);
                 this.checkTargetValues.push(tar);
             }
         }
         this.updateBtnStatus();
     };
+
+
+    this.getItemInfo = function (id) {
+        if (this.scans && this.scans.length > 0) {
+            for (var i = 0; i < this.scans.length; i++) {
+                if (this.scans[i].scan_id == id) {
+                    return this.scans[i]
+                }
+            }
+        }
+        return null
+    }
     this.updateBtnStatus = function () {
+
         const stopBtn = document.getElementById("stop-btn");
         const createBtn = document.getElementById("create-btn");
         const delBtn = document.getElementById("del-btn");
+
+        this.stopValues = []
+        this.stopTargetValues = []
+        this.createValues = []
+        this.createTargetValues = []
+
+        for (let idx = 0; this.checkValues.length > idx; idx++) {
+            let id = this.checkValues[idx]
+            let tid = this.checkTargetValues[idx]
+            let itemInfo = this.getItemInfo(id)
+            if (itemInfo && itemInfo.current_session.status == "processing") {
+                this.stopValues.push(id)
+                this.stopTargetValues.push(tid)
+            } else if (itemInfo && itemInfo.current_session.status == "completed") {
+                this.createValues.push(id)
+                this.createTargetValues.push(tid)
+            }
+        }
         if (this.checkValues.length > 0) {
-            stopBtn.style.backgroundColor = "#14539A";
-            stopBtn.style.cursor = "pointer";
-
-            createBtn.style.backgroundColor = "#14539A";
-            createBtn.style.cursor = "pointer";
-
             delBtn.style.backgroundColor = "#D9001B";
             delBtn.style.cursor = "pointer";
         } else {
-            stopBtn.style.backgroundColor = "#AAAAAA";
-            stopBtn.style.cursor = null;
-
-            createBtn.style.backgroundColor = "#AAAAAA";
-            createBtn.style.cursor = null;
-
             delBtn.style.backgroundColor = "#AAAAAA";
             delBtn.style.cursor = null;
+        }
+        if (this.stopValues.length > 0) {
+            stopBtn.style.backgroundColor = "#14539A";
+            stopBtn.style.cursor = "pointer";
+        } else {
+            stopBtn.style.backgroundColor = "#AAAAAA";
+            stopBtn.style.cursor = null;
+        }
+        if (this.createValues.length > 0) {
+            createBtn.style.backgroundColor = "#14539A";
+            createBtn.style.cursor = "pointer";
+        } else {
+            createBtn.style.backgroundColor = "#AAAAAA";
+            createBtn.style.cursor = null;
         }
     };
 
@@ -154,11 +191,6 @@ Tea.context(function () {
         this.nShowState = state;
         if (state === 3) { //漏洞详情
             this.vulnerabilities = this.scans_vulns
-            // this.$get("/webscan/vulnerabilities").params({Address: this.Address, List: true}).success(resp => {
-            //     if (resp.code === 200) {
-            //         this.vulnerabilities = resp.data.vulnerabilities
-            //     }
-            // })
         }
     }
 
@@ -208,8 +240,6 @@ Tea.context(function () {
         else {
             for (let idx = 0; idx < this.scans_vulns.length; idx++) {
                 let vul = this.scans_vulns[idx]
-                console.log(this.scans_vulns[idx])
-                console.log(this.scans_vulns[idx].severity, "==============", this.severity)
                 if (vul.severity == this.severity)
                     vulns.push(vul)
             }
@@ -240,13 +270,6 @@ Tea.context(function () {
         let s = time % 60
         return m + 'm' + s + 's'
     };
-    this.onChangeCountFormat = function (count) {
-        let q = parseInt(count / 1000);
-        let s = count % 1000;
-
-        return q + ',' + s
-    };
-
 
     this.curIndex = -1
 

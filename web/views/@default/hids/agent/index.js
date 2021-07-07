@@ -1,6 +1,5 @@
 Tea.context(function () {
 
-
     this.onOpenCommand = function () {
         teaweb.popup(Tea.url(".install"),{
             height: "350px",

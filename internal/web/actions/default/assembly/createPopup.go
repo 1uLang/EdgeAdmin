@@ -16,6 +16,7 @@ func (this *CreatePopupAction) Init() {
 }
 
 func (this *CreatePopupAction) RunGet(params struct{}) {
+	this.Data["state"] = 1
 	this.Show()
 }
 
@@ -28,6 +29,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 	Secret       string
 	AssemblyType int
 	Argeement    int
+	State        int
 
 	Must *actions.Must
 	CSRF *actionutils.CSRF
@@ -39,10 +41,10 @@ func (this *CreatePopupAction) RunPost(params struct {
 	params.Must.
 		Field("addr", params.Addr).
 		Require("请输入地址").
-		Match("(^(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])\\.(\\d|[1-9]\\d|1\\d{2}" +
-			"|2[0-4]\\d|25[0-5])\\.(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])\\.(\\d|[1-9]\\" +
-			"d|1\\d{2}|2[0-4]\\d|25[0-5]):([0-9]|[1-9]\\d|[1-9]\\d{2}|[1-9]\\d{3}|[1-5]\\d{4}|6[0-4]\\d{3}|65[0-4]\\d{2}|655[0-" +
-			"2]\\d|6553[0-5])$)|([a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\\.?)","请输入正确的地址")
+		Match("(^(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])\\.(\\d|[1-9]\\d|1\\d{2}"+
+			"|2[0-4]\\d|25[0-5])\\.(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])\\.(\\d|[1-9]\\"+
+			"d|1\\d{2}|2[0-4]\\d|25[0-5]):([0-9]|[1-9]\\d|[1-9]\\d{2}|[1-9]\\d{3}|[1-5]\\d{4}|6[0-4]\\d{3}|65[0-4]\\d{2}|655[0-"+
+			"2]\\d|6553[0-5])$)|([a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\\.?)", "请输入正确的地址")
 
 	params.Must.
 		Field("assemblyType", params.AssemblyType).
@@ -74,7 +76,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 		params.Must.
 			Field("secret", params.Secret).
 			Require("请输入secretKey")
-		case 4: //web漏扫
+	case 4: //web漏扫
 		params.Must.
 			Field("key", params.Key).
 			Require("请输入XAuth")
@@ -92,7 +94,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 		Port:   params.Port,
 		Idc:    params.IdcId,
 		Type:   params.AssemblyType,
-		State:  1,
+		State:  params.State,
 		Key:    params.Key,
 		Secret: params.Secret,
 		IsSsl:  params.Argeement,
