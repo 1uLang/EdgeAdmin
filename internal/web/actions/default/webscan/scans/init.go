@@ -16,6 +16,7 @@ func init() {
 			Prefix("/webscan/scans").
 			Get("", new(IndexAction)).
 			GetPost("/create", new(CreateAction)).
+			Get("/vulnerabilities", new(VulnerabilitiesAction)).
 			Post("/delete", new(DeleteAction)).
 			Post("/stop", new(StopAction)).
 			Get("/statistics", new(StatisticsAction)).

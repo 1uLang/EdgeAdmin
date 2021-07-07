@@ -18,17 +18,22 @@ func (this *IndexAction) RunGet(params struct {
 	PageSize   int
 	PageNo     int
 }) {
+	defer this.Show()
+
+	this.Data["monitors"] = nil
+	this.Data["total"] = 0
+	this.Data["nShowState"] = params.NShowState
 	//默认端口监控
 	if params.NShowState == 0 {
 		params.NShowState = 1
 	}
 	list, total, err := monitor_list_server.GetList(&monitor_list_server.ListReq{MonitorType: params.NShowState, PageSize: params.PageSize, PageNum: params.PageNo})
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = err.Error()
+		return
 	}
 	this.Data["monitors"] = list
 	this.Data["total"] = total
 	this.Data["nShowState"] = params.NShowState
-	this.Show()
 
 }

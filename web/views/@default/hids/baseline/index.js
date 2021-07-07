@@ -1,7 +1,6 @@
 Tea.context(function () {
     this.curIndex = -1
     this.sSelectValue = 0
-
     this.dayFrom = ""
     this.dayTo = ""
 
@@ -77,37 +76,25 @@ Tea.context(function () {
 
     //合规基线
      this.onOpenCheck = function (item) {
+
+         let serverIp = item.serverIp
+         console.log(serverIp)
         //打开合规基线弹窗
-         teaweb.popup(Tea.url(".template?macCode="+item.macCode+"&os="+item.os.osType), {
+         teaweb.popup(Tea.url(".template?macCode="+item.macCode+'&serverIp='+serverIp+"&os="+item.os.osType), {
              height: "500px",
          })
       }
 
-    this.onStartCheck = function () {
-        if (this.sSelectValue == 0 ){
-            teaweb.warn("请设置合规基线模板", function () {})
-        }
-        teaweb.confirm("确定开始体检该主机吗？", function () {
-            this.$post(".check").params({
-                Opt: "ignore",
-                MacCode: [this.macCode],
-                templateId: this.sSelectValue,
-            }).refresh()
-        })
-    }
-
     this.onOpenDetail = function (item) {
+        this.serverIp = item.serverIp
         window.location = "/hids/baseline/detail?macCode="+item.macCode+'&pageSize='+item.totalItemCount+'&time='+item.overTime+'&checkCount='+item.riskItemCount
     }
 
     //添加/删除元素
     this.onAddSelectValue = function (index) {
-        console.log("=========",index)
         this.sSelectValue = index
     }
     this.getShowSelectImage = function (id) {
-        console.log(id,this.sSelectValue)
-
         if (this.sSelectValue == id) {
           return "/images/select_select.png";
         }

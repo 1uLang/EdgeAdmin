@@ -2,7 +2,9 @@ package examine
 
 import (
 	"fmt"
+	"github.com/1uLang/zhiannet-api/hids/model/agent"
 	"github.com/1uLang/zhiannet-api/hids/model/examine"
+	agent_server "github.com/1uLang/zhiannet-api/hids/server/agent"
 	examine_server "github.com/1uLang/zhiannet-api/hids/server/examine"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
@@ -18,6 +20,7 @@ func (this *ScanAction) RunPost(params struct {
 	Opt       string
 	MacCode   []string
 	ScanItems string
+	ServerIp  string
 
 	VirusPath    string
 	WebShellPath string
@@ -38,6 +41,23 @@ func (this *ScanAction) RunPost(params struct {
 	if err != nil {
 		this.ErrorPage(err)
 		return
+	}
+	if params.ServerIp != ""{
+		req :=  &agent.SearchReq{}
+		req.ServerIp = params.ServerIp
+
+		list, err := agent_server.List(req)
+		if err != nil {
+			this.Error(fmt.Sprintf("获取主机信息失败：%v", err),400)
+			return
+		}
+		if len(list.List) == 0 {
+			this.Error(fmt.Sprintf("该主机不存在"),400)
+			return
+		}else if state,isExist := list.List[0]["agentState"].(string);state != "2" && isExist{	//启用 主机
+			this.Error("失败：该主机agent已暂停服务，命令无法执行！",400)
+			return
+		}
 	}
 	if params.Opt == "now" {
 		req := &examine.ScanReq{MacCode: params.MacCode}

@@ -140,7 +140,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 		{
 			"code":   "dashboard",
 			"module": configloaders.AdminModuleCodeDashboard,
-			"name":   "概览",
+			"name":   "业务概览",
 			"icon":   "dashboard",
 			"url":    "/dashboard",
 		},
@@ -176,7 +176,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"code":   "ddos",
 			"module": configloaders.AdminModuleCodeDdos,
 			"name":   "DDoS防护",
-			"icon":   "joomla",
+			"icon":   "shield",
 			"subItems": []maps.Map{
 				{
 					"name": "主机状态",
@@ -222,7 +222,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"code":   "servers",
 			"module": configloaders.AdminModuleCodeServer,
 			"name":   "WAF服务",
-			"icon":   "cloud",
+			"icon":   "skyatlas",
 			"subItems": []maps.Map{
 				{
 					"name": "服务列表",

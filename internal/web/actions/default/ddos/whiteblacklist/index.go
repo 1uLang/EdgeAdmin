@@ -37,6 +37,7 @@ func (this *IndexAction) RunGet(params struct {
 		this.Data["errorMessage"] = "未配置DDoS防火墙节点"
 		return
 	}
+	this.Data["ddos"] = ddos
 	if params.NodeId == 0 {
 		params.NodeId = ddos[0].Id
 	}
@@ -44,14 +45,13 @@ func (this *IndexAction) RunGet(params struct {
 		NodeId: params.NodeId,
 		Addr:   params.Address,
 	}
+	this.Data["nodeId"] = req.NodeId
 	list, err := black_white_list_server.GetBWList(req)
 	if err != nil {
 		this.Data["errorMessage"] = fmt.Sprintf("获取DDoS防火墙黑白名单列表失败：%v", err.Error())
 		return
 	}
 	this.Data["list"] = list.Bwlist
-	this.Data["ddos"] = ddos
 	this.Data["Address"] = list.Address
-	this.Data["nodeId"] = req.NodeId
 
 }

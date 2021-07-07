@@ -68,9 +68,8 @@
                 </td>
                 <td>
                     <div class="Bar" style="display: inline-flex;">
-                        <div id="MBUFItem" :style="{width: getProgressPer(item.progress,100)}">
-                        </div>
-                        <span>{{getProgressPerStr(item.progress,100)}}</span>
+                        <div id="MBUFItem" :style="{width: getProgressPer(item.progress,100)}"></div>
+                        <span>{{getProgressPerStr(item.progress,100)}} - {{item.progress}}</span>
                     </div>
                 </td>
                 <td>{{getStateName(item.state)}}</td>
@@ -79,7 +78,7 @@
                 <td>
                     <div style="display: inline-flex;justify-content: center;">
                         <div v-if="item.state!=1 && item.state!= 2 && item.state!= 3" class="edit_btn_blue" @click="onOpenCheck(item)">基线检查</div>
-                        <div v-if="item.state==3 || item.state ==2 " class="edit_btn_blue" @click="onOpenCheck(item)">重新检查</div>
+                        <div v-if="item.state==3 || item.state ==2 || item.state ==6 " class="edit_btn_blue" @click="onOpenCheck(item)">重新检查</div>
                         <div v-if="item.state==2" class="edit_btn_blue" @click="onOpenDetail(item)">详情</div>
                     </div>
                 </td>

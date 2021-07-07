@@ -51,21 +51,16 @@ Tea.context(function () {
          })
       }
 
-    this.onStartCheck = function (macCode) {
+    this.onStartCheck = function () {
         this.$post(".check").params({
             MacCode: [this.macCode],
+            serverIp: this.serverIp,
             templateId: this.sSelectValue,
-        }).done(function () {
+        }).success(function () {
             teaweb.closePopup()
+        }).error(resp => {
+            teaweb.warn(resp)
         })
-        
-
-        // teaweb.confirm("确定开始体检该主机吗？", function () {
-        //     this.$post(".check").params({
-        //         MacCode: [this.macCode],
-        //         templateId: this.sSelectValue,
-        //     }).refresh()
-        // })
     }
 
     this.onOpenDetail = function (item) {

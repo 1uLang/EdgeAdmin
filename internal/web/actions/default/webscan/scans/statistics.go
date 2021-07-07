@@ -44,5 +44,26 @@ func (this *StatisticsAction) RunGet(params struct {
 		return
 	}
 	this.Data["statistics"] = info
+	var severity float64
+
+	scanning_app, isExist := info["scanning_app"].(map[string]interface{})
+	if isExist {
+		wvs, isExist := scanning_app["wvs"].(map[string]interface{})
+		if isExist {
+			main, isExist := wvs["main"].(map[string]interface{})
+			if isExist {
+				vulns, isExist := main["vulns"]
+				if isExist {
+					for _, vul := range vulns.([]interface{}) {
+						s, isExist := vul.(map[string]interface{})["severity"].(float64)
+						if isExist && s > severity {
+							severity = s
+						}
+					}
+				}
+			}
+		}
+	}
+	this.Data["severity"] = severity
 	this.Success()
 }

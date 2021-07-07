@@ -2,7 +2,6 @@
 {$layout}
 
 <!-- 漏洞详情js-->
-<script type="text/javascript" src="/_/@default/webscan/vulnerabilities/index.js"></script>
 <p class="comment" v-if="nodeErr != ''">请先添加web漏洞扫描节点</p>
 
 <div class="btn-contain" v-if="scans.length > 0">
@@ -66,9 +65,12 @@
         <div class="card-box" style="flex: 1;margin-right: 15px;">
             <div style="display: inline-flex;">
                 <h2>威胁等级</h2>
-                <div style="margin-left: 5px;">3</div>
+                <div style="margin-left: 5px;">{{severity}}</div>
             </div>
-            <div>扫描程序发现了一个或多个高危类型漏洞。恶意用户可以利用这些漏洞并破坏后端数据库和/或损坏您的网站。</div>
+            <div v-if="severity == 0">威胁级别尚不可用。</div>
+            <div v-if="severity == 1">扫描程序发现了一个或多个低危类型漏洞。</div>
+            <div v-if="severity == 2">扫描程序发现了一个或多个中危类型漏洞。您应调查每个漏洞以确保它们不会发展成为更严重的问题。</div>
+            <div v-if="severity == 3">扫描程序发现了一个或多个高危类型漏洞。恶意用户可以利用这些漏洞并破坏后端数据库和/或损坏您的网站。</div>
         </div>
         <div class="card-box" style="flex: 1;">
             <div style="display: inline-flex;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 5px;justify-content: space-between;">
@@ -198,10 +200,6 @@
                 <div class="ui menu basic text">
                     <div class="item">
                         <div class="ui fields inline">
-                            <!-- <div class="ui field">
-                                <span class="ui field">目标：</span>
-                                <input type="text" name="address" placeholder="请输入目标地址" v-model="address"/>
-                            </div> -->
                             <span>严重性：</span>
                             <div class="ui field">
                                 <div class="ui field">
@@ -216,7 +214,7 @@
                             </div>
 
                             <div class="ui field">
-                                <button type="submit" class="ui button">搜索</button>
+                                <button type="button" class="ui button" @click="search()">搜索</button>
                             </div>
                         </div>
                     </div>
@@ -236,9 +234,10 @@
                     <tbody>
                     <tr align="center" style="height: 50px;cursor: pointer;" v-for="item in vulnerabilities" @click="getDetailInfo(item)" >
                         <td :class="{'red-color':item.severity===3, 'yellow-color':item.severity===2,'blue-color':item.severity===1,'green-color':item.severity===0}">{{onChangeSeverityFormat(item.severity)}}</td>
-                        <td>{{item.vt_name}}</td>
-                        <td>{{item.affects_url}}</td>
-                        <td>{{onChangeTimeFormat(item.last_seen)}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.target_info.host}}</td>
+                        <td>{{item.time}}</td>
+<!--                        <td>{{onChangeTimeFormat(item.last_seen)}}</td>-->
                     </tr>
                     </tbody>
                 </table>

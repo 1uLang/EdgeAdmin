@@ -41,9 +41,9 @@ func (this *InstallAction) RunGet(params struct {
 	}
 	//172.18.200.29 替换
 	linux = strings.Replace(linux, "https://172.18.200.29", "https://user.cloudhids.net", 1)
-	linux = strings.ReplaceAll(linux, "172.18.200.29", "52.74.129.144")
+	linux = strings.ReplaceAll(linux, "172.18.200.29", "156.240.95.243")
 
-	windows = strings.Replace(windows, "172.18.200.29", "52.74.129.144", 1)
+	windows = strings.Replace(windows, "172.18.200.29", "156.240.95.243", 1)
 
 	this.Data["linux"] = linux
 	this.Data["windows"] = windows

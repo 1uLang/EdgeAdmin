@@ -6,6 +6,12 @@ Tea.context(function () {
         }
     }
 
+    this.$delay(function () {
+        if (this.errorMessage !== "" && this.errorMessage !== undefined) {
+            teaweb.warn(this.errorMessage, function () {
+            })
+        }
+    })
     this.onOpenPost = function () {
         teaweb.popup(Tea.url(".createPopup"), {
             height: "16em",

@@ -36,11 +36,10 @@ func (this *IndexAction) RunGet(params struct {
 	}
 	list, err := scans_server.List(&scans.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, AdminUserId: uint64(this.AdminId())})
 	if err != nil && list != nil {
-		//this.ErrorPage(err)
+		this.ErrorPage(err)
 		this.Show()
 		return
 	}
-	//this.Data["scans"] = list["scans"]
 	if lists, ok := list["scans"]; ok {
 		this.Data["scans"] = lists
 	}

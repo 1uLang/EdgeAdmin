@@ -18,9 +18,10 @@ func (this *TemplateAction) Init() {
 }
 
 func (this *TemplateAction) RunGet(params struct {
-	MacCode string
-	Os      string
-	Must    *actions.Must
+	MacCode  string
+	ServerIp string
+	Os       string
+	Must     *actions.Must
 	//CSRF *actionutils.CSRF
 }) {
 	params.Must.Field("macCode", params.MacCode).Require("请输入机器码")
@@ -54,13 +55,14 @@ func (this *TemplateAction) RunGet(params struct {
 		}
 	}
 	this.Data["templates"] = ls
-	if len(ls) >0 {
+	if len(ls) > 0 {
 		this.Data["sSelectValue"] = ls[0]["id"]
-	}else{
+	} else {
 		this.Data["sSelectValue"] = ""
 	}
 
 	this.Data["macCode"] = params.MacCode
+	this.Data["serverIp"] = params.ServerIp
 	this.Show()
 }
 

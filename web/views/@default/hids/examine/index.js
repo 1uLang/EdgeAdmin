@@ -10,6 +10,7 @@ Tea.context(function () {
     this.webSearchKey = ""  //网页后门
     this.searchPath = ""    //病毒木马
     this.MacCode = ""
+    this.serverIp = ""
     this.bTimeOutTip = false
     this.bShowScanPath = false
 
@@ -171,6 +172,7 @@ Tea.context(function () {
 
     this.onOpenCheck = function (item) {
         this.MacCode = item.macCode
+        this.serverIp = item.serverExamineResultInfo.serverIp
         this.sSelectCheckValue = ["01","02","03","04","13","14","15"]
         this.pCheckDetailData = [
             {
@@ -240,12 +242,16 @@ Tea.context(function () {
         teaweb.confirm("确定立即体检吗？", function () {
             this.$post(".scans").params({
                 Opt:'now',
+                serverIp:this.serverIp,
                 VirusPath:this.searchPath,
                 WebShellPath:this.webSearchKey,
                 MacCode: [this.MacCode],
                 ScanItems: this.sSelectCheckValue.join(","),
-
-            }).refresh()
+            }).success(function () {
+                teaweb.closePopup()
+            }).error(resp => {
+                teaweb.warn(resp)
+            })
         })
 
         this.bShowCheckDetail = false
@@ -256,8 +262,13 @@ Tea.context(function () {
         teaweb.confirm("确定取消体检吗？", function () {
             this.$post(".scans").params({
                 Opt:'cancel',
+                serverIp:item.os.serverIp,
                 MacCode: [item.macCode],
-            }).refresh()
+            }).success(function () {
+                teaweb.closePopup()
+            }).error(function (){
+                teaweb.warn("失败：该主机agent已暂停服务，命令无法执行", function () {})
+            })
         })
     }
     //检测是否显示扫描路径的输入框和提示框
