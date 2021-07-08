@@ -100,19 +100,19 @@
     </div>
 
     <div class="card-box ui four columns grid" style="height: 130px;width: 100%;">
-        <div class="ui column">
+        <div class="ui column" style="height: 100%;display: flex;flex-direction: column;justify-content: space-around;align-items: center;">
             <h4>持续扫描时间</h4>
             <div class="value"><span class="show-num">{{onChangeTimeFormat2(statistics.duration)}}</span></div>
         </div>
-        <div class="ui column">
+        <div class="ui column" style="height: 100%;display: flex;flex-direction: column;justify-content: space-around;align-items: center;">
             <h4>请求</h4>
             <div class="value"><span class="show-num">{{statistics.request_count}}</span></div>
         </div>
-        <div class="ui column">
+        <div class="ui column" style="height: 100%;display: flex;flex-direction: column;justify-content: space-around;align-items: center;">
             <h4>平均响应事件</h4>
             <div class="value"><span class="show-num">{{statistics.avg_response_time}}ms</span></div>
         </div>
-        <div class="ui column">
+        <div class="ui column" style="height: 100%;display: flex;flex-direction: column;justify-content: space-around;align-items: center;">
             <h4>路径已确认</h4>
             <div class="value"><span class="show-num">{{statistics.locations}}</span></div>
         </div>
