@@ -44,7 +44,10 @@ func (this *IndexAction) RunGet(params struct {
 		PageSize: int(page.Size),
 		PageNum: int(page.Current),
 	})
-	if len(list.Rows) > 0 {
+	if err != nil || list == nil {
+		list = &req_ips.IpsListResp{}
+	}
+	if list len(list.Rows) > 0 {
 		this.Data["tableData"] = list.Rows
 	} else {
 		this.Data["tableData"] = make([]interface{}, 0)
