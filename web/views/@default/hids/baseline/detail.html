@@ -4,10 +4,8 @@
 <div class="bottom-line-style" style="width:100%;display: inline-flex;padding: 20px 30px;align-items: center;">
     <div class="out-circular-style" style="margin-right: 40px;" v-if="checkCount ==0 ">无异常项</div>
     <div class="out-circular-style" style="margin-right: 40px;" v-else>
-        <span style="color: red;font-size: 19px">{{getProgressPer(checkCount,totalCount)}}
-        <span style="color: red;font-size: 14px">异常项占比</span>
-        </span>
-
+        <span style="color: red;font-size: 19px;">{{getProgressPer(checkCount,totalCount)}}</span>
+        <span style="color: red;font-size: 14px;">异常项占比</span>
     </div>
     <div style="display: flex;flex-direction: column;justify-content: start;">
         <div style="display: inline-flex;">

@@ -48,12 +48,20 @@ Tea.context(function () {
         this.curIndex = -1;
       }
     
-    this.getProgressPerStr = function (curValue,maxValue) { 
+    this.getProgressPerStr = function (curValue,maxValue,state) { 
+        if(curValue == 0 ){
+            if(state==1){
+                return "1%"
+            }else if(state==0){
+                return ""
+            }
+        }
+
         if(curValue && maxValue && maxValue>0 && maxValue >= curValue){
             var tempValue = ((curValue / maxValue) * 100).toFixed(1)
             if(tempValue>=100){
                 return "已完成"
-            }else if(tempValue<1){
+            }else if(tempValue<1 && state && state==1){
                 return "1%"
             }
             
@@ -62,11 +70,25 @@ Tea.context(function () {
         return "0%"
     }
 
-    this.getProgressPer = function (curValue,maxValue) { 
+    this.checkShowColor = function (curValue, maxValue) {
+        if(curValue && maxValue){
+            var tempValue = ((curValue / maxValue) * 100).toFixed(1)
+            return tempValue >= 100
+        }
+        return false
+    }
+    
+
+    this.getProgressPer = function (curValue,maxValue,state) { 
+        if(curValue == 0 ){
+            if(state && state==1){
+                return "1%"
+            }
+        }
 
         if(curValue && maxValue && maxValue>0 && maxValue >= curValue){
             var tempValue = ((curValue / maxValue) * 100).toFixed(1)
-            if(tempValue<1){
+            if(tempValue<1 && state && state==1 ){
                 return "1%"
             }
             return tempValue + "%"

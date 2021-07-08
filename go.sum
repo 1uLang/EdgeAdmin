@@ -10,6 +10,8 @@ github.com/1uLang/zhiannet-api v0.0.0-20210703103714-e02ad47de91e h1:jre65ck2YsF
 github.com/1uLang/zhiannet-api v0.0.0-20210703103714-e02ad47de91e/go.mod h1:roVKSA5tjx0MKSEF3AlhlRl8oRT2so3oI799U54hhtw=
 github.com/1uLang/zhiannet-api v0.0.0-20210706091744-4fddd95a8b76 h1:d1UiEsk5LZqHmK5a8rYsfIYXITe303kKh3BpYMoSEzw=
 github.com/1uLang/zhiannet-api v0.0.0-20210706091744-4fddd95a8b76/go.mod h1:roVKSA5tjx0MKSEF3AlhlRl8oRT2so3oI799U54hhtw=
+github.com/1uLang/zhiannet-api v0.0.0-20210707132127-bb713e20bb95 h1:wKmHlHr++lSZ1V86p74CKCu73FzJCBw6JnSeBdJ77eU=
+github.com/1uLang/zhiannet-api v0.0.0-20210707132127-bb713e20bb95/go.mod h1:roVKSA5tjx0MKSEF3AlhlRl8oRT2so3oI799U54hhtw=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
 github.com/DataDog/sketches-go v0.0.0-20190923095040-43f19ad77ff7/go.mod h1:Q5DbzQ+3AkgGwymQO7aZFNP7ns2lZKGtvRBzRXfdi60=
