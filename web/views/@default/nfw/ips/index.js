@@ -13,12 +13,17 @@ Tea.context(function () {
                 return "已停用"
         }
     }
-
+    this.parseAction = function (action) {
+        if (action === "alert")
+            return "警报"
+        else
+            return "丢弃"
+    }
     this.getEditName= function (act) {
         if(act == "drop"){
-            return "alert"
+            return "警报"
         }
-        return "drop";
+        return "丢弃";
     }
 
     this.getItemInfo = function (id) { 

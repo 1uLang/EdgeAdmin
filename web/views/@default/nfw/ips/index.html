@@ -31,7 +31,7 @@
             <tbody id='tableBody'>
             <tr align="center" style="height: 40px;" v-for="item in tableData">
                 <td>{{item.sid}}</td>
-                <td>{{item.action}}</td>
+                <td>{{parseAction(item.action)}}</td>
                 <td>{{item.source}}</td>
                 <td>{{item.classtype}}</td>
                 <td>{{item.msg}}</td>
@@ -52,4 +52,5 @@
             </tbody>
         </table>
     </div>
+    <div class="page" v-html="page"></div>
 </div>

@@ -59,7 +59,8 @@ Tea.context(function () {
         }).success(function () {
             teaweb.closePopup()
         }).error(resp => {
-            teaweb.warn(resp)
+            console.log(resp)
+            teaweb.warn("失败：该主机agent已暂停服务，命令无法执行！")
         })
     }
 

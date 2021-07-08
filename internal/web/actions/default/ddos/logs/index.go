@@ -76,10 +76,18 @@ func (this *IndexAction) RunGet(params struct {
 	this.Data["ddos"] = ddos
 	this.Data["nodeId"] = req.NodeId
 	//2006-01-02
-	this.Data["startTime"] = list.StartDate[:10]
-	this.Data["endTime"] = list.EndDate[:10]
+	if len(list.StartDate) > 10{
+		this.Data["startTime"] = list.StartDate[:10]
+	}else{
+		this.Data["startTime"] = list.StartDate
+	}
+	if len(list.EndDate) > 10{
+		this.Data["endTime"] = list.EndDate[:10]
+	}else{
+		this.Data["endTime"] = list.EndDate
+	}
 	this.Data["address"] = list.Address
 	this.Data["attackType"] = list.CurFlags
 	this.Data["status"] = list.CurStatus
-	this.Show()
+
 }
