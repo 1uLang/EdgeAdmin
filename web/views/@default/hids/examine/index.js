@@ -176,7 +176,6 @@ Tea.context(function () {
     };
 
     this.getStatusName = function (status) {
-        console.log(status)
         switch (status) {
             case 0:
                 return "未体检"
@@ -351,12 +350,20 @@ Tea.context(function () {
         return false
     }
     
-    this.getProgressPerStr = function (curValue, maxValue) {
-        if(curValue && maxValue && maxValue>0){
+    this.getProgressPerStr = function (curValue, maxValue,state) {
+        if(curValue == 0 ){
+            if(state==1){
+                return "1%"
+            }else if(state==0){
+                return ""
+            }
+        }
+
+        if(curValue && maxValue && maxValue>0 && maxValue >= curValue){
             var tempValue = ((curValue / maxValue) * 100).toFixed(1)
             if(tempValue>=100){
                 return "已完成"
-            }else if(tempValue<1){
+            }else if(tempValue<1 && state && state==1){
                 return "1%"
             }
             
@@ -365,10 +372,17 @@ Tea.context(function () {
         return "0%"
     }
 
-    this.getProgressPer = function (curValue, maxValue) {
-        if(curValue && maxValue && maxValue>0){
+    this.getProgressPer = function (curValue, maxValue,state) {
+
+        if(curValue == 0 ){
+            if(state && state==1){
+                return "1%"
+            }
+        }
+
+        if(curValue && maxValue && maxValue>0 && maxValue >= curValue){
             var tempValue = ((curValue / maxValue) * 100).toFixed(1)
-            if(tempValue<1){
+            if(tempValue<1 && state && state==1 ){
                 return "1%"
             }
             return tempValue + "%"

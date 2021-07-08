@@ -4,10 +4,10 @@
 {$template "/datepicker"}
 <script src="/js/timeFactory.js"></script>
 
-<div class="card-div" style="margin-top: 20px;height: 120px;">
+<div class="card-div" style="margin-top: 20px;height: 90px;">
     <form class="ui form" autocomplete="off">
         <div style="display: flex;flex-direction: row;margin: 0px 15px 15px 15px;height: 40px;align-items: center;">
-            <div style="display: inline-flex;width: 50%;">
+            <!-- <div style="display: inline-flex;width: 50%;">
                 <div class="title-style">体检状态</div>
                 <div :class="{'meun-select-color':state===0,'meun-define-color':state!=0}"
                      @click="onChangeCheckState(0)">全部
@@ -21,7 +21,18 @@
                 <div :class="{'meun-select-color':state===3,'meun-define-color':state!=3}"
                      @click="onChangeCheckState(3)">已完成
                 </div>
+            </div> -->
+            <div class="ui fields inline" style="width: 50%;">
+                <div class="title-style">体检时间</div>
+                <div class="ui field">
+                   <input type="text" name="dayFrom" placeholder="开始日期" v-model="dayFrom" value="" style="width:8em;height: 28px;font-size: 13px;" id="day-from-picker"/>
+               </div>
+               <div style="margin-right: 10px;"></div>
+               <div class="ui field">
+                   <input type="text" name="dayTo" placeholder="结束日期" v-model="dayTo" value="" style="width:8em;height: 28px;font-size: 13px;" id="day-to-picker"/>
+               </div>
             </div>
+
             <div style="display: inline-flex;width: 50%;">
                 <div class="title-style">体检分数</div>
                 <div :class="{'meun-select-color':score===0,'meun-define-color':score!=0}"
@@ -39,7 +50,7 @@
             </div>
         </div>
 
-        <div style="display: flex;flex-direction: row;margin: 15px;height: 40px;">
+        <!-- <div style="display: flex;flex-direction: row;margin: 15px;height: 40px;">
             <div class="ui fields inline" style="width: 50%;">
                 <div class="title-style">体检时间</div>
                 <div class="ui field">
@@ -50,7 +61,45 @@
                    <input type="text" name="dayTo" placeholder="结束日期" v-model="dayTo" value="" style="width:8em;height: 28px;font-size: 13px;" id="day-to-picker"/>
                </div>
             </div>
+<<<<<<< HEAD
         </div>
+=======
+        </div> -->
+
+        <!-- <div style="display: flex;flex-direction: row;margin: 15px;height: 40px;">
+            <div style="display: inline-flex;align-items: center;width: 50%;">
+                <div class="title-style">体检类型</div>
+                <div :class="{'meun-select-color':Type===0,'meun-define-color':Type!=0}"
+                     @click="onChangeResultState(0)">全部
+                </div>
+                <div :class="{'meun-select-color':Type===1,'meun-define-color':Type!=1}"
+                     @click="onChangeResultState(1)">定时体检
+                </div>
+                <div :class="{'meun-select-color':Type===2,'meun-define-color':Type!=2}"
+                     @click="onChangeResultState(2)">非定时体检
+                </div>
+            </div>
+        </div> -->
+
+        <!-- <div style="display: inline-flex;margin: 15px;">
+            <div class="title-style">体检项目</div>
+            <div style="display: flex;flex-direction: column;">
+                <div style="display: inline-flex;margin-bottom: 20px;">
+                    <div v-for='item in sTopSelectItem' @click="onAddSelectValue(item.id)" class="more-select-content">
+                        <img :src="getShowSelectImage(item.id)" width="15px" height="15px">
+                        <span style="margin-left: 10px;">{{item.value}}</span>
+                    </div>
+                </div>
+                <div style="display: inline-flex;">
+                    <div v-for='item in sBottomSelectItem' class="more-select-content"
+                         @click="onAddSelectValue(item.id)">
+                        <img :src="getShowSelectImage(item.id)" width="15px" height="15px">
+                        <span style="margin-left: 10px;">{{item.value}}</span>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+>>>>>>> 4c2c445d5b0f57808094b47a283674c39215a3ef
     </form>
 </div>
 <div class="card-div" style="width: 100%;height: 550px;overflow-x: auto; overflow-y: auto;">
@@ -83,9 +132,9 @@
             <td>
                 <div class="Bar">
                     <div :class="[checkShowColor(item.serverExamineResultInfo.progress,100) ? 'progress-green-bg-style' : 'progress-blue-bg-style']"
-                         :style="{width:getProgressPer(item.serverExamineResultInfo.progress,100)}">
+                         :style="{width:getProgressPer(item.serverExamineResultInfo.progress,100,item.serverExamineResultInfo.state)}">
                     </div>
-                    <span>{{getProgressPerStr(item.serverExamineResultInfo.progress,100)}}</span>
+                    <span>{{getProgressPerStr(item.serverExamineResultInfo.progress,100,item.serverExamineResultInfo.state)}}</span>
                 </div>
             </td>
             <td>{{getStatusName(item.serverExamineResultInfo.state)}}</td>
