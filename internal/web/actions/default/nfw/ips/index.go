@@ -47,7 +47,7 @@ func (this *IndexAction) RunGet(params struct {
 	if err != nil || list == nil {
 		list = &req_ips.IpsListResp{}
 	}
-	if list len(list.Rows) > 0 {
+	if len(list.Rows) > 0 {
 		this.Data["tableData"] = list.Rows
 	} else {
 		this.Data["tableData"] = make([]interface{}, 0)
