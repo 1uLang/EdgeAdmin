@@ -83,7 +83,7 @@ func (this *AdminNode) Run() {
 		EndAll().
 		Session(sessions.NewFileSessionManager(86400, secret), teaconst.CookieSID).
 		ReadHeaderTimeout(3 * time.Second).
-		ReadTimeout(600 * time.Second).
+		ReadTimeout(60 * time.Second).
 		Start()
 }
 

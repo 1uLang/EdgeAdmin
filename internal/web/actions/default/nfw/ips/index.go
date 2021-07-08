@@ -18,8 +18,6 @@ func (this *IndexAction) Init() {
 
 func (this *IndexAction) RunGet(params struct {
 	NodeId   uint64
-	PageNum  int
-	PageSize int
 }) {
 	node, _, err := opnsense_server.GetOpnsenseNodeList()
 	if err != nil || node == nil {
@@ -35,10 +33,17 @@ func (this *IndexAction) RunGet(params struct {
 		NodeId: params.NodeId,
 	})
 	if err != nil || list == nil {
-		//this.ErrorPage(err)
-		//return
 		list = &req_ips.IpsListResp{}
 	}
+	count := list.Total
+	page := this.NewPage(int64(count))
+	this.Data["page"] = page.AsHTML()
+
+	list, err = ips.GetIpsList(&ips.IpsReq{
+		NodeId: params.NodeId,
+		PageSize: int(page.Size),
+		PageNum: int(page.Current),
+	})
 	if len(list.Rows) > 0 {
 		this.Data["tableData"] = list.Rows
 	} else {

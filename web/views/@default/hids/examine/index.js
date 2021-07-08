@@ -140,7 +140,7 @@ Tea.context(function () {
             case 6:
                 return "已取消"
             default:
-                return "未知"
+                return "取消中"
         }
     }
 
@@ -250,7 +250,8 @@ Tea.context(function () {
             }).success(function () {
                 teaweb.closePopup()
             }).error(resp => {
-                teaweb.warn(resp)
+                console.log(resp)
+                teaweb.warn("失败：该主机agent已暂停服务，命令无法执行！")
             })
         })
 

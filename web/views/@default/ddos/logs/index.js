@@ -4,7 +4,7 @@ Tea.context(function () {
     this.traffics = []
     this.level = 1
     this.address = ''
-    this.nShowState = 1
+    this.nShowState = 2
 
     this.$delay(function () {
         teaweb.datepicker("day-from-picker")
@@ -15,9 +15,21 @@ Tea.context(function () {
             teaweb.warn(this.errorMessage, function () {
             })
         }
+        this.getTraffic(this.nShowState)
     })
+    this.getTraffic = function (state){
 
-
+        this.$get(".traffic").params({NodeId: this.nodeId, level: this.level}).success(resp => {
+            if (resp.code === 200) {
+                if (resp.data.traffics)
+                    this.traffics = resp.data.traffics
+                else
+                    this.traffics = []
+                this.level = resp.data.level
+                this.nShowState = state
+            }
+        })
+    }
     this.showHost = function () { //重新加载该页面
         let node = this.nodeId
         window.location.href = '/ddos/logs?nodeId=' + node
@@ -27,16 +39,7 @@ Tea.context(function () {
         this.level = 1
         if (this.nShowState != state) {
             if (state === 2) {
-                this.$get(".traffic").params({NodeId: this.nodeId,level:this.level}).success(resp => {
-                    if (resp.code === 200) {
-                        if (resp.data.traffics)
-                            this.traffics = resp.data.traffics
-                        else
-                            this.traffics = []
-                        this.level = resp.data.level
-                        this.nShowState = state
-                    }
-                })
+                this.getTraffic(state)
             } else {
                 this.$get(".link").params({NodeId: this.nodeId,level:this.level}).success(resp => {
                     if (resp.code === 200) {

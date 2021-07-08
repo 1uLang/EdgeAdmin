@@ -26,7 +26,8 @@ func (this *CreateAction) RunPost(params struct {
 
 	params.Must.
 		Field("address", params.Address).
-		Require("请输入目标地址")
+		Require("请输入目标地址").
+		Match("[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\\.?", "请输入正确的目标地址")
 
 	err := webscan.InitAPIServer()
 	if err != nil {
