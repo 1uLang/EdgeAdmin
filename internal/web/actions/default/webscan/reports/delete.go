@@ -4,7 +4,6 @@ import (
 	reports_server "github.com/1uLang/zhiannet-api/awvs/server/reports"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/webscan"
-	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
 )
 
@@ -34,19 +33,6 @@ func (this *DeleteAction) RunPost(params struct {
 			return
 		}
 	}
-
-	userResp, err := this.RPC().UserRPC().FindEnabledUser(this.AdminContext(), &pb.FindEnabledUserRequest{UserId: this.AdminId()})
-
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-	user := userResp.User
-	if user == nil {
-		this.NotFound("user", this.AdminId())
-		return
-	}
-
 	// 日志
 	this.CreateLogInfo("WEB漏洞扫描 - 删除目标扫描报表:%v成功", params.ReportIds)
 	this.Success()
