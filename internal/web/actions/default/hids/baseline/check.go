@@ -41,6 +41,11 @@ func (this *CheckAction) RunPost(params struct {
 		params.ServerIp = strings.ReplaceAll(params.ServerIp,"/",".")
 		req := &agent.SearchReq{}
 		req.ServerIp = params.ServerIp
+		req.UserName,err = this.UserName()
+		if err != nil {
+			this.ErrorPage(fmt.Errorf("获取用户信息失败:%v", err))
+			return
+		}
 
 		list, err := agent_server.List(req)
 		if err != nil {

@@ -1,6 +1,7 @@
 package reports
 
 import (
+	"fmt"
 	"github.com/1uLang/zhiannet-api/awvs/model/reports"
 	reports_server "github.com/1uLang/zhiannet-api/awvs/server/reports"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
@@ -38,6 +39,35 @@ func (this *IndexAction) RunGet(params struct {
 	if err != nil && list == nil {
 		//this.ErrorPage(err)
 		this.Show()
+		return
+	}
+	//this.Data["reports"] = list["reports"]
+	if lists, ok := list["reports"]; ok {
+		this.Data["reports"] = lists
+	}
+	this.Show()
+}
+
+func (this *IndexAction) RunPost(params struct {
+	PageSize int
+	PageNo   int
+}) {
+	this.Data["nodeErr"] = ""
+	this.Data["reports"] = make([]interface{}, 0)
+	err := webscan.InitAPIServer()
+	if err != nil {
+		this.ErrorPage(fmt.Errorf("web漏洞扫描节点错误:%v",err))
+		return
+	}
+	if params.PageNo < 0 {
+		params.PageNo = 0
+	}
+	if params.PageSize < 0 {
+		params.PageSize = 20
+	}
+	list, err := reports_server.List(&reports.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, AdminUserId: uint64(this.AdminId())})
+	if err != nil && list == nil {
+		this.ErrorPage(err)
 		return
 	}
 	//this.Data["reports"] = list["reports"]

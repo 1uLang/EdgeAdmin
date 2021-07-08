@@ -28,8 +28,7 @@ func (this *IndexAction) RunGet(params struct {
 	this.Data["targets"] = data
 	err := webscan.InitAPIServer()
 	if err != nil {
-		this.Data["nodeErr"] = fmt.Errorf("获取扫描节点信息失败")
-		this.Show()
+		this.ErrorPage(fmt.Errorf("获取扫描节点信息失败：%v", err))
 		return
 	}
 	if params.PageNo < 0 {
@@ -40,9 +39,7 @@ func (this *IndexAction) RunGet(params struct {
 	}
 	list, err := targets_server.List(&targets.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, AdminUserId: uint64(this.AdminId())})
 	if err != nil && list != nil {
-		//this.ErrorPage(err)
-		this.Data["targets"] = data
-		this.Show()
+		this.ErrorPage(err)
 		return
 	}
 	if lists, ok := list["targets"]; ok {
@@ -52,4 +49,32 @@ func (this *IndexAction) RunGet(params struct {
 		this.Success()
 	}
 	this.Show()
+}
+func (this *IndexAction) RunPost(params struct {
+	PageSize int
+	PageNo   int
+}) {
+	data := make([]interface{}, 0)
+	this.Data["nodeErr"] = ""
+	this.Data["targets"] = data
+	err := webscan.InitAPIServer()
+	if err != nil {
+		this.ErrorPage(fmt.Errorf("获取扫描节点信息失败：%v", err))
+		return
+	}
+	if params.PageNo < 0 {
+		params.PageNo = 0
+	}
+	if params.PageSize < 0 {
+		params.PageSize = 20
+	}
+	list, err := targets_server.List(&targets.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, AdminUserId: uint64(this.AdminId())})
+	if err != nil && list != nil {
+		this.ErrorPage(err)
+		return
+	}
+	if lists, ok := list["targets"]; ok {
+		this.Data["targets"] = lists
+	}
+	this.Success()
 }

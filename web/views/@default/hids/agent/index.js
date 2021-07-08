@@ -19,8 +19,9 @@ Tea.context(function () {
                 .params({
                     MacCode: item.macCode,
                     Opt: 'enable',
-                })
-                .refresh()
+                }).success(function (){
+                window.location.reload()
+            })
         })
 
     }
@@ -31,8 +32,9 @@ Tea.context(function () {
                 .params({
                     MacCode: item.macCode,
                     Opt: 'disable',
-                })
-                .refresh()
+                }).success(function (){
+                window.location.reload()
+            })
         })
 
     }
@@ -43,8 +45,9 @@ Tea.context(function () {
                 .params({
                     MacCode: item.macCode,
                     Opt: 'delete',
-                })
-                .refresh()
+                }).success(function (){
+                window.location.reload()
+            })
         })
     }
 

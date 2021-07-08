@@ -1,12 +1,12 @@
 {$layout "layout_popup"}
 
-<h3>添加节点</h3>
+<h3>添加组件</h3>
 
 <form class="ui form" method="post" data-tea-action="$" data-tea-success="success">
 	<csrf-token></csrf-token>
 	<table class="ui table definition selectable">
         <tr>
-            <td class="title">节点名称 *</td>
+            <td class="title">组件名称 *</td>
             <td>
                 <input type="text" name="name" maxlength="100" ref="focus"/>
             </td>
@@ -18,7 +18,7 @@
             </td>
         </tr>
         <tr>
-            <td>节点地址 *</td>
+            <td>组件地址 *</td>
             <td>
                 <div style="display: flex;flex-direction: column;">
                     <input type="text" name="addr" maxlength="100"/>
@@ -26,7 +26,7 @@
                         可以是"IP:端口"或者"域名"
                     </span>
                 </div>
-<!--                <p class="comment">节点访问域名或地址（https[http]://ip:port）。</p>-->
+<!--                <p class="comment">组件访问域名或地址（https[http]://ip:port）。</p>-->
             </td>
         </tr>
         <tr>
@@ -42,7 +42,7 @@
             </td>
         </tr>
         <tr>
-            <td>节点类型 *</td>
+            <td>组件类型 *</td>
             <td>
                 <assembly-selector></assembly-selector>
             </td>

@@ -14,7 +14,7 @@ func init() {
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeWebScan)).
 			Data("teaMenu", "scans").
 			Prefix("/webscan/scans").
-			Get("", new(IndexAction)).
+			GetPost("", new(IndexAction)).
 			GetPost("/create", new(CreateAction)).
 			Get("/vulnerabilities", new(VulnerabilitiesAction)).
 			Post("/delete", new(DeleteAction)).

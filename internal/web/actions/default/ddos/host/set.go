@@ -38,7 +38,6 @@ func (this *SetAction) RunGet(params struct {
 		this.Error(err.Error(), 400)
 		return
 	}
-	fmt.Println("==============", res)
 	this.Data["ignore"] = res.Ignore == "checked"
 	this.Data["level"] = res.ParamSet
 	this.Success()

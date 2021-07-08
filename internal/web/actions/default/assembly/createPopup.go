@@ -46,14 +46,16 @@ func (this *CreatePopupAction) RunPost(params struct {
 			"d|1\\d{2}|2[0-4]\\d|25[0-5]):([0-9]|[1-9]\\d|[1-9]\\d{2}|[1-9]\\d{3}|[1-5]\\d{4}|6[0-4]\\d{3}|65[0-4]\\d{2}|655[0-"+
 			"2]\\d|6553[0-5])$)|([a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\\.?)", "请输入正确的地址")
 
-	params.Must.
-		Field("assemblyType", params.AssemblyType).
-		Require("请选择节点类型")
-
-	params.Must.
-		Field("idcId", params.IdcId).
-		Require("请选择数据中心")
-
+	//检测节点类型
+	_, isExist := typeMap[params.AssemblyType]
+	if !isExist {
+		this.Fail("请选择节点类型")
+	}
+	//检测数据中心
+	_, isExist = idcMap[params.IdcId]
+	if !isExist {
+		this.Fail("请选择数据中心")
+	}
 	switch params.AssemblyType {
 	case 1: //ddos防火墙
 		params.Must.
@@ -65,10 +67,10 @@ func (this *CreatePopupAction) RunPost(params struct {
 	case 2: //云防火墙
 		params.Must.
 			Field("key", params.Key).
-			Require("请输入key")
+			Require("请输入username")
 		params.Must.
 			Field("secret", params.Secret).
-			Require("请输入secret")
+			Require("请输入password")
 	case 3: //主机漏洞扫描
 		params.Must.
 			Field("key", params.Key).

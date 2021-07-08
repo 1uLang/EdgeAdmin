@@ -23,6 +23,51 @@ Tea.context(function () {
     this.onCloseDetail = function () {
         this.bShowDetail = false
     };
+
+    this.$delay(function () {
+        //开启监听
+        let that = this
+        that.onCreateLoopTimeOut()
+        window.addEventListener('beforeunload', function () {
+            that.onReleaseTimeOut()
+        })
+    })
+
+    this.checkTimer = null
+
+    this.onCallBack = function () {
+        if (this.checkScans()) {
+            this.$post(".").success(resp => {
+                if (resp.code === 200) {
+                    this.scans = resp.data.scans
+                }
+            })
+        }
+    }
+
+    this.onCreateLoopTimeOut = function () {
+        this.onReleaseTimeOut()
+        this.checkTimer = createTimer(this.onCallBack, {timeout: 30000});
+        this.checkTimer.start();
+    }
+    this.onReleaseTimeOut = function () {
+        if (this.checkTimer) {
+            this.checkTimer.stop()
+            this.checkTimer = null
+        }
+    }
+
+    this.checkScans = function () {
+        for (item of this.scans) {
+            if (item.current_session.status === "processing" ||
+                item.current_session.status === "queued" ||
+                item.current_session.status === "aborting") {
+                return true
+            }
+        }
+        return false
+    }
+
     this.onStopScan = function () {
         if (this.stopValues.length > 0) {
             let that = this
@@ -32,11 +77,10 @@ Tea.context(function () {
                     .params({
                         ScanIds: scan_ids
                     })
-                    // .refresh()
+                // .refresh()
             })
         }
     };
-
     this.onCreateReport = function () {
         if (this.createValues.length > 0) {
             let that = this
@@ -223,6 +267,13 @@ Tea.context(function () {
                 this.statistics.messages = resp.data.statistics.scanning_app.wvs.main.messages
                 this.onChangeState(2)
             }
+        }).done(function () {
+            console.log(this.statistics.progress)
+            if (this.statistics.progress != 100) {
+                this.$delay(function () {
+                    this.onShowDetail(item)
+                }, 5000)
+            }
         })
     }
 
@@ -312,4 +363,5 @@ Tea.context(function () {
             }
         })
     }
-});
+})
+;

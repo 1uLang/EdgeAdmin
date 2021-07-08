@@ -56,10 +56,9 @@ Tea.context(function () {
             MacCode: [this.macCode],
             serverIp: this.serverIp,
             templateId: this.sSelectValue,
-        }).success(function () {
-            teaweb.closePopup()
-        }).error(resp => {
-            console.log(resp)
+        }).success(function (){
+            window.location.reload()
+        }).error(function (){
             teaweb.warn("失败：该主机agent已暂停服务，命令无法执行！")
         })
     }

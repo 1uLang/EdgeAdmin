@@ -87,7 +87,7 @@ Tea.context(function () {
     };
     this.onOpenConfig = function (addr) {
         this.searchAddress = addr
-
+        console.log(addr)
         let node = this.getNodeId()
         let that = this
         //ip直通 防护策略

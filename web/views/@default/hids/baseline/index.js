@@ -12,7 +12,44 @@ Tea.context(function () {
             teaweb.warn(this.errorMessage, function () {
             })
         }
+        let that = this
+        that.onCreateLoopTimeOut()
+        window.addEventListener('beforeunload', function () {
+            that.onReleaseTimeOut()
+        })
     })
+
+    this.onCallBack = function () {
+        if (this.checkScans()) {
+            this.$post(".").success(resp => {
+                if (resp.code === 200) {
+                    this.baselines = resp.data.baselines
+                    this.State = resp.data.State
+                    this.ResultState = resp.data.ResultState
+                }
+            })
+        }
+    }
+    this.onCreateLoopTimeOut = function () {
+        this.onReleaseTimeOut()
+        this.checkTimer = createTimer(this.onCallBack, {timeout: 60000});
+        this.checkTimer.start();
+    }
+    this.onReleaseTimeOut = function () {
+        if (this.checkTimer) {
+            this.checkTimer.stop()
+            this.checkTimer = null
+        }
+    }
+    this.checkScans = function () {
+        for (item of this.datas) {
+            if (item.state === 1) {
+                return true
+            }
+        }
+        return false
+    }
+
     this.onChangeCheckState = function (state) {
         window.location = "/hids/baseline?State="+state+'&ResultState='+this.ResultState
      }
@@ -26,6 +63,7 @@ Tea.context(function () {
     }
 
     this.getStateName = function (status) {
+        console.log(status)
         switch(status){
             case 0:
                 return "未检查"

@@ -13,7 +13,7 @@ func init() {
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeHids)).
 			Data("teaMenu", "examine").
 			Prefix("/hids/examine").
-			Get("", new(IndexAction)).
+			GetPost("", new(IndexAction)).
 			Get("/detail", new(DetailAction)).
 			Post("/scans", new(ScanAction)).
 			EndAll()

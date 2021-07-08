@@ -41,8 +41,55 @@ Tea.context(function () {
             teaweb.warn(this.errorMessage, function () {
             })
         }
+        let that = this
+        that.onCreateLoopTimeOut()
+        window.addEventListener('beforeunload', function () {
+            that.onReleaseTimeOut()
+        })
     })
 
+    this.onCallBack = function () {
+        if (this.checkScans()) {
+            this.$post(".").success(resp => {
+                if (resp.code === 200) {
+                    this.datas = resp.data.datas
+                    this.state = resp.data.state
+                    this.Type = resp.data.Type
+                    this.score = resp.data.score
+                    this.examineItems = resp.data.examineItems
+                    this.startTime = resp.data.startTime
+                    this.endTime = resp.data.endTime
+                }
+            })
+        }
+    }
+    this.onCreateLoopTimeOut = function () {
+        this.onReleaseTimeOut()
+        this.checkTimer = createTimer(this.onCallBack, {timeout: 60000});
+        this.checkTimer.start();
+    }
+    this.onReleaseTimeOut = function () {
+        if (this.checkTimer) {
+            this.checkTimer.stop()
+            this.checkTimer = null
+        }
+    }
+    this.checkScans = function () {
+        for (item of this.datas) {
+            if (item.serverExamineResultInfo.state === 1 ||
+                item.serverExamineResultInfo.state === 4) {
+                return true
+            }
+        }
+        return false
+    }
+    //判断是否有主机正在体检...
+    this.checkExamine = function (){
+        for(item of this.datas){
+            console.log(item)
+        }
+        return false
+    }
     this.onChangeCheckState = function (state) {
         if (this.state != state) {
             this.state = state
@@ -137,10 +184,12 @@ Tea.context(function () {
                 return "体检中"
             case 2:
                 return "已完成"
+            case 4:
+                return "取消中"
             case 6:
                 return "已取消"
             default:
-                return "取消中"
+                return "未知"
         }
     }
 
@@ -247,10 +296,9 @@ Tea.context(function () {
                 WebShellPath:this.webSearchKey,
                 MacCode: [this.MacCode],
                 ScanItems: this.sSelectCheckValue.join(","),
-            }).success(function () {
-                teaweb.closePopup()
-            }).error(resp => {
-                console.log(resp)
+            }).success(function (){
+                window.location.reload()
+            }).error(function (){
                 teaweb.warn("失败：该主机agent已暂停服务，命令无法执行！")
             })
         })
@@ -265,8 +313,8 @@ Tea.context(function () {
                 Opt:'cancel',
                 serverIp:item.os.serverIp,
                 MacCode: [item.macCode],
-            }).success(function () {
-                teaweb.closePopup()
+            }).success(function (){
+                window.location.reload()
             }).error(function (){
                 teaweb.warn("失败：该主机agent已暂停服务，命令无法执行", function () {})
             })
@@ -346,44 +394,4 @@ Tea.context(function () {
             this[timeId] = null
         }
     }
-
-    this.tableData = [
-        {
-            id: 1,
-            hostData: {
-                intIp: "192.168.0.1",
-                outIp: "192.168.1.1",
-                hostName: "elk.novalocal",
-                systemName: "centos linux7.6.1810_64bit",
-                rootName: "3.10.0-957.1.3.el7",
-                macAddr: "3.10.0-957.1.3.el7",
-                remarks: "备注信息",
-            },
-            status: 3,
-            checkNum: 70,
-            startTime: "2021-06-05T12:15:25.000",
-            endTime: "2021-06-05T13:15:25.000",
-            maxValue: 100,
-            curValue: 100
-        },
-        {
-            id: 2,
-            hostData: {
-                intIp: "192.168.0.1",
-                outIp: "192.168.1.1",
-                hostName: "elk.novalocal",
-                systemName: "centos linux7.6.1810_64bit",
-                rootName: "3.10.0-957.1.3.el7",
-                macAddr: "3.10.0-957.1.3.el7",
-                remarks: "备注信息",
-            },
-            status: 2,
-            checkNum: 70,
-            startTime: "2021-06-05T12:15:25.000",
-            endTime: "2021-06-05T13:15:25.000",
-            maxValue: 100,
-            curValue: 70
-        }
-    ]
-
 })

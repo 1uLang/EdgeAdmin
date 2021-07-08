@@ -51,40 +51,6 @@
                </div>
             </div>
         </div>
-
-        <!-- <div style="display: flex;flex-direction: row;margin: 15px;height: 40px;">
-            <div style="display: inline-flex;align-items: center;width: 50%;">
-                <div class="title-style">体检类型</div>
-                <div :class="{'meun-select-color':Type===0,'meun-define-color':Type!=0}"
-                     @click="onChangeResultState(0)">全部
-                </div>
-                <div :class="{'meun-select-color':Type===1,'meun-define-color':Type!=1}"
-                     @click="onChangeResultState(1)">定时体检
-                </div>
-                <div :class="{'meun-select-color':Type===2,'meun-define-color':Type!=2}"
-                     @click="onChangeResultState(2)">非定时体检
-                </div>
-            </div>
-        </div> -->
-
-        <!-- <div style="display: inline-flex;margin: 15px;">
-            <div class="title-style">体检项目</div>
-            <div style="display: flex;flex-direction: column;">
-                <div style="display: inline-flex;margin-bottom: 20px;">
-                    <div v-for='item in sTopSelectItem' @click="onAddSelectValue(item.id)" class="more-select-content">
-                        <img :src="getShowSelectImage(item.id)" width="15px" height="15px">
-                        <span style="margin-left: 10px;">{{item.value}}</span>
-                    </div>
-                </div>
-                <div style="display: inline-flex;">
-                    <div v-for='item in sBottomSelectItem' class="more-select-content"
-                         @click="onAddSelectValue(item.id)">
-                        <img :src="getShowSelectImage(item.id)" width="15px" height="15px">
-                        <span style="margin-left: 10px;">{{item.value}}</span>
-                    </div>
-                </div>
-            </div>
-        </div> -->
     </form>
 </div>
 <div class="card-div" style="width: 100%;height: 550px;overflow-x: auto; overflow-y: auto;">

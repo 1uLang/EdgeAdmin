@@ -1,7 +1,6 @@
 package nat
 
 import (
-	"fmt"
 	"github.com/1uLang/zhiannet-api/common/model/subassemblynode"
 	req_nat "github.com/1uLang/zhiannet-api/opnsense/request/nat"
 	opnsense_server "github.com/1uLang/zhiannet-api/opnsense/server"
@@ -41,7 +40,6 @@ func (this *IndexAction) RunGet(params struct {
 	this.Data["tableDataList"] = list
 	this.Data["nodes"] = node
 	this.Data["selectNode"] = params.NodeId
-	fmt.Println("list", list)
 	this.Show()
 	//this.Success()
 }

@@ -45,3 +45,30 @@ func (this *IndexAction) RunGet(params struct {
 	}
 	this.Show()
 }
+
+func (this *IndexAction) RunPost(params struct {
+	PageSize int
+	PageNo   int
+}) {
+	this.Data["scans"] = make([]interface{}, 0)
+	err := webscan.InitAPIServer()
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	if params.PageNo <= 0 {
+		params.PageNo = 0
+	}
+	if params.PageSize <= 0 {
+		params.PageSize = 20
+	}
+	list, err := scans_server.List(&scans.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, AdminUserId: uint64(this.AdminId())})
+	if err != nil && list != nil {
+		this.ErrorPage(err)
+		return
+	}
+	if lists, ok := list["scans"]; ok {
+		this.Data["scans"] = lists
+	}
+	this.Success()
+}

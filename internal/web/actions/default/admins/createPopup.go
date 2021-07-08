@@ -2,8 +2,12 @@ package admins
 
 import (
 	"encoding/json"
+	"fmt"
+	hids_user_model "github.com/1uLang/zhiannet-api/hids/model/user"
+	hids_user_server "github.com/1uLang/zhiannet-api/hids/server/user"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/systemconfigs"
 	"github.com/iwind/TeaGo/actions"
@@ -116,6 +120,17 @@ func (this *CreatePopupAction) RunPost(params struct {
 
 	defer this.CreateLogInfo("创建系统用户 %d", createResp.AdminId)
 
+	//判断是否拥有了主机防护功能  有 则对应创建该用户
+	err = hids.InitAPIServer()
+	if err != nil {
+		this.ErrorPage(fmt.Errorf("主机防护组件初始化失败：%v",err))
+		return
+	}
+	_,err = hids_user_server.Add(&hids_user_model.AddReq{UserName: params.Username,Password: "dengbao-"+params.Username,Role: 3})
+	if err != nil {
+		this.ErrorPage(fmt.Errorf("主机防护组件同步信息失败：%v",err))
+		return
+	}
 	// 通知更改
 	err = configloaders.NotifyAdminModuleMappingChange()
 	if err != nil {

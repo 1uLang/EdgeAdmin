@@ -3,6 +3,45 @@ Tea.context(function () {
 
     this.scanValues = []  //需要扫描的ID
 
+    this.checkTimer = null
+
+    this.$delay(function () {
+        //开启监听
+        let that = this
+        that.onCreateLoopTimeOut()
+        window.addEventListener('beforeunload', function () {
+            that.onReleaseTimeOut()
+        })
+    })
+    this.onCallBack = function () {
+        if (this.checkScans()) {
+            this.$post(".").success(resp => {
+                if (resp.code === 200) {
+                    this.targets = resp.data.targets
+                }
+            })
+        }
+    }
+    this.onCreateLoopTimeOut = function () {
+        this.onReleaseTimeOut()
+        this.checkTimer = createTimer(this.onCallBack, {timeout: 30000});
+        this.checkTimer.start();
+    }
+    this.onReleaseTimeOut = function () {
+        if (this.checkTimer) {
+            this.checkTimer.stop()
+            this.checkTimer = null
+        }
+    }
+    this.checkScans = function () {
+        for (item of this.targets) {
+            if (item.last_scan_session_status === "processing") {
+                return true
+            }
+        }
+        return false
+    }
+
     this.onScan = function () {
         if (this.scanValues.length > 0) {
             let that = this

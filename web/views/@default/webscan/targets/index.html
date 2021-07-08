@@ -1,6 +1,7 @@
 <!-- 添加目标 -->
 {$layout}
 {$template "/datepicker"}
+<script type="text/javascript" src="/js/timeFactory.js"></script>
 <p class="comment" v-if="nodeErr != ''">请先添加web漏洞扫描节点</p>
 
 <first-menu v-if="nodeErr  == ''">
@@ -33,7 +34,7 @@
             </td>
             <td>{{item.address}}</td>
             <td>{{item.description}}</td>
-            <td>Web/网络</td>
+            <td>Web</td>
             <td>
                 <div style="display: flex;justify-content: center;" v-if="item.severity_counts">
                     <div class="vulnerable-num" style="background-color: #ec808d;">{{item.severity_counts.high}}</div>

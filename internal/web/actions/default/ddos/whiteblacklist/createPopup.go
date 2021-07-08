@@ -44,7 +44,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 		White:  params.White == "白名单",
 	})
 	if err != nil {
-		this.ErrorPage(err)
+		this.Fail(err.Error())
 		return
 	}
 	this.Success()

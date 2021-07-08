@@ -42,20 +42,24 @@ func (this *ScanAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	if params.ServerIp != ""{
-		req :=  &agent.SearchReq{}
+	if params.ServerIp != "" {
+		req := &agent.SearchReq{}
 		req.ServerIp = params.ServerIp
-
+		req.UserName, err = this.UserName()
+		if err != nil {
+			this.ErrorPage(fmt.Errorf("获取用户信息失败:%v", err))
+			return
+		}
 		list, err := agent_server.List(req)
 		if err != nil {
-			this.Error(fmt.Sprintf("获取主机信息失败：%v", err),400)
+			this.Error(fmt.Sprintf("获取主机信息失败：%v", err), 400)
 			return
 		}
 		if len(list.List) == 0 {
-			this.Error(fmt.Sprintf("该主机不存在"),400)
+			this.Error(fmt.Sprintf("该主机不存在"), 400)
 			return
-		}else if state,isExist := list.List[0]["agentState"].(string);state != "2" && isExist{	//启用 主机
-			this.Error("失败：该主机agent已暂停服务，命令无法执行！",400)
+		} else if state, isExist := list.List[0]["agentState"].(string); isExist && state != "2" { //启用 主机
+			this.Error("失败：该主机agent已暂停服务，命令无法执行！", 400)
 			return
 		}
 	}
