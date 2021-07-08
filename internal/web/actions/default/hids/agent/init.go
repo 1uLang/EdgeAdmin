@@ -16,7 +16,7 @@ func init() {
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeHids)).
 			Data("teaMenu", "agent").
 			Prefix("/hids/agent").
-			Get("", new(IndexAction)).
+			GetPost("", new(IndexAction)).
 			Get("/download", new(DownloadAction)).
 			Get("/install", new(InstallAction)).
 			Post("/disport", new(DisportAction)).

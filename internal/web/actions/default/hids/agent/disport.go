@@ -40,5 +40,5 @@ func (this *DisportAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	this.Show()
+	this.Success()
 }

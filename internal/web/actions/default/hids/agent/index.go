@@ -52,5 +52,39 @@ func (this *IndexAction) RunGet(params struct {
 		return
 	}
 	this.Data["agents"] = list.List
+}
 
+func (this *IndexAction) RunPost(params struct {
+	PageNo        int
+	PageSize      int
+	ServerIp      string
+	ServerLocalIp string
+
+	Must *actions.Must
+	//CSRF *actionutils.CSRF
+}) {
+	err := hids.InitAPIServer()
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+
+	req := &agent.SearchReq{}
+	req.UserName, err = this.UserName()
+	if err != nil {
+		this.ErrorPage(fmt.Errorf("获取用户信息失败：%v", err))
+		return
+	}
+	req.PageNo = params.PageNo
+	req.PageSize = params.PageSize
+	req.ServerIp = params.ServerIp
+	req.ServerLocalIp = params.ServerLocalIp
+
+	list, err := agent_server.List(req)
+	if err != nil {
+		this.ErrorPage(fmt.Errorf("获取agent主机列表失败：%v", err))
+		return
+	}
+	this.Data["agents"] = list.List
+	this.Success()
 }

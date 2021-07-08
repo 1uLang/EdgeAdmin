@@ -41,42 +41,7 @@ Tea.context(function () {
     this.onOpenChangeView = function (id) {
         //获取详细数据
         this.GetNatInfo(id)
-        // for (var i = 0; i < this.tableDataList.length; i++) {
-        //     if (this.tableDataList[i].id == id) {
-        //         console.log("tableData")
-        //         this.id = this.tableDataList[i].id
-        //         this.interface = this.tableDataList[i].interface
-        //         this.type = this.tableDataList[i].type
-        //         this.external = this.tableDataList[i].external
-        //         this.src = this.tableDataList[i].src
-        //         // this.srcmask = this.tableDataList[i].srcmask //
-        //         this.dst = this.tableDataList[i].dst
-        //         this.dsts = this.tableDataList[i].dst
-        //         // this.dstmask = this.tableDataList[i].dstmask //
-        //         this.descr = this.tableDataList[i].descr
-        //         break
-        //     }
-        // }
-        // this.onChangeShowState(3) //获取详细信息回调里面执行
     }
-
-    //重置value
-    // this.resetValue = function () {
-    //     this.id = ""
-    //     this.interface = "wan"
-    //     this.interfaces = []
-    //     this.type = "binat"
-    //     this.types = []
-    //     this.external = ""
-    //     this.src = ""
-    //     this.srcmask = ""
-    //     this.dst = ""
-    //     this.dstinput = ""
-    //     this.dsts = []
-    //     this.dstmask = ""
-    //     this.descr = ""
-    //
-    // }
 
     //保存配置
     this.onSaveConfig = function () {
@@ -100,10 +65,6 @@ Tea.context(function () {
             }).refresh()
     }
 
-    //开启配置
-    // this.onOpenConfig = function (id) {
-    //
-    // }
 
     //关闭配置
     this.onOpenConfig = function (id, status) {
@@ -147,74 +108,6 @@ Tea.context(function () {
         {id: 25, value: 25}, {id: 26, value: 26}, {id: 27, value: 27}, {id: 28, value: 28},
         {id: 29, value: 29}, {id: 30, value: 30}, {id: 31, value: 31}, {id: 32, value: 32},
     ]
-
-    // this.hostData = [
-    //     {id: 1, addr: "成都-ddos-192.168.1.1",},
-    //     {id: 2, addr: "成都-ddos-192.168.1.2",},
-    //     {id: 3, addr: "成都-ddos-192.168.1.3",},
-    //     {id: 4, addr: "成都-ddos-192.168.1.4",},
-    // ]
-
-
-    //postIndex:接口* 选择的id  typeIndex 类型* 选择的id  sourceTypeIndex 源* 选择的id  targetIndex 目标* 选择的id
-    // this.tableData = [
-    //     {
-    //         id: 1,
-    //         postId: "LAN",
-    //         intIP: "192.168.0.1",
-    //         outIP: "192.168.1.1",
-    //         targetIP: "192.168.3.1",
-    //         desc: "描述",
-    //         status: 1,
-    //         postIndex: 1,
-    //         typeIndex: 1,
-    //         sourceTypeIndex: 1,
-    //         targetIndex: 1,
-    //         sourceValue: "源的值"
-    //     },
-    //     {
-    //         id: 2,
-    //         postId: "WAN",
-    //         intIP: "192.168.0.2",
-    //         outIP: "192.168.1.2",
-    //         targetIP: "192.168.3.2",
-    //         desc: "描述",
-    //         status: 2,
-    //         postIndex: 2,
-    //         typeIndex: 1,
-    //         sourceTypeIndex: 1,
-    //         targetIndex: 1,
-    //         sourceValue: "源的值"
-    //     },
-    //     {
-    //         id: 3,
-    //         postId: "LAN",
-    //         intIP: "192.168.0.3",
-    //         outIP: "192.168.1.3",
-    //         targetIP: "192.168.3.3",
-    //         desc: "描述",
-    //         status: 1,
-    //         postIndex: 1,
-    //         typeIndex: 1,
-    //         sourceTypeIndex: 1,
-    //         targetIndex: 1,
-    //         sourceValue: "源的值"
-    //     },
-    //     {
-    //         id: 4,
-    //         postId: "LAN",
-    //         intIP: "192.168.0.4",
-    //         outIP: "192.168.1.4",
-    //         targetIP: "192.168.3.4",
-    //         desc: "描述",
-    //         status: 2,
-    //         postIndex: 3,
-    //         typeIndex: 1,
-    //         sourceTypeIndex: 1,
-    //         targetIndex: 1,
-    //         sourceValue: "源的值"
-    //     }
-    // ]
 
     //获取当前选中的节点
     this.GetSelectNode = function (event) {
@@ -272,7 +165,10 @@ Tea.context(function () {
                     }
                 }
                 this.external = resp.data.external
-                this.src = resp.data.src
+                if (id !== "")
+                    this.src = resp.data.src
+                else
+                    this.src = ""
                 // this.srcmask = this.tableDataList[i].srcmask //
                 if (resp.data.dst.length > 0) {
                     this.dsts = resp.data.dst
@@ -289,9 +185,9 @@ Tea.context(function () {
                 }
                 // this.dstmask = this.tableDataList[i].dstmask //
                 this.descr = resp.data.descr
-                if(id != ""){
+                if (id != "") {
                     this.onChangeShowState(3)
-                }else{
+                } else {
                     this.onChangeShowState(2)
                 }
 
@@ -299,12 +195,11 @@ Tea.context(function () {
             })
 
 
-
     }
 
 
     //判断输入是否是输入类型
-    this.checkDstSrcType = function(value){
+    this.checkDstSrcType = function (value) {
         let vmap = ["bogons", "bogonsv6", "virusprot", "sshlockout", "any", "(self)", "lan", "lanip",
             "lo0", "wan", "wanip"]
         if (vmap.indexOf(value) == -1) {

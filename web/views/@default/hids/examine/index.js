@@ -296,6 +296,7 @@ Tea.context(function () {
                 MacCode: [this.MacCode],
                 ScanItems: this.sSelectCheckValue.join(","),
             }).success(function (){
+                teaweb.closePopup()
                 window.location.reload()
             }).error(function (){
                 teaweb.warn("失败：该主机agent已暂停服务，命令无法执行！")
@@ -349,7 +350,7 @@ Tea.context(function () {
         }
         return false
     }
-    
+
     this.getProgressPerStr = function (curValue, maxValue,state) {
         if(curValue == 0 ){
             if(state==1){
@@ -366,7 +367,7 @@ Tea.context(function () {
             }else if(tempValue<1 && state && state==1){
                 return "1%"
             }
-            
+
             return tempValue + "%"
         }
         return "0%"

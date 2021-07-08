@@ -6,13 +6,49 @@ Tea.context(function () {
         });
     }
 
+
     this.$delay(function () {
 
         if (this.errorMessage !== "" && this.errorMessage !== undefined) {
             teaweb.warn(this.errorMessage, function () {
             })
         }
+
+        let that = this
+        that.onCreateLoopTimeOut()
+        window.addEventListener('beforeunload', function () {
+            that.onReleaseTimeOut()
+        })
     })
+
+    this.onCallBack = function () {
+        if (this.checkScans()) {
+            this.$post(".").success(resp => {
+                if (resp.code === 200) {
+                    this.agents = resp.data.agents
+                }
+            })
+        }
+    }
+    this.onCreateLoopTimeOut = function () {
+        this.onReleaseTimeOut()
+        this.checkTimer = createTimer(this.onCallBack, {timeout: 60000});
+        this.checkTimer.start();
+    }
+    this.onReleaseTimeOut = function () {
+        if (this.checkTimer) {
+            this.checkTimer.stop()
+            this.checkTimer = null
+        }
+    }
+    this.checkScans = function () {
+        for (item of this.agents) {
+            if (item.agentState == '1'||item.agentState == '3'||item.agentState == '5') {
+                return true
+            }
+        }
+        return false
+    }
     this.onStartConfig = function (item) {
         teaweb.confirm("确定要启动吗？", function () {
             this.$post(".disport")

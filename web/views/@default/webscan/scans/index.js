@@ -76,8 +76,9 @@ Tea.context(function () {
                 that.$post(".stop")
                     .params({
                         ScanIds: scan_ids
-                    })
-                // .refresh()
+                    }).success(function () {
+                    window.location.reload()
+                })
             })
         }
     };
@@ -106,8 +107,9 @@ Tea.context(function () {
                 that.$post(".delete")
                     .params({
                         ScanIds: scan_ids
-                    })
-                    .refresh()
+                    }).success(function () {
+                    window.location.reload()
+                })
             })
         }
     };
