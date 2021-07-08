@@ -9,7 +9,7 @@ Tea.context(function () {
     this.$delay(function () {
         teaweb.datepicker("day-from-picker")
         teaweb.datepicker("day-to-picker")
-        console.log(this.errorMessage)
+
 
         if (this.errorMessage !== "" && this.errorMessage !== undefined) {
             teaweb.warn(this.errorMessage, function () {

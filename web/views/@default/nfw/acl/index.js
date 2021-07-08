@@ -78,7 +78,7 @@ Tea.context(function () {
 
     //修改配置
     this.onOpenChangeView = function (id) {
-        console.log(id)
+
         this.GetNatInfo(id)
         // this.onChangeShowState(3)
     }
@@ -125,7 +125,6 @@ Tea.context(function () {
             .post()
             .success(function (resp) {
 
-                console.log(resp.data);
             }).refresh()
     }
 
@@ -306,7 +305,6 @@ Tea.context(function () {
                     this.src = ""
                     this.srcinput = ""
                     this.srcs = resp.data.src
-                    console.log(this.srcs);
 
                     for (var i = 0; i < resp.data.src.length; i++) { //目标下拉
                         if (resp.data.src[i].selected == true) {
@@ -322,7 +320,6 @@ Tea.context(function () {
                         this.src = resp.data.src[0].value
                         this.srcinput = resp.data.src[0].value
                     }
-                    console.log(this.src);
 
                 }
                 //源掩码
@@ -342,7 +339,6 @@ Tea.context(function () {
                 if (resp.data.dst.length > 0) {
                     this.dst = ""
                     this.dsts = resp.data.dst
-                    console.log(this.dsts)
 
                     for (var i = 0; i < resp.data.dst.length; i++) { //目标下拉
                         if (resp.data.dst[i].selected == true) {

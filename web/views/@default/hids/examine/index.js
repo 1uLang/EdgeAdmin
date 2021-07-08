@@ -402,7 +402,7 @@ Tea.context(function () {
     }
 
     this.onReleaseTimeOut = function (timeId) {
-        console.log(this[timeId])
+
         if (this[timeId]) {
             this[timeId].stop()
             this[timeId] = null

@@ -87,7 +87,7 @@ Tea.context(function () {
     };
     this.onOpenConfig = function (addr) {
         this.searchAddress = addr
-        console.log(addr)
+
         let node = this.getNodeId()
         let that = this
         //ip直通 防护策略
@@ -150,7 +150,6 @@ Tea.context(function () {
         } else {
             inputValue = document.getElementById("unlinkHostInput").value
         }
-        console.log(inputValue)
         //todo
     }
     //全部释放 如果传入id 则单独释放 否则释放全部

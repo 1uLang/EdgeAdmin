@@ -76,7 +76,6 @@ Tea.context(function () {
         }
     }
     this.getShowSelectImage = function (id) {
-        console.log(id,this.sSelectValue)
 
         if (this.sSelectValue == id) {
           return "/images/select_select.png";

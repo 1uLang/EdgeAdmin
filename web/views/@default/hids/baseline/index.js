@@ -63,7 +63,7 @@ Tea.context(function () {
     }
 
     this.getStateName = function (status) {
-        console.log(status)
+
         switch(status){
             case 0:
                 return "未检查"
@@ -138,7 +138,7 @@ Tea.context(function () {
      this.onOpenCheck = function (item) {
 
          let serverIp = item.serverIp
-         console.log(serverIp)
+
         //打开合规基线弹窗
          teaweb.popup(Tea.url(".template?macCode="+item.macCode+'&serverIp='+serverIp+"&os="+item.os.osType), {
              height: "500px",

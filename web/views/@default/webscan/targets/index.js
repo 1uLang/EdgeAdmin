@@ -47,12 +47,10 @@ Tea.context(function () {
             let that = this
             let target_ids = JSON.parse(JSON.stringify(this.scanValues))
             teaweb.confirm("确定要扫描这个目标吗？", function () {
-              console.log("====>onScan")
                 that.$post("/webscan/scans/create")
                     .params({
                         TargetIds: target_ids
                     }).success(function () {
-                      console.log("====>success")
                       window.location = "/webscan/scans"
                 })
             })

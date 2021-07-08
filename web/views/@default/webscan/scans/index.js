@@ -268,7 +268,6 @@ Tea.context(function () {
                 this.onChangeState(2)
             }
         }).done(function () {
-            console.log(this.statistics.progress)
             if (this.statistics.progress != 100) {
                 this.$delay(function () {
                     this.onShowDetail(item)

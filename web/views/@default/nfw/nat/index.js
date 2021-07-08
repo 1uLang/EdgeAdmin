@@ -39,7 +39,6 @@ Tea.context(function () {
 
     //修改配置
     this.onOpenChangeView = function (id) {
-        console.log(id)
         //获取详细数据
         this.GetNatInfo(id)
         // for (var i = 0; i < this.tableDataList.length; i++) {
@@ -81,7 +80,6 @@ Tea.context(function () {
 
     //保存配置
     this.onSaveConfig = function () {
-        console.log(this.interface);
 
         Tea.action("/nfw/nat/createPopup")
             .params({
@@ -99,8 +97,6 @@ Tea.context(function () {
             })
             .post()
             .success(function (resp) {
-
-                console.log(resp.data);
             }).refresh()
     }
 
@@ -259,14 +255,12 @@ Tea.context(function () {
                 this.id = id
                 if (resp.data.interface.length > 0) {
                     this.interfaces = resp.data.interface
-                    console.log(this.interfaces);
 
                     for (var i = 0; i < resp.data.interface.length; i++) { //接口下拉
                         if (resp.data.interface[i].selected == true) {
                             this.interface = resp.data.interface[i].value
                         }
                     }
-                    console.log(this.interface)
                 }
 
                 if (resp.data.type.length > 0) {
