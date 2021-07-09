@@ -74,7 +74,7 @@ Tea.context(function () {
         let searchIp = this.src_ip === '' ? this.searchAddress : this.searchAddress + '-' + this.src_ip
         let node = this.getNodeId()
         //屏蔽列表
-        this.$get(".shield").params({Addr: searchIp, NodeId: node}).success(resp => {
+        this.$get(".shield").params({Addr: searchIp, NodeId: node,_:new Date().getMilliseconds()}).success(resp => {
             if (resp.code === 200) {
                 if (resp.data.shield)
                     this.shieldList = resp.data.shield
@@ -95,6 +95,8 @@ Tea.context(function () {
             if (resp.code === 200) {
                 that.ignore = resp.data.ignore
                 that.level = resp.data.level
+                if (parseInt(that.level) > 3)
+                    that.level = "3"
                 //屏蔽列表
                 that.$get(".shield").params({Addr: addr, NodeId: node}).success(resp => {
                     if (resp.code === 200) {
@@ -158,20 +160,23 @@ Tea.context(function () {
         let node = this.getNodeId()
         let msg = ''
         if (item === "all") {//全部释放
-            adds[0] = this.address
+            adds[0] = this.searchAddress
             msg = "全部"
         } else {
-            adds[0] = item.RemoteAddress + '-' + item.LocalAddress
+            adds[0] = item.LocalAddress + '-' + item.RemoteAddress
         }
+        let that = this
         //ip直通 防护策略
         teaweb.confirm("确定要" + msg + "释放吗？", function () {
             this.$post(".shield").params({Addr: adds, NodeId: node}).success(resp => {
                 if (resp.code === 200) {
                     teaweb.success("释放成功", function () {
-                        teaweb.reload()
+                        that.$delay(function () {
+                            that.shieldSearchList(1)
+                        },1000)
                     })
                 }
-            }).refresh()
+            })
         })
     }
 
