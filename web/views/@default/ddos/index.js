@@ -3,9 +3,15 @@ Tea.context(function () {
     this.severity = ''
 
     this.$delay(function () {
+		let curSelectNode = localStorage.getItem("ddosSelectNodeId");
+		if(curSelectNode){
+			this.nodeId = curSelectNode
+		}
+
         this.reloadHourChart()
         this.reloadDayChart()
         this.reloadMonthChart()
+	
     })
 
     this.reloadHourChart = function () {
@@ -247,6 +253,16 @@ Tea.context(function () {
 		chart.setOption(option)
 		chart.resize()
 	}
+
+	this.getNodeId = function () {
+        let node = this.nodeId
+        return node
+    }
+
+    this.showHost = function () {
+		let node = this.getNodeId()
+        localStorage.setItem("ddosSelectNodeId", node);
+    }
 
 	this.tableData = [
 		{id:1,direction:"外网",flow:"235.04 / 215.79 Mbps",msg:"54712 / 39151 pps",anyKey:"0.01 / 0.01 Mbps"},

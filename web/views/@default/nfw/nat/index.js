@@ -17,6 +17,15 @@ Tea.context(function () {
     this.dstmask = ""   //目标的掩码
     this.descr = "" //描述
     // this.selectNode = 0 //节点
+
+
+    this.$delay(function () {
+        let curSelectNode = localStorage.getItem("nfwSelectNodeId");
+        if(curSelectNode){
+            this.selectNode = curSelectNode
+        }
+    })
+
     this.onChangeShowState = function (state) {
         if (this.nShowState != state) {
             this.nShowState = state
@@ -112,6 +121,7 @@ Tea.context(function () {
     //获取当前选中的节点
     this.GetSelectNode = function (event) {
         this.selectNode = event.target.value; //获取option对应的value值
+        localStorage.setItem("nfwSelectNodeId", this.selectNode);
         let node = this.selectNode
         window.location.href = '/nfw/nat?nodeId=' + node
 

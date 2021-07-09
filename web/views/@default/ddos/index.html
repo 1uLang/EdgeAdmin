@@ -8,9 +8,13 @@
     <div style="line-height: 40px;text-align: center;">DDoS防护节点：</div>
     <div class="ui field">
         <div class="ui field">
-            <select class="ui dropdown auto-width">
-                <option :value="item.id" v-for="(item,idx) in ddos" :selected="idx === 0">{{item.name}}-{{item.addr}}</option>
+            <select class="ui dropdown auto-width" @change="showHost" v-model="nodeId">
+                <option :value="item.id" v-for="item in ddos" >{{item.name}}-{{item.addr}}</option>
             </select>
+
+            <!-- <select class="ui dropdown auto-width">
+                <option :value="item.id" v-for="(item,idx) in ddos" :selected="idx === 0">{{item.name}}-{{item.addr}}</option>
+            </select> -->
         </div>
     </div>
 </div>

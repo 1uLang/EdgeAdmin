@@ -10,6 +10,10 @@ Tea.context(function () {
         teaweb.datepicker("day-from-picker")
         teaweb.datepicker("day-to-picker")
 
+        let curSelectNode = localStorage.getItem("ddosSelectNodeId");
+		if(curSelectNode){
+			this.nodeId = curSelectNode
+		}
 
         if (this.errorMessage !== "" && this.errorMessage !== undefined) {
             teaweb.warn(this.errorMessage, function () {
@@ -32,6 +36,7 @@ Tea.context(function () {
     }
     this.showHost = function () { //重新加载该页面
         let node = this.nodeId
+        localStorage.setItem("ddosSelectNodeId", node);
         window.location.href = '/ddos/logs?nodeId=' + node
     }
 

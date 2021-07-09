@@ -26,6 +26,13 @@ Tea.context(function () {
     // this.targerRangeStartId = 1 //修改中 目标范围的开始值
     // this.targerRangeEndId = 1 //修改中 目标范围的终止值
 
+    this.$delay(function () {
+        let curSelectNode = localStorage.getItem("nfwSelectNodeId");
+        if(curSelectNode){
+            this.selectNode = curSelectNode
+        }
+    })
+
     this.onChangeShowState = function (state) {
         if (this.nShowState != state) {
             this.nShowState = state
@@ -209,6 +216,7 @@ Tea.context(function () {
 
     this.GetSelectNode = function (event) {
         this.selectNode = event.target.value; //获取option对应的value值
+        localStorage.setItem("nfwSelectNodeId", this.selectNode);
         let node = this.selectNode
         window.location.href = '/nfw/acl?nodeId=' + node
 

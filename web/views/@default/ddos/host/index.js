@@ -1,6 +1,11 @@
 Tea.context(function () {
 
     this.$delay(function () {
+        let curSelectNode = localStorage.getItem("ddosSelectNodeId");
+		if(curSelectNode){
+			this.nodeId = curSelectNode
+		}
+
         if (this.errorMessage !== "" && this.errorMessage !== undefined) {
             teaweb.warn(this.errorMessage, function () {
             })
@@ -37,6 +42,7 @@ Tea.context(function () {
         } else {
             node = this.nodeId
         }
+        localStorage.setItem("ddosSelectNodeId", node);
         window.location.href = '/ddos/host?nodeId=' + node
     }
     this.setHost = function (notice) {

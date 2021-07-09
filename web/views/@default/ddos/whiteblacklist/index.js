@@ -2,6 +2,13 @@ Tea.context(function () {
 
 
     this.$delay(function () {
+        
+        let curSelectNode = localStorage.getItem("ddosSelectNodeId");
+		if(curSelectNode){
+			this.nodeId = curSelectNode
+		}
+
+
         if (this.errorMessage !== "" && this.errorMessage !== undefined) {
             teaweb.warn(this.errorMessage, function () {
             })
@@ -36,6 +43,7 @@ Tea.context(function () {
 
     this.showHost = function () { //重新加载该页面
         let node = this.getNodeId()
+        localStorage.setItem("ddosSelectNodeId", node);
         window.location.href = '/ddos/whiteblacklist?nodeId=' + node
     }
     this.toShowFlags = function (flags) {

@@ -11,6 +11,10 @@ Tea.context(function () {
 
     this.$delay(function () {
         this.initDataPer()
+        let curSelectNode = localStorage.getItem("nfwSelectNodeId");
+        if(curSelectNode){
+            this.selectNode = curSelectNode
+        }
     })
 
     this.initDataPer = function(){
@@ -78,6 +82,7 @@ Tea.context(function () {
 
     this.GetSelectNode = function (event) {
         this.selectNode = event.target.value; //获取option对应的value值
+        localStorage.setItem("nfwSelectNodeId", this.selectNode);
         let node = this.selectNode
         window.location.href = '/nfw/acl?nodeId=' + node
 
