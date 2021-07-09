@@ -75,8 +75,6 @@ Tea.context(function () {
         } else if (this.nShowState == 2) {
             let start = document.getElementById("day-from-picker").value
             let end = document.getElementById("day-to-picker").value
-            console.log("=============",start)
-            console.log("=============",end)
             this.$get(".attacks").params({
                 NodeId: this.nodeId,
                 startTime: start,
