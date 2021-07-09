@@ -214,7 +214,7 @@ func (this *UpdateAction) RunPost(params struct {
 			}
 		}
 		if !configloaders.AllowModule(this.AdminId(),configloaders.AdminModuleCodeHids) && hasHids {
-			
+
 			err = hids.InitAPIServer()
 			if err != nil {
 				this.ErrorPage(fmt.Errorf("主机防护组件初始化失败：%v",err))

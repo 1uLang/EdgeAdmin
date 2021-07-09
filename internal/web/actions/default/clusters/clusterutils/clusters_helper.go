@@ -17,5 +17,5 @@ func (this *ClustersHelper) BeforeAction(action *actions.ActionObject) {
 		return
 	}
 
-	action.Data["teaMenu"] = "grants"
+	action.Data["teaMenu"] = "clusters"
 }
