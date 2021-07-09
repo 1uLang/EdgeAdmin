@@ -41,7 +41,7 @@ Tea.context(function () {
     }
 
     this.onGoBack = function () {
-        window.location = "/hids/examine"
+        window.location.href = "/hids/examine"
     }
 
     this.getHealthName = function (score) {

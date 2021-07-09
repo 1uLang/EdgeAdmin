@@ -149,6 +149,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"module": configloaders.AdminModuleCodeConfig,
 			"name":   "平台管理",
 			"icon":   "sitemap",
+			"url":    "/assembly",
 			"subItems": []maps.Map{
 				{
 					"name": "安全组件",
@@ -177,6 +178,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"module": configloaders.AdminModuleCodeDdos,
 			"name":   "DDoS防护",
 			"icon":   "shield",
+			"url":    "/ddos/host",
 			"subItems": []maps.Map{
 				{
 					"name": "主机状态",
@@ -196,10 +198,11 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			},
 		},
 		{
-			"code":     "nfw",
-			"module":   configloaders.AdminModuleCodeNfw,
-			"name":     "云防火墙",
-			"icon":     "bars",
+			"code":   "nfw",
+			"module": configloaders.AdminModuleCodeNfw,
+			"name":   "云防火墙",
+			"icon":   "bars",
+			"url":    "/nfw/nat",
 			"subItems": []maps.Map{
 				{
 					"name": "NAT规则",
@@ -223,6 +226,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"module": configloaders.AdminModuleCodeServer,
 			"name":   "WAF服务",
 			"icon":   "skyatlas",
+			"url":    "/servers",
 			"subItems": []maps.Map{
 				{
 					"name": "服务列表",
@@ -262,6 +266,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"name":     "主机防护",
 			"subtitle": "全局状态",
 			"icon":     "linux",
+			"url":      "/ddos/host",
 			"subItems": []maps.Map{
 				{
 					"name": "主机体检",
@@ -291,10 +296,11 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			},
 		},
 		{
-			"code": "webscan",
+			"code":   "webscan",
 			"module": configloaders.AdminModuleCodeWebScan,
-			"name": "漏洞扫描",
-			"icon": "ioxhost",
+			"name":   "漏洞扫描",
+			"icon":   "ioxhost",
+			"url":    "/webscan/targets",
 			"subItems": []maps.Map{
 				{
 					"name": "扫描目标",
@@ -318,6 +324,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"module": configloaders.AdminModuleCodeClusters,
 			"name":   "边缘节点",
 			"icon":   "instagram",
+			"url":    "/clusters",
 			"subItems": []maps.Map{
 				{
 					"name": "集群列表",
@@ -346,6 +353,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"module": configloaders.AdminModuleCodeDNS,
 			"name":   "域名解析",
 			"icon":   "soundcloud",
+			"url":    "/dns",
 			"subItems": []maps.Map{
 				{
 					"name": "集群列表",
@@ -369,6 +377,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"module": configloaders.AdminModuleCodeMonitor,
 			"name":   "监控告警",
 			"icon":   "flickr ",
+			"url":    "/monitor",
 			"subItems": []maps.Map{
 				{
 					"name": "监控任务",
@@ -527,6 +536,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"module": configloaders.AdminModuleCodeSetting,
 			"name":   "系统设置",
 			"icon":   "setting",
+			"url":    "/settings/server",
 			"subItems": []maps.Map{
 				{
 					"name": "基本设置",

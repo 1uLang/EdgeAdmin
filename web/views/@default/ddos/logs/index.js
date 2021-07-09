@@ -1,10 +1,14 @@
 Tea.context(function () {
 
     this.links = []
-    this.traffics = []
+    this.attacks = []
     this.level = 1
     this.address = ''
-    this.nShowState = 2
+    this.nShowState = 1
+    this.endTime = ""
+    this.startTime = ""
+    this.attackType = "0"
+    this.status = "0"
 
     this.$delay(function () {
         teaweb.datepicker("day-from-picker")
@@ -15,17 +19,17 @@ Tea.context(function () {
             teaweb.warn(this.errorMessage, function () {
             })
         }
-        this.getTraffic(this.nShowState)
+        // this.getTraffic(this.nShowState)
     })
-    this.getTraffic = function (state){
+    this.getAttacks = function (state) {
 
-        this.$get(".traffic").params({NodeId: this.nodeId, level: this.level}).success(resp => {
+        this.$get(".attacks").params({NodeId: this.nodeId, level: this.level}).success(resp => {
             if (resp.code === 200) {
-                if (resp.data.traffics)
-                    this.traffics = resp.data.traffics
+                if (resp.data.attacks)
+                    this.attacks = resp.data.attacks
                 else
-                    this.traffics = []
-                this.level = resp.data.level
+                    this.attacks = []
+                this.nodeId = resp.data.nodeId
                 this.nShowState = state
             }
         })
@@ -39,9 +43,9 @@ Tea.context(function () {
         this.level = 1
         if (this.nShowState != state) {
             if (state === 2) {
-                this.getTraffic(state)
+                this.getAttacks(state)
             } else {
-                this.$get(".link").params({NodeId: this.nodeId,level:this.level}).success(resp => {
+                this.$get(".link").params({NodeId: this.nodeId, level: this.level}).success(resp => {
                     if (resp.code === 200) {
                         if (resp.data.links)
                             this.links = resp.data.links
@@ -56,28 +60,42 @@ Tea.context(function () {
         }
     }
     this.search = function () {
-        if (this.nShowState == 2) {
-            this.$get(".traffic").params({
-                NodeId: this.nodeId,
-                Address: this.address,
-                Level: this.level
-            }).success(resp => {
-                if (resp.code === 200) {
-                    if (resp.data.traffics)
-                        this.traffics = resp.data.traffics
-                    else
-                        this.traffics = []
-                    this.level = resp.data.level
-                }
-            })
+        if (this.nShowState == 1) {
+            window.location.href = "/ddos/logs?NodeId=" + this.nodeId + "&Level=" + this.level
         } else if (this.nShowState == 3) {
-            this.$get(".link").params({NodeId: this.nodeId, Address: this.address, Level: this.level}).success(resp => {
+            this.$get(".link").params({NodeId: this.nodeId , Level: this.level}).success(resp => {
                 if (resp.code === 200) {
                     if (resp.data.links)
                         this.links = resp.data.links
                     else
                         this.links = []
                     this.level = resp.data.level
+                }
+            })
+        } else if (this.nShowState == 2) {
+            let start = document.getElementById("day-from-picker").value
+            let end = document.getElementById("day-to-picker").value
+            console.log("=============",start)
+            console.log("=============",end)
+            this.$get(".attacks").params({
+                NodeId: this.nodeId,
+                startTime: start,
+                endTime: end,
+                attackType: this.attackType,
+                status: this.status,
+                address: this.address,
+            }).success(resp => {
+                if (resp.code === 200) {
+                    if (resp.data.attacks)
+                        this.attacks = resp.data.attacks
+                    else
+                        this.attacks = []
+                    this.nodeId = resp.data.nodeId
+                    this.startTime = resp.data.startTime
+                    this.endTime = resp.data.endTime
+                    this.address = resp.data.address
+                    this.attackType = resp.data.attackType
+                    this.status = resp.data.status
                 }
             })
         }

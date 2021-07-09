@@ -39,7 +39,7 @@ Tea.context(function () {
     };
 
     this.onGoBack = function () {
-        window.location = "/hids/risk/weak";
+        window.location.href = "/hids/risk/weak";
     };
 
     this.parseServerLocalIp = function (ip){

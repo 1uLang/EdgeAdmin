@@ -51,7 +51,9 @@ Tea.context(function () {
                     .params({
                         TargetIds: target_ids
                     }).success(function () {
-                      window.location = "/webscan/scans"
+                    that.$delay(function () {   //延迟 500毫秒跳转
+                        window.location = "/webscan/scans"
+                    }, 500)
                 })
             })
         }

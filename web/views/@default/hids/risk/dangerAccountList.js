@@ -49,7 +49,7 @@ Tea.context(function () {
     };
 
     this.onGoBack = function () {
-        window.location = "/hids/risk/dangerAccount";
+        window.location.href = "/hids/risk/dangerAccount";
     };
 
     this.onDetail = function (item) {

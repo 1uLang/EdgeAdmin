@@ -8,7 +8,7 @@ Tea.context(function () {
     this.bShowSelectBox = false
 
     this.onGoBack = function () {
-        window.location = "/hids/risk";
+        window.location.href = "/hids/risk";
     }
 
     this.$delay(function () {
@@ -23,7 +23,7 @@ Tea.context(function () {
         return ips.slice(-1)[0]
     }
     this.onOpenDetail = function (item) {
-        window.location = "/hids/risk/systemRiskList?ip=" + item.serverIp +  '&macCode=' +item.macCode
+        window.location.href = "/hids/risk/systemRiskList?ip=" + item.serverIp +  '&macCode=' +item.macCode
     }
     this.dangerData = [
         {id: 1, value: "低危"},

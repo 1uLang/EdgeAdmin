@@ -115,7 +115,7 @@ Tea.context(function () {
         if (this.Items.length > 0) {
             url += "&examineItems=" + this.Items.toString()
         }
-        window.location = url
+        window.location.href= url
 
     }
 
@@ -215,7 +215,7 @@ Tea.context(function () {
     }
 
     this.onOpenDetail = function (item) {
-        window.location = "/hids/examine/detail?macCode="+item.macCode
+        window.location.href = "/hids/examine/detail?macCode="+item.macCode
     }
 
     this.onOpenCheck = function (item) {

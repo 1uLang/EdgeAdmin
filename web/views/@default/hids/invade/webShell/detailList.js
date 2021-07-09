@@ -12,7 +12,7 @@ Tea.context(function () {
         return ips.slice(-1)[0]
     }
     this.onGoBack = function () {
-        window.location = "/hids/invade/webshell"
+        window.location.href = "/hids/invade/webshell"
     };
     this.onDetail = function (item) {
         teaweb.popup(Tea.url(".detail?macCode=" + this.macCode +

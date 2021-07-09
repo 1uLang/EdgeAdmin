@@ -20,6 +20,8 @@ Tea.context(function () {
 
     this.bShowDetail = false
 
+    this.showDetailItem = null
+
     this.onCloseDetail = function () {
         this.bShowDetail = false
     };
@@ -58,6 +60,9 @@ Tea.context(function () {
     }
 
     this.checkScans = function () {
+        if (this.nShowState !== 1)
+            return false
+
         for (item of this.scans) {
             if (item.current_session.status === "processing" ||
                 item.current_session.status === "queued" ||
@@ -93,7 +98,7 @@ Tea.context(function () {
                         Ids: scan_ids,
                         TarIds: tarId,
                     }).success(function () {
-                    window.location = "/webscan/reports"
+                    window.location.href = "/webscan/reports"
                 })
             })
         }
@@ -234,13 +239,20 @@ Tea.context(function () {
     };
 
     this.onChangeState = function (state) {
-        this.nShowState = state;
         if (state === 3) { //漏洞详情
+            this.nShowState = 3;
+            this.severity = ""
             this.vulnerabilities = this.scans_vulns
+        }else if(state === 2){
+            if(this.showDetailItem)
+                this.onShowDetail(this.showDetailItem)
+        }else{
+            window.location.reload()
         }
     }
 
     this.onShowDetail = function (item) {
+        this.showDetailItem = item
         this.scanId = item.scan_id
         this.scanSessionId = item.current_session.scan_session_id
         //获取漏洞详情报表
@@ -267,12 +279,13 @@ Tea.context(function () {
                 this.statistics.duration = resp.data.statistics.scanning_app.wvs.main.duration
                 this.statistics.progress = resp.data.statistics.scanning_app.wvs.main.progress
                 this.statistics.messages = resp.data.statistics.scanning_app.wvs.main.messages
-                this.onChangeState(2)
+                this.nShowState = 2
             }
         }).done(function () {
             if (this.statistics.progress != 100) {
                 this.$delay(function () {
-                    this.onShowDetail(item)
+                    if(this.nShowState === 2)
+                        this.onShowDetail(item)
                 }, 5000)
             }
         })
@@ -318,9 +331,12 @@ Tea.context(function () {
         return resultStatus;
     };
     this.onChangeTimeFormat2 = function (time) {
-        let m = parseInt(time / 60)
-        let s = time % 60
-        return m + 'm' + s + 's'
+        if (time) {
+            let m = parseInt(time / 60)
+            let s = time % 60
+            return m + 'm' + s + 's'
+        }
+        return '0s'
     };
 
     this.curIndex = -1
