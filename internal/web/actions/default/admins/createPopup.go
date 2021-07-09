@@ -121,16 +121,26 @@ func (this *CreatePopupAction) RunPost(params struct {
 	defer this.CreateLogInfo("创建系统用户 %d", createResp.AdminId)
 
 	//判断是否拥有了主机防护功能  有 则对应创建该用户
-	err = hids.InitAPIServer()
-	if err != nil {
-		this.ErrorPage(fmt.Errorf("主机防护组件初始化失败：%v",err))
-		return
+	var hasHids bool
+	for _,code := range params.ModuleCodes {
+		if code == configloaders.AdminModuleCodeHids{
+			hasHids = true
+			break
+		}
 	}
-	_,err = hids_user_server.Add(&hids_user_model.AddReq{UserName: params.Username,Password: "dengbao-"+params.Username,Role: 3})
-	if err != nil {
-		this.ErrorPage(fmt.Errorf("主机防护组件同步信息失败：%v",err))
-		return
+	if hasHids {
+		err = hids.InitAPIServer()
+		if err != nil {
+			this.ErrorPage(fmt.Errorf("主机防护组件初始化失败：%v",err))
+			return
+		}
+		_,err = hids_user_server.Add(&hids_user_model.AddReq{UserName: params.Username,Password: "dengbao-"+params.Username,Role: 3})
+		if err != nil {
+			this.ErrorPage(fmt.Errorf("主机防护组件同步信息失败：%v",err))
+			return
+		}
 	}
+
 	// 通知更改
 	err = configloaders.NotifyAdminModuleMappingChange()
 	if err != nil {
