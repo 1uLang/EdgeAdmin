@@ -85,7 +85,7 @@ func (this *IndexAction) RunGet(params struct {
 			return
 		}
 		list.ServerExamineResultInfoList[k]["os"] = os
-		if req.State  != -1{
+		if req.State != -1 {
 			list.ServerExamineResultInfoList[k]["state"] = req.State
 		}
 
@@ -156,7 +156,8 @@ func (this *IndexAction) RunPost(params struct {
 			return
 		}
 		list.ServerExamineResultInfoList[k]["os"] = os
-		if req.State  != -1{
+
+		if req.State != -1 {
 			list.ServerExamineResultInfoList[k]["state"] = req.State
 		}
 

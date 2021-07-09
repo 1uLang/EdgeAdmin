@@ -51,11 +51,11 @@ Tea.context(function () {
     }
 
     this.onChangeCheckState = function (state) {
-        window.location = "/hids/baseline?State="+state+'&ResultState='+this.ResultState
+        window.location.href = "/hids/baseline?State="+state+'&ResultState='+this.ResultState
      }
 
     this.onChangeResultState = function(state){
-        window.location = "/hids/baseline?State="+this.State+'&ResultState='+state
+        window.location.href = "/hids/baseline?State="+this.State+'&ResultState='+state
     }
     this.parseServerLocalIp = function (ip){
         let ips = ip.split(";")
@@ -147,7 +147,7 @@ Tea.context(function () {
 
     this.onOpenDetail = function (item) {
         this.serverIp = item.serverIp
-        window.location = "/hids/baseline/detail?macCode="+item.macCode+'&pageSize='+item.totalItemCount+'&time='+item.overTime+'&checkCount='+item.riskItemCount
+        window.location.href = "/hids/baseline/detail?macCode="+item.macCode+'&pageSize='+item.totalItemCount+'&time='+item.overTime+'&checkCount='+item.riskItemCount
     }
 
     //添加/删除元素

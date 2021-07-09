@@ -8,7 +8,7 @@ Tea.context(function () {
     };
 
     this.onGoBack = function () {
-        window.location = "/hids/invade/abnormalProcess"
+        window.location.href = "/hids/invade/abnormalProcess"
     };
     this.onDetail = function (item) {
         teaweb.popup(Tea.url(".detail?macCode=" + this.macCode +

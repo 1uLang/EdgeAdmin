@@ -2,7 +2,7 @@ Tea.context(function () {
     this.curIndex = -1
 
     this.onGoBack = function () {
-        window.location = "/hids/risk";
+        window.location.href = "/hids/risk";
     }
 
     this.$delay(function () {
@@ -16,7 +16,7 @@ Tea.context(function () {
         return item.lowRiskCount + item.middleRiskCount + item.highRiskCount + item.criticalCount
     }
     this.onOpenDetail = function (item) {
-        window.location = "/hids/risk/dangerAccountList?ip=" + item.serverIp + '&macCode=' + item.macCode +
+        window.location.href = "/hids/risk/dangerAccountList?ip=" + item.serverIp + '&macCode=' + item.macCode +
             "&os=" + item.os.osType + "&lastUpdateTime=" + item.os.lastUpdateTime
     }
     this.parseServerLocalIp = function (ip) {

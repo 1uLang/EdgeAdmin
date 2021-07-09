@@ -2,10 +2,10 @@ Tea.context(function () {
     this.curIndex = -1
 
     this.onGoBack = function () {
-        window.location = "/hids/invade"
+        window.location.href = "/hids/invade"
     }
     this.onOpenDetail = function (item) {
-        window.location = "/hids/invade/abnormalProcess/detailList?macCode="+item.macCode+"&ip="+item.serverIp
+        window.location.href = "/hids/invade/abnormalProcess/detailList?macCode="+item.macCode+"&ip="+item.serverIp
     }
     this.enters = function (index) {
         // this.curIndex = index;

@@ -71,7 +71,7 @@ Tea.context(function () {
     };
 
     this.onGoBack = function () {
-        window.location = "/hids/risk/systemRisk";
+        window.location.href = "/hids/risk/systemRisk";
     };
 
     this.onDetail = function (item) {

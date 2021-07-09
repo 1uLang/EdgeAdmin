@@ -15,16 +15,16 @@ Tea.context(function () {
     this.onOpenDetail = function(type){
         switch(type){
             case 1:
-                window.location = "/hids/risk/systemRisk"
+                window.location.href = "/hids/risk/systemRisk"
                 break
             case 2:
-                window.location = "/hids/risk/weak"
+                window.location.href = "/hids/risk/weak"
                 break
             case 3:
-                window.location = "/hids/risk/dangerAccount"
+                window.location.href = "/hids/risk/dangerAccount"
                 break
             case 4:
-                window.location = "/hids/risk/configDefect"
+                window.location.href = "/hids/risk/configDefect"
                 break
             default:
                 break

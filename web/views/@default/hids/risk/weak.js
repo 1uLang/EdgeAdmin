@@ -2,7 +2,7 @@ Tea.context(function () {
     this.curIndex = -1
 
     this.onGoBack = function () {
-        window.location = "/hids/risk";
+        window.location.href = "/hids/risk";
     }
 
     this.$delay(function () {
@@ -21,7 +21,7 @@ Tea.context(function () {
     }
     this.onOpenDetail = function (item) {
 
-        window.location = "/hids/risk/weakList?ip=" + item.serverIp + '&macCode=' + item.macCode +
+        window.location.href = "/hids/risk/weakList?ip=" + item.serverIp + '&macCode=' + item.macCode +
             "&os=" + item.os.osType + "&lastUpdateTime=" + item.os.lastUpdateTime
     }
 
