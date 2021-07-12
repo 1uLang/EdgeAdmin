@@ -23,7 +23,7 @@
         <tr>
             <td>组件地址 *</td>
             <td>
-                <input type="text" name="addr" maxlength="100" v-model="node.addr"/>
+                <input type="password" name="addr" maxlength="100" v-model="node.addr"/>
                 <!--                <p class="comment">组件访问域名或地址（https[http]://ip:port）。</p>-->
             </td>
         </tr>
@@ -54,16 +54,16 @@
         <!--  DDoS防护      -->
         <tbody v-if="showAPIAUTHVisible == 1 || (showAPIAUTHVisible == -1 && node.type == 1)">
         <tr>
-            <td>username *</td>
+            <td>username </td>
             <td>
-                <input type="text" name="key" maxlength="100" v-model="node.key"/>
+                <input type="password" name="key" maxlength="100" v-model="node.key"/>
                 <p class="comment">登陆金盾管理中心所使用的账号</p>
             </td>
         </tr>
         <tr>
-            <td>password *</td>
+            <td>password </td>
             <td>
-                <input type="text" name="secret" maxlength="100" v-model="node.secret"/>
+                <input type="password" name="secret" maxlength="100" v-model="node.secret"/>
                 <p class="comment">登陆金盾管理中心所使用的密码</p>
             </td>
         </tr>
@@ -72,16 +72,16 @@
         <!--  云防火墙      -->
         <tbody v-if="showAPIAUTHVisible == 2 || (showAPIAUTHVisible == -1 && node.type == 2)">
         <tr>
-            <td>username *</td>
+            <td>username </td>
             <td>
-                <input type="text" name="key" maxlength="100" v-model="node.key"/>
+                <input type="password" name="key" maxlength="100" v-model="node.key"/>
                 <p class="comment">登录云防火墙所使用的账号</p>
             </td>
         </tr>
         <tr>
-            <td>password *</td>
+            <td>password </td>
             <td>
-                <input type="text" name="secret" maxlength="100" v-model="node.secret"/>
+                <input type="password" name="secret" maxlength="100" v-model="node.secret"/>
                 <p class="comment">登录云防火墙所使用的密码</p>
             </td>
         </tr>
@@ -89,16 +89,16 @@
         <!--  主机防护      -->
         <tbody v-if="showAPIAUTHVisible == 5 || (showAPIAUTHVisible == -1 &&node.type == 5)">
         <tr>
-            <td>appid *</td>
+            <td>appid </td>
             <td>
-                <input type="text" name="key" maxlength="100" v-model="node.key"/>
+                <input type="password" name="key" maxlength="100" v-model="node.key"/>
                 <p class="comment">登录主机防护管理后台-API管理-新增</p>
             </td>
         </tr>
         <tr>
-            <td>secret *</td>
+            <td>secret </td>
             <td>
-                <input type="text" name="secret" maxlength="100" v-model="node.secret"/>
+                <input type="password" name="secret" maxlength="100" v-model="node.secret"/>
                 <p class="comment">登录主机防护管理后台-API管理-新增</p>
             </td>
         </tr>
@@ -106,9 +106,9 @@
         <!--  WEB漏洞扫描      -->
         <tbody v-if="showAPIAUTHVisible == 4 || (showAPIAUTHVisible == -1 &&node.type == 4)">
         <tr>
-            <td>XAuth *</td>
+            <td>XAuth </td>
             <td>
-                <input type="text" name="key" maxlength="100" v-model="node.key"/>
+                <input type="password" name="key" maxlength="100" v-model="node.key"/>
                 <p class="comment">登录Web漏洞扫描系统-右上角用户名-配置文件-API密钥</p>
             </td>
         </tr>
@@ -116,16 +116,16 @@
         <!--  主机漏洞扫描      -->
         <tbody v-if="showAPIAUTHVisible == 3 || (showAPIAUTHVisible == -1 &&node.type == 3)">
         <tr>
-            <td>accessKey *</td>
+            <td>accessKey </td>
             <td>
-                <input type="text" name="key" maxlength="100" v-model="node.key"/>
+                <input type="password" name="key" maxlength="100" v-model="node.key"/>
                 <p class="comment">登录主机扫描组件-右上角用户名-我的账户-API密钥-产生</p>
             </td>
         </tr>
         <tr>
-            <td>secretKey *</td>
+            <td>secretKey </td>
             <td>
-                <input type="text" name="secret" maxlength="100" v-model="node.secret"/>
+                <input type="password" name="secret" maxlength="100" v-model="node.secret"/>
                 <p class="comment">登录主机扫描组件-右上角用户名-我的账户-API密钥-产生</p>
             </td>
         </tr>

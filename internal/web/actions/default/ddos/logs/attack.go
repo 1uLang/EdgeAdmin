@@ -67,12 +67,12 @@ func (this *AttacksAction) RunGet(params struct {
 		req.EndTime = eT
 	}
 
-	fmt.Println(req.StartTime,req.EndTime)
 	list, err := logs_server.GetAttackLogList(req)
 	if err != nil {
 		this.ErrorPage(fmt.Errorf("获取统计日志列表失败：%v", err))
 		return
 	}
+
 	this.Data["attacks"] = list.Report
 	this.Data["ddos"] = ddos
 	this.Data["nodeId"] = params.NodeId

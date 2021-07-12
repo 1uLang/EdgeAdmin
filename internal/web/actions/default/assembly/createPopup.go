@@ -103,7 +103,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 	}
 	id, err := subassemblynode.Add(req)
 	if err != nil {
-		this.ErrorPage(err)
+		this.Fail(err.Error())
 		return
 	}
 	defer this.CreateLogInfo("创建节点 %d", id)

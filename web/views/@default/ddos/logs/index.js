@@ -2,7 +2,7 @@ Tea.context(function () {
 
     this.links = []
     this.attacks = []
-    this.level = 1
+
     this.address = ''
     this.nShowState = 1
     this.endTime = ""

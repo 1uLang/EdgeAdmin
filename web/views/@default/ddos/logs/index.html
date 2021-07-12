@@ -17,7 +17,7 @@
         <div class="ui field">
             <div class="ui field">
                 <select class="ui dropdown auto-width" @change="showHost" v-model="nodeId" name="nodeId">
-                    <option :value="item.id" v-for="item in ddos">{{item.name}}-{{item.addr}}</option>
+                    <option :value="item.id" v-for="item in ddos">{{item.name}}</option>
                 </select>
             </div>
         </div>
@@ -203,3 +203,4 @@
         </div>
     </div>
 </div>
+<div class="page" v-html="page"></div>

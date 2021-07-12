@@ -17,15 +17,17 @@ func (this *LinkAction) RunGet(params struct {
 	Level   int
 }) {
 	defer this.Success()
-
+	if params.Level == 0 {
+		params.Level = 1
+	}
 	//ddos节点
 	ddos, _, err := host_status_server.GetDdosNodeList()
 	if err != nil {
-		this.Error(err.Error(),400)
+		this.Error(err.Error(), 400)
 		return
 	}
 	if len(ddos) == 0 {
-		this.Error("未配置DDoS防火墙节点",400)
+		this.Error("未配置DDoS防火墙节点", 400)
 		return
 	}
 	if params.NodeId == 0 {
@@ -38,9 +40,10 @@ func (this *LinkAction) RunGet(params struct {
 	}
 	list, err := logs_server.GetLinkLogList(req)
 	if err != nil {
-		this.Error(fmt.Sprintf("获取流量分析列表失败：%v",err),400)
+		this.Error(fmt.Sprintf("获取流量分析列表失败：%v", err), 400)
 		return
 	}
+
 	this.Data["links"] = list.Report
 
 	this.Data["ddos"] = ddos
