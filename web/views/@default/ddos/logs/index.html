@@ -107,10 +107,10 @@
                     <option value="4">查看每月流量</option>
                 </select>
             </div>
-<!--            <div class="ui field">主机地址：</div>-->
-<!--            <div class="ui field">-->
-<!--                <input type="text" name="address" style="width:10em" v-model="address" />-->
-<!--            </div>-->
+            <!--            <div class="ui field">主机地址：</div>-->
+            <!--            <div class="ui field">-->
+            <!--                <input type="text" name="address" style="width:10em" v-model="address" />-->
+            <!--            </div>-->
             <div class="ui field">
                 <button type="button" class="ui button" @click="search">查询</button>
             </div>
@@ -165,6 +165,7 @@
                 </tbody>
             </table>
         </div>
+
         <div v-else>
             <table id="tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
                 <thead>
@@ -203,4 +204,4 @@
         </div>
     </div>
 </div>
-<div class="page" v-html="page"></div>
+<div class="page" v-html="page" v-if="nShowState===1"></div>
