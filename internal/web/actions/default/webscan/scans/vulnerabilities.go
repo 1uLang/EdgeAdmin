@@ -1,10 +1,10 @@
 package scans
 
 import (
-	scans_server "github.com/1uLang/zhiannet-api/awvs/server/scans"
 	"github.com/1uLang/zhiannet-api/awvs/model/scans"
+	scans_server "github.com/1uLang/zhiannet-api/awvs/server/scans"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/webscan"
 	"github.com/iwind/TeaGo/actions"
 )
 
@@ -17,7 +17,7 @@ func (this *VulnerabilitiesAction) RunGet(params struct {
 	ScanSessionId string
 	VulId         string
 
-	Must          *actions.Must
+	Must *actions.Must
 }) {
 	params.Must.
 		Field("vulId", params.VulId).
@@ -29,7 +29,7 @@ func (this *VulnerabilitiesAction) RunGet(params struct {
 		Field("scanSessionId", params.ScanSessionId).
 		Require("请输入扫描会话id")
 
-	if err := hids.InitAPIServer(); err != nil {
+	if err := webscan.InitAPIServer(); err != nil {
 		this.ErrorPage(err)
 		return
 	}

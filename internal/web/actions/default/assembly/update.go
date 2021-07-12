@@ -41,8 +41,8 @@ func (this *UpdateAction) RunGet(params struct {
 		"idc":       info.Idc,
 		//"Status": info.Status,
 		"State":  info.State,
-		"key":    info.Key,
-		"secret": info.Secret,
+		"key":    "",
+		"secret": "",
 	}
 
 	this.Show()
@@ -88,42 +88,6 @@ func (this *UpdateAction) RunPost(params struct {
 	if !isExist {
 		this.Fail("请选择数据中心")
 	}
-	
-	switch params.AssemblyType {
-	case 1: //ddos防火墙
-		params.Must.
-			Field("key", params.Key).
-			Require("请输入username")
-		params.Must.
-			Field("secret", params.Secret).
-			Require("请输入password")
-	case 2: //云防火墙
-		params.Must.
-			Field("key", params.Key).
-			Require("请输入key")
-		params.Must.
-			Field("secret", params.Secret).
-			Require("请输入secret")
-	case 3: //主机漏洞扫描
-		params.Must.
-			Field("key", params.Key).
-			Require("请输入accessKey")
-		params.Must.
-			Field("secret", params.Secret).
-			Require("请输入secretKey")
-	case 4: //web漏扫
-		params.Must.
-			Field("key", params.Key).
-			Require("请输入XAuth")
-	case 5: //主机防护
-		params.Must.
-			Field("key", params.Key).
-			Require("请输入appid")
-		params.Must.
-			Field("secret", params.Secret).
-			Require("请输入secret")
-
-	}
 
 	_, err := subassemblynode_server.Edit(&subassemblynode.Subassemblynode{
 		Id:     params.Id,
@@ -138,7 +102,7 @@ func (this *UpdateAction) RunPost(params struct {
 		IsSsl:  params.Argeement,
 	})
 	if err != nil {
-		this.ErrorPage(err)
+		this.Fail(err.Error())
 		return
 	}
 
