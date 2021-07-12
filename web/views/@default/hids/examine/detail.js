@@ -130,7 +130,7 @@ Tea.context(function () {
 			tooltip: {
 				trigger: "item",
 			},
-            color:['#2698fb','#26c4c3'],
+            color:['#FD0112','#FF8F40','#00A2EC','#78deff'],
 			series: [
                 {
                     type: 'pie',

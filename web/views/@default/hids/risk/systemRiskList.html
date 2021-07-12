@@ -56,7 +56,7 @@
                         <div style="display: flex;justify-content: space-around;">
                             <div class="edit_btn" @click="onDetail(item)">详情</div>
                             <div class="edit_btn" @click="onIgnore(item)" v-if="item.status === 0" >忽略</div>
-                            <div class="edit_btn" @click="onFix(item)"  v-if="item.status !== 4">修复</div>
+                            <!-- <div class="edit_btn" @click="onFix(item)"  v-if="item.status !== 4">修复</div> -->
                         </div>
                     </td>
                 </tr>
