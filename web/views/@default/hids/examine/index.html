@@ -1,7 +1,7 @@
 <!-- <a href="/hids/examine/detail" class="item">详情</a> -->
 <!-- 主机体检 -->
 {$layout}
-{$template "/datepicker"}
+<!-- {$template "/datepicker"} -->
 <script src="/js/timeFactory.js"></script>
 
 <div class="card-div" style="margin-top: 20px;height: 90px;">
@@ -23,13 +23,13 @@
                 </div>
             </div> -->
             <div class="ui fields inline" style="width: 50%;">
-                <div class="title-style">体检时间</div>
+                <div class="title-style">完成时间</div>
                 <div class="ui field">
-                   <input type="text" name="dayFrom" placeholder="开始日期" v-model="dayFrom" value="" style="width:8em;height: 28px;font-size: 13px;" id="day-from-picker"/>
+                    <input type="datetime-local" step="01" style="height: 28px;font-size: 13px;" id="day-from-picker" @change="onTimeChange"/>
                </div>
                <div style="margin-right: 10px;"></div>
                <div class="ui field">
-                   <input type="text" name="dayTo" placeholder="结束日期" v-model="dayTo" value="" style="width:8em;height: 28px;font-size: 13px;" id="day-to-picker"/>
+                    <input type="datetime-local" step="01" style="height: 28px;font-size: 13px;" id="day-to-picker" @change="onTimeChange"/>
                </div>
             </div>
 

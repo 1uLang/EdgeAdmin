@@ -14,9 +14,6 @@ Tea.context(function () {
     this.bTimeOutTip = false
     this.bShowScanPath = false
 
-    this.dayFrom = ""
-    this.dayTo = ""
-
     this.sTopSelectItem = [
         {id: "01", value: "系统漏洞"},
         {id: "02", value: "弱口令"},
@@ -36,8 +33,8 @@ Tea.context(function () {
     this.$delay(function () {
         // this.onReloadProgressData()
 
-        teaweb.datepicker("day-from-picker")
-        teaweb.datepicker("day-to-picker")
+        // teaweb.datepicker("day-from-picker")
+        // teaweb.datepicker("day-to-picker")
 
         if (this.errorMessage !== "" && this.errorMessage !== undefined) {
             teaweb.warn(this.errorMessage, function () {
@@ -428,6 +425,15 @@ Tea.context(function () {
             return tempValue + "%"
         }
         return "0%"
+    }
+    
+    //选择时间之后的回调
+    this.onTimeChange = function () {
+        let startTime = document.getElementById("day-from-picker").value
+        startTime = startTime.replace("T", " ");
+        let endTime = document.getElementById("day-to-picker").value
+        endTime = endTime.replace("T", " ");
+        //todo req
     }
 
 

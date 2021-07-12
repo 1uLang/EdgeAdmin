@@ -19,12 +19,12 @@
             <div class="ui fields inline" style="width: 50%;">
                 <div class="title-style">检查时间</div>
                 <div class="ui field">
-                   <input type="text" name="dayFrom" placeholder="开始日期" v-model="dayFrom" value="" style="width:8em;height: 28px;font-size: 13px;" id="day-from-picker" @change="onTimeChange"/>
-               </div>
-               <div style="margin-right: 10px;"></div>
-               <div class="ui field">
-                   <input type="text" name="dayTo" placeholder="结束日期" v-model="dayTo" value="" style="width:8em;height: 28px;font-size: 13px;" id="day-to-picker" @change="onTimeChange"/>
-               </div>
+                    <input type="datetime-local" step="01" style="height: 28px;font-size: 13px;" id="day-from-picker" @change="onTimeChange"/>
+                </div>
+                <div style="margin-right: 10px;"></div>
+                <div class="ui field">
+                    <input type="datetime-local" step="01" style="height: 28px;font-size: 13px;" id="day-to-picker" @change="onTimeChange"/>
+                 </div>
             </div>
             <div style="display: flex;flex-direction: row;width: 50%;">
                 <div style="display: inline-flex;align-items: center;">

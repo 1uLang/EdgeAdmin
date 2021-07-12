@@ -9,6 +9,7 @@ Tea.context(function () {
 	this.isSubmitting = false
 
 	this.$delay(function () {
+		sessionStorage.setItem("leftSelectCode","dashboard")
 		this.$find("form input[name='username']").focus()
 		this.changePassword()
 	});

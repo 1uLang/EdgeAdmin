@@ -1,8 +1,6 @@
 Tea.context(function () {
     this.curIndex = -1
     this.sSelectValue = 0
-    this.dayFrom = ""
-    this.dayTo = ""
 
     this.$delay(function () {
         teaweb.datepicker("day-from-picker")
@@ -161,8 +159,13 @@ Tea.context(function () {
         return "/images/select_box.png";
       }
 
-      this.onTimeChange = function () {
-      
-      }
+      //选择时间之后的回调
+    this.onTimeChange = function () {
+        let startTime = document.getElementById("day-from-picker").value
+        startTime = startTime.replace("T", " ");
+        let endTime = document.getElementById("day-to-picker").value
+        endTime = endTime.replace("T", " ");
+        //todo req
+    }
 });
   
