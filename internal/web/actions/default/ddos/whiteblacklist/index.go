@@ -16,10 +16,8 @@ func (this *IndexAction) Init() {
 }
 
 func (this *IndexAction) RunGet(params struct {
-	Address  string
-	NodeId   uint64
-	PageNum  int
-	PageSize int
+	Address string
+	NodeId  uint64
 }) {
 	defer this.Show()
 	this.Data["list"] = nil
@@ -45,13 +43,22 @@ func (this *IndexAction) RunGet(params struct {
 		NodeId: params.NodeId,
 		Addr:   params.Address,
 	}
+
 	this.Data["nodeId"] = req.NodeId
 	list, err := black_white_list_server.GetBWList(req)
 	if err != nil {
 		this.Data["errorMessage"] = fmt.Sprintf("获取DDoS防火墙黑白名单列表失败：%v", err.Error())
 		return
 	}
-	this.Data["list"] = list.Bwlist
+	page := this.NewPage(int64(len(list.Bwlist)))
+	this.Data["page"] = page.AsHTML()
+
+	offset := page.Offset
+	end := offset + page.Size
+	if end > page.Total {
+		end = page.Total
+	}
+	this.Data["list"] = list.Bwlist[offset:end]
 	this.Data["Address"] = list.Address
 
 }

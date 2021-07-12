@@ -8,7 +8,6 @@ import (
 )
 
 type IndexAction struct {
-
 	actionutils.ParentAction
 }
 
@@ -18,6 +17,10 @@ func (this *IndexAction) RunGet(params struct {
 	Level   int
 }) {
 	defer this.Show()
+
+	if params.Level == 0 {
+		params.Level = 1
+	}
 	//ddos节点
 	ddos, _, err := host_status_server.GetDdosNodeList()
 	if err != nil {
@@ -43,7 +46,16 @@ func (this *IndexAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	this.Data["traffics"] = list.Report
+
+	page := this.NewPage(int64(len(list.Report)))
+	this.Data["page"] = page.AsHTML()
+
+	offset := page.Offset
+	end := offset + page.Size
+	if end > page.Total {
+		end = page.Total
+	}
+	this.Data["traffics"] = list.Report[offset:end]
 
 	this.Data["ddos"] = ddos
 
