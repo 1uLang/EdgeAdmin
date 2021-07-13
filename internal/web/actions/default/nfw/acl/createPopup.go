@@ -66,7 +66,6 @@ func (this *CreatePopupAction) RunPost(params struct {
 		ID:         params.Id,
 	}
 	tips, err := acl.SaveAcl(data)
-	fmt.Println("err==", err, "tips==", tips)
 	if err != nil {
 		this.ErrorPage(err)
 	}

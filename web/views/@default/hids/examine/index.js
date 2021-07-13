@@ -1,7 +1,6 @@
 Tea.context(function () {
     this.progressListData = []//{id:1,curPer:1,disabled:1}
 
-    this.Items = this.examineItems !== ""? this.examineItems.split(","): []
     this.curIndex = -1
 
     this.bShowCheckDetail = false
@@ -30,11 +29,11 @@ Tea.context(function () {
         {id: "16", value: "异常进程"},
         {id: "17", value: "日志异常删除"},
     ]
- 
+
     this.$delay(function () {
 
         this.onReloadProgressData()
-
+        this.initTime()
         if (this.errorMessage !== "" && this.errorMessage !== undefined) {
             teaweb.warn(this.errorMessage, function () {
             })
@@ -48,6 +47,13 @@ Tea.context(function () {
         })
     })
 
+    this.initTime = function (){
+        //判断体检完成时间初始值
+        if(this.startTime && this.endTime != ""){
+            document.getElementById("day-from-picker").value = this.startTime
+            document.getElementById("day-to-picker").value = this.endTime
+        }
+    }
     this.onResetProgressData = function () {
         if(this.datas && this.datas.length > 0){
             if(this.progressListData && this.progressListData.length > 0){
@@ -85,11 +91,11 @@ Tea.context(function () {
                 if (resp.code === 200) {
                     this.datas = resp.data.datas
                     this.state = resp.data.state
-                    this.Type = resp.data.Type
                     this.score = resp.data.score
                     this.examineItems = resp.data.examineItems
                     this.startTime = resp.data.startTime
                     this.endTime = resp.data.endTime
+                    this.initTime()
                 }
             })
         }
@@ -135,19 +141,19 @@ Tea.context(function () {
         this.refreshPage()
     }
 
-    this.onChangeResultState = function (state) {
-        if (this.Type != state) {
-            this.Type = state
-        }
-        this.refreshPage()
-    }
     this.refreshPage = function () {
-        let url = "/hids/examine?state=" + this.state + "&score=" + this.score + "&Type=" + this.Type
-        if (this.Items.length > 0) {
-            url += "&examineItems=" + this.Items.toString()
-        }
-        window.location.href= url
+        if(this.startTime && this.startTime != ""){
+            let startTime = this.startTime
+            startTime = startTime.replace("T", " ");
+            startTime = startTime.replace("/", "-");
 
+            let endTime = this.endTime
+            endTime = endTime.replace("T", " ");
+            endTime = endTime.replace("/", "-");
+            window.location.href= "/hids/examine?state=" + this.state + "&score=" + this.score + '&startTime='+startTime+'&endTime='+endTime
+        }else{
+            window.location.href= "/hids/examine?state=" + this.state + "&score=" + this.score
+        }
     }
 
     this.parseServerLocalIp = function (ip) {
@@ -168,35 +174,6 @@ Tea.context(function () {
 
         return false;
     }
-    //添加/删除元素
-    this.onAddSelectValue = function (index) {
-        let bValue = false;
-        if (this.checkSelectValue) {
-            bValue = this.checkSelectValue(index, this.Items);
-        }
-        if (bValue) {
-            this.Items = this.Items.filter((itemIndex) => {
-                return itemIndex != index;
-            });
-        } else {
-            this.Items.push(index);
-        }
-
-        this.refreshPage()
-    }
-
-
-    this.getShowSelectImage = function (id) {
-        let bValue = false;
-        if (this.checkSelectValue) {
-            bValue = this.checkSelectValue(id, this.Items);
-        }
-        if (bValue) {
-            return "/images/select_select.png";
-        }
-        return "/images/select_box.png";
-    }
-
     this.onChangeTimeFormat = function (time) {
         var resultTime = "";
         if (time) {
@@ -431,8 +408,6 @@ Tea.context(function () {
 
         if(!this.getProgressItemInfo){return "0%"}
 
-        console.log(this.progressListData)
-
         if(curValue == 0 ){
             if(state && state==1){
                 let curData = this.getProgressItemInfo(id)
@@ -455,14 +430,18 @@ Tea.context(function () {
         }
         return "0%"
     }
-    
+
     //选择时间之后的回调
     this.onTimeChange = function () {
         let startTime = document.getElementById("day-from-picker").value
         startTime = startTime.replace("T", " ");
+        startTime = startTime.replace("/", "-");
         let endTime = document.getElementById("day-to-picker").value
         endTime = endTime.replace("T", " ");
+        endTime = endTime.replace("/", "-");
         //todo req
+        if(startTime && startTime != "" && endTime && endTime != "")
+            window.location.href= "/hids/examine?state=" + this.state + "&score=" + this.score + '&startTime='+startTime+'&endTime='+endTime
     }
 
 
@@ -506,7 +485,7 @@ Tea.context(function () {
     this.onSaveProgressData = function () {
         localStorage.setItem("examinProgressData", JSON.stringify(this.progressListData));
     }
-    
+
 
     //计时器
     this.onCreateUpdateTimeOut = function () {

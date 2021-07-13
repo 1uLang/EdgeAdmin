@@ -3,8 +3,8 @@ Tea.context(function () {
     this.sSelectValue = 0
 
     this.$delay(function () {
-        teaweb.datepicker("day-from-picker")
-        teaweb.datepicker("day-to-picker")
+
+        this.initTime()
 
         if (this.errorMessage !== "" && this.errorMessage !== undefined) {
             teaweb.warn(this.errorMessage, function () {
@@ -17,6 +17,13 @@ Tea.context(function () {
         })
     })
 
+    this.initTime = function () {
+        //判断体检完成时间初始值
+        if (this.startTime && this.startTime != "") {
+            document.getElementById("day-from-picker").value = this.startTime
+            document.getElementById("day-to-picker").value = this.endTime
+        }
+    }
     this.onCallBack = function () {
         if (this.checkScans()) {
             this.$post(".").success(resp => {
@@ -24,6 +31,9 @@ Tea.context(function () {
                     this.baselines = resp.data.baselines
                     this.State = resp.data.State
                     this.ResultState = resp.data.ResultState
+                    this.startTime = resp.data.startTime
+                    this.endTime = resp.data.endTime
+                    this.initTime()
                 }
             })
         }
@@ -49,20 +59,45 @@ Tea.context(function () {
     }
 
     this.onChangeCheckState = function (state) {
-        window.location.href = "/hids/baseline?State="+state+'&ResultState='+this.ResultState
-     }
+        window.location.href = "/hids/baseline?State=" + state + '&ResultState=' + this.ResultState
+        if (this.startTime && this.startTime != "") {
+            let startTime = this.startTime
+            startTime = startTime.replace("T", " ");
+            startTime = startTime.replace("/", "-");
 
-    this.onChangeResultState = function(state){
-        window.location.href = "/hids/baseline?State="+this.State+'&ResultState='+state
+            let endTime = this.endTime
+            endTime = endTime.replace("T", " ");
+            endTime = endTime.replace("/", "-");
+            window.location.href =
+                window.location.href = "/hids/baseline?State=" + state + '&ResultState=' + this.ResultState + '&startTime=' + startTime + '&endTime=' + endTime
+        } else {
+
+            window.location.href = "/hids/baseline?State=" + state + '&ResultState=' + this.ResultState
+        }
     }
-    this.parseServerLocalIp = function (ip){
+
+    this.onChangeResultState = function (state) {
+        if (this.startTime && this.startTime != "") {
+            let startTime = this.startTime
+            startTime = startTime.replace("T", " ");
+            startTime = startTime.replace("/", "-");
+
+            let endTime = this.endTime
+            endTime = endTime.replace("T", " ");
+            endTime = endTime.replace("/", "-");
+            window.location.href = "/hids/baseline?State=" + this.State + '&ResultState=' + state + '&startTime=' + startTime + '&endTime=' + endTime
+        } else {
+            window.location.href = "/hids/baseline?State=" + this.State + '&ResultState=' + state
+        }
+    }
+    this.parseServerLocalIp = function (ip) {
         let ips = ip.split(";")
         return ips.slice(-1)[0]
     }
 
     this.getStateName = function (status) {
 
-        switch(status){
+        switch (status) {
             case 0:
                 return "未检查"
             case 1:
@@ -74,78 +109,81 @@ Tea.context(function () {
             default:
                 return "未检查"
         }
-     }
+    }
 
-     this.enters = function (index) {
+    this.enters = function (index) {
         // this.curIndex = index;
-      }
-    
-      this.leaver = function (index) {
+    }
+
+    this.leaver = function (index) {
         this.curIndex = -1;
-      }
-    
-    this.getProgressPerStr = function (curValue,maxValue,state) { 
-        if(curValue == 0 ){
-            if(state==1){
+    }
+
+    this.getProgressPerStr = function (curValue, maxValue, state) {
+        if (curValue == 0) {
+            if (state == 1) {
                 return "1%"
-            }else if(state==0){
+            } else if (state == 0) {
                 return ""
             }
         }
 
-        if(curValue && maxValue && maxValue>0 && maxValue >= curValue){
+        if (curValue && maxValue && maxValue > 0 && maxValue >= curValue) {
             var tempValue = ((curValue / maxValue) * 100).toFixed(1)
-            if(tempValue>=100){
+            if (tempValue >= 100) {
                 return "已完成"
-            }else if(tempValue<1 && state && state==1){
+            } else if (tempValue < 1 && state && state == 1) {
                 return "1%"
             }
-            
+
             return tempValue + "%"
         }
         return "0%"
     }
 
     this.checkShowColor = function (curValue, maxValue) {
-        if(curValue && maxValue){
+        if (curValue && maxValue) {
             var tempValue = ((curValue / maxValue) * 100).toFixed(1)
             return tempValue >= 100
         }
         return false
     }
-    
 
-    this.getProgressPer = function (curValue,maxValue,state) { 
-        if(curValue == 0 ){
-            if(state && state==1){
+
+    this.getProgressPer = function (curValue, maxValue, state) {
+        if (curValue == 0) {
+            if (state && state == 1) {
                 return "1%"
             }
         }
 
-        if(curValue && maxValue && maxValue>0 && maxValue >= curValue){
+        if (curValue && maxValue && maxValue > 0 && maxValue >= curValue) {
             var tempValue = ((curValue / maxValue) * 100).toFixed(1)
-            if(tempValue<1 && state && state==1 ){
+            if (tempValue < 1 && state && state == 1) {
                 return "1%"
             }
             return tempValue + "%"
         }
         return "0%"
-     }
+    }
 
     //合规基线
-     this.onOpenCheck = function (item) {
+    this.onOpenCheck = function (item) {
 
-         let serverIp = item.serverIp
+        let serverIp = item.serverIp
 
         //打开合规基线弹窗
-         teaweb.popup(Tea.url(".template?macCode="+item.macCode+'&serverIp='+serverIp+"&os="+item.os.osType), {
-             height: "500px",
-         })
-      }
+        teaweb.popup(Tea.url(".template?macCode=" + item.macCode + '&serverIp=' + serverIp + "&os=" + item.os.osType), {
+            height: "500px",
+            onClose: function () {
+                teaweb.reload()
+            }
+        })
+    }
 
     this.onOpenDetail = function (item) {
         this.serverIp = item.serverIp
-        window.location.href = "/hids/baseline/detail?macCode="+item.macCode+'&pageSize='+item.totalItemCount+'&time='+item.overTime+'&checkCount='+item.riskItemCount
+        window.location.href = "/hids/baseline/detail?macCode=" + item.macCode + '&pageSize=' + item.totalItemCount + '&time=' + item.overTime + '&checkCount=' + item.riskItemCount
     }
 
     //添加/删除元素
@@ -154,18 +192,22 @@ Tea.context(function () {
     }
     this.getShowSelectImage = function (id) {
         if (this.sSelectValue == id) {
-          return "/images/select_select.png";
+            return "/images/select_select.png";
         }
         return "/images/select_box.png";
-      }
+    }
 
-      //选择时间之后的回调
+    //选择时间之后的回调
     this.onTimeChange = function () {
         let startTime = document.getElementById("day-from-picker").value
         startTime = startTime.replace("T", " ");
+        startTime = startTime.replace("/", "-");
         let endTime = document.getElementById("day-to-picker").value
         endTime = endTime.replace("T", " ");
+        endTime = endTime.replace("/", "-");
         //todo req
+        if (startTime && startTime != "" && endTime && endTime != "")
+            window.location.href = "/hids/baseline?State=" + this.State + '&ResultState=' + this.ResultState + '&startTime=' + startTime + '&endTime=' + endTime
     }
 });
   

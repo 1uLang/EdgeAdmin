@@ -178,7 +178,6 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"module": configloaders.AdminModuleCodeDdos,
 			"name":   "DDoS防护",
 			"icon":   "shield",
-			"url":    "/ddos/host",
 			"subItems": []maps.Map{
 				{
 					"name": "主机状态",
@@ -202,7 +201,6 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"module": configloaders.AdminModuleCodeNfw,
 			"name":   "云防火墙",
 			"icon":   "bars",
-			"url":    "/nfw/nat",
 			"subItems": []maps.Map{
 				{
 					"name": "NAT规则",
@@ -261,12 +259,10 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			},
 		},
 		{
-			"code":     "/hids/examine",
-			"module":   configloaders.AdminModuleCodeHids,
-			"name":     "主机防护",
-			"subtitle": "全局状态",
-			"icon":     "linux",
-			"url":      "/ddos/host",
+			"code":   "/hids/examine",
+			"module": configloaders.AdminModuleCodeHids,
+			"name":   "主机防护",
+			"icon":   "linux",
 			"subItems": []maps.Map{
 				{
 					"name": "主机体检",
@@ -300,7 +296,6 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"module": configloaders.AdminModuleCodeWebScan,
 			"name":   "漏洞扫描",
 			"icon":   "ioxhost",
-			"url":    "/webscan/targets",
 			"subItems": []maps.Map{
 				{
 					"name": "扫描目标",
