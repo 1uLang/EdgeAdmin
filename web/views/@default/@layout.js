@@ -41,6 +41,25 @@ Tea.context(function () {
 
     })
 
+    this.onChangeUrl = function (url,code) {
+        let tempUrl = url
+        if(tempUrl){
+            if(tempUrl.indexOf("nfw") != -1){
+                let curSelectNode = localStorage.getItem("nfwSelectNodeId");
+                if(curSelectNode){
+                    tempUrl = tempUrl+"?nodeId="+curSelectNode
+                }
+            }else if(tempUrl.indexOf("ddos") != -1){
+                let curSelectNode = localStorage.getItem("ddosSelectNodeId");
+                if(curSelectNode){
+                    tempUrl = tempUrl+"?nodeId="+curSelectNode
+                }
+            }
+        }
+
+        return tempUrl
+    }
+
     this.onSetLeftTouchCode = function (code) {
         if(this.curSelectCode!=code){
             this.curSelectCode = code

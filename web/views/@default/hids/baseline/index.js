@@ -1,20 +1,25 @@
 Tea.context(function () {
+    this.progressListData = []//{id:1,curPer:1,disabled:1}
+
     this.curIndex = -1
     this.sSelectValue = 0
 
     this.$delay(function () {
 
         this.initTime()
+        this.onReloadProgressData()
 
         if (this.errorMessage !== "" && this.errorMessage !== undefined) {
             teaweb.warn(this.errorMessage, function () {
             })
         }
         let that = this
-        that.onCreateLoopTimeOut()
+        // that.onCreateLoopTimeOut()
         window.addEventListener('beforeunload', function () {
-            that.onReleaseTimeOut()
+            that.onReleaseUpdateTimeOut()
+            // that.onReleaseTimeOut()
         })
+
     })
 
     this.initTime = function () {
@@ -119,13 +124,39 @@ Tea.context(function () {
         this.curIndex = -1;
     }
 
-    this.getProgressPerStr = function (curValue, maxValue, state) {
-        if (curValue == 0) {
-            if (state == 1) {
+    this.getProgressItemInfo = function (id) {
+        if(id){
+            for(var index=0;index<this.progressListData.length;index++){
+                if(this.progressListData[index].id == id){
+                    return this.progressListData[index]
+                }
+            }
+        }
+        return null
+    }
+
+    this.getProgressPerStr = function (curValue,maxValue,id,state) {
+
+        if(!this.getProgressItemInfo){return "0%"}
+
+        if(curValue == 0 ){
+            if(state==1){
+                this.onCreateUpdateTimeOut()
+                let curData = this.getProgressItemInfo(id)
+                if(curData){
+                    if(curData.curPer == 0){
+                        return "1%"
+                    }
+                    return curData.curPer+"%"
+                }
+                this.onCreateProgressItemInfo(id)
                 return "1%"
-            } else if (state == 0) {
+            }else{
+                this.onChangeProgressDataState(id,state)
                 return ""
             }
+        }else if(curValue == 100){
+            this.onChangeProgressDataState(id,state)
         }
 
         if (curValue && maxValue && maxValue > 0 && maxValue >= curValue) {
@@ -138,6 +169,7 @@ Tea.context(function () {
 
             return tempValue + "%"
         }
+
         return "0%"
     }
 
@@ -149,10 +181,17 @@ Tea.context(function () {
         return false
     }
 
+    this.getProgressPer = function (curValue, maxValue,id,state) {
 
-    this.getProgressPer = function (curValue, maxValue, state) {
-        if (curValue == 0) {
-            if (state && state == 1) {
+        if(!this.getProgressItemInfo){return "0%"}
+
+        if(curValue == 0 ){
+            if(state && state==1){
+                let curData = this.getProgressItemInfo(id)
+                if(curData){
+                    return curData.curPer+"%"
+                }
+                this.onCreateProgressItemInfo(id)
                 return "1%"
             }
         }
@@ -208,6 +247,72 @@ Tea.context(function () {
         //todo req
         if (startTime && startTime != "" && endTime && endTime != "")
             window.location.href = "/hids/baseline?State=" + this.State + '&ResultState=' + this.ResultState + '&startTime=' + startTime + '&endTime=' + endTime
+    }
+
+    this.updateTimeId = null
+
+    this.onCreateProgressItemInfo = function (id) {
+        let curData = {id:id,curPer:0,state:1,disabled:0}
+        this.progressListData.push(curData)
+        this.onSaveProgressData()
+    }
+
+    this.onChangeProgressDataState = function (id,state) {
+        for(var index=0;index<this.progressListData.length;index++){
+            if(this.progressListData[index].id==id){
+                this.progressListData[index].state = state
+                break
+            }
+        }
+        if(this.progressListData.length>0){
+            this.progressListData = this.progressListData.filter((item) => {
+                return item.state == 1;
+            });
+        }
+
+        this.onSaveProgressData()
+    }
+
+    // 进度的缓存数据
+    this.onReloadProgressData = function () {
+        let curProgressData = localStorage.getItem("baselineProgressData");
+        if(curProgressData){
+            this.progressListData = JSON.parse(curProgressData)
+        }else{
+            this.progressListData = []
+        }
+    }
+
+    this.onUpdateProgressData = function () {
+        for(var index=0;index<this.progressListData.length;index++){
+            if(this.progressListData[index].state==1){
+                this.progressListData[index].curPer = this.progressListData[index].curPer+5
+                if(this.progressListData[index].curPer>=95){
+                    this.progressListData[index].curPer = 95
+                }
+            }
+        }
+        this.onSaveProgressData()
+    }
+
+    this.onSaveProgressData = function () {
+        localStorage.setItem("baselineProgressData", JSON.stringify(this.progressListData));
+    }
+
+    //计时器
+    this.onCreateUpdateTimeOut = function () {
+        if(!this.updateTimeId){
+            this.updateTimeId = createTimer(this.onUpdateProgressData, {timeout: 5000});
+            this.updateTimeId.start();
+        }
+    }
+
+    this.onReleaseUpdateTimeOut = function () {
+
+        if (this.updateTimeId) {
+            this.updateTimeId.stop()
+            this.updateTimeId = null
+        }
     }
 });
   

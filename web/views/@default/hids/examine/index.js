@@ -386,9 +386,12 @@ Tea.context(function () {
                 }
                 this.onCreateProgressItemInfo(id)
                 return "1%"
-            }else if(state==0){
+            }else{
+                this.onChangeProgressDataState(id,state)
                 return ""
             }
+        }else if(curValue == 100){
+            this.onChangeProgressDataState(id,state)
         }
 
         if(curValue && maxValue && maxValue>0 && maxValue >= curValue){
@@ -416,8 +419,6 @@ Tea.context(function () {
                 }
                 this.onCreateProgressItemInfo(id)
                 return "1%"
-            }else{
-                this.onChangeProgressDataState(id,state)
             }
         }
 
@@ -459,6 +460,12 @@ Tea.context(function () {
                 break
             }
         }
+        if(this.progressListData.length>0){
+            this.progressListData = this.progressListData.filter((item) => {
+                return item.state == 1;
+            });
+        }
+        console.log(this.progressListData);
         this.onSaveProgressData()
     }
     // 进度的缓存数据
@@ -485,7 +492,6 @@ Tea.context(function () {
     this.onSaveProgressData = function () {
         localStorage.setItem("examinProgressData", JSON.stringify(this.progressListData));
     }
-
 
     //计时器
     this.onCreateUpdateTimeOut = function () {
