@@ -174,7 +174,8 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			},
 		},
 		{
-			"code":   "/ddos/host",
+			"code":   "ddos",
+			"url":    "/ddos/host",
 			"module": configloaders.AdminModuleCodeDdos,
 			"name":   "DDoS防护",
 			"icon":   "shield",
@@ -197,7 +198,8 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			},
 		},
 		{
-			"code":   "/nfw/nat",
+			"code":   "nfw",
+			"url":    "/nfw/nat",
 			"module": configloaders.AdminModuleCodeNfw,
 			"name":   "云防火墙",
 			"icon":   "bars",
@@ -259,7 +261,8 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			},
 		},
 		{
-			"code":   "/hids/examine",
+			"code":   "hids",
+			"url":    "/hids/examine",
 			"module": configloaders.AdminModuleCodeHids,
 			"name":   "主机防护",
 			"icon":   "linux",
@@ -292,7 +295,8 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			},
 		},
 		{
-			"code":   "/webscan/targets",
+			"code":   "webscan",
+			"url":    "/webscan/targets",
 			"module": configloaders.AdminModuleCodeWebScan,
 			"name":   "漏洞扫描",
 			"icon":   "ioxhost",
