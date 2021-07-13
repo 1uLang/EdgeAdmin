@@ -10,6 +10,8 @@ Tea.context(function () {
 
 	this.$delay(function () {
 		sessionStorage.setItem("leftSelectCode","dashboard")
+		localStorage.removeItem("ddosSelectNodeId");
+		localStorage.removeItem("nfwSelectNodeId");
 		this.$find("form input[name='username']").focus()
 		this.changePassword()
 	});
