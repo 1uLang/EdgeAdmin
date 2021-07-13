@@ -3,7 +3,6 @@
 <!-- <a href="/hids/baseline/template" class="item">基线检查 </a>
 <a href="/hids/baseline/detail" class="item">详情 </a> -->
 {$layout}
-{$template "/datepicker"}
 <script src="/js/timeFactory.js"></script>
 
 <div class="card-div" style="margin-top: 20px;height: 90px;">
@@ -80,9 +79,9 @@
                 <td>
                     <div class="Bar" style="display: inline-flex;">
                         <div :class="[checkShowColor(item.progress,100) ? 'progress-green-bg-style' : 'progress-blue-bg-style']"
-                            :style="{width: getProgressPer(item.progress,100,item.state)}">
+                            :style="{width: getProgressPer(item.progress,100,item.serverIp,item.state)}">
                         </div>
-                        <span>{{getProgressPerStr(item.progress,100,item.state)}}</span>
+                        <span>{{getProgressPerStr(item.progress,100,item.serverIp,item.state)}}</span>
                     </div>
                 </td>
                 <td>{{getStateName(item.state)}}</td>

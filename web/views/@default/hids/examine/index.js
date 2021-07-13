@@ -48,37 +48,6 @@ Tea.context(function () {
         })
     })
 
-    this.onResetProgressData = function () {
-        if(this.datas && this.datas.length > 0){
-            if(this.progressListData && this.progressListData.length > 0){
-                this.progressListData.forEach(element => {
-                    let isFindId = false
-                    this.datas.forEach(item => {
-                        if(item.serverExamineResultInfo.serverIp == element.id){
-                            element.state = item.serverExamineResultInfo.state
-                            if(item.serverExamineResultInfo.progress==100){
-                                isFindId = true
-                                element.curPer = 100
-                            }
-                        }
-                    });
-                    if(!isFindId){
-                        element.disabled = 1
-                    }
-                });
-                this.progressListData = this.progressListData.filter((item) => {
-                    return item.disabled == 0;
-                });
-            }else{
-                this.datas.forEach(item => {
-                    let curData = {id:item.serverExamineResultInfo.serverIp,curPer:item.serverExamineResultInfo.progress,state:item.serverExamineResultInfo.state,disabled:0}
-                    this.progressListData.push(curData)
-                });
-            }
-            this.onUpdateProgressData()
-        }
-    }
-
     this.onCallBack = function () {
         if (this.checkScans()) {
             this.$post(".").success(resp => {
@@ -409,9 +378,12 @@ Tea.context(function () {
                 }
                 this.onCreateProgressItemInfo(id)
                 return "1%"
-            }else if(state==0){
+            }else{
+                this.onChangeProgressDataState(id,state)
                 return ""
             }
+        }else if(curValue == 100){
+            this.onChangeProgressDataState(id,state)
         }
 
         if(curValue && maxValue && maxValue>0 && maxValue >= curValue){
@@ -430,9 +402,7 @@ Tea.context(function () {
     this.getProgressPer = function (curValue, maxValue,id,state) {
 
         if(!this.getProgressItemInfo){return "0%"}
-
-        console.log(this.progressListData)
-
+        
         if(curValue == 0 ){
             if(state && state==1){
                 let curData = this.getProgressItemInfo(id)
@@ -441,8 +411,6 @@ Tea.context(function () {
                 }
                 this.onCreateProgressItemInfo(id)
                 return "1%"
-            }else{
-                this.onChangeProgressDataState(id,state)
             }
         }
 
@@ -480,6 +448,12 @@ Tea.context(function () {
                 break
             }
         }
+        if(this.progressListData.length>0){
+            this.progressListData = this.progressListData.filter((item) => {
+                return item.state == 1;
+            });
+        }
+        console.log(this.progressListData);
         this.onSaveProgressData()
     }
     // 进度的缓存数据
@@ -510,6 +484,7 @@ Tea.context(function () {
 
     //计时器
     this.onCreateUpdateTimeOut = function () {
+        console.log(this.updateTimeId)
         if(!this.updateTimeId){
             this.updateTimeId = createTimer(this.onUpdateProgressData, {timeout: 5000});
             this.updateTimeId.start();

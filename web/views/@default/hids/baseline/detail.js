@@ -26,7 +26,7 @@ Tea.context(function () {
 
 
     this.onGoBack = function (id) { 
-        window.location = "/hids/baseline";
+        teaweb.closePopup()
     }
    
     this.getProgressPer = function (curValue,maxValue) { 
