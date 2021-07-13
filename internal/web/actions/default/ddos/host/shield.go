@@ -53,7 +53,6 @@ func (this *ShieldAction) RunPost(params struct {
 		this.ErrorPage(fmt.Errorf("请选择释放屏蔽的主机"))
 		return
 	}
-	fmt.Println(params)
 	//GetHostShieldList
 	err := host_status_server.ReleaseShield(&host_status_server.ReleaseShieldReq{
 		Addr:   params.Addr,
