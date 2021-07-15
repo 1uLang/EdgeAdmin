@@ -23,7 +23,7 @@ func (this *CreatePopupAction) RunGet(params struct{ NodeId uint64 }) {
 		this.ErrorPage(err)
 		return
 	}
-	this.Data["ddos"] = ddos.Name + "-ddos-" + ddos.Addr
+	this.Data["ddos"] = ddos.Name
 	this.Data["node"] = params.NodeId
 	this.Show()
 }
