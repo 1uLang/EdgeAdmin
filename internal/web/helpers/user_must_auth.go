@@ -552,9 +552,10 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 	}
 	leftResult := []maps.Map{}
 	for _, m := range leftMaps {
-		if m.GetString("code") == "finance" && !configloaders.ShowFinance() {
-			continue
-		}
+		//去掉财务信息
+		//if m.GetString("code") == "finance" && !configloaders.ShowFinance() {
+		//	continue
+		//}
 
 		module := m.GetString("module")
 		if configloaders.AllowModule(adminId, module) {
