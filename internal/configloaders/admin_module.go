@@ -33,6 +33,7 @@ const (
 	AdminModuleCodeWAF     AdminModuleCode = "waf"     //web防火墙
 	AdminModuleCodeAudit   AdminModuleCode = "audit"   //审计系统
 	AdminModuleCodeFort    AdminModuleCode = "fort"    //堡垒机
+	AdminModuleCodeBackup  AdminModuleCode = "backup"  //数据备份
 )
 
 var sharedAdminModuleMapping = map[int64]*AdminModuleList{} // adminId => AdminModuleList
