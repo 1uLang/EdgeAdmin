@@ -4,6 +4,7 @@ import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/configs"
 	"github.com/TeaOSLab/EdgeAdmin/internal/rpc"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/configutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
@@ -63,16 +64,6 @@ func (this *ValidateApiAction) RunPost(params struct {
 			this.FailField("newHost", "请输入正确的节点主机地址")
 		}
 
-		listener, err := net.Listen("tcp", params.NewHost+":"+params.NewPort)
-		if err != nil {
-			if strings.Contains(err.Error(), "in use") {
-				this.FailField("newPort", "端口 \""+params.NewPort+"\" 已经被别的服务占用，请关闭正在使用此端口的其他应用程序，或者使用另外一个端口")
-			} else {
-				this.FailField("newHost", "无法正确绑定端口地址，请检查主机地址："+err.Error())
-			}
-		}
-		_ = listener.Close()
-
 		params.Must.
 			Field("newHost", params.NewHost).
 			Require("请输入节点主机地址")
@@ -96,7 +87,7 @@ func (this *ValidateApiAction) RunPost(params struct {
 		RPC: struct {
 			Endpoints []string `yaml:"endpoints"`
 		}{
-			Endpoints: []string{params.OldProtocol + "://" + params.OldHost + ":" + params.OldPort},
+			Endpoints: []string{params.OldProtocol + "://" + configutils.QuoteIP(params.OldHost) + ":" + params.OldPort},
 		},
 		NodeId: params.OldNodeId,
 		Secret: params.OldNodeSecret,

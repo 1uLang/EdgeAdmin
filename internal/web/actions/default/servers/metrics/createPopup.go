@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
 )
@@ -22,6 +23,7 @@ func (this *CreatePopupAction) RunGet(params struct {
 	Category string
 }) {
 	this.Data["category"] = params.Category
+	this.Data["valueDefinitions"] = serverconfigs.FindAllMetricValueDefinitions(params.Category)
 
 	this.Show()
 }
@@ -32,6 +34,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 	KeysJSON   []byte
 	PeriodJSON []byte
 	Value      string
+	IsPublic   bool
 
 	Must *actions.Must
 	CSRF *actionutils.CSRF
@@ -73,6 +76,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 		Period:     period,
 		PeriodUnit: periodUnit,
 		Value:      params.Value,
+		IsPublic:   params.IsPublic,
 	})
 	if err != nil {
 		this.ErrorPage(err)

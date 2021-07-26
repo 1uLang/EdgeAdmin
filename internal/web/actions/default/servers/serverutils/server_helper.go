@@ -3,6 +3,7 @@ package serverutils
 import (
 	"encoding/json"
 	"errors"
+	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
 	"github.com/TeaOSLab/EdgeAdmin/internal/rpc"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
@@ -92,12 +93,14 @@ func (this *ServerHelper) createLeftMenu(action *actions.ActionObject) {
 	selectedTabbar, _ := action.Data["mainTab"]
 	tabbar := actionutils.NewTabbar()
 	tabbar.Add("服务列表", "", "/servers", "", false)
-	//tabbar.Add("看板", "", "/servers/server/board?serverId="+serverIdString, "dashboard", selectedTabbar == "board")
-	if family == "http" {
-		tabbar.Add("日志", "", "/servers/server/log?serverId="+serverIdString, "history", selectedTabbar == "log")
+	if teaconst.IsPlus {
+		tabbar.Add("看板", "", "/servers/server/boards?serverId="+serverIdString, "dashboard", selectedTabbar == "board")
 	}
 	if family == "http" {
 		tabbar.Add("统计", "", "/servers/server/stat?serverId="+serverIdString, "chart area", selectedTabbar == "stat")
+	}
+	if family == "http" {
+		tabbar.Add("日志", "", "/servers/server/log?serverId="+serverIdString, "history", selectedTabbar == "log")
 	}
 	tabbar.Add("设置", "", "/servers/server/settings?serverId="+serverIdString, "setting", selectedTabbar == "setting")
 	tabbar.Add("删除", "", "/servers/server/delete?serverId="+serverIdString, "trash", selectedTabbar == "delete")
@@ -248,7 +251,7 @@ func (this *ServerHelper) createSettingsMenu(secondMenuItem string, serverIdStri
 			"isOn":     serverConfig.Web != nil && len(serverConfig.Web.HostRedirects) > 0,
 		})
 		menuItems = append(menuItems, maps.Map{
-			"name":     "路径规则",
+			"name":     "路由规则",
 			"url":      "/servers/server/settings/locations?serverId=" + serverIdString,
 			"isActive": secondMenuItem == "locations",
 			"isOn":     serverConfig.Web != nil && len(serverConfig.Web.Locations) > 0,

@@ -34,6 +34,9 @@ func (this *IndexAction) RunGet(params struct {
 
 	Auth *helpers.UserShouldAuth
 }) {
+	// DEMO模式
+	this.Data["isDemo"] = teaconst.IsDemoMode
+
 	// 检查系统是否已经配置过
 	if !setup.IsConfigured() {
 		this.RedirectURL("/setup")
@@ -70,7 +73,7 @@ func (this *IndexAction) RunGet(params struct {
 	this.Show()
 }
 
-// 提交
+// RunPost 提交
 func (this *IndexAction) RunPost(params struct {
 	Token    string
 	Username string

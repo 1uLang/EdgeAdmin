@@ -23,16 +23,22 @@ func init() {
 			GetPost("/test", new(TestAction)).
 			GetPost("/update", new(UpdateAction)).
 			Get("/items", new(ItemsAction)).
+			Get("/selectPopup", new(SelectPopupAction)).
 
 			// IP相关
 			GetPost("/createIPPopup", new(CreateIPPopupAction)).
 			GetPost("/updateIPPopup", new(UpdateIPPopupAction)).
 			Post("/deleteIP", new(DeleteIPAction)).
+			Get("/accessLogsPopup", new(AccessLogsPopupAction)).
 
 			// 防火墙
 			GetPost("/bindHTTPFirewallPopup", new(BindHTTPFirewallPopupAction)).
 			Post("/unbindHTTPFirewall", new(UnbindHTTPFirewallAction)).
 			Post("/httpFirewall", new(HttpFirewallAction)).
+
+			// 选项数据
+			Post("/levelOptions", new(LevelOptionsAction)).
+
 			EndAll()
 	})
 }

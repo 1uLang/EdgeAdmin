@@ -5,11 +5,14 @@ import (
 	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
 	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/sslconfigs"
 	"github.com/iwind/TeaGo/actions"
+	"github.com/iwind/TeaGo/logs"
 	"github.com/iwind/TeaGo/maps"
+	"github.com/iwind/TeaGo/types"
 	"strings"
 )
 
@@ -67,6 +70,9 @@ func (this *CreateAction) RunPost(params struct {
 	ServerNames string
 	CertIdsJSON []byte
 	Origins     string
+
+	AccessLogIsOn bool
+	WebsocketIsOn bool
 
 	WebRoot string
 
@@ -126,7 +132,7 @@ func (this *CreateAction) RunPost(params struct {
 		}
 	case serverconfigs.ServerTypeTCPProxy:
 		// 在DEMO模式下不能创建
-		if teaconst.IsDemo {
+		if teaconst.IsDemoMode {
 			this.Fail("DEMO模式下不能创建TCP反向代理")
 		}
 
@@ -163,7 +169,7 @@ func (this *CreateAction) RunPost(params struct {
 		}
 	case serverconfigs.ServerTypeUDPProxy:
 		// 在DEMO模式下不能创建
-		if teaconst.IsDemo {
+		if teaconst.IsDemoMode {
 			this.Fail("DEMO模式下不能创建UDP反向代理")
 		}
 
@@ -414,6 +420,70 @@ func (this *CreateAction) RunPost(params struct {
 	if err != nil {
 		this.ErrorPage(err)
 		return
+	}
+	var serverId = createResp.ServerId
+
+	// 开启访问日志和Websocket
+	if params.ServerType == serverconfigs.ServerTypeHTTPProxy {
+		webConfig, err := dao.SharedHTTPWebDAO.FindWebConfigWithServerId(this.AdminContext(), serverId)
+		if err != nil {
+			logs.Error(err)
+		} else {
+			// 访问日志
+			if params.AccessLogIsOn {
+				_, err = this.RPC().HTTPWebRPC().UpdateHTTPWebAccessLog(this.AdminContext(), &pb.UpdateHTTPWebAccessLogRequest{
+					WebId: webConfig.Id,
+					AccessLogJSON: []byte(`{
+			"isPrior": false,
+			"isOn": true,
+			"fields": [],
+			"status1": true,
+			"status2": true,
+			"status3": true,
+			"status4": true,
+			"status5": true,
+
+			"storageOnly": false,
+			"storagePolicies": [],
+
+            "firewallOnly": false
+		}`),
+				})
+				if err != nil {
+					logs.Error(err)
+				}
+			}
+
+			// websocket
+			if params.WebsocketIsOn {
+				createWebSocketResp, err := this.RPC().HTTPWebsocketRPC().CreateHTTPWebsocket(this.AdminContext(), &pb.CreateHTTPWebsocketRequest{
+					HandshakeTimeoutJSON: []byte(`{
+					"count": 30,
+					"unit": "second"
+				}`),
+					AllowAllOrigins:   true,
+					AllowedOrigins:    nil,
+					RequestSameOrigin: true,
+					RequestOrigin:     "",
+				})
+				if err != nil {
+					logs.Error(err)
+				} else {
+					websocketId := createWebSocketResp.WebsocketId
+					_, err = this.RPC().HTTPWebRPC().UpdateHTTPWebWebsocket(this.AdminContext(), &pb.UpdateHTTPWebWebsocketRequest{
+						WebId: webConfig.Id,
+						WebsocketJSON: []byte(` {
+				"isPrior": false,
+				"isOn": true,
+				"websocketId": ` + types.String(websocketId) + `
+			}`),
+					})
+					if err != nil {
+						logs.Error(err)
+					}
+				}
+			}
+		}
 	}
 
 	// 创建日志

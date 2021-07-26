@@ -5,7 +5,9 @@ package metrics
 import (
 	"encoding/json"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/metrics/metricutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
 )
@@ -21,11 +23,13 @@ func (this *UpdateAction) Init() {
 func (this *UpdateAction) RunGet(params struct {
 	ItemId int64
 }) {
-	err := InitItem(this.Parent(), params.ItemId)
+	item, err := metricutils.InitItem(this.Parent(), params.ItemId)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
+
+	this.Data["valueDefinitions"] = serverconfigs.FindAllMetricValueDefinitions(item.Category)
 
 	this.Show()
 }
@@ -37,6 +41,7 @@ func (this *UpdateAction) RunPost(params struct {
 	PeriodJSON []byte
 	Value      string
 	IsOn       bool
+	IsPublic   bool
 
 	Must *actions.Must
 	CSRF *actionutils.CSRF
@@ -74,6 +79,7 @@ func (this *UpdateAction) RunPost(params struct {
 		PeriodUnit:   periodUnit,
 		Value:        params.Value,
 		IsOn:         params.IsOn,
+		IsPublic:     params.IsPublic,
 	})
 	if err != nil {
 		this.ErrorPage(err)

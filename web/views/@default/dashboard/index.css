@@ -1,7 +1,7 @@
-.ui.message .icon {
+.ui.message a .icon {
   position: absolute;
   right: 1em;
-  top: 1.8em;
+  top: 2.8em;
 }
 .grid {
   margin-top: 2em !important;
@@ -54,5 +54,8 @@
   justify-content: space-around;
   padding-left: 40px;
 }
-
+h4 span {
+  font-size: 0.8em;
+  color: grey;
+}
 /*# sourceMappingURL=index.css.map */

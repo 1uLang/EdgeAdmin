@@ -51,6 +51,10 @@ func NewRPCClient(apiConfig *configs.APIConfig) (*RPCClient, error) {
 	return client, nil
 }
 
+func (this *RPCClient) APITokenRPC() pb.APITokenServiceClient {
+	return pb.NewAPITokenServiceClient(this.pickConn())
+}
+
 func (this *RPCClient) AdminRPC() pb.AdminServiceClient {
 	return pb.NewAdminServiceClient(this.pickConn())
 }
@@ -205,6 +209,10 @@ func (this *RPCClient) HTTPFirewallRuleGroupRPC() pb.HTTPFirewallRuleGroupServic
 
 func (this *RPCClient) HTTPFirewallRuleSetRPC() pb.HTTPFirewallRuleSetServiceClient {
 	return pb.NewHTTPFirewallRuleSetServiceClient(this.pickConn())
+}
+
+func (this *RPCClient) FirewallRPC() pb.FirewallServiceClient {
+	return pb.NewFirewallServiceClient(this.pickConn())
 }
 
 func (this *RPCClient) HTTPLocationRPC() pb.HTTPLocationServiceClient {
@@ -380,6 +388,10 @@ func (this *RPCClient) NSRecordRPC() pb.NSRecordServiceClient {
 	return pb.NewNSRecordServiceClient(this.pickConn())
 }
 
+func (this *RPCClient) NSKeyRPC() pb.NSKeyServiceClient {
+	return pb.NewNSKeyServiceClient(this.pickConn())
+}
+
 func (this *RPCClient) NSRouteRPC() pb.NSRouteServiceClient {
 	return pb.NewNSRouteServiceClient(this.pickConn())
 }
@@ -388,12 +400,32 @@ func (this *RPCClient) NSAccessLogRPC() pb.NSAccessLogServiceClient {
 	return pb.NewNSAccessLogServiceClient(this.pickConn())
 }
 
+func (this *RPCClient) NSRPC() pb.NSServiceClient {
+	return pb.NewNSServiceClient(this.pickConn())
+}
+
 func (this *RPCClient) MetricItemRPC() pb.MetricItemServiceClient {
 	return pb.NewMetricItemServiceClient(this.pickConn())
 }
 
+func (this *RPCClient) MetricStatRPC() pb.MetricStatServiceClient {
+	return pb.NewMetricStatServiceClient(this.pickConn())
+}
+
+func (this *RPCClient) MetricChartRPC() pb.MetricChartServiceClient {
+	return pb.NewMetricChartServiceClient(this.pickConn())
+}
+
 func (this *RPCClient) NodeClusterMetricItemRPC() pb.NodeClusterMetricItemServiceClient {
 	return pb.NewNodeClusterMetricItemServiceClient(this.pickConn())
+}
+
+func (this *RPCClient) ServerStatBoardRPC() pb.ServerStatBoardServiceClient {
+	return pb.NewServerStatBoardServiceClient(this.pickConn())
+}
+
+func (this *RPCClient) ServerStatBoardChartRPC() pb.ServerStatBoardChartServiceClient {
+	return pb.NewServerStatBoardChartServiceClient(this.pickConn())
 }
 
 // Context 构造Admin上下文

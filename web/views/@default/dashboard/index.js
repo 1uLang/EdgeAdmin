@@ -1,19 +1,8 @@
 Tea.context(function () {
 	this.trafficTab = "hourly"
 
-
 	this.$delay(function () {
 		this.reloadHourlyTrafficChart()
-
-		let that = this
-		window.addEventListener("resize", function () {
-			if (that.trafficTab == "hourly") {
-				that.resizeHourlyTrafficChart()
-			}
-			if (that.trafficTab == "daily") {
-				that.resizeDailyTrafficChart()
-			}
-		})
 	})
 
 	this.selectTrafficTab = function (tab) {
@@ -29,26 +18,33 @@ Tea.context(function () {
 		}
 	}
 
-	this.resizeHourlyTrafficChart = function () {
-		let chartBox = document.getElementById("hourly-traffic-chart-box")
-		let chart = echarts.init(chartBox)
-		chart.resize()
-	}
-
 	this.reloadHourlyTrafficChart = function () {
+		let axis = teaweb.bytesAxis(this.hourlyTrafficStats, function (v) {
+			return v.bytes
+		})
 		let chartBox = document.getElementById("hourly-traffic-chart-box")
-		let chart = echarts.init(chartBox)
+		let chart = teaweb.initChart(chartBox)
+		let that = this
 		let option = {
 			xAxis: {
 				data: this.hourlyTrafficStats.map(function (v) {
 					return v.hour;
 				})
 			},
-			yAxis: {},
+			yAxis: {
+				axisLabel: {
+					formatter: function (v) {
+						return v + axis.unit
+					}
+				}
+			},
 			tooltip: {
 				show: true,
 				trigger: "item",
-				formatter: "{c} GB"
+				formatter: function (args) {
+					let index = args.dataIndex
+					return that.hourlyTrafficStats[index].hour + "时：" + teaweb.formatBytes(that.hourlyTrafficStats[index].bytes)
+				}
 			},
 			grid: {
 				left: 40,
@@ -60,7 +56,7 @@ Tea.context(function () {
 					name: "流量",
 					type: "line",
 					data: this.hourlyTrafficStats.map(function (v) {
-						return v.count;
+						return v.bytes / axis.divider;
 					}),
 					itemStyle: {
 						color: "#9DD3E8"
@@ -79,26 +75,34 @@ Tea.context(function () {
 		chart.resize()
 	}
 
-	this.resizeDailyTrafficChart = function () {
-		let chartBox = document.getElementById("daily-traffic-chart-box")
-		let chart = echarts.init(chartBox)
-		chart.resize()
-	}
-
 	this.reloadDailyTrafficChart = function () {
+		let axis = teaweb.bytesAxis(this.dailyTrafficStats, function (v) {
+			return v.bytes
+		})
 		let chartBox = document.getElementById("daily-traffic-chart-box")
-		let chart = echarts.init(chartBox)
+		let chart = teaweb.initChart(chartBox)
+
+		let that = this
 		let option = {
 			xAxis: {
 				data: this.dailyTrafficStats.map(function (v) {
 					return v.day;
 				})
 			},
-			yAxis: {},
+			yAxis: {
+				axisLabel: {
+					formatter: function (v) {
+						return v + axis.unit
+					}
+				}
+			},
 			tooltip: {
 				show: true,
 				trigger: "item",
-				formatter: "{c} GB"
+				formatter: function (args) {
+					let index = args.dataIndex
+					return that.dailyTrafficStats[index].day + "：" + teaweb.formatBytes(that.dailyTrafficStats[index].bytes)
+				}
 			},
 			grid: {
 				left: 40,
@@ -110,7 +114,7 @@ Tea.context(function () {
 					name: "流量",
 					type: "line",
 					data: this.dailyTrafficStats.map(function (v) {
-						return v.count;
+						return v.bytes / axis.divider;
 					}),
 					itemStyle: {
 						color: "#9DD3E8"

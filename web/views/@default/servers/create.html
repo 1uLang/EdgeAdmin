@@ -50,7 +50,7 @@
             <tr>
                 <td>{{tlsProtocolName.toUpperCase()}}证书</td>
                 <td>
-                    <ssl-certs-box></ssl-certs-box>
+                    <ssl-certs-box :v-protocol="tlsProtocolName.toLowerCase()"></ssl-certs-box>
                 </td>
             </tr>
         </tbody>
@@ -85,6 +85,15 @@
 				<server-group-selector></server-group-selector>
 			</td>
 		</tr>
+
+        <tr>
+            <td>默认开启配置</td>
+            <td>
+                <checkbox checked="checked" name="accessLogIsOn">访问日志</checkbox>
+                &nbsp; &nbsp;
+                <checkbox checked="checked" name="websocketIsOn">Websocket</checkbox>
+            </td>
+        </tr>
 
 		<tr>
 			<td colspan="2"><more-options-indicator></more-options-indicator></td>

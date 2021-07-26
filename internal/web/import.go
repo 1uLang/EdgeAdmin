@@ -61,8 +61,10 @@ import (
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/components/groups"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/components/log"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/components/waf"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/metrics"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/metrics/charts"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/server"
-	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/server/board"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/server/boards"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/server/delete"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/server/log"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/server/settings"
@@ -110,8 +112,9 @@ import (
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/server/settings/websocket"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/server/stat"
 
+	// IP相关
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/ipbox"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/iplists"
-	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/metrics"
 
 	// 设置相关
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings"
@@ -131,6 +134,9 @@ import (
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/upgrade"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/user-nodes"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/user-ui"
+
+	// 恢复
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/recover"
 
 	// 安装
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/setup"

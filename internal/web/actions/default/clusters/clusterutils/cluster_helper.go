@@ -2,7 +2,6 @@ package clusterutils
 
 import (
 	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
-	"github.com/TeaOSLab/EdgeAdmin/internal/rpc"
 	"github.com/TeaOSLab/EdgeAdmin/internal/utils/numberutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
@@ -36,7 +35,7 @@ func (this *ClusterHelper) BeforeAction(actionPtr actions.ActionWrapper) (goNext
 	action.Data["clusterId"] = clusterId
 
 	if clusterId > 0 {
-		var ctx = actionPtr.(rpc.ContextInterface).AdminContext()
+		var ctx = actionPtr.(actionutils.ActionInterface).AdminContext()
 		cluster, err := dao.SharedNodeClusterDAO.FindEnabledNodeCluster(ctx, clusterId)
 		if err != nil {
 			logs.Error(err)
@@ -59,7 +58,10 @@ func (this *ClusterHelper) BeforeAction(actionPtr actions.ActionWrapper) (goNext
 
 		tabbar := actionutils.NewTabbar()
 		tabbar.Add("集群列表", "", "/clusters", "", false)
-		tabbar.Add("集群节点", "", "/clusters/cluster?clusterId="+clusterIdString, "server", selectedTabbar == "node")
+		if teaconst.IsPlus {
+			tabbar.Add("集群看板", "", "/clusters/cluster/boards?clusterId="+clusterIdString, "board", selectedTabbar == "board")
+		}
+		tabbar.Add("集群节点", "", "/clusters/cluster/nodes?clusterId="+clusterIdString, "server", selectedTabbar == "node")
 		tabbar.Add("集群设置", "", "/clusters/cluster/settings?clusterId="+clusterIdString, "setting", selectedTabbar == "setting")
 		tabbar.Add("删除集群", "", "/clusters/cluster/delete?clusterId="+clusterIdString, "trash", selectedTabbar == "delete")
 
@@ -121,12 +123,12 @@ func (this *ClusterHelper) createSettingMenu(cluster *pb.NodeCluster, info *pb.F
 		"isActive": selectedItem == "dns",
 		"isOn":     cluster.DnsDomainId > 0 || len(cluster.DnsName) > 0,
 	})
-	/**items = append(items, maps.Map{
+	items = append(items, maps.Map{
 		"name":     "统计指标",
 		"url":      "/clusters/cluster/settings/metrics?clusterId=" + clusterId,
 		"isActive": selectedItem == "metric",
 		"isOn":     info != nil && info.HasMetricItems,
-	})**/
+	})
 
 	if teaconst.IsPlus {
 		items = append(items, maps.Map{
