@@ -14,7 +14,6 @@ require (
 	github.com/go-yaml/yaml v2.1.0+incompatible
 	github.com/golang/protobuf v1.5.2
 	github.com/google/go-cmp v0.5.6 // indirect
-	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/iwind/TeaGo v0.0.0-20210720011303-fc255c995afa
 	github.com/iwind/gosock v0.0.0-20210722083328-12b2d66abec3
 	github.com/miekg/dns v1.1.35
@@ -22,7 +21,6 @@ require (
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	github.com/tealeg/xlsx/v3 v3.2.3
 	github.com/xlzd/gotp v0.0.0-20181030022105-c8557ba2c119
-	golang.org/x/net v0.0.0-20210614182718-04defd469f4e // indirect
 	golang.org/x/sys v0.0.0-20210616094352-59db8d763f22
 	google.golang.org/genproto v0.0.0-20210617175327-b9e0b3197ced // indirect
 	google.golang.org/grpc v1.38.0
