@@ -2,6 +2,7 @@ module github.com/TeaOSLab/EdgeAdmin
 
 go 1.15
 
+replace github.com/1uLang/zhiannet-api => ../zhiannet-api
 replace github.com/TeaOSLab/EdgeCommon => ../EdgeCommon
 
 require (
