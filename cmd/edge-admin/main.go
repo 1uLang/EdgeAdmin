@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
-	_ "github.com/1uLang/zhiannet-api/common/cache"
-	_ "github.com/1uLang/zhiannet-api/common/model"
+	"github.com/1uLang/zhiannet-api/common/cache"
+	"github.com/1uLang/zhiannet-api/common/model"
 	"github.com/TeaOSLab/EdgeAdmin/internal/apps"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configs"
 	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
 	"github.com/TeaOSLab/EdgeAdmin/internal/nodes"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web"
+	"github.com/iwind/TeaGo/Tea"
 	_ "github.com/iwind/TeaGo/bootstrap"
 	"github.com/iwind/gosock/pkg/gosock"
 )
@@ -72,6 +73,12 @@ func main() {
 		}
 		fmt.Println("change demo mode successfully")
 	})
+
+	//初始化 第三方包的配置文件
+	model.ApiDbPath = Tea.ConfigFile("api_db.yaml")
+	model.InitMysqlLink()
+	cache.ApiDbPath = Tea.ConfigFile("api_db.yaml")
+	cache.InitClient()
 	app.Run(func() {
 		adminNode := nodes.NewAdminNode()
 		adminNode.Run()

@@ -262,6 +262,7 @@ Tea.context(function () {
     this.showHost = function () {
 		let node = this.getNodeId()
         localStorage.setItem("ddosSelectNodeId", node);
+		window.location.href = '/ddos/host?nodeId=' + node
     }
 
 	this.tableData = [

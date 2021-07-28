@@ -6,14 +6,15 @@ replace github.com/1uLang/zhiannet-api => ../zhiannet-api
 replace github.com/TeaOSLab/EdgeCommon => ../EdgeCommon
 
 require (
-	github.com/1uLang/zhiannet-api v0.0.0-20210712075030-8d12255a548f
-	github.com/PuerkitoBio/goquery v1.7.0 // indirect
+	github.com/1uLang/zhiannet-api v0.0.0-20210728032017-a3be6e0904ab
+	github.com/PuerkitoBio/goquery v1.7.1 // indirect
 	github.com/TeaOSLab/EdgeCommon v0.0.0-00010101000000-000000000000
 	github.com/cespare/xxhash v1.1.0
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/go-yaml/yaml v2.1.0+incompatible
 	github.com/golang/protobuf v1.5.2
 	github.com/google/go-cmp v0.5.6 // indirect
+	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/iwind/TeaGo v0.0.0-20210720011303-fc255c995afa
 	github.com/iwind/gosock v0.0.0-20210722083328-12b2d66abec3
 	github.com/miekg/dns v1.1.35
