@@ -4,9 +4,11 @@ import (
 	"fmt"
 	hids_user_model "github.com/1uLang/zhiannet-api/hids/model/user"
 	hids_user_server "github.com/1uLang/zhiannet-api/hids/server/user"
+	jumpserver_users_model "github.com/1uLang/zhiannet-api/jumpserver/model/users"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/jumpserver"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/users/userutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
@@ -80,22 +82,20 @@ func (this *FeaturesAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	//判断是否拥有了主机防护功能  有 则对应创建该用户
-	var hasHids bool
+	moduleCodes := map[string]bool{}
 	for _, code := range params.Codes {
-		if code == configloaders.AdminModuleCodeHids {
-			hasHids = true
-			break
-		}
+		moduleCodes[code] = true
 	}
-	if hasHids {
+	var user *pb.User
+	//判断是否拥有了主机防护功能  有 则对应创建该用户
+	if _,isExist := moduleCodes[configloaders.AdminModuleCodeHids] ;isExist{
 
 		userResp, err := this.RPC().UserRPC().FindEnabledUser(this.AdminContext(), &pb.FindEnabledUserRequest{UserId: params.UserId})
 		if err != nil {
 			this.ErrorPage(err)
 			return
 		}
-		user := userResp.User
+		user = userResp.User
 		if user == nil {
 			this.NotFound("user", params.UserId)
 			return
@@ -108,6 +108,41 @@ func (this *FeaturesAction) RunPost(params struct {
 		_, err = hids_user_server.Add(&hids_user_model.AddReq{UserName: user.Username, Password: "dengbao-" + user.Username, Role: 3})
 		if err != nil {
 			this.ErrorPage(fmt.Errorf("主机防护组件同步信息失败：%v", err))
+			return
+		}
+	}
+	//判断是否拥有了堡垒机功能  有 则对应创建该用户
+	if _,isExist := moduleCodes[configloaders.AdminModuleCodeFort] ;isExist{
+		if user == nil {
+			userResp, err := this.RPC().UserRPC().FindEnabledUser(this.AdminContext(), &pb.FindEnabledUserRequest{UserId: params.UserId})
+			if err != nil {
+				this.ErrorPage(err)
+				return
+			}
+			user = userResp.User
+			if user == nil {
+				this.NotFound("user", params.UserId)
+				return
+			}
+		}
+		err = jumpserver.InitAPIServer()
+		if err != nil {
+			this.ErrorPage(fmt.Errorf("堡垒机组件初始化失败0：%v", err))
+			return
+		}
+		req,err := jumpserver.NewServerRequest(jumpserver.Username,jumpserver.Password)
+		if err != nil {
+			this.ErrorPage(fmt.Errorf("堡垒机组件初始化失败1：%v", err))
+			return
+		}
+		if user.Email =="" {
+			this.ErrorPage(fmt.Errorf("当前用户未绑定邮箱，请先绑定后开启堡垒机功能"))
+			return
+		}
+		_,err = req.Users.Create(&jumpserver_users_model.CreateReq{Name: user.Username,Username: user.Username,Password: "dengbao-"+user.Username,
+			Email: user.Email})
+		if err != nil {
+			this.ErrorPage(fmt.Errorf("堡垒机组件同步信息失败：%v", err))
 			return
 		}
 	}
