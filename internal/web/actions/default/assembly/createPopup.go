@@ -89,6 +89,13 @@ func (this *CreatePopupAction) RunPost(params struct {
 		params.Must.
 			Field("secret", params.Secret).
 			Require("请输入secret")
+	case 7: //堡垒机
+		params.Must.
+			Field("key", params.Key).
+			Require("请输入username")
+		params.Must.
+			Field("secret", params.Secret).
+			Require("请输入password")
 	}
 	req := &subassemblynode_model.Subassemblynode{
 		Name:   params.Name,
