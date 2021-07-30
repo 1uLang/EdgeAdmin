@@ -88,7 +88,7 @@ func (this *FeaturesAction) RunPost(params struct {
 	}
 	var user *pb.User
 	//判断是否拥有了主机防护功能  有 则对应创建该用户
-	if _,isExist := moduleCodes[configloaders.AdminModuleCodeHids] ;isExist{
+	if _, isExist := moduleCodes[configloaders.AdminModuleCodeHids]; isExist {
 
 		userResp, err := this.RPC().UserRPC().FindEnabledUser(this.AdminContext(), &pb.FindEnabledUserRequest{UserId: params.UserId})
 		if err != nil {
@@ -112,7 +112,7 @@ func (this *FeaturesAction) RunPost(params struct {
 		}
 	}
 	//判断是否拥有了堡垒机功能  有 则对应创建该用户
-	if _,isExist := moduleCodes[configloaders.AdminModuleCodeFort] ;isExist{
+	if _, isExist := moduleCodes[configloaders.AdminModuleCodeFort]; isExist {
 		if user == nil {
 			userResp, err := this.RPC().UserRPC().FindEnabledUser(this.AdminContext(), &pb.FindEnabledUserRequest{UserId: params.UserId})
 			if err != nil {
@@ -130,17 +130,18 @@ func (this *FeaturesAction) RunPost(params struct {
 			this.ErrorPage(fmt.Errorf("堡垒机组件初始化失败0：%v", err))
 			return
 		}
-		req,err := jumpserver.NewServerRequest(jumpserver.Username,jumpserver.Password)
+		req, err := jumpserver.NewServerRequest(jumpserver.Username, jumpserver.Password)
 		if err != nil {
 			this.ErrorPage(fmt.Errorf("堡垒机组件初始化失败1：%v", err))
 			return
 		}
-		if user.Email =="" {
+		if user.Email == "" {
 			this.ErrorPage(fmt.Errorf("当前用户未绑定邮箱，请先绑定后开启堡垒机功能"))
 			return
 		}
-		_,err = req.Users.Create(&jumpserver_users_model.CreateReq{Name: user.Username,Username: user.Username,Password: "dengbao-"+user.Username,
+		_, err = req.Users.Create(&jumpserver_users_model.CreateReq{Name: user.Username, Username: user.Username, Password: "dengbao-" + user.Username,
 			Email: user.Email})
+		fmt.Println("create jumpserver account : ", user.Username, "dengbao-"+user.Username)
 		if err != nil {
 			this.ErrorPage(fmt.Errorf("堡垒机组件同步信息失败：%v", err))
 			return
