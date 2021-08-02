@@ -3,6 +3,9 @@ package admins
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/1uLang/zhiannet-api/audit/model/audit_user_relation"
+	"github.com/1uLang/zhiannet-api/audit/request"
+	"github.com/1uLang/zhiannet-api/audit/server/user"
 	hids_user_model "github.com/1uLang/zhiannet-api/hids/model/user"
 	hids_user_server "github.com/1uLang/zhiannet-api/hids/server/user"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
@@ -87,6 +90,30 @@ func (this *CreatePopupAction) RunPost(params struct {
 		return
 	}
 
+	//创建审计系统账号
+	auditResp, auditErr := user.AddUser(&user.AddUserReq{
+		User:        &request.UserReq{AdminUserId: uint64(this.AdminId())},
+		Email:       "",
+		IsAdmin:     1,
+		NickName:    params.Username,
+		Opt:         1,
+		Password:    params.Pass1,
+		Phonenumber: "",
+		RoleIds:     []uint64{},
+		RoleName:    "平台管理员",
+		Sex:         1,
+		Status:      1,
+		UserName:    params.Username,
+	})
+	if auditErr != nil || auditResp == nil {
+		this.ErrorPage(fmt.Errorf("创建账号失败"))
+		return
+	}
+	if auditResp.Code != 0 {
+		this.ErrorPage(fmt.Errorf(auditResp.Msg))
+		return
+	}
+
 	createResp, err := this.RPC().AdminRPC().CreateAdmin(this.AdminContext(), &pb.CreateAdminRequest{
 		Username:    params.Username,
 		Password:    params.Pass1,
@@ -118,12 +145,22 @@ func (this *CreatePopupAction) RunPost(params struct {
 		}
 	}
 
+	//关联审计系统账号
+	_, err = audit_user_relation.Add(&audit_user_relation.AuditReq{
+		AdminUserId: uint64(createResp.AdminId),
+		AuditUserId: uint64(auditResp.Data.Id),
+	})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+
 	defer this.CreateLogInfo("创建系统用户 %d", createResp.AdminId)
 
 	//判断是否拥有了主机防护功能  有 则对应创建该用户
 	var hasHids bool
-	for _,code := range params.ModuleCodes {
-		if code == configloaders.AdminModuleCodeHids{
+	for _, code := range params.ModuleCodes {
+		if code == configloaders.AdminModuleCodeHids {
 			hasHids = true
 			break
 		}
@@ -131,12 +168,12 @@ func (this *CreatePopupAction) RunPost(params struct {
 	if hasHids {
 		err = hids.InitAPIServer()
 		if err != nil {
-			this.ErrorPage(fmt.Errorf("主机防护组件初始化失败：%v",err))
+			this.ErrorPage(fmt.Errorf("主机防护组件初始化失败：%v", err))
 			return
 		}
-		_,err = hids_user_server.Add(&hids_user_model.AddReq{UserName: params.Username,Password: "dengbao-"+params.Username,Role: 3})
+		_, err = hids_user_server.Add(&hids_user_model.AddReq{UserName: params.Username, Password: "dengbao-" + params.Username, Role: 3})
 		if err != nil {
-			this.ErrorPage(fmt.Errorf("主机防护组件同步信息失败：%v",err))
+			this.ErrorPage(fmt.Errorf("主机防护组件同步信息失败：%v", err))
 			return
 		}
 	}

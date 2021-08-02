@@ -1,6 +1,10 @@
 package users
 
 import (
+	"fmt"
+	"github.com/1uLang/zhiannet-api/audit/model/audit_user_relation"
+	"github.com/1uLang/zhiannet-api/audit/request"
+	"github.com/1uLang/zhiannet-api/audit/server/user"
 	"github.com/TeaOSLab/EdgeAdmin/internal/utils/numberutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
@@ -76,6 +80,33 @@ func (this *CreatePopupAction) RunPost(params struct {
 			Email("请输入正确的电子邮箱")
 	}
 
+	//创建审计系统的账号
+	//{
+	auditResp, auditErr := user.AddUser(&user.AddUserReq{
+		User:        &request.UserReq{AdminUserId: uint64(this.AdminId())},
+		Email:       params.Email,
+		IsAdmin:     1,
+		NickName:    params.Username,
+		Opt:         1,
+		Password:    params.Pass1,
+		Phonenumber: params.Mobile,
+		RoleIds:     []uint64{},
+		RoleName:    "平台管理员",
+		Sex:         1,
+		Status:      1,
+		UserName:    params.Username,
+	})
+	if auditErr != nil || auditResp == nil {
+		this.ErrorPage(fmt.Errorf("创建账号失败"))
+		return
+	}
+	if auditResp.Code != 0 {
+		this.ErrorPage(fmt.Errorf(auditResp.Msg))
+		return
+	}
+
+	//}
+
 	createResp, err := this.RPC().UserRPC().CreateUser(this.AdminContext(), &pb.CreateUserRequest{
 		Username:      params.Username,
 		Password:      params.Pass1,
@@ -93,5 +124,14 @@ func (this *CreatePopupAction) RunPost(params struct {
 	}
 	defer this.CreateLogInfo("创建用户 %d", createResp.UserId)
 
+	//关联账号
+	_, err = audit_user_relation.Add(&audit_user_relation.AuditReq{
+		UserId:      uint64(createResp.UserId),
+		AuditUserId: uint64(auditResp.Data.Id),
+	})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
 	this.Success()
 }
