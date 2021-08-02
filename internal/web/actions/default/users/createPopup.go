@@ -9,6 +9,8 @@ import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
+	"github.com/1uLang/zhiannet-api/nextcloud/model"
+	"github.com/1uLang/zhiannet-api/nextcloud/request"
 )
 
 type CreatePopupAction struct {
@@ -80,6 +82,28 @@ func (this *CreatePopupAction) RunPost(params struct {
 			Email("请输入正确的电子邮箱")
 	}
 
+	// 创建nextcloud账号，并写入数据库
+	adminToken := request.GetAdminToken()
+	userPwd := `adminAd#@2021`
+	err = request.CreateUser(adminToken, params.Username, userPwd)
+	if err != nil {
+		log.Println("createUser", err.Error())
+		this.ErrorPage(err)
+		return
+	}
+	// 生成token
+	gtReq := &model.LoginReq{
+		User:     params.Username,
+		Password: userPwd,
+	}
+	ncToken := request.GenerateToken(gtReq)
+	// 写入数据库
+	err = model.StoreNCToken(params.Username, ncToken)
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+
 	//创建审计系统的账号
 	//{
 	auditResp, auditErr := user.AddUser(&user.AddUserReq{
@@ -129,6 +153,13 @@ func (this *CreatePopupAction) RunPost(params struct {
 		UserId:      uint64(createResp.UserId),
 		AuditUserId: uint64(auditResp.Data.Id),
 	})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	// 用户账号和nextcloud账号进行关联
+	// 因为用户名是唯一的，所以加入用户名字段，减少脏数据的产生
+	err = model.BindNCTokenAndUID(params.Username, createResp.UserId)
 	if err != nil {
 		this.ErrorPage(err)
 		return
