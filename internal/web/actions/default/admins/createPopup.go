@@ -9,7 +9,7 @@ import (
 	hids_user_model "github.com/1uLang/zhiannet-api/hids/model/user"
 	hids_user_server "github.com/1uLang/zhiannet-api/hids/server/user"
 	"github.com/1uLang/zhiannet-api/nextcloud/model"
-	"github.com/1uLang/zhiannet-api/nextcloud/request"
+	nc_req "github.com/1uLang/zhiannet-api/nextcloud/request"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
@@ -93,10 +93,10 @@ func (this *CreatePopupAction) RunPost(params struct {
 	}
 
 	// 创建nextcloud账号，并写入数据库
-	adminToken := request.GetAdminToken()
+	adminToken := nc_req.GetAdminToken()
 	userPwd := `adminAd#@2021`
 	un := "admin_" + params.Username
-	err = request.CreateUser(adminToken, un, userPwd)
+	err = nc_req.CreateUser(adminToken, un, userPwd)
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -106,7 +106,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 		User:     params.Username,
 		Password: userPwd,
 	}
-	ncToken := request.GenerateToken(gtReq)
+	ncToken := nc_req.GenerateToken(gtReq)
 	// 写入数据库
 	err = model.StoreNCToken(params.Username, ncToken, 1)
 	if err != nil {
@@ -188,7 +188,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	
+
 	//判断是否拥有了主机防护功能  有 则对应创建该用户
 	var hasHids bool
 	for _, code := range params.ModuleCodes {
