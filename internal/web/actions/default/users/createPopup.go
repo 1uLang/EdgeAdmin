@@ -10,7 +10,7 @@ import (
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/1uLang/zhiannet-api/nextcloud/model"
-	"github.com/1uLang/zhiannet-api/nextcloud/request"
+	nc_req "github.com/1uLang/zhiannet-api/nextcloud/request"
 )
 
 type CreatePopupAction struct {
@@ -87,11 +87,10 @@ func (this *CreatePopupAction) RunPost(params struct {
 	}
 
 	// 创建nextcloud账号，并写入数据库
-	adminToken := request.GetAdminToken()
+	adminToken := nc_req.GetAdminToken()
 	userPwd := `adminAd#@2021`
-	err = request.CreateUser(adminToken, params.Username, userPwd)
+	err = nc_req.CreateUser(adminToken, params.Username, userPwd)
 	if err != nil {
-		log.Println("createUser", err.Error())
 		this.ErrorPage(err)
 		return
 	}
@@ -100,7 +99,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 		User:     params.Username,
 		Password: userPwd,
 	}
-	ncToken := request.GenerateToken(gtReq)
+	ncToken := nc_req.GenerateToken(gtReq)
 	// 写入数据库
 	err = model.StoreNCToken(params.Username, ncToken)
 	if err != nil {
