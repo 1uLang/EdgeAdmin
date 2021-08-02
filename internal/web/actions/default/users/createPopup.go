@@ -62,6 +62,10 @@ func (this *CreatePopupAction) RunPost(params struct {
 		Equal(params.Pass1, "两次输入的密码不一致")
 
 	params.Must.
+		Field("pass1", params.Pass1).
+		Match(`^[a-zA-Z0-9_]+$`, "用户名中只能含有英文、数字和下划线")
+
+	params.Must.
 		Field("fullname", params.Fullname).
 		Require("请输入全名")
 
