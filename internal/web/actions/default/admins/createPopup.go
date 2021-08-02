@@ -8,6 +8,8 @@ import (
 	"github.com/1uLang/zhiannet-api/audit/server/user"
 	hids_user_model "github.com/1uLang/zhiannet-api/hids/model/user"
 	hids_user_server "github.com/1uLang/zhiannet-api/hids/server/user"
+	"github.com/1uLang/zhiannet-api/nextcloud/model"
+	"github.com/1uLang/zhiannet-api/nextcloud/request"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
@@ -90,6 +92,28 @@ func (this *CreatePopupAction) RunPost(params struct {
 		return
 	}
 
+	// 创建nextcloud账号，并写入数据库
+	adminToken := request.GetAdminToken()
+	userPwd := `adminAd#@2021`
+	un := "admin_" + params.Username
+	err = request.CreateUser(adminToken, un, userPwd)
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	// 生成token
+	gtReq := &model.LoginReq{
+		User:     params.Username,
+		Password: userPwd,
+	}
+	ncToken := request.GenerateToken(gtReq)
+	// 写入数据库
+	err = model.StoreNCToken(params.Username, ncToken, 1)
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+
 	//创建审计系统账号
 	auditResp, auditErr := user.AddUser(&user.AddUserReq{
 		User:        &request.UserReq{AdminUserId: uint64(this.AdminId())},
@@ -157,6 +181,14 @@ func (this *CreatePopupAction) RunPost(params struct {
 
 	defer this.CreateLogInfo("创建系统用户 %d", createResp.AdminId)
 
+	// 用户账号和nextcloud账号进行关联
+	// 因为用户名是唯一的，所以加入用户名字段，减少脏数据的产生
+	err = model.BindNCTokenAndUID(un, createResp.AdminId)
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	
 	//判断是否拥有了主机防护功能  有 则对应创建该用户
 	var hasHids bool
 	for _, code := range params.ModuleCodes {

@@ -87,7 +87,6 @@ func (this *CreatePopupAction) RunPost(params struct {
 	userPwd := `adminAd#@2021`
 	err = request.CreateUser(adminToken, params.Username, userPwd)
 	if err != nil {
-		log.Println("createUser", err.Error())
 		this.ErrorPage(err)
 		return
 	}
