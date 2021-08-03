@@ -448,6 +448,11 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"url":  "/audit/report",
 					"code": "command",
 				},
+				{
+					"name": "agent",
+					"url":  "/audit/agent",
+					"code": "command",
+				},
 			},
 		},
 		//{
