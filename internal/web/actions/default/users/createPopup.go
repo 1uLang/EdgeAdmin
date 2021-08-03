@@ -6,6 +6,7 @@ import (
 	"github.com/1uLang/zhiannet-api/audit/request"
 	"github.com/1uLang/zhiannet-api/audit/server/user"
 	"github.com/1uLang/zhiannet-api/nextcloud/model"
+	nc_req "github.com/1uLang/zhiannet-api/nextcloud/request"
 	"github.com/TeaOSLab/EdgeAdmin/internal/utils/numberutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
@@ -86,25 +87,25 @@ func (this *CreatePopupAction) RunPost(params struct {
 	}
 
 	// 创建nextcloud账号，并写入数据库
-	//adminToken := nc_req.GetAdminToken()
-	//userPwd := `adminAd#@2021`
-	//err = nc_req.CreateUser(adminToken, params.Username, userPwd)
-	//if err != nil {
-	//	this.ErrorPage(err)
-	//	return
-	//}
-	//// 生成token
-	//gtReq := &model.LoginReq{
-	//	User:     params.Username,
-	//	Password: userPwd,
-	//}
-	//ncToken := nc_req.GenerateToken(gtReq)
-	//// 写入数据库
-	//err = model.StoreNCToken(params.Username, ncToken)
-	//if err != nil {
-	//	this.ErrorPage(err)
-	//	return
-	//}
+	adminToken := nc_req.GetAdminToken()
+	userPwd := `adminAd#@2021`
+	err = nc_req.CreateUser(adminToken, params.Username, userPwd)
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	// 生成token
+	gtReq := &model.LoginReq{
+		User:     params.Username,
+		Password: userPwd,
+	}
+	ncToken := nc_req.GenerateToken(gtReq)
+	// 写入数据库
+	err = model.StoreNCToken(params.Username, ncToken)
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
 
 	//创建审计系统的账号
 	//{
@@ -122,8 +123,6 @@ func (this *CreatePopupAction) RunPost(params struct {
 		Status:      1,
 		UserName:    params.Username,
 	})
-	fmt.Println("res-----", auditResp)
-	fmt.Println("err-----", auditErr)
 	if auditErr != nil || auditResp == nil {
 		this.ErrorPage(fmt.Errorf("创建账号失败"))
 		return
@@ -132,7 +131,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 		this.ErrorPage(fmt.Errorf(auditResp.Msg))
 		return
 	}
-	this.Success()
+
 	//}
 
 	createResp, err := this.RPC().UserRPC().CreateUser(this.AdminContext(), &pb.CreateUserRequest{
