@@ -15,6 +15,7 @@ import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/systemconfigs"
+	"github.com/dlclark/regexp2"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
 	"github.com/xlzd/gotp"
@@ -76,6 +77,14 @@ func (this *CreatePopupAction) RunPost(params struct {
 		Require("请输入确认登录密码")
 	if params.Pass1 != params.Pass2 {
 		this.FailField("pass2", "两次输入的密码不一致")
+	}
+	reg, err := regexp2.Compile(
+		`^(?![A-z0-9]+$)(?=.[^%&',;=?$\x22])(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,30}$`, 0)
+	if err != nil {
+		this.FailField("pass1", "密码格式不正确")
+	}
+	if match, err := reg.FindStringMatch(params.Pass1); err != nil || match == nil {
+		this.FailField("pass1", "密码格式不正确")
 	}
 
 	modules := []*systemconfigs.AdminModule{}
@@ -183,7 +192,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 
 	// 用户账号和nextcloud账号进行关联
 	// 因为用户名是唯一的，所以加入用户名字段，减少脏数据的产生
-	err = model.BindNCTokenAndUID(un, createResp.AdminId,1)
+	err = model.BindNCTokenAndUID(un, createResp.AdminId, 1)
 	if err != nil {
 		this.ErrorPage(err)
 		return

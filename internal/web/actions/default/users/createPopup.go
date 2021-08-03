@@ -10,6 +10,7 @@ import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/utils/numberutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/dlclark/regexp2"
 	"github.com/iwind/TeaGo/actions"
 )
 
@@ -63,9 +64,14 @@ func (this *CreatePopupAction) RunPost(params struct {
 		Require("请再次输入确认密码").
 		Equal(params.Pass1, "两次输入的密码不一致")
 
-	params.Must.
-		Field("pass1", params.Pass1).
-		Match(`^[a-zA-Z0-9_]+$`, "用户名中只能含有英文、数字和下划线")
+	reg, err := regexp2.Compile(
+		`^(?![A-z0-9]+$)(?=.[^%&',;=?$\x22])(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,30}$`, 0)
+	if err != nil {
+		this.FailField("pass1", "密码格式不正确")
+	}
+	if match, err := reg.FindStringMatch(params.Pass1); err != nil || match == nil {
+		this.FailField("pass1", "密码格式不正确")
+	}
 
 	params.Must.
 		Field("fullname", params.Fullname).
@@ -85,7 +91,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 			Field("email", params.Email).
 			Email("请输入正确的电子邮箱")
 	}
-
+	this.Success()
 	// 创建nextcloud账号，并写入数据库
 	adminToken := nc_req.GetAdminToken()
 	userPwd := `adminAd#@2021`

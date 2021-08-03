@@ -4,6 +4,7 @@ import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/users/userutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/dlclark/regexp2"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
 )
@@ -106,6 +107,15 @@ func (this *UpdateAction) RunPost(params struct {
 			Field("pass2", params.Pass2).
 			Require("请再次输入确认密码").
 			Equal(params.Pass1, "两次输入的密码不一致")
+		reg, err := regexp2.Compile(
+			`^(?![A-z0-9]+$)(?=.[^%&',;=?$\x22])(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,30}$`, 0)
+		if err != nil {
+			this.FailField("pass1", "密码格式不正确")
+		}
+		if match, err := reg.FindStringMatch(params.Pass1); err != nil || match == nil {
+			this.FailField("pass1", "密码格式不正确")
+		}
+
 	}
 
 	params.Must.
