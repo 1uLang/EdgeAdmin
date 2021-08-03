@@ -183,7 +183,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 
 	// 用户账号和nextcloud账号进行关联
 	// 因为用户名是唯一的，所以加入用户名字段，减少脏数据的产生
-	err = model.BindNCTokenAndUID(un, createResp.AdminId)
+	err = model.BindNCTokenAndUID(un, createResp.AdminId,1)
 	if err != nil {
 		this.ErrorPage(err)
 		return
