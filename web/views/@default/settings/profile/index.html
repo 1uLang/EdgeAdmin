@@ -60,14 +60,14 @@
 			<td class="title">登录屏蔽时间</td>
 			<td>
 				<input disabled type="number" name="bInputFailWaitSec" v-model="bInputFailWaitSec"/>
-				<p class="comment">（单位：秒）当用户登录失败次数达到限制后，那么在此时间间隔内禁止登录</p>
+				<p class="comment">（单位：分钟）当用户登录失败次数达到限制后，那么在此时间间隔内禁止登录</p>
 			</td>
 		</tr>
 		<tr>
 			<td class="title">登录空闲超时</td>
 			<td>
 				<input disabled type="number" name="bInputOutWaitSec" v-model="bInputOutWaitSec"/>
-				<p class="comment">（单位：秒）如果在指定时间内没有操作，连接会被断开</p>
+				<p class="comment">（单位：分钟）如果在指定时间内没有操作，连接会被断开</p>
 			</td>
 		</tr>
 	</table>
