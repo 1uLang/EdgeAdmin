@@ -74,7 +74,10 @@ Tea.context(function () {
 
     this.onuploadFile = function () {
         this.onShowLoading()
-        this.onHideLoading()
+        setTimeout(() => {
+            this.onHideLoading()
+        }, 2000);
+        
         // let that = this
         // var uploadFile = document.getElementById("uploadFile");
         // if(uploadFile.value==""){
