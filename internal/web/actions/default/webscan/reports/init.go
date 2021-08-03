@@ -1,7 +1,6 @@
 package reports
 
 import (
-	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/helpers"
 	"github.com/iwind/TeaGo"
 )
@@ -11,13 +10,14 @@ import (
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
-			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeWebScan)).
+			Helper(helpers.NewUserMustAuth("")).
 			Data("teaMenu", "reports").
 			Prefix("/webscan/reports").
 			GetPost("", new(IndexAction)).
 			Post("/create", new(CreateAction)).
 			Post("/delete", new(DeleteAction)).
 			Get("/download", new(DownloadAction)).
+			Post("/export", new(ExportAction)).
 			EndAll()
 	})
 }

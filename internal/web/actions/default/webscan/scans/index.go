@@ -3,6 +3,8 @@ package scans
 import (
 	"github.com/1uLang/zhiannet-api/awvs/model/scans"
 	scans_server "github.com/1uLang/zhiannet-api/awvs/server/scans"
+	nessus_scans_model "github.com/1uLang/zhiannet-api/nessus/model/scans"
+	nessus_scans_server "github.com/1uLang/zhiannet-api/nessus/server/scans"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/webscan"
 )
@@ -23,7 +25,6 @@ func (this *IndexAction) RunGet(params struct {
 	this.Data["scans"] = make([]interface{}, 0)
 	err := webscan.InitAPIServer()
 	if err != nil {
-		//this.ErrorPage(err)
 		this.Data["nodeErr"] = "web扫描节点错误"
 		this.Show()
 		return
@@ -35,13 +36,22 @@ func (this *IndexAction) RunGet(params struct {
 		params.PageSize = 20
 	}
 	list, err := scans_server.List(&scans.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, AdminUserId: uint64(this.AdminId())})
-	if err != nil && list != nil {
-		this.ErrorPage(err)
-		this.Show()
-		return
-	}
+	//if err != nil && list != nil {
+	//	this.ErrorPage(err)
+	//	return
+	//}
+	var scansMaps []interface{}
 	if lists, ok := list["scans"]; ok {
-		this.Data["scans"] = lists
+		scansMaps = lists.([]interface{})
+	}
+	nessus_list, err := nessus_scans_server.History(&nessus_scans_model.HistoryReq{ AdminUserId: uint64(this.AdminId())})
+	//if err != nil {
+	//	this.ErrorPage(err)
+	//	return
+	//}
+	scansMaps = append(scansMaps, nessus_list...)
+	if len(nessus_list) > 0 || len(scansMaps)> 0{
+		this.Data["scans"] = scansMaps
 	}
 	this.Show()
 }
@@ -63,12 +73,22 @@ func (this *IndexAction) RunPost(params struct {
 		params.PageSize = 20
 	}
 	list, err := scans_server.List(&scans.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, AdminUserId: uint64(this.AdminId())})
-	if err != nil && list != nil {
-		this.ErrorPage(err)
-		return
-	}
+	//if err != nil && list != nil {
+	//	this.ErrorPage(err)
+	//	return
+	//}
+	var scansMaps []interface{}
 	if lists, ok := list["scans"]; ok {
-		this.Data["scans"] = lists
+		scansMaps = lists.([]interface{})
+	}
+	nessus_list, err := nessus_scans_server.History(&nessus_scans_model.HistoryReq{ AdminUserId: uint64(this.AdminId())})
+	//if err != nil {
+	//	this.ErrorPage(err)
+	//	return
+	//}
+	scansMaps = append(scansMaps, nessus_list...)
+	if len(nessus_list) > 0 || len(scansMaps)> 0{
+		this.Data["scans"] = scansMaps
 	}
 	this.Success()
 }

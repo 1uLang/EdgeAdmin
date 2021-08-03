@@ -1,19 +1,18 @@
 {$layout}
 <!-- echart -->
+{$var "header"}
 <script type="text/javascript" src="/js/echarts/echarts.min.js"></script>
+{$end}
 <p class="comment" v-if="data.nodeErr != ''">请先添加漏洞扫描节点。</p>
+
 
 <div v-if="data.nodeErr == ''">
 
-    <!-- 高危漏洞 -->
     <div class="card-box" style="height: 380px;">
         <div class="chart-box" id="high-vulnerabilities-chart-box"></div>
-        <!-- 中危漏洞 -->
         <div class="chart-box" id="med-vulnerabilities-chart-box"></div>
-        <!-- 低危漏洞 -->
         <div class="chart-box" id="low-vulnerabilities-chart-box"></div>
     </div>
-    <!-- 漏洞统计 -->
     <div class="card-box ui five columns grid" style="height: 130px">
         <div class="ui column">
             <h4>正在扫描</h4>

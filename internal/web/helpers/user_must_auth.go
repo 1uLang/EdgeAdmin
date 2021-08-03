@@ -496,67 +496,34 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 		//		},
 		//	},
 		//},
-		//{
-		//	"code":   "fort",
-		//	"module": configloaders.AdminModuleCodeFort,
-		//	"name":   "堡垒机",
-		//	"icon":   "history",
-		//	"subItems": []maps.Map{
-		//		{
-		//			"name": "全局状态",
-		//			"url":  "/fort",
-		//			"code": "fort",
-		//		},
-		//		{
-		//			"name": "资产管理",
-		//			"code": "assets",
-		//			"subItems": []maps.Map{
-		//				{
-		//					"name": "资产列表",
-		//					"url":  "/fort/assets",
-		//					"code": "assets",
-		//				},
-		//				{
-		//					"name": "管理用户",
-		//					"url":  "/fort/assets/admin-users",
-		//					"code": "admin-users",
-		//				},
-		//				{
-		//					"name": "系统用户",
-		//					"url":  "/fort/assets/system-users",
-		//					"code": "system-users",
-		//				},
-		//			},
-		//		},
-		//		{
-		//			"name": "授权管理",
-		//			"code": "perms",
-		//			"subItems": []maps.Map{
-		//				{
-		//					"name": "资产授权",
-		//					"url":  "/fort/perms",
-		//					"code": "perms",
-		//				},
-		//			},
-		//		},
-		//		{
-		//			"name": "会话管理",
-		//			"code": "session",
-		//			"subItems": []maps.Map{
-		//				{
-		//					"name": "会话管理",
-		//					"url":  "/fort/session",
-		//					"code": "session",
-		//				},
-		//				{
-		//					"name": "命令记录",
-		//					"url":  "/fort/session/command",
-		//					"code": "command",
-		//				},
-		//			},
-		//		},
-		//	},
-		//},
+		{
+			"code":   "fortcloud",
+			"module": configloaders.AdminModuleCodeFort,
+			"name":   "堡垒机",
+			"icon":   "history",
+			"subItems": []maps.Map{
+				{
+					"name": "资产管理",
+					"url":  "/fortcloud/assets",
+					"code": "assets",
+				},
+				{
+					"name": "管理账号",
+					"url":  "/fortcloud/admins",
+					"code": "admins",
+				},
+				{
+					"name": "会话管理",
+					"url":  "/fortcloud/sessions",
+					"code": "sessions",
+				},
+				{
+					"name": "运维审计",
+					"url":  "/fortcloud/audit",
+					"code": "audit",
+				},
+			},
+		},
 		{
 			"code":   "settings",
 			"module": configloaders.AdminModuleCodeSetting,
