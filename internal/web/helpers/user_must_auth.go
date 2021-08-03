@@ -417,6 +417,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 				},
 			},
 		},
+<<<<<<< HEAD
 		//{
 		//	"code":   "audit",
 		//	"module": configloaders.AdminModuleCodeAudit,
@@ -452,10 +453,80 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 		//					"name": "agent管理",
 		//					"icon": "",
 		//					"url":  "/audit/assets/agent",
+=======
+		{
+			"code": "audit",
+			"url":  "/audit/db",
+			"name": "安全审计",
+			"icon": "ioxhost",
+			"subItems": []maps.Map{
+				{
+					"name": "数据库管理",
+					"url":  "/audit/db",
+					"code": "assets",
+				},
+				{
+					"name": "主机管理",
+					"url":  "/audit/host",
+					"code": "admins",
+				},
+				{
+					"name": "应用管理",
+					"url":  "/audit/app",
+					"code": "sessions",
+				},
+				{
+					"name": "审计日志",
+					"url":  "/audit/logs",
+					"code": "command",
+				},
+				{
+					"name": "订阅报告",
+					"url":  "/audit/report",
+					"code": "command",
+				},
+				{
+					"name": "agent",
+					"url":  "/audit/agent",
+					"code": "command",
+				},
+			},
+		},
+		//{
+		//	"code":   "fort",
+		//	"module": configloaders.AdminModuleCodeFort,
+		//	"name":   "堡垒机",
+		//	"icon":   "history",
+		//	"subItems": []maps.Map{
+		//		{
+		//			"name": "全局状态",
+		//			"url":  "/fort",
+		//			"code": "fort",
+		//		},
+		//		{
+		//			"name": "资产管理",
+		//			"code": "assets",
+		//			"subItems": []maps.Map{
+		//				{
+		//					"name": "资产列表",
+		//					"url":  "/fort/assets",
+		//					"code": "assets",
+		//				},
+		//				{
+		//					"name": "管理用户",
+		//					"url":  "/fort/assets/admin-users",
+		//					"code": "admin-users",
+		//				},
+		//				{
+		//					"name": "系统用户",
+		//					"url":  "/fort/assets/system-users",
+		//					"code": "system-users",
+>>>>>>> f9ef33d192763bfb96fe4c3461c1793d8fc7fe82
 		//				},
 		//			},
 		//		},
 		//		{
+<<<<<<< HEAD
 		//			"name": "查询分析",
 		//			"icon": "",
 		//			"url":  "/audit/query/logs",
@@ -469,10 +540,20 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 		//					"name": "风险查询",
 		//					"icon": "",
 		//					"url":  "/audit/query/risk",
+=======
+		//			"name": "授权管理",
+		//			"code": "perms",
+		//			"subItems": []maps.Map{
+		//				{
+		//					"name": "资产授权",
+		//					"url":  "/fort/perms",
+		//					"code": "perms",
+>>>>>>> f9ef33d192763bfb96fe4c3461c1793d8fc7fe82
 		//				},
 		//			},
 		//		},
 		//		{
+<<<<<<< HEAD
 		//			"name": "报表中心",
 		//			"icon": "",
 		//			"url":  "/audit/form/preview",
@@ -491,11 +572,26 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 		//					"name": "审计归档",
 		//					"icon": "",
 		//					"url":  "/audit/form/file",
+=======
+		//			"name": "会话管理",
+		//			"code": "session",
+		//			"subItems": []maps.Map{
+		//				{
+		//					"name": "会话管理",
+		//					"url":  "/fort/session",
+		//					"code": "session",
+		//				},
+		//				{
+		//					"name": "命令记录",
+		//					"url":  "/fort/session/command",
+		//					"code": "command",
+>>>>>>> f9ef33d192763bfb96fe4c3461c1793d8fc7fe82
 		//				},
 		//			},
 		//		},
 		//	},
 		//},
+<<<<<<< HEAD
 		{
 			"code":   "fortcloud",
 			"module": configloaders.AdminModuleCodeFort,
@@ -524,6 +620,8 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 				},
 			},
 		},
+=======
+>>>>>>> f9ef33d192763bfb96fe4c3461c1793d8fc7fe82
 		{
 			"code":   "settings",
 			"module": configloaders.AdminModuleCodeSetting,

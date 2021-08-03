@@ -10,6 +10,7 @@ import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/systemconfigs"
+	"github.com/dlclark/regexp2"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
 	"github.com/xlzd/gotp"
@@ -130,6 +131,14 @@ func (this *UpdateAction) RunPost(params struct {
 		if params.Pass1 != params.Pass2 {
 			this.FailField("pass2", "两次输入的密码不一致")
 		}
+		reg, err := regexp2.Compile(
+			`^(?![A-z0-9]+$)(?=.[^%&',;=?$\x22])(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,30}$`, 0)
+		if err != nil {
+			this.FailField("pass1", "密码格式不正确")
+		}
+		if match, err := reg.FindStringMatch(params.Pass1); err != nil || match == nil {
+			this.FailField("pass1", "密码格式不正确")
+		}
 	}
 
 	modules := []*systemconfigs.AdminModule{}
@@ -207,22 +216,22 @@ func (this *UpdateAction) RunPost(params struct {
 		}
 		//判断是否拥有了主机防护功能  有 则对应创建该用户
 		var hasHids bool
-		for _,code := range params.ModuleCodes {
-			if code == configloaders.AdminModuleCodeHids{
+		for _, code := range params.ModuleCodes {
+			if code == configloaders.AdminModuleCodeHids {
 				hasHids = true
 				break
 			}
 		}
-		if !configloaders.AllowModule(this.AdminId(),configloaders.AdminModuleCodeHids) && hasHids {
+		if !configloaders.AllowModule(this.AdminId(), configloaders.AdminModuleCodeHids) && hasHids {
 
 			err = hids.InitAPIServer()
 			if err != nil {
-				this.ErrorPage(fmt.Errorf("主机防护组件初始化失败：%v",err))
+				this.ErrorPage(fmt.Errorf("主机防护组件初始化失败：%v", err))
 				return
 			}
-			_,err = hids_user_server.Add(&hids_user_model.AddReq{UserName: params.Username,Password: "dengbao-"+params.Username,Role: 3})
+			_, err = hids_user_server.Add(&hids_user_model.AddReq{UserName: params.Username, Password: "dengbao-" + params.Username, Role: 3})
 			if err != nil {
-				this.ErrorPage(fmt.Errorf("主机防护组件同步信息失败：%v",err))
+				this.ErrorPage(fmt.Errorf("主机防护组件同步信息失败：%v", err))
 				return
 			}
 		}

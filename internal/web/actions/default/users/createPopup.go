@@ -1,9 +1,16 @@
 package users
 
 import (
+	"fmt"
+	"github.com/1uLang/zhiannet-api/audit/model/audit_user_relation"
+	"github.com/1uLang/zhiannet-api/audit/request"
+	"github.com/1uLang/zhiannet-api/audit/server/user"
+	"github.com/1uLang/zhiannet-api/nextcloud/model"
+	nc_req "github.com/1uLang/zhiannet-api/nextcloud/request"
 	"github.com/TeaOSLab/EdgeAdmin/internal/utils/numberutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/dlclark/regexp2"
 	"github.com/iwind/TeaGo/actions"
 )
 
@@ -57,6 +64,15 @@ func (this *CreatePopupAction) RunPost(params struct {
 		Require("请再次输入确认密码").
 		Equal(params.Pass1, "两次输入的密码不一致")
 
+	reg, err := regexp2.Compile(
+		`^(?![A-z0-9]+$)(?=.[^%&',;=?$\x22])(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,30}$`, 0)
+	if err != nil {
+		this.FailField("pass1", "密码格式不正确")
+	}
+	if match, err := reg.FindStringMatch(params.Pass1); err != nil || match == nil {
+		this.FailField("pass1", "密码格式不正确")
+	}
+
 	params.Must.
 		Field("fullname", params.Fullname).
 		Require("请输入全名")
@@ -75,6 +91,54 @@ func (this *CreatePopupAction) RunPost(params struct {
 			Field("email", params.Email).
 			Email("请输入正确的电子邮箱")
 	}
+	this.Success()
+	// 创建nextcloud账号，并写入数据库
+	adminToken := nc_req.GetAdminToken()
+	userPwd := `adminAd#@2021`
+	err = nc_req.CreateUser(adminToken, params.Username, userPwd)
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	// 生成token
+	gtReq := &model.LoginReq{
+		User:     params.Username,
+		Password: userPwd,
+	}
+	ncToken := nc_req.GenerateToken(gtReq)
+	// 写入数据库
+	err = model.StoreNCToken(params.Username, ncToken)
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+
+	//创建审计系统的账号
+	//{
+	auditResp, auditErr := user.AddUser(&user.AddUserReq{
+		User:        &request.UserReq{AdminUserId: uint64(this.AdminId())},
+		Email:       params.Email,
+		IsAdmin:     1,
+		NickName:    params.Username,
+		Opt:         1,
+		Password:    params.Pass1,
+		Phonenumber: params.Mobile,
+		RoleIds:     []uint64{},
+		RoleName:    "平台管理员",
+		Sex:         1,
+		Status:      1,
+		UserName:    params.Username,
+	})
+	if auditErr != nil || auditResp == nil {
+		this.ErrorPage(fmt.Errorf("创建账号失败"))
+		return
+	}
+	if auditResp.Code != 0 {
+		this.ErrorPage(fmt.Errorf(auditResp.Msg))
+		return
+	}
+
+	//}
 
 	createResp, err := this.RPC().UserRPC().CreateUser(this.AdminContext(), &pb.CreateUserRequest{
 		Username:      params.Username,
@@ -93,5 +157,21 @@ func (this *CreatePopupAction) RunPost(params struct {
 	}
 	defer this.CreateLogInfo("创建用户 %d", createResp.UserId)
 
+	//关联账号
+	_, err = audit_user_relation.Add(&audit_user_relation.AuditReq{
+		UserId:      uint64(createResp.UserId),
+		AuditUserId: uint64(auditResp.Data.Id),
+	})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	// 用户账号和nextcloud账号进行关联
+	// 因为用户名是唯一的，所以加入用户名字段，减少脏数据的产生
+	err = model.BindNCTokenAndUID(params.Username, createResp.UserId)
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
 	this.Success()
 }

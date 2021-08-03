@@ -130,6 +130,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/profile"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/security"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/server"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/strategy"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/ui"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/upgrade"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/user-nodes"
@@ -192,6 +193,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/risk"
 
 	//审计系统
+<<<<<<< HEAD
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/assets/agent"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/assets/app"
@@ -209,4 +211,12 @@ import (
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fortcloud/audit"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fortcloud/command"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fortcloud/sessions"
+=======
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/agent"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/app"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/db"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/host"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/logs"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/report"
+>>>>>>> f9ef33d192763bfb96fe4c3461c1793d8fc7fe82
 )
