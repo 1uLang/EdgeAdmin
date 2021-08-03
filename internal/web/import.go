@@ -130,6 +130,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/profile"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/security"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/server"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/strategy"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/ui"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/upgrade"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/user-nodes"
