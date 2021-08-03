@@ -7,7 +7,7 @@ replace github.com/1uLang/zhiannet-api => ../zhiannet-api
 replace github.com/TeaOSLab/EdgeCommon => ../EdgeCommon
 
 require (
-	github.com/1uLang/zhiannet-api v0.0.0-20210728032017-a3be6e0904ab
+	github.com/1uLang/zhiannet-api v0.0.0-00010101000000-000000000000
 	github.com/TeaOSLab/EdgeCommon v0.0.0-00010101000000-000000000000
 	github.com/cespare/xxhash v1.1.0
 	github.com/go-sql-driver/mysql v1.6.0
