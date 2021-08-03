@@ -192,31 +192,17 @@ import (
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/invade/webShell"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/risk"
 
-	//审计系统
-<<<<<<< HEAD
-	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit"
-	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/assets/agent"
-	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/assets/app"
-	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/assets/db"
-	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/assets/host"
-	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/form/file"
-	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/form/preview"
-	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/form/subscribe"
-	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/query/logs"
-	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/query/risk"
-
 	//堡垒机
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fortcloud/admins"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fortcloud/assets"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fortcloud/audit"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fortcloud/command"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fortcloud/sessions"
-=======
+	//审计系统
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/agent"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/app"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/db"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/host"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/logs"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/report"
->>>>>>> f9ef33d192763bfb96fe4c3461c1793d8fc7fe82
 )
