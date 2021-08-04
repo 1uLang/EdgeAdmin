@@ -4,9 +4,9 @@ Tea.context(function () {
 		if(this.data.nodeErr != ""){
 			return
 		}
-		this.reloadHighVulnerabilitiesChart()
-		this.reloadMedVulnerabilitiesChart()
-		this.reloadLowVulnerabilitiesChart()
+		// this.reloadHighVulnerabilitiesChart()
+		// this.reloadMedVulnerabilitiesChart()
+		// this.reloadLowVulnerabilitiesChart()
 
 		let that = this
 		window.addEventListener("resize", function () {

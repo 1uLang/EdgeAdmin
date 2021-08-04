@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/1uLang/zhiannet-api/awvs/model/reports"
 	reports_server "github.com/1uLang/zhiannet-api/awvs/server/reports"
+	nessus_scans_model "github.com/1uLang/zhiannet-api/nessus/model/scans"
+	nessus_scans_server "github.com/1uLang/zhiannet-api/nessus/server/scans"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/webscan"
 )
@@ -36,14 +38,23 @@ func (this *IndexAction) RunGet(params struct {
 		params.PageSize = 20
 	}
 	list, err := reports_server.List(&reports.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, AdminUserId: uint64(this.AdminId())})
-	if err != nil && list == nil {
-		//this.ErrorPage(err)
-		this.Show()
-		return
-	}
-	//this.Data["reports"] = list["reports"]
+	//if err != nil && list == nil {
+	//	this.ErrorPage(err)
+	//	return
+	//}
+	var reports []interface{}
 	if lists, ok := list["reports"]; ok {
-		this.Data["reports"] = lists
+		reports = lists.([]interface{})
+	}
+	nessus_list, err := nessus_scans_server.ListReport(&nessus_scans_model.ScansListReq{AdminUserId: uint64(this.AdminId())})
+	//if err != nil {
+	//	this.ErrorPage(err)
+	//	return
+	//}
+	reports = append(reports, nessus_list...)
+
+	if len(nessus_list) > 0 || len(reports) > 0 {
+		this.Data["reports"] = reports
 	}
 	this.Show()
 }
@@ -56,7 +67,7 @@ func (this *IndexAction) RunPost(params struct {
 	this.Data["reports"] = make([]interface{}, 0)
 	err := webscan.InitAPIServer()
 	if err != nil {
-		this.ErrorPage(fmt.Errorf("web漏洞扫描节点错误:%v",err))
+		this.ErrorPage(fmt.Errorf("web漏洞扫描节点错误:%v", err))
 		return
 	}
 	if params.PageNo < 0 {
@@ -66,13 +77,23 @@ func (this *IndexAction) RunPost(params struct {
 		params.PageSize = 20
 	}
 	list, err := reports_server.List(&reports.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, AdminUserId: uint64(this.AdminId())})
-	if err != nil && list == nil {
-		this.ErrorPage(err)
-		return
-	}
-	//this.Data["reports"] = list["reports"]
+	//if err != nil && list == nil {
+	//	this.ErrorPage(err)
+	//	return
+	//}
+	var reports []interface{}
 	if lists, ok := list["reports"]; ok {
-		this.Data["reports"] = lists
+		reports = lists.([]interface{})
 	}
-	this.Show()
+	nessus_list, err := nessus_scans_server.ListReport(&nessus_scans_model.ScansListReq{AdminUserId: uint64(this.AdminId())})
+	//if err != nil {
+	//	this.ErrorPage(err)
+	//	return
+	//}
+	reports = append(reports, nessus_list...)
+
+	if len(reports) > 0 {
+		this.Data["reports"] = reports
+	}
+	this.Success()
 }

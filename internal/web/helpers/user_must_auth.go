@@ -1,6 +1,8 @@
 package helpers
 
 import (
+	"fmt"
+	"github.com/1uLang/zhiannet-api/common/cache"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
 	"github.com/TeaOSLab/EdgeAdmin/internal/setup"
@@ -9,6 +11,7 @@ import (
 	"net/http"
 	"reflect"
 	"strings"
+	"time"
 )
 
 // 认证拦截
@@ -158,6 +161,24 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 		initMethod.Call([]reflect.Value{})
 	}
 
+	fmt.Println("每次都执行的事件url=", action.Request.RequestURI, adminId)
+	taskUrl := []string{
+		"/clusters/tasks/check", "/dns/tasks/check", "/messages/badge",
+	}
+	for _, v := range taskUrl {
+		if action.Request.RequestURI == v {
+			break
+		}
+		res, _ := cache.GetInt(fmt.Sprintf("login_success_adminid_%v", adminId))
+		if res == 0 {
+			//30分钟没有操作  自动退出
+			session.Delete()
+			this.login(action)
+			return false
+		}
+		//续期
+		cache.Incr(fmt.Sprintf("login_success_adminid_%v", adminId), time.Minute*30)
+	}
 	return true
 }
 
@@ -417,6 +438,41 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 				},
 			},
 		},
+		//{
+		//	"code":   "audit",
+		//	"module": configloaders.AdminModuleCodeAudit,
+		//	"name":   "审计系统",
+		//	"icon":   "",
+		//	"subItems": []maps.Map{
+		//		{
+		//			"name": "全局状态",
+		//			"url":  "/audit",
+		//			"code": "",
+		//		},
+		//		{
+		//			"name": "资产管理",
+		//			"icon": "",
+		//			"url":  "audit/assets/db",
+		//			"subItems": []maps.Map{
+		//				{
+		//					"name": "数据库管理",
+		//					"icon": "",
+		//					"url":  "/audit/assets/db",
+		//				},
+		//				{
+		//					"name": "主机管理",
+		//					"icon": "",
+		//					"url":  "/audit/assets/host",
+		//				},
+		//				{
+		//					"name": "应用管理",
+		//					"icon": "",
+		//					"url":  "/audit/assets/app",
+		//				},
+		//				{
+		//					"name": "agent管理",
+		//					"icon": "",
+		//					"url":  "/audit/assets/agent",
 		{
 			"code": "audit",
 			"url":  "/audit/db",
@@ -449,11 +505,16 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"code": "command",
 				},
 				{
-					"name": "agent",
+					"name": "Agent管理",
 					"url":  "/audit/agent",
 					"code": "command",
 				},
 			},
+		}, {
+			"code": "databackup",
+			"url":  "/databackup",
+			"name": "数据备份",
+			"icon": "ioxhost",
 		},
 		//{
 		//	"code":   "fort",
@@ -488,6 +549,19 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 		//			},
 		//		},
 		//		{
+		//			"name": "查询分析",
+		//			"icon": "",
+		//			"url":  "/audit/query/logs",
+		//			"subItems": []maps.Map{
+		//				{
+		//					"name": "审计日志",
+		//					"icon": "",
+		//					"url":  "/audit/query/logs",
+		//				},
+		//				{
+		//					"name": "风险查询",
+		//					"icon": "",
+		//					"url":  "/audit/query/risk",
 		//			"name": "授权管理",
 		//			"code": "perms",
 		//			"subItems": []maps.Map{
@@ -499,6 +573,24 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 		//			},
 		//		},
 		//		{
+		//			"name": "报表中心",
+		//			"icon": "",
+		//			"url":  "/audit/form/preview",
+		//			"subItems": []maps.Map{
+		//				{
+		//					"name": "报表预览",
+		//					"icon": "",
+		//					"url":  "/audit/form/preview",
+		//				},
+		//				{
+		//					"name": "报表订阅",
+		//					"icon": "",
+		//					"url":  "/audit/form/subscribe",
+		//				},
+		//				{
+		//					"name": "审计归档",
+		//					"icon": "",
+		//					"url":  "/audit/form/file",
 		//			"name": "会话管理",
 		//			"code": "session",
 		//			"subItems": []maps.Map{
@@ -516,6 +608,34 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 		//		},
 		//	},
 		//},
+		{
+			"code":   "fortcloud",
+			"module": configloaders.AdminModuleCodeFort,
+			"name":   "堡垒机",
+			"icon":   "history",
+			"subItems": []maps.Map{
+				{
+					"name": "资产管理",
+					"url":  "/fortcloud/assets",
+					"code": "assets",
+				},
+				{
+					"name": "管理账号",
+					"url":  "/fortcloud/admins",
+					"code": "admins",
+				},
+				{
+					"name": "会话管理",
+					"url":  "/fortcloud/sessions",
+					"code": "sessions",
+				},
+				{
+					"name": "运维审计",
+					"url":  "/fortcloud/audit",
+					"code": "audit",
+				},
+			},
+		},
 		{
 			"code":   "settings",
 			"module": configloaders.AdminModuleCodeSetting,

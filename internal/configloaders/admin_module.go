@@ -32,7 +32,7 @@ const (
 	AdminModuleCodeMonitor AdminModuleCode = "monitor" //监控告警
 	AdminModuleCodeWAF     AdminModuleCode = "waf"     //web防火墙
 	AdminModuleCodeAudit   AdminModuleCode = "audit"   //审计系统
-	AdminModuleCodeFort    AdminModuleCode = "fort"    //堡垒机
+	AdminModuleCodeFort    AdminModuleCode = "fortcloud"    //堡垒机
 	AdminModuleCodeBackup  AdminModuleCode = "backup"  //数据备份
 )
 

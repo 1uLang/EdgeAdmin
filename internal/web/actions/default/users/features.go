@@ -7,8 +7,8 @@ import (
 	jumpserver_users_model "github.com/1uLang/zhiannet-api/jumpserver/model/users"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fortcloud"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/jumpserver"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/users/userutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
@@ -125,12 +125,12 @@ func (this *FeaturesAction) RunPost(params struct {
 				return
 			}
 		}
-		err = jumpserver.InitAPIServer()
+		err = fortcloud.InitAPIServer()
 		if err != nil {
 			this.ErrorPage(fmt.Errorf("堡垒机组件初始化失败0：%v", err))
 			return
 		}
-		req, err := jumpserver.NewServerRequest(jumpserver.Username, jumpserver.Password)
+		req, err := fortcloud.NewServerRequest(fortcloud.Username, fortcloud.Password)
 		if err != nil {
 			this.ErrorPage(fmt.Errorf("堡垒机组件初始化失败1：%v", err))
 			return

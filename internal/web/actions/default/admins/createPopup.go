@@ -112,12 +112,12 @@ func (this *CreatePopupAction) RunPost(params struct {
 	}
 	// 生成token
 	gtReq := &model.LoginReq{
-		User:     params.Username,
+		User:     un,
 		Password: userPwd,
 	}
 	ncToken := nc_req.GenerateToken(gtReq)
 	// 写入数据库
-	err = model.StoreNCToken(params.Username, ncToken, 1)
+	err = model.StoreNCToken(un, ncToken, 1)
 	if err != nil {
 		this.ErrorPage(err)
 		return
