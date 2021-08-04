@@ -496,32 +496,32 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 				{
 					"name": "数据库管理",
 					"url":  "/audit/db",
-					"code": "assets",
+					"code": "db",
 				},
 				{
 					"name": "主机管理",
 					"url":  "/audit/host",
-					"code": "admins",
+					"code": "host",
 				},
 				{
 					"name": "应用管理",
 					"url":  "/audit/app",
-					"code": "sessions",
+					"code": "app",
 				},
 				{
 					"name": "审计日志",
 					"url":  "/audit/logs",
-					"code": "command",
+					"code": "logs",
 				},
 				{
 					"name": "订阅报告",
 					"url":  "/audit/report",
-					"code": "command",
+					"code": "report",
 				},
 				{
 					"name": "Agent管理",
 					"url":  "/audit/agent",
-					"code": "command",
+					"code": "agent",
 				},
 			},
 		}, {
