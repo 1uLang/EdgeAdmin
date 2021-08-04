@@ -4,6 +4,7 @@ import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/dlclark/regexp2"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
 )
@@ -64,6 +65,14 @@ func (this *IndexAction) RunPost(params struct {
 	if len(params.Password) > 0 {
 		if params.Password != params.Password2 {
 			this.FailField("password2", "两次输入的密码不一致")
+		}
+		reg, err := regexp2.Compile(
+			`^(?![A-z0-9]+$)(?=.[^%&',;=?$\x22])(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,30}$`, 0)
+		if err != nil {
+			this.FailField("pass1", "密码格式不正确")
+		}
+		if match, err := reg.FindStringMatch(params.Password2); err != nil || match == nil {
+			this.FailField("pass1", "密码格式不正确")
 		}
 	}
 

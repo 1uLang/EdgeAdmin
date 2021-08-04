@@ -1,6 +1,8 @@
 package helpers
 
 import (
+	"fmt"
+	"github.com/1uLang/zhiannet-api/common/cache"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
 	"github.com/TeaOSLab/EdgeAdmin/internal/setup"
@@ -9,6 +11,7 @@ import (
 	"net/http"
 	"reflect"
 	"strings"
+	"time"
 )
 
 // 认证拦截
@@ -158,6 +161,24 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 		initMethod.Call([]reflect.Value{})
 	}
 
+	fmt.Println("每次都执行的事件url=", action.Request.RequestURI, adminId)
+	taskUrl := []string{
+		"/clusters/tasks/check", "/dns/tasks/check", "/messages/badge",
+	}
+	for _, v := range taskUrl {
+		if action.Request.RequestURI == v {
+			break
+		}
+		res, _ := cache.GetInt(fmt.Sprintf("login_success_adminid_%v", adminId))
+		if res == 0 {
+			//30分钟没有操作  自动退出
+			session.Delete()
+			this.login(action)
+			return false
+		}
+		//续期
+		cache.Incr(fmt.Sprintf("login_success_adminid_%v", adminId), time.Minute*30)
+	}
 	return true
 }
 
@@ -484,11 +505,16 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"code": "command",
 				},
 				{
-					"name": "agent",
+					"name": "Agent管理",
 					"url":  "/audit/agent",
 					"code": "command",
 				},
 			},
+		}, {
+			"code": "databackup",
+			"url":  "/databackup",
+			"name": "数据备份",
+			"icon": "ioxhost",
 		},
 		//{
 		//	"code":   "fort",

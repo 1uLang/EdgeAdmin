@@ -1,6 +1,7 @@
 package index
 
 import (
+	"fmt"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/helpers"
 	"github.com/iwind/TeaGo/actions"
@@ -20,6 +21,9 @@ func (this *UpdatePwdAction) RunGet(params struct {
 
 	Auth *helpers.UserShouldAuth
 }) {
+
+	fmt.Println("username = ", params.Auth.GetUpdatePwdToken())
+
 	// DEMO模式
 	//this.Data["isDemo"] = teaconst.IsDemoMode
 	//
@@ -70,6 +74,11 @@ func (this *UpdatePwdAction) RunPost(params struct {
 	Auth     *helpers.UserShouldAuth
 	CSRF     *actionutils.CSRF
 }) {
+	fmt.Println("username = ", params.Username)
+	fmt.Println("username = ", params.Auth.GetUpdatePwdToken())
+	if params.Username != params.Auth.GetUpdatePwdToken() {
+		this.FailField("username", "")
+	}
 	//params.Must.
 	//	Field("username", params.Username).
 	//	Require("请输入用户名").
