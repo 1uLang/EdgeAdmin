@@ -161,7 +161,6 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 		initMethod.Call([]reflect.Value{})
 	}
 
-	fmt.Println("每次都执行的事件url=", action.Request.RequestURI, adminId)
 	taskUrl := []string{
 		"/clusters/tasks/check", "/dns/tasks/check", "/messages/badge",
 	}
@@ -306,6 +305,16 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"url":  "/servers/certs",
 					"code": "certs",
 				},
+				{
+					"name": "集群列表",
+					"url":  "/clusters",
+					"code": "clusters",
+				},
+				{
+					"name": "DNS服务商",
+					"url":  "/dns/providers",
+					"code": "providers",
+				},
 			},
 		},
 		{
@@ -366,59 +375,59 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 				},
 			},
 		},
-		{
-			"code":   "clusters",
-			"module": configloaders.AdminModuleCodeClusters,
-			"name":   "边缘节点",
-			"icon":   "instagram",
-			"url":    "/clusters",
-			"subItems": []maps.Map{
-				{
-					"name": "集群列表",
-					"url":  "/clusters",
-					"code": "clusters",
-				},
-				{
-					"name": "节点日志",
-					"url":  "/clusters/logs",
-					"code": "logs",
-				},
-				{
-					"name": "SSH认证",
-					"url":  "/clusters/grants",
-					"code": "grants",
-				},
-				{
-					"name": "区域设置",
-					"url":  "/clusters/regions",
-					"code": "regions",
-				},
-			},
-		},
-		{
-			"code":   "dns",
-			"module": configloaders.AdminModuleCodeDNS,
-			"name":   "域名解析",
-			"icon":   "soundcloud",
-			"url":    "/dns",
-			"subItems": []maps.Map{
-				{
-					"name": "集群列表",
-					"url":  "/dns",
-					"code": "dns",
-				},
-				{
-					"name": "问题修复",
-					"url":  "/dns/issues",
-					"code": "issues",
-				},
-				{
-					"name": "DNS服务商",
-					"url":  "/dns/providers",
-					"code": "providers",
-				},
-			},
-		},
+		//{
+		//	"code":   "clusters",
+		//	"module": configloaders.AdminModuleCodeClusters,
+		//	"name":   "边缘节点",
+		//	"icon":   "instagram",
+		//	"url":    "/clusters",
+		//	"subItems": []maps.Map{
+		//		{
+		//			"name": "集群列表",
+		//			"url":  "/clusters",
+		//			"code": "clusters",
+		//		},
+		//		{
+		//			"name": "节点日志",
+		//			"url":  "/clusters/logs",
+		//			"code": "logs",
+		//		},
+		//		{
+		//			"name": "SSH认证",
+		//			"url":  "/clusters/grants",
+		//			"code": "grants",
+		//		},
+		//		{
+		//			"name": "区域设置",
+		//			"url":  "/clusters/regions",
+		//			"code": "regions",
+		//		},
+		//	},
+		//},
+		//{
+		//	"code":   "dns",
+		//	"module": configloaders.AdminModuleCodeDNS,
+		//	"name":   "域名解析",
+		//	"icon":   "soundcloud",
+		//	"url":    "/dns",
+		//	"subItems": []maps.Map{
+		//		{
+		//			"name": "集群列表",
+		//			"url":  "/dns",
+		//			"code": "dns",
+		//		},
+		//		{
+		//			"name": "问题修复",
+		//			"url":  "/dns/issues",
+		//			"code": "issues",
+		//		},
+		//		{
+		//			"name": "DNS服务商",
+		//			"url":  "/dns/providers",
+		//			"code": "providers",
+		//		},
+		//	},
+		//},
 		{
 			"code":   "monitor",
 			"module": configloaders.AdminModuleCodeMonitor,
@@ -608,34 +617,34 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 		//		},
 		//	},
 		//},
-		{
-			"code":   "fortcloud",
-			"module": configloaders.AdminModuleCodeFort,
-			"name":   "堡垒机",
-			"icon":   "history",
-			"subItems": []maps.Map{
-				{
-					"name": "资产管理",
-					"url":  "/fortcloud/assets",
-					"code": "assets",
-				},
-				{
-					"name": "管理账号",
-					"url":  "/fortcloud/admins",
-					"code": "admins",
-				},
-				{
-					"name": "会话管理",
-					"url":  "/fortcloud/sessions",
-					"code": "sessions",
-				},
-				{
-					"name": "运维审计",
-					"url":  "/fortcloud/audit",
-					"code": "audit",
-				},
-			},
-		},
+		//{
+		//	"code":   "fortcloud",
+		//	"module": configloaders.AdminModuleCodeFort,
+		//	"name":   "堡垒机",
+		//	"icon":   "history",
+		//	"subItems": []maps.Map{
+		//		{
+		//			"name": "资产管理",
+		//			"url":  "/fortcloud/assets",
+		//			"code": "assets",
+		//		},
+		//		{
+		//			"name": "管理账号",
+		//			"url":  "/fortcloud/admins",
+		//			"code": "admins",
+		//		},
+		//		{
+		//			"name": "会话管理",
+		//			"url":  "/fortcloud/sessions",
+		//			"code": "sessions",
+		//		},
+		//		{
+		//			"name": "运维审计",
+		//			"url":  "/fortcloud/audit",
+		//			"code": "audit",
+		//		},
+		//	},
+		//},
 		{
 			"code":   "settings",
 			"module": configloaders.AdminModuleCodeSetting,

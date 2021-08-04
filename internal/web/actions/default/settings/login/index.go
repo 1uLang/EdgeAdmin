@@ -1,6 +1,7 @@
 package login
 
 import (
+	"github.com/1uLang/zhiannet-api/common/server/edge_admins_server"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
@@ -62,6 +63,7 @@ func (this *IndexAction) RunPost(params struct {
 		this.FailField("username", "此用户名已经被别的管理员使用，请换一个")
 	}
 
+	var editPwd bool
 	if len(params.Password) > 0 {
 		if params.Password != params.Password2 {
 			this.FailField("password2", "两次输入的密码不一致")
@@ -74,6 +76,7 @@ func (this *IndexAction) RunPost(params struct {
 		if match, err := reg.FindStringMatch(params.Password2); err != nil || match == nil {
 			this.FailField("pass1", "密码格式不正确")
 		}
+		editPwd = true
 	}
 
 	_, err = this.RPC().AdminRPC().UpdateAdminLogin(this.AdminContext(), &pb.UpdateAdminLoginRequest{
@@ -92,6 +95,9 @@ func (this *IndexAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
-
+	if editPwd {
+		//更新密码修改时间
+		edge_admins_server.UpdatePwdAt(uint64(this.AdminId()))
+	}
 	this.Success()
 }

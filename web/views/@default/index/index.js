@@ -59,7 +59,7 @@ Tea.context(function () {
 
 	this.submitFaild = function(res){
 		let that = this
-		if(res.code==100){ //如果是密码过期
+		if(res.data.from=="/updatePwd"){ //如果是密码过期
 			teaweb.warn(res.message,function(){
 				that.onOpenResetPassword()
 			})

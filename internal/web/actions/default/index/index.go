@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/1uLang/zhiannet-api/common/cache"
-	"github.com/1uLang/zhiannet-api/common/server/edge_admins"
+	"github.com/1uLang/zhiannet-api/common/server/edge_admins_server"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
 	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
@@ -84,14 +84,18 @@ func (this *IndexAction) RunPost(params struct {
 	Remember bool
 	Must     *actions.Must
 	Auth     *helpers.UserShouldAuth
-	CSRF     *actionutils.CSRF
+	//CSRF     *actionutils.CSRF
 }) {
-	params.Must.
-		Field("username", params.Username).
-		Require("请输入用户名").
-		Field("password", params.Password).
-		Require("请输入密码")
+	this.Data["from"] = ""
 
+	//params.Must.
+	//	Field("username", params.Username).
+	//	Require("请输入用户名").
+	//	Field("password", params.Password).
+	//	Require("请输入密码")
+	if params.Username == "" {
+		this.FailField("username", "请输入用户名")
+	}
 	if params.Password == stringutil.Md5("") {
 		this.FailField("password", "请输入密码")
 	}
@@ -114,7 +118,7 @@ func (this *IndexAction) RunPost(params struct {
 		this.Fail("服务器出了点小问题：" + err.Error())
 	}
 	//登录限制检查
-	if res, _ := edge_admins.LoginCheck(fmt.Sprintf("admin_%v", params.Username)); res {
+	if res, _ := edge_admins_server.LoginCheck(fmt.Sprintf("admin_%v", params.Username)); res {
 		this.FailField("refresh", "账号已被锁定（请 30分钟后重试）")
 	}
 
@@ -138,7 +142,7 @@ func (this *IndexAction) RunPost(params struct {
 			utils.PrintError(err)
 		}
 		//登录次数+1
-		edge_admins.LoginErrIncr(fmt.Sprintf("admin_%v", params.Username))
+		edge_admins_server.LoginErrIncr(fmt.Sprintf("admin_%v", params.Username))
 		this.Fail("请输入正确的用户名密码")
 	}
 
@@ -165,10 +169,10 @@ func (this *IndexAction) RunPost(params struct {
 	}
 
 	//密码过期检查
-	this.Data["from"] = ""
-	if res, _ := edge_admins.CheckPwdInvalid(params.Username); res {
-		params.Auth.SetUpdatePwdToken(params.Username)
+	if res, _ := edge_admins_server.CheckPwdInvalid(uint64(resp.AdminId)); res {
+		params.Auth.SetUpdatePwdToken(resp.AdminId)
 		this.Data["from"] = "/updatePwd"
+		this.Fail("密码已过期，请立即修改")
 	}
 
 	adminId := resp.AdminId

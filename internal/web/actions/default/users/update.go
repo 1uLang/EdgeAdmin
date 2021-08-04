@@ -1,6 +1,7 @@
 package users
 
 import (
+	"github.com/1uLang/zhiannet-api/common/server/edge_users_server"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/users/userutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
@@ -100,6 +101,7 @@ func (this *UpdateAction) RunPost(params struct {
 		this.FailField("username", "此用户名已经被占用，请换一个")
 	}
 
+	var editPwd bool
 	if len(params.Pass1) > 0 {
 		params.Must.
 			Field("pass1", params.Pass1).
@@ -115,7 +117,7 @@ func (this *UpdateAction) RunPost(params struct {
 		if match, err := reg.FindStringMatch(params.Pass1); err != nil || match == nil {
 			this.FailField("pass1", "密码格式不正确")
 		}
-
+		editPwd = true
 	}
 
 	params.Must.
@@ -149,6 +151,9 @@ func (this *UpdateAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
-
+	if editPwd {
+		//更新密码修改时间
+		edge_users_server.UpdatePwdAt(uint64(params.UserId))
+	}
 	this.Success()
 }

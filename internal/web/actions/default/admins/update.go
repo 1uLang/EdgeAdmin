@@ -3,6 +3,7 @@ package admins
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/1uLang/zhiannet-api/common/server/edge_admins_server"
 	hids_user_model "github.com/1uLang/zhiannet-api/hids/model/user"
 	hids_user_server "github.com/1uLang/zhiannet-api/hids/server/user"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
@@ -122,6 +123,7 @@ func (this *UpdateAction) RunPost(params struct {
 		this.FailField("username", "此用户名已经被别的系统用户使用，请换一个")
 	}
 
+	var editPwd bool
 	if len(params.Pass1) > 0 {
 		params.Must.
 			Field("pass1", params.Pass1).
@@ -139,6 +141,7 @@ func (this *UpdateAction) RunPost(params struct {
 		if match, err := reg.FindStringMatch(params.Pass1); err != nil || match == nil {
 			this.FailField("pass1", "密码格式不正确")
 		}
+		editPwd = true
 	}
 
 	modules := []*systemconfigs.AdminModule{}
@@ -242,7 +245,10 @@ func (this *UpdateAction) RunPost(params struct {
 			this.ErrorPage(err)
 			return
 		}
-
+		if editPwd {
+			//更新密码修改时间
+			edge_admins_server.UpdatePwdAt(uint64(params.AdminId))
+		}
 		this.Success()
 	}
 }
