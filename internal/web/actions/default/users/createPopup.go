@@ -91,7 +91,6 @@ func (this *CreatePopupAction) RunPost(params struct {
 			Field("email", params.Email).
 			Email("请输入正确的电子邮箱")
 	}
-	this.Success()
 	// 创建nextcloud账号，并写入数据库
 	adminToken := nc_req.GetAdminToken()
 	userPwd := `adminAd#@2021`
