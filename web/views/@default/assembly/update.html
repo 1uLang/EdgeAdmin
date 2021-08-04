@@ -147,6 +147,23 @@
             </td>
         </tr>
         </tbody>
+        <!--  数据备份      -->
+        <tbody v-if="showAPIAUTHVisible == 8 || (showAPIAUTHVisible == -1 && node.type == 8)">
+        <tr>
+            <td>username </td>
+            <td>
+                <input type="password" name="key" maxlength="100" v-model="node.key"/>
+                <p class="comment">登录数据备份所使用的账号</p>
+            </td>
+        </tr>
+        <tr>
+            <td>password </td>
+            <td>
+                <input type="password" name="secret" maxlength="100" v-model="node.secret"/>
+                <p class="comment">登录数据备份所使用的密码</p>
+            </td>
+        </tr>
+        </tbody>
     </table>
     <submit-btn></submit-btn>
 </form>

@@ -218,6 +218,11 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"url":  "/log",
 					"code": "log",
 				},
+				{
+					"name": "通知媒介",
+					"url":  "/admins/recipients",
+					"code": "recipients",
+				},
 			},
 		},
 		{
@@ -428,25 +433,25 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 		//		},
 		//	},
 		//},
-		{
-			"code":   "monitor",
-			"module": configloaders.AdminModuleCodeMonitor,
-			"name":   "监控告警",
-			"icon":   "flickr ",
-			"url":    "/monitor",
-			"subItems": []maps.Map{
-				{
-					"name": "监控任务",
-					"url":  "/monitor",
-					"code": "monitor",
-				},
-				{
-					"name": "告警通知",
-					"url":  "/monitor/notice",
-					"code": "notice",
-				},
-			},
-		},
+		//{
+		//	"code":   "monitor",
+		//	"module": configloaders.AdminModuleCodeMonitor,
+		//	"name":   "监控告警",
+		//	"icon":   "flickr ",
+		//	"url":    "/monitor",
+		//	"subItems": []maps.Map{
+		//		{
+		//			"name": "监控任务",
+		//			"url":  "/monitor",
+		//			"code": "monitor",
+		//		},
+		//		{
+		//			"name": "告警通知",
+		//			"url":  "/monitor/notice",
+		//			"code": "notice",
+		//		},
+		//	},
+		//},
 		//{
 		//	"code":   "audit",
 		//	"module": configloaders.AdminModuleCodeAudit,
@@ -486,7 +491,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"code": "audit",
 			"url":  "/audit/db",
 			"name": "安全审计",
-			"icon": "ioxhost",
+			"icon": "sellsy",
 			"subItems": []maps.Map{
 				{
 					"name": "数据库管理",
@@ -523,7 +528,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"code": "databackup",
 			"url":  "/databackup",
 			"name": "数据备份",
-			"icon": "ioxhost",
+			"icon": "copy",
 		},
 		//{
 		//	"code":   "fort",
