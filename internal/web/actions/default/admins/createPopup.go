@@ -3,6 +3,8 @@ package admins
 import (
 	"encoding/json"
 	"fmt"
+	"log"
+
 	"github.com/1uLang/zhiannet-api/audit/model/audit_user_relation"
 	"github.com/1uLang/zhiannet-api/audit/request"
 	"github.com/1uLang/zhiannet-api/audit/server/user"
@@ -139,6 +141,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 		UserName:    params.Username,
 	})
 	if auditErr != nil || auditResp == nil {
+		log.Println(auditErr)
 		this.ErrorPage(fmt.Errorf("创建账号失败"))
 		return
 	}
