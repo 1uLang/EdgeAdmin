@@ -56,4 +56,19 @@ Tea.context(function () {
 			window.location = this.from;
 		}
 	};
+
+	this.submitFaild = function(res){
+		let that = this
+		if(res.code==100){ //如果是密码过期
+			teaweb.warn(res.message,function(){
+				that.onOpenResetPassword()
+			})
+		}else{
+			teaweb.warn(res.message)
+		}
+	}
+
+	this.onOpenResetPassword = function(){
+		window.location = "/updatePwd"
+	}
 });

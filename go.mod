@@ -10,7 +10,7 @@ require (
 	github.com/1uLang/zhiannet-api v0.0.0-00010101000000-000000000000
 	github.com/TeaOSLab/EdgeCommon v0.0.0-00010101000000-000000000000
 	github.com/cespare/xxhash v1.1.0
-	github.com/dlclark/regexp2 v1.4.0 // indirect
+	github.com/dlclark/regexp2 v1.4.0
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/go-yaml/yaml v2.1.0+incompatible
 	github.com/golang/protobuf v1.5.2
