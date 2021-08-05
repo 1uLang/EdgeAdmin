@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="UTF-8">
-    <title>行业智慧能力平台</title>
+    <title>智安云综合防御平台</title>
     <link rel="stylesheet" type="text/css" href="css/style2.0.css">
 
 	<script type="text/javascript" src="/js/utils.js"></script>
@@ -13,6 +13,7 @@
 </head>
 <style type="text/css">
 	ul li{font-size: 30px;color:#2ec0f6;}
+	
 	.tyg-p{
 		font-size: 14px;
 	    font-weight: 600px;
@@ -214,7 +215,8 @@
 		reqApi("post","/checkOTP",tempFormData,null,
 				(res)=>{
 					var optInputBox =  document.getElementById("optInputBox")
-					if(res.data.requireOTP){
+					tempShowOTP = res.data.requireOTP
+					if(tempShowOTP){
 						optInputBox.style.display = "block"
 					}else{
 						optInputBox.style.display = "none"
@@ -239,6 +241,10 @@
 		tempFormData.append("password",tempPassword)
 		tempFormData.append("token",tempToken)
 		tempFormData.append("csrfToken",tempCsrfToke)
+		if(tempShowOTP){
+			var tempOTPCode = document.getElementById('otpCode').value
+			tempFormData.append("otpCode",tempOTPCode)
+		}
 		reqApi("post","",tempFormData,null,
 				(res)=>{
 					if (res.data.from.length == 0) {
