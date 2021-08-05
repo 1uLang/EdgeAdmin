@@ -14,6 +14,7 @@
                 <th>协议</th>
                 <th>组件类型</th>
                 <th>数据中心</th>
+<!--                <th class="center width10">是否可用</th>-->
                 <th class="center width10">状态</th>
                 <th class="two op">操作</th>
             </tr>
@@ -46,8 +47,11 @@
                 </div>
             </td>
             <td class="center">
-                <label-on :v-is-on="node.state"></label-on>
+                <label-on-conn :v-is-conn="node.conn_state"></label-on-conn>
             </td>
+<!--            <td class="center">-->
+<!--                <label-on :v-is-on="node.state"></label-on>-->
+<!--            </td>-->
             <td>
                 <div style="padding: 3px 0;">
                     <a @click.prevent="updateNode(node.id)" style="cursor: pointer;">修改</a> &nbsp;

@@ -5,6 +5,7 @@ import (
 	"github.com/1uLang/zhiannet-api/audit/model/audit_user_relation"
 	"github.com/1uLang/zhiannet-api/audit/request"
 	"github.com/1uLang/zhiannet-api/audit/server/user"
+	"github.com/1uLang/zhiannet-api/common/server/edge_users_server"
 	"github.com/1uLang/zhiannet-api/nextcloud/model"
 	nc_req "github.com/1uLang/zhiannet-api/nextcloud/request"
 	"github.com/TeaOSLab/EdgeAdmin/internal/utils/numberutils"
@@ -172,5 +173,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
+	//更新密码修改时间
+	edge_users_server.UpdatePwdAt(uint64(createResp.UserId))
 	this.Success()
 }

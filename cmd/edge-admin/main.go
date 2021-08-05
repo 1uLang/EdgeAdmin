@@ -4,9 +4,10 @@ import (
 	"fmt"
 
 	ag_ser "github.com/1uLang/zhiannet-api/agent/server"
-	nc_model "github.com/1uLang/zhiannet-api/nextcloud/model"
 	"github.com/1uLang/zhiannet-api/common/cache"
+	"github.com/1uLang/zhiannet-api/common/cron"
 	"github.com/1uLang/zhiannet-api/common/model"
+	nc_model "github.com/1uLang/zhiannet-api/nextcloud/model"
 	"github.com/TeaOSLab/EdgeAdmin/internal/apps"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configs"
 	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
@@ -85,6 +86,7 @@ func main() {
 	nc_model.InitialAdminUser()
 	cache.ApiDbPath = Tea.ConfigFile("api_db.yaml")
 	cache.InitClient()
+	cron.InitCron()
 	app.Run(func() {
 		adminNode := nodes.NewAdminNode()
 		adminNode.Run()

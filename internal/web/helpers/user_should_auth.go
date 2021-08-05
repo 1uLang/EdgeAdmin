@@ -1,6 +1,8 @@
 package helpers
 
 import (
+	"fmt"
+	"github.com/1uLang/zhiannet-api/common/cache"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
 	"github.com/TeaOSLab/EdgeAdmin/internal/utils/numberutils"
@@ -81,6 +83,7 @@ func (this *UserShouldAuth) AdminId() int {
 }
 
 func (this *UserShouldAuth) Logout() {
+	cache.DelKey(fmt.Sprintf("login_success_adminid_%v", this.AdminId()))
 	this.action.Session().Delete()
 }
 

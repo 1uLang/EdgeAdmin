@@ -35,7 +35,8 @@ var TokenSalt = stringutil.Rand(32)
 func (this *IndexAction) RunGet(params struct {
 	From  string
 	Token string
-	Auth  *helpers.UserShouldAuth
+
+	Auth *helpers.UserShouldAuth
 }) {
 	// DEMO模式
 	this.Data["isDemo"] = teaconst.IsDemoMode
