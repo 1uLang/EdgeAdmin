@@ -2,6 +2,7 @@ package assembly
 
 import (
 	"github.com/1uLang/zhiannet-api/common/model/subassemblynode"
+	nc_model "github.com/1uLang/zhiannet-api/nextcloud/model"
 	subassemblynode_server "github.com/1uLang/zhiannet-api/common/server/subassemblynode"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/actions"
@@ -104,6 +105,11 @@ func (this *UpdateAction) RunPost(params struct {
 	if err != nil {
 		this.Fail(err.Error())
 		return
+	}
+
+	// 刷新nextcloud缓存
+	if params.State == 8 {
+		nc_model.InitialAdminUser()
 	}
 
 	this.Success()

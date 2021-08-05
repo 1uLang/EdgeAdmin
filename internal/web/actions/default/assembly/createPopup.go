@@ -3,6 +3,7 @@ package assembly
 import (
 	subassemblynode_model "github.com/1uLang/zhiannet-api/common/model/subassemblynode"
 	"github.com/1uLang/zhiannet-api/common/server/subassemblynode"
+	nc_req "github.com/1uLang/zhiannet-api/nextcloud/request"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/actions"
 )
@@ -122,5 +123,13 @@ func (this *CreatePopupAction) RunPost(params struct {
 	}
 	defer this.CreateLogInfo("创建节点 %d", id)
 
+	// 创建成功则和nextcloud关联
+	if params.AssemblyType == 8 {
+		err := nc_req.ConnNextcloudWithAdmin(params.Key, params.Secret)
+		if err != nil {
+			this.Fail(err.Error())
+			return
+		}
+	}
 	this.Success()
 }
