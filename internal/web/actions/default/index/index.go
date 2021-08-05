@@ -3,6 +3,8 @@ package index
 import (
 	"encoding/json"
 	"fmt"
+	"time"
+
 	"github.com/1uLang/zhiannet-api/common/cache"
 	"github.com/1uLang/zhiannet-api/common/server/edge_admins_server"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
@@ -20,7 +22,6 @@ import (
 	"github.com/iwind/TeaGo/types"
 	stringutil "github.com/iwind/TeaGo/utils/string"
 	"github.com/xlzd/gotp"
-	"time"
 )
 
 type IndexAction struct {
@@ -32,9 +33,9 @@ type IndexAction struct {
 var TokenSalt = stringutil.Rand(32)
 
 func (this *IndexAction) RunGet(params struct {
-	From string
-
-	Auth *helpers.UserShouldAuth
+	From  string
+	Token string
+	Auth  *helpers.UserShouldAuth
 }) {
 	// DEMO模式
 	this.Data["isDemo"] = teaconst.IsDemoMode
@@ -71,7 +72,9 @@ func (this *IndexAction) RunGet(params struct {
 		this.Data["version"] = teaconst.Version
 	}
 	this.Data["faviconFileId"] = config.FaviconFileId
-
+	if params.Token != "" {
+		this.Success()
+	}
 	this.Show()
 }
 

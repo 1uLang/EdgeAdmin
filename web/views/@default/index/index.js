@@ -59,13 +59,18 @@ Tea.context(function () {
 
 	this.submitFaild = function(res){
 		let that = this
-		if(res.data.from=="/updatePwd"){ //如果是密码过期
-			teaweb.warn(res.message,function(){
-				that.onOpenResetPassword()
-			})
-		}else{
-			teaweb.warn(res.message)
-		}
+		this.onOpenResetPassword()
+		// if(res.data.from=="/updatePwd"){ //如果是密码过期
+		// 	teaweb.warn(res.message,function(){
+		// 		that.onOpenResetPassword()
+		// 	})
+		// }else{
+		// 	teaweb.warn(res.message)
+		// }
+	}
+
+	this.onTestReq = function(){
+		
 	}
 
 	this.onOpenResetPassword = function(){
