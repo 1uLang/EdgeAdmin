@@ -20,3 +20,14 @@ func (this *BadgeAction) RunPost(params struct{}) {
 
 	this.Success()
 }
+func (this *BadgeAction) RunGet(params struct{}) {
+	countResp, err := this.RPC().MessageRPC().CountUnreadMessages(this.AdminContext(), &pb.CountUnreadMessagesRequest{})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+
+	this.Data["count"] = countResp.Count
+
+	this.Success()
+}

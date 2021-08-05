@@ -6,6 +6,7 @@ import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
 	"github.com/TeaOSLab/EdgeAdmin/internal/setup"
+	"github.com/TeaOSLab/EdgeAdmin/internal/utils"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
 	"net/http"
@@ -161,23 +162,21 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 		initMethod.Call([]reflect.Value{})
 	}
 
-	taskUrl := []string{
-		"/clusters/tasks/check", "/dns/tasks/check", "/messages/badge",
-	}
-	for _, v := range taskUrl {
-		if action.Request.RequestURI == v {
-			break
-		}
+	//fmt.Println("action.Request.RequestURI===",action.Request.RequestURI)
+	//非检测请求  登录信息续期
+	if !utils.UrlIn(action.Request.RequestURI) {
 		res, _ := cache.GetInt(fmt.Sprintf("login_success_adminid_%v", adminId))
 		if res == 0 {
 			//30分钟没有操作  自动退出
 			session.Delete()
+			cache.DelKey(fmt.Sprintf("login_success_adminid_%v", adminId))
 			this.login(action)
 			return false
 		}
 		//续期
 		cache.Incr(fmt.Sprintf("login_success_adminid_%v", adminId), time.Minute*30)
 	}
+
 	return true
 }
 

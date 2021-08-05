@@ -14,9 +14,8 @@ func init() {
 			Helper(clusterutils.NewClustersHelper()).
 			Prefix("/dns/tasks").
 			GetPost("/listPopup", new(ListPopupAction)).
-			Post("/check", new(CheckAction)).
+			GetPost("/check", new(CheckAction)).
 			Post("/delete", new(DeleteAction)).
-
 			EndAll()
 	})
 }
