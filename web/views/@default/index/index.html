@@ -5,8 +5,6 @@
     <meta charset="UTF-8">
     <title>行业智慧能力平台</title>
     <link rel="stylesheet" type="text/css" href="css/style2.0.css">
-	<!-- <link rel="stylesheet" type="text/css" href="css/semantic.min.css"> -->
-	
 
 	<script type="text/javascript" src="/js/utils.js"></script>
 	<script type="text/javascript" src="/js/md5.min.js"></script>
@@ -17,17 +15,19 @@
 	ul li{font-size: 30px;color:#2ec0f6;}
 	.tyg-p{
 		font-size: 14px;
-	    font-family: 'microsoft yahei';
+	    font-weight: 600px;
 	}
 	.tyg-div-denglv{
 		z-index:1000;float:right;position:absolute;right:20%;top:18%;
 	}
 	.tyg-div-form{
-		background-color: #23305a;
+		/* background-color: #23305a; */
 		width:300px;
 		height:auto;
+		border-radius: 6px;
 		margin:120px auto 0 auto;
 		color:#2ec0f6;
+		border: 1px solid #23305a;
 	}
 	.tyg-div-form form {padding:10px;}
 
@@ -37,7 +37,7 @@
 	    height: 44px;
 	    margin-top: 25px;
 	    padding: 0;
-	    background: #2ec0f6;
+	    /* background: #2ec0f6; */
 	    -moz-border-radius: 6px;
 	    -webkit-border-radius: 6px;
 	    border-radius: 6px;
@@ -132,7 +132,7 @@
 		<div class="tyg-div-form">
 			<form id="loginFormData" action="">
 				<div style="width: 100%;display: flex;flex-direction: row;justify-content: space-between;align-items: center;">
-					<h2>欢迎登录</h2><span class="tyg-p">智安云综合防御平台</span>
+					<h2>欢迎访问</h2><span class="tyg-p">智安云综合防御平台</span>
 				</div>
 				<div class="inputBox-style">
 					 <img src="/images/user_blue.svg" width="18px" height="20px">
@@ -140,7 +140,7 @@
 				</div>
 				<div class="inputBox-style">
 					<img src="/images/pwd_blue.svg" width="18px" height="20px">
-					<input class="input-style" type="password" id="password" name="password" placeholder="请输入用密码" maxlength="200" onkeydown="onCheckDoLogin()"/>
+					<input class="input-style" type="password" id="password" name="password" placeholder="请输入密码" maxlength="200" onkeydown="onCheckDoLogin()"/>
 				</div>
 				<div id="optInputBox" style="display: none;">
 					<div class="inputBox-style" >
