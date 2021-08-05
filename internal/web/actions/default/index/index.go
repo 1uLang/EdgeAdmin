@@ -32,7 +32,8 @@ type IndexAction struct {
 var TokenSalt = stringutil.Rand(32)
 
 func (this *IndexAction) RunGet(params struct {
-	From string
+	From  string
+	Token string
 
 	Auth *helpers.UserShouldAuth
 }) {
@@ -71,7 +72,9 @@ func (this *IndexAction) RunGet(params struct {
 		this.Data["version"] = teaconst.Version
 	}
 	this.Data["faviconFileId"] = config.FaviconFileId
-
+	if params.Token != "" {
+		this.Success()
+	}
 	this.Show()
 }
 

@@ -55,11 +55,11 @@ func (this *UpdateAction) RunPost(params struct {
 	Port         int64
 	AssemblyType int
 	IdcId        int
-	Status       int
-	State        int
-	Key          string
-	Secret       string
-	Argeement    int
+	//Status       int
+	State     int
+	Key       string
+	Secret    string
+	Argeement int
 
 	Must *actions.Must
 	CSRF *actionutils.CSRF
@@ -96,7 +96,7 @@ func (this *UpdateAction) RunPost(params struct {
 		Port:   params.Port,
 		Type:   params.AssemblyType,
 		Idc:    params.IdcId,
-		State:  params.State,
+		State:  1,
 		Key:    params.Key,
 		Secret: params.Secret,
 		IsSsl:  params.Argeement,

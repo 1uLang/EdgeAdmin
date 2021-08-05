@@ -89,7 +89,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 		params.Must.
 			Field("secret", params.Secret).
 			Require("请输入secret")
-	case 7: //堡垒机
+	case 6, 7: //审计系统 堡垒机
 		params.Must.
 			Field("key", params.Key).
 			Require("请输入username")
@@ -110,7 +110,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 		Port:   params.Port,
 		Idc:    params.IdcId,
 		Type:   params.AssemblyType,
-		State:  params.State,
+		State:  1,
 		Key:    params.Key,
 		Secret: params.Secret,
 		IsSsl:  params.Argeement,
