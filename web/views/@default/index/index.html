@@ -209,7 +209,9 @@
 
 	function onRefreshShowOpt(){
 		var tempUserName = document.getElementById('username').value
-		reqApi("post","/checkOTP",{username:tempUserName},null,
+		var tempFormData = new FormData();
+		tempFormData.append("username",tempUserName)
+		reqApi("post","/checkOTP",tempFormData,null,
 				(res)=>{
 					var optInputBox =  document.getElementById("optInputBox")
 					if(res.data.requireOTP){
