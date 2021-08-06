@@ -5,6 +5,8 @@ import (
 	"github.com/1uLang/zhiannet-api/audit/model/audit_user_relation"
 	"github.com/1uLang/zhiannet-api/audit/request"
 	"github.com/1uLang/zhiannet-api/audit/server/user"
+	"github.com/1uLang/zhiannet-api/common/model/edge_logins"
+	"github.com/1uLang/zhiannet-api/common/server/edge_logins_server"
 	"github.com/1uLang/zhiannet-api/common/server/edge_users_server"
 	"github.com/1uLang/zhiannet-api/nextcloud/model"
 	nc_req "github.com/1uLang/zhiannet-api/nextcloud/request"
@@ -13,6 +15,8 @@ import (
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/dlclark/regexp2"
 	"github.com/iwind/TeaGo/actions"
+	"github.com/iwind/TeaGo/maps"
+	"github.com/xlzd/gotp"
 )
 
 type CreatePopupAction struct {
@@ -37,6 +41,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 	Email     string
 	Remark    string
 	ClusterId int64
+	OtpOn     bool
 
 	Must *actions.Must
 	CSRF *actionutils.CSRF
@@ -92,6 +97,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 			Field("email", params.Email).
 			Email("请输入正确的电子邮箱")
 	}
+
 	// 创建nextcloud账号，并写入数据库
 	adminToken := nc_req.GetAdminToken()
 	userPwd := `adminAd#@2021`
@@ -175,5 +181,25 @@ func (this *CreatePopupAction) RunPost(params struct {
 	}
 	//更新密码修改时间
 	edge_users_server.UpdatePwdAt(uint64(createResp.UserId))
+	//otp
+	if params.OtpOn {
+		otpLogin := &edge_logins.EdgeLogins{
+			Id:   0,
+			Type: "otp",
+			Params: string(maps.Map{
+				"secret": gotp.RandomSecret(16), // TODO 改成可以设置secret长度
+			}.AsJSON()),
+			IsOn:    1,
+			AdminId: 0,
+			UserId:  uint64(createResp.UserId),
+			State:   1,
+		}
+
+		_, err = edge_logins_server.Save(otpLogin)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+	}
 	this.Success()
 }
