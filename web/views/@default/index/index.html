@@ -3,6 +3,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="UTF-8">
+	<link rel="icon" href="/images/logo.png" type="image/x-icon" />
+	<link rel="shortcut icon" href="/images/logo.png" type="image/x-icon"/>
     <title>智安云综合防御平台</title>
     <link rel="stylesheet" type="text/css" href="css/style2.0.css">
 
@@ -186,6 +188,9 @@
 	var showChangePwd = false
 
 	window.onload = function(){
+		sessionStorage.setItem("leftSelectCode","dashboard")
+		localStorage.removeItem("ddosSelectNodeId");
+		localStorage.removeItem("nfwSelectNodeId");
 		onGetRefreshToken()
 		onGetToken()
  	}
@@ -247,7 +252,7 @@
 		}
 		reqApi("post","",tempFormData,null,
 				(res)=>{
-					if (res.data.from.length == 0) {
+					if (res.data.from && res.data.from.length == 0) {
 						window.location = "/dashboard";
 					} else {
 						window.location = this.data.from;
@@ -264,7 +269,10 @@
 		 					onGetToken()
 						})
 					}else{
-						teaweb.warn(res.message)
+						teaweb.warn(res.message,function(){
+							onGetRefreshToken()
+		 					onGetToken()
+						})
 					}
 				}
 			)
@@ -288,7 +296,7 @@
 		tempFormData.append("csrfToken",tempCsrfToke)
 		reqApi("post","/updatePwd",tempFormData,null,
 				(res)=>{
-					teaweb.warn("修改成功",function(){
+					teaweb.success("修改成功",function(){
 							var loginPart =  document.getElementById("loginPart")
 							var resetPwdPart =  document.getElementById("resetPart")
 							document.getElementById('password').value = ""
