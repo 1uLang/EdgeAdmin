@@ -1,6 +1,7 @@
 package users
 
 import (
+	"fmt"
 	"github.com/1uLang/zhiannet-api/common/model/edge_logins"
 	"github.com/1uLang/zhiannet-api/common/server/edge_logins_server"
 	"github.com/1uLang/zhiannet-api/common/server/edge_users_server"
@@ -199,8 +200,9 @@ func (this *UpdateAction) RunPost(params struct {
 			return
 		}
 	} else {
+		fmt.Println("otp=====", otpLogin)
 		if otpLogin != nil && otpLogin.Id > 0 {
-			_, err = edge_logins_server.UpdateOpt(uint64(params.UserId), 0)
+			_, err = edge_logins_server.UpdateOpt(uint64(otpLogin.Id), 0)
 			if err != nil {
 				this.ErrorPage(err)
 				return
