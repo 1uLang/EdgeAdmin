@@ -49,7 +49,6 @@ Tea.context(function () {
     }
 
     this.onSearch = function () {
-        console.log(this.searchSQLName)
         // window.location.href = '/audit/db?name=' + this.searchSQLName+"&ip="+this.searchSQLIp
         // this.$post("/audit/db")
         //     .params({
@@ -63,7 +62,8 @@ Tea.context(function () {
             name: this.searchSQLName,
             ip: this.searchSQLIp,
             json: true,
-        }).success(resp => {
+        })
+        .success(resp => {
             if (resp.code === 200) {
                 if (resp.data.dbList)
                     this.dbList = resp.data.dbList

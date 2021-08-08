@@ -85,9 +85,7 @@ Tea.context(function () {
 
     //修改配置
     this.onOpenChangeView = function (id) {
-
         this.GetNatInfo(id)
-        // this.onChangeShowState(3)
     }
 
     //重置value
@@ -224,7 +222,7 @@ Tea.context(function () {
 
     //通过ID 获取详细数据
     this.GetNatInfo = async function (id) {
-
+        console.log("GetNatInfo")
         await Tea.action("/nfw/acl/detail")
             .params({
                 nodeId: this.selectNode,
@@ -232,6 +230,7 @@ Tea.context(function () {
                 "act": "get-info"
             })
             .get()
+            .showDialog(true)
             .success(function (resp) {
                 //操作
                 if (resp.data.type.length > 0) {
