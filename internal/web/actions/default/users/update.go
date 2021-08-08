@@ -1,6 +1,9 @@
 package users
 
 import (
+	"fmt"
+	"github.com/1uLang/zhiannet-api/common/model/edge_logins"
+	"github.com/1uLang/zhiannet-api/common/server/edge_logins_server"
 	"github.com/1uLang/zhiannet-api/common/server/edge_users_server"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/users/userutils"
@@ -8,6 +11,7 @@ import (
 	"github.com/dlclark/regexp2"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
+	"github.com/xlzd/gotp"
 )
 
 type UpdateAction struct {
@@ -45,6 +49,16 @@ func (this *UpdateAction) RunGet(params struct {
 		return
 	}
 	countAccessKeys := countAccessKeyResp.Count
+	//otp
+	var otpLogin bool
+	info, err := edge_logins_server.GetInfoByUid(uint64(params.UserId))
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	if info != nil && info.IsOn == 1 {
+		otpLogin = true
+	}
 
 	this.Data["user"] = maps.Map{
 		"id":              user.Id,
@@ -56,6 +70,7 @@ func (this *UpdateAction) RunGet(params struct {
 		"mobile":          user.Mobile,
 		"isOn":            user.IsOn,
 		"countAccessKeys": countAccessKeys,
+		"otpLoginIsOn":    otpLogin,
 	}
 
 	this.Data["clusterId"] = 0
@@ -78,6 +93,7 @@ func (this *UpdateAction) RunPost(params struct {
 	Remark    string
 	IsOn      bool
 	ClusterId int64
+	OtpOn     bool
 
 	Must *actions.Must
 	CSRF *actionutils.CSRF
@@ -154,6 +170,45 @@ func (this *UpdateAction) RunPost(params struct {
 	if editPwd {
 		//更新密码修改时间
 		edge_users_server.UpdatePwdAt(uint64(params.UserId))
+	}
+	otpLogin, err := edge_logins_server.GetInfoByUid(uint64(params.UserId))
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	if params.OtpOn {
+		if otpLogin == nil || otpLogin.Id == 0 {
+			otpLogin = &edge_logins.EdgeLogins{
+				Id:   0,
+				Type: "otp",
+				Params: string(maps.Map{
+					"secret": gotp.RandomSecret(16), // TODO 改成可以设置secret长度
+				}.AsJSON()),
+				IsOn:    1,
+				AdminId: 0,
+				UserId:  uint64(params.UserId),
+				State:   1,
+			}
+		} else {
+			// 如果已经有了，就覆盖，这样可以保留既有的参数
+			otpLogin.IsOn = 1
+		}
+
+		_, err = edge_logins_server.Save(otpLogin)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+	} else {
+		fmt.Println("otp=====", otpLogin)
+		if otpLogin != nil && otpLogin.Id > 0 {
+			_, err = edge_logins_server.UpdateOpt(uint64(otpLogin.Id), 0)
+			if err != nil {
+				this.ErrorPage(err)
+				return
+			}
+		}
+
 	}
 	this.Success()
 }

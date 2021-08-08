@@ -19,6 +19,7 @@ func init() {
 			Post("/delete", new(DeleteAction)).
 			GetPost("/features", new(FeaturesAction)).
 			GetPost("/option", new(OptionAction)).
+			GetPost("/otpQrcode", new(OtpQrcodeAction)).
 
 			//// AccessKeys
 			//Prefix("/users/accessKeys").

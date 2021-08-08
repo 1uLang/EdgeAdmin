@@ -4,6 +4,10 @@ Tea.context(function () {
 
     this.fileDesc = ""
 
+    this.bShowDialog = false
+    this.nDialogTxt="正在上传中..."
+    this.sTxtList=["正在上传中...","正在下载中..."]
+
     this.onChangeState=function (id) {
         if(this.pageState!=id){
             this.pageState = id
@@ -20,11 +24,18 @@ Tea.context(function () {
       };
 
     this.onDownFile = function (fileName,fileType) {
+        
+        let that =this
         teaweb.confirm("确定下载该文件？",function() {
-            this.$get("/databackup/download").params({
+            that.nDialogTxt = this.sTxtList[1] 
+            that.onShowLoading()
+            that.$get("/databackup/download").params({
                 name: fileName,
             }).success((res)=>{
-                this.onTestDownload(res,fileType)
+                that.onDownloadFlie(res,fileType)
+            }).fail((res)=>{
+                that.onHideLoading()
+                teaweb.warn(res.message)
             })
         })
     }
@@ -49,42 +60,63 @@ Tea.context(function () {
     }
 
 
-    this.onTestDownload = function(res,fileType){
-        var bstr = atob(res.data.body)
-        let n = bstr.length
-        let u8arr =new Uint8Array(n)
-        while (n--) {
-            u8arr[n] = bstr.charCodeAt(n);
-        }
+    this.onDownloadFlie = function(res,fileType){
+        try{
+            let that = this
+            var bstr = atob(res.data.body)
+            let n = bstr.length
+            let u8arr =new Uint8Array(n)
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
 
-        const blob = new Blob([u8arr], { type:fileType});
-        const reader = new FileReader();
-        reader.readAsDataURL(blob);
-        reader.onload = (e) => {
-          const a = document.createElement('a');
-          a.download = res.data.fileName;
-          a.href = e.target.result;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
+            const blob = new Blob([u8arr], { type:fileType});
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onload = (e) => {
+                const a = document.createElement('a');
+                a.download = res.data.fileName;
+                a.href = e.target.result;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                that.onHideLoading()
+                that.uploadFileSuccess()
+            }
+        }catch(e){
+            this.onHideLoading()
         }
+        
     }
 
     this.onuploadFile = function () {
+        this.nDialogTxt = this.sTxtList[0]
         let that = this
         var uploadFile = document.getElementById("uploadFile");
         if(uploadFile.value==""){
             teaweb.warn("请选择上传文件")
             return
         }
+        this.onShowLoading()
         var fm = document.getElementById('formData');
         var fd = new FormData(fm);
 
         this.$post("/databackup").params(fd)
         .success(()=>{
+            this.onHideLoading()
             that.uploadFileSuccess()
             return true
+        }).done(()=>{
+            this.onHideLoading()
         })
+    }
+    this.onShowLoading =  function() {
+        this.bShowDialog = true
+    }
+     
+     
+    this.onHideLoading = function () {
+        this.bShowDialog = false
     }
 
     this.tableData = [

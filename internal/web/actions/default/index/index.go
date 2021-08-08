@@ -3,6 +3,8 @@ package index
 import (
 	"encoding/json"
 	"fmt"
+	"time"
+
 	"github.com/1uLang/zhiannet-api/common/cache"
 	"github.com/1uLang/zhiannet-api/common/server/edge_admins_server"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
@@ -20,7 +22,6 @@ import (
 	"github.com/iwind/TeaGo/types"
 	stringutil "github.com/iwind/TeaGo/utils/string"
 	"github.com/xlzd/gotp"
-	"time"
 )
 
 type IndexAction struct {
@@ -32,7 +33,8 @@ type IndexAction struct {
 var TokenSalt = stringutil.Rand(32)
 
 func (this *IndexAction) RunGet(params struct {
-	From string
+	From  string
+	Token string
 
 	Auth *helpers.UserShouldAuth
 }) {
@@ -71,7 +73,9 @@ func (this *IndexAction) RunGet(params struct {
 		this.Data["version"] = teaconst.Version
 	}
 	this.Data["faviconFileId"] = config.FaviconFileId
-
+	if params.Token != "" {
+		this.Success()
+	}
 	this.Show()
 }
 
@@ -143,7 +147,8 @@ func (this *IndexAction) RunPost(params struct {
 		}
 		//登录次数+1
 		edge_admins_server.LoginErrIncr(fmt.Sprintf("admin_%v", params.Username))
-		this.Fail("请输入正确的用户名密码")
+		num, _ := cache.GetInt(fmt.Sprintf("admin_%v", params.Username))
+		this.Fail(fmt.Sprintf("请输入正确的用户名密码，您还可以尝试%v次，（账号将被临时锁定30分钟）", 5-num))
 	}
 
 	// 检查OTP-*/
@@ -185,5 +190,6 @@ func (this *IndexAction) RunPost(params struct {
 	}
 	//记录登录成功30分钟
 	cache.SetNx(fmt.Sprintf("login_success_adminid_%v", adminId), time.Minute*30)
+	cache.DelKey(fmt.Sprintf("admin_%v", params.Username))
 	this.Success()
 }

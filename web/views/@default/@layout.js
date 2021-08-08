@@ -100,7 +100,7 @@ Tea.context(function () {
      * 检查消息
      */
     this.checkMessages = function () {
-        this.$post("/messages/badge")
+        this.$get("/messages/badge")
             .params({})
             .success(function (resp) {
                 this.globalMessageBadge = resp.data.count
@@ -117,7 +117,7 @@ Tea.context(function () {
     }
 
     this.checkMessagesOnce = function () {
-        this.$post("/messages/badge")
+        this.$get("/messages/badge")
             .params({})
             .success(function (resp) {
                 this.globalMessageBadge = resp.data.count
@@ -161,7 +161,7 @@ Tea.context(function () {
         if (!Tea.Vue.teaCheckNodeTasks) {
             return
         }
-        this.$post("/clusters/tasks/check")
+        this.$get("/clusters/tasks/check")
             .success(function (resp) {
                 this.doingNodeTasks.isDoing = resp.data.isDoing
                 this.doingNodeTasks.hasError = resp.data.hasError
@@ -194,7 +194,7 @@ Tea.context(function () {
         if (!Tea.Vue.teaCheckDNSTasks) {
             return
         }
-        this.$post("/dns/tasks/check")
+        this.$get("/dns/tasks/check")
             .success(function (resp) {
                 this.doingDNSTasks.isDoing = resp.data.isDoing
                 this.doingDNSTasks.hasError = resp.data.hasError

@@ -25,19 +25,19 @@ func (this *IndexAction) RunGet(params struct {
 	if len(list) > 0 {
 		for k, v := range list {
 			listMap[k] = map[string]interface{}{
-				"id":     v.Id,
-				"name":   v.Name,
-				"addr":   v.Addr,
-				"port":   v.Port,
-				"is_ssl": v.IsSsl,
-				"type":   v.Type,
-				"idc":    v.Idc,
-				"state":  v.State == 1,
-				//"status":    v.Status,
-				"key":       v.Key,
-				"secret":    v.Secret,
-				"idc_name":  idcMap[v.Idc],
-				"type_name": typeMap[v.Type],
+				"id":         v.Id,
+				"name":       v.Name,
+				"addr":       v.Addr,
+				"port":       v.Port,
+				"is_ssl":     v.IsSsl,
+				"type":       v.Type,
+				"idc":        v.Idc,
+				"state":      v.State == 1,
+				"conn_state": v.ConnState == 1,
+				"key":        v.Key,
+				"secret":     v.Secret,
+				"idc_name":   idcMap[v.Idc],
+				"type_name":  typeMap[v.Type],
 			}
 		}
 	}

@@ -3,6 +3,7 @@ package admins
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/1uLang/zhiannet-api/common/server/edge_admins_server"
 	"log"
 
 	"github.com/1uLang/zhiannet-api/audit/model/audit_user_relation"
@@ -228,6 +229,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
-
+	//修改密码更新时间
+	edge_admins_server.UpdatePwdAt(uint64(createResp.AdminId))
 	this.Success()
 }

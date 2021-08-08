@@ -32,7 +32,7 @@ func (this *Helper) BeforeAction(actionPtr actions.ActionWrapper) (goNext bool) 
 		tabbar.Add("Web服务", "", "/settings/server", "", this.tab == "server")
 		tabbar.Add("管理界面设置", "", "/settings/ui", "", this.tab == "ui")
 		tabbar.Add("用户界面设置", "", "/settings/user-ui", "", this.tab == "userUI")
-		tabbar.Add("安全设置", "", "/settings/security", "", this.tab == "security")
+		tabbar.Add("访问设置", "", "/settings/security", "", this.tab == "security")
 		tabbar.Add("IP库", "", "/settings/ip-library", "", this.tab == "ipLibrary")
 	}
 	tabbar.Add("个人资料", "", "/settings/profile", "", this.tab == "profile")

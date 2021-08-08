@@ -3,6 +3,7 @@ package assembly
 import (
 	subassemblynode_model "github.com/1uLang/zhiannet-api/common/model/subassemblynode"
 	"github.com/1uLang/zhiannet-api/common/server/subassemblynode"
+	nc_req "github.com/1uLang/zhiannet-api/nextcloud/request"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/actions"
 )
@@ -89,7 +90,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 		params.Must.
 			Field("secret", params.Secret).
 			Require("请输入secret")
-	case 7: //堡垒机
+	case 6, 7: //审计系统 堡垒机
 		params.Must.
 			Field("key", params.Key).
 			Require("请输入username")
@@ -110,7 +111,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 		Port:   params.Port,
 		Idc:    params.IdcId,
 		Type:   params.AssemblyType,
-		State:  params.State,
+		State:  1,
 		Key:    params.Key,
 		Secret: params.Secret,
 		IsSsl:  params.Argeement,
@@ -122,5 +123,13 @@ func (this *CreatePopupAction) RunPost(params struct {
 	}
 	defer this.CreateLogInfo("创建节点 %d", id)
 
+	// 创建成功则和nextcloud关联
+	if params.AssemblyType == 8 {
+		err := nc_req.ConnNextcloudWithAdmin(params.Key, params.Secret)
+		if err != nil {
+			this.Fail(err.Error())
+			return
+		}
+	}
 	this.Success()
 }
