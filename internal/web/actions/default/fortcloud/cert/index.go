@@ -1,9 +1,9 @@
-package admins
+package cert
 
 import (
 	"fmt"
-	admin_users_model "github.com/1uLang/zhiannet-api/jumpserver/model/admin_users"
-	jumpserver_server "github.com/1uLang/zhiannet-api/jumpserver/server"
+	cert_model "github.com/1uLang/zhiannet-api/next-terminal/model/cert"
+	next_terminal_server "github.com/1uLang/zhiannet-api/next-terminal/server"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fortcloud"
 	"github.com/iwind/TeaGo/actions"
@@ -13,20 +13,15 @@ type IndexAction struct {
 	actionutils.ParentAction
 }
 
-func (this *IndexAction) checkAndNewServerRequest() (*jumpserver_server.Request, error) {
+func (this *IndexAction) checkAndNewServerRequest() (*next_terminal_server.Request, error) {
 	if fortcloud.ServerUrl == "" {
 		err := fortcloud.InitAPIServer()
 		if err != nil {
 			return nil, err
 		}
 	}
-	username, _ := this.UserName()
-	return fortcloud.NewServerRequest(username, "dengbao-"+username)
+	return fortcloud.NewServerRequest(fortcloud.Username, fortcloud.Password)
 }
-func (this *IndexAction) Init() {
-	this.Nav("", "fortcloud", "index")
-}
-
 func (this *IndexAction) RunGet() {
 
 	req, err := this.checkAndNewServerRequest()
@@ -36,10 +31,10 @@ func (this *IndexAction) RunGet() {
 		return
 	}
 
-	list, err := req.AdminUser.List(&admin_users_model.ListReq{
+	list, _, err := req.Cert.List(&cert_model.ListReq{
 		AdminUserId: uint64(this.AdminId()),
 	})
-	this.Data["adminUsers"] = list
+	this.Data["certs"] = list
 	this.Show()
 }
 
@@ -47,7 +42,6 @@ func (this *IndexAction) RunPost(params struct {
 	Name     string
 	Username string
 	Password string
-	Comment  string
 
 	Must *actions.Must
 }) {
@@ -70,18 +64,17 @@ func (this *IndexAction) RunPost(params struct {
 		return
 	}
 
-	args := &admin_users_model.CreateReq{}
+	args := &cert_model.CreateReq{}
 	args.Name = params.Name
-	args.UserName = params.Username
+	args.Username = params.Username
 	args.Password = params.Password
-	args.Comment = params.Comment
 	args.AdminUserId = uint64(this.AdminId())
-	_, err = req.AdminUser.Create(args)
+	err = req.Cert.Create(args)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
 	// 日志
-	this.CreateLogInfo("堡垒机 - 新增管理用户:[%v]成功", params.Name)
+	this.CreateLogInfo("堡垒机 - 新增授权凭证:[%v]成功", params.Name)
 	this.Success()
 }

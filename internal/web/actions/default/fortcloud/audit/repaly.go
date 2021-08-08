@@ -1,29 +1,30 @@
-package assets
+package audit
 
 import (
 	"fmt"
-	assets_model "github.com/1uLang/zhiannet-api/jumpserver/model/assets"
-	jumpserver_server "github.com/1uLang/zhiannet-api/jumpserver/server"
+	session_model "github.com/1uLang/zhiannet-api/next-terminal/model/session"
+	next_terminal_server "github.com/1uLang/zhiannet-api/next-terminal/server"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fortcloud"
 	"github.com/iwind/TeaGo/actions"
 )
 
-type DelAuthorizeAction struct {
+type ReplayAction struct {
+
 	actionutils.ParentAction
 }
 
-func (this *DelAuthorizeAction) checkAndNewServerRequest() (*jumpserver_server.Request, error) {
+func (this *ReplayAction) checkAndNewServerRequest() (*next_terminal_server.Request, error) {
 	if fortcloud.ServerUrl == "" {
 		err := fortcloud.InitAPIServer()
 		if err != nil {
 			return nil, err
 		}
 	}
-	username, _ := this.UserName()
-	return fortcloud.NewServerRequest(username, "dengbao-"+username)
+	return fortcloud.NewServerRequest(fortcloud.Username, fortcloud.Password)
 }
-func (this *DelAuthorizeAction) RunPost(params struct {
+
+func (this *ReplayAction) RunGet(params struct {
 	Id   string
 	Must *actions.Must
 }) {
@@ -37,15 +38,13 @@ func (this *DelAuthorizeAction) RunPost(params struct {
 		this.ErrorPage(fmt.Errorf("堡垒机组件错误:" + err.Error()))
 		return
 	}
-	err = req.Assets.DelAuthorize(&assets_model.DelAuthorizeReq{
-		Asset: params.Id,
-	})
+	args := &session_model.ReplayReq{}
+	args.Id = params.Id
+	buf,err := req.Session.Replay(args)
 	if err != nil {
 		this.ErrorPage(err)
 		return
-	}
-	// 日志
-	this.CreateLogInfo("堡垒机 - 删除授权资产:%v成功", params.Id)
-
-	this.Success()
+	}// 日志
+	this.CreateLogInfo("堡垒机 - 回放会话:[%v]成功", params.Id)
+	this.Write(buf)
 }
