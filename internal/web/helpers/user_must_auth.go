@@ -360,7 +360,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"url":    "/webscan/targets",
 			"module": configloaders.AdminModuleCodeWebScan,
 			"name":   "漏洞扫描",
-			"icon":   "ioxhost",
+			"icon":   "yelp",
 			"subItems": []maps.Map{
 				{
 					"name": "扫描目标",
@@ -376,6 +376,35 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"name": "扫描报告",
 					"url":  "/webscan/reports",
 					"code": "reports",
+				},
+			},
+		},
+		{
+			"code": "fortcloud",
+			"url":  "/fortcloud/assets",
+			"module": configloaders.AdminModuleCodeFort,
+			"name": "堡垒机",
+			"icon": "ioxhost",
+			"subItems": []maps.Map{
+				{
+					"name": "资产管理",
+					"url":  "/fortcloud/assets",
+					"code": "assets",
+				},
+				{
+					"name": "授权凭证",
+					"url":  "/fortcloud/cert",
+					"code": "cert",
+				},
+				{
+					"name": "会话管理",
+					"url":  "/fortcloud/sessions",
+					"code": "sessions",
+				},
+				{
+					"name": "运维审计",
+					"url":  "/fortcloud/audit",
+					"code": "audit",
 				},
 			},
 		},
@@ -529,38 +558,6 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"name": "数据备份",
 			"icon": "copy",
 		},
-		//{
-		//	"code":   "fort",
-		//	"module": configloaders.AdminModuleCodeFort,
-		//	"name":   "堡垒机",
-		//	"icon":   "history",
-		//	"subItems": []maps.Map{
-		//		{
-		//			"name": "全局状态",
-		//			"url":  "/fort",
-		//			"code": "fort",
-		//		},
-		//		{
-		//			"name": "资产管理",
-		//			"code": "assets",
-		//			"subItems": []maps.Map{
-		//				{
-		//					"name": "资产列表",
-		//					"url":  "/fort/assets",
-		//					"code": "assets",
-		//				},
-		//				{
-		//					"name": "管理用户",
-		//					"url":  "/fort/assets/admin-users",
-		//					"code": "admin-users",
-		//				},
-		//				{
-		//					"name": "系统用户",
-		//					"url":  "/fort/assets/system-users",
-		//					"code": "system-users",
-		//				},
-		//			},
-		//		},
 		//		{
 		//			"name": "查询分析",
 		//			"icon": "",
