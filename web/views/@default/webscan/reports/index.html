@@ -24,26 +24,26 @@
         </tr>
         </thead>
         <tbody id='tableBody'>
-            <tr align="center" style="height: 50px;" v-for="item in reports">
-                <td>
-                    <input type="checkbox" name="select" :value="item.report_id" @click="clickCheckbox">
-                </td>
-                <td v-if="item.source">{{parseDesc(item.source.description)}}</td>
-                <td v-else >{{item.address}}</td>
-                <td>{{onChangeTimeFormat(item.generation_date)}}</td>
-                <td>{{onChangeStatusFormat(item.status)}}</td>
-                <td>
-                    <!--主机漏洞扫描-->
-                    <div style="display: inline-flex;" v-if="item.owner">
-                        <div class="pdf-style" @click="exportFile(item.id,'csv')">CSV</div>
-                        <div class="html-style" @click="exportFile(item.id,'html')">HTML</div>
-                    </div>
-                    <div style="display: inline-flex;" v-else>
-                        <div class="pdf-style" @click="downloadFile(item.download[1])">PDF</div>
-                        <div class="html-style" @click="downloadFile(item.download[0])">HTML</div>
-                    </div>
-                </td>
-            </tr>
+        <tr align="center" style="height: 50px;" v-for="item in reports">
+            <td>
+                <input type="checkbox" name="select" :value="item.report_id" @click="clickCheckbox">
+            </td>
+            <td v-if="item.source">{{parseDesc(item.source.description)}}</td>
+            <td v-else >{{item.address}}</td>
+            <td>{{onChangeTimeFormat(item.generation_date)}}</td>
+            <td>{{onChangeStatusFormat(item.status)}}</td>
+            <td>
+                <!--主机漏洞扫描-->
+                <div style="display: inline-flex;" v-if="item.owner">
+                    <div class="pdf-style" @click="exportFile(item,'csv')">CSV</div>
+                    <div class="html-style" @click="exportFile(item,'html')">HTML</div>
+                </div>
+                <div style="display: inline-flex;" v-else>
+                    <div class="pdf-style" @click="downloadFile(item.download[1])">PDF</div>
+                    <div class="html-style" @click="downloadFile(item.download[0])">HTML</div>
+                </div>
+            </td>
+        </tr>
         </tbody>
     </table>
 </div>

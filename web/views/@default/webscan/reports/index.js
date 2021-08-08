@@ -98,7 +98,7 @@ Tea.context(function () {
         }
     };
     this.parseDesc = function (desc) {
-      return desc.split(";",1)[0]
+        return desc.split(";",1)[0]
     }
     //btn删除
     this.onDelete = function () {
@@ -151,9 +151,10 @@ Tea.context(function () {
         })
     }
     //主机漏洞扫描报表
-    this.exportFile = function (id,format) {
+    this.exportFile = function (item,format) {
         this.$post(".export").params({
-            id: id,
+            id: item.scan_id,
+            historyId: item.history_id,
             format:format,
         }).success(resp => {
             if (resp.code === 200) {
