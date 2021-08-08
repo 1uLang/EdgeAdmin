@@ -5,9 +5,6 @@ Tea.context(function () {
 
     this.curSelectCode = sessionStorage.getItem("leftSelectCode")? sessionStorage.getItem("leftSelectCode"):"dashboard"
     
-    
-
-
     if (typeof this.leftMenuItemIsDisabled == "undefined") {
         this.leftMenuItemIsDisabled = false
     }
@@ -28,7 +25,6 @@ Tea.context(function () {
         if(curSelectCode){
             this.onSetLeftTouchCode(curSelectCode)
         }
-        
 
         // 检查消息
         this.checkMessages()
@@ -64,9 +60,13 @@ Tea.context(function () {
         if(this.curSelectCode!=code){
             this.curSelectCode = code
         }
+        this.onOpenDialog()
         sessionStorage.setItem("leftSelectCode",this.curSelectCode)
     }
 
+    this.onOpenDialog = function () {
+        Tea.dialogBoxEnabled("block")
+    }
 	/**
 	 * 切换模板
 	 */

@@ -30,13 +30,33 @@
             </thead>
             <tbody id='tableBody'>
             <tr align="center" style="height: 40px;" v-for="item in tableData">
-                <td>{{item.sid}}</td>
-                <td>{{parseAction(item.action)}}</td>
-                <td>{{item.source}}</td>
-                <td>{{item.classtype}}</td>
-                <td>{{item.msg}}</td>
                 <td>
-                    <div :class="{'status-open':item.status===1,'status-close':item.status===2}">
+                    <div style="padding: 4px 0;">
+                        {{item.sid}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.action}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.source}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.classtype}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.msg}}
+                    </div>
+                </td>
+                <td>
+                    <div :class="{'status-open':item.enabled===1,'status-close':item.enabled===2}">
                         {{getStatus(item.enabled)}}
                     </div>
                 </td>
