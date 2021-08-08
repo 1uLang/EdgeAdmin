@@ -46,7 +46,7 @@ func (this *AuthorizeAction) RunGet(params struct {
 		return
 	}
 	contain := map[string]bool{}
-	for _, v := range list {
+	for _, v := range list[1:] { //从一开始 去掉创建者
 		contain[v] = true
 	}
 	countResp, err := this.RPC().AdminRPC().CountAllEnabledAdmins(this.AdminContext(), &pb.CountAllEnabledAdminsRequest{})
@@ -68,12 +68,12 @@ func (this *AuthorizeAction) RunGet(params struct {
 	for _, v := range adminsResp.Admins {
 		if _, isExist := contain[fmt.Sprintf("%v", v.Id)]; isExist {
 			authUsers = append(authUsers, map[string]interface{}{
-				"name": fmt.Sprintf("%v(%v)",v.Fullname,v.Username),
+				"name": fmt.Sprintf("%v(%v)", v.Fullname, v.Username),
 				"id":   v.Id,
 			})
 		} else {
 			allUsers = append(allUsers, map[string]interface{}{
-				"name": fmt.Sprintf("%v(%v)",v.Fullname,v.Username),
+				"name": fmt.Sprintf("%v(%v)", v.Fullname, v.Username),
 				"id":   v.Id,
 				"my":   v.Id == this.AdminId(),
 			})

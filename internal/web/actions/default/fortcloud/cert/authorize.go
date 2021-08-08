@@ -46,7 +46,7 @@ func (this *AuthorizeAction) RunGet(params struct {
 		return
 	}
 	contain := map[uint64]bool{}
-	for _, v := range list.UserIds {
+	for _, v := range list.AdminUserId {
 		contain[v] = true
 	}
 
@@ -101,7 +101,7 @@ func (this *AuthorizeAction) RunPost(params struct {
 	}
 	args := &cert_model.AuthorizeReq{}
 	args.ID = params.Id
-	args.UserIds = params.Users
+	args.AdminUserIds = params.Users
 	err = req.Cert.Authorize(args)
 	if err != nil {
 		this.ErrorPage(err)
