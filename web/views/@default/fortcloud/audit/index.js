@@ -75,4 +75,23 @@ Tea.context(function () {
             })
         }
     }
+
+    this.bShowAudioPlayBox = false
+    this.onTestReplay = function () {
+        this.bShowAudioPlayBox = true
+        var RECORDING_URL = 'URL';
+        var display = document.getElementById('display');
+        var tunnel = new Guacamole.StaticHTTPTunnel(RECORDING_URL);
+        var recording = new Guacamole.SessionRecording(tunnel);
+        var recordingDisplay = recording.getDisplay();
+        display.appendChild(recordingDisplay.getElement());
+        recording.connect();
+        recording.onplay = () => {
+           console.log("onPlayHandle")
+        };
+        recording.onpause = () => {
+            console.log("onPauseHandle")
+        };
+        
+    }
 })
