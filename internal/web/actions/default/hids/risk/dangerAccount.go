@@ -39,32 +39,28 @@ func (this *DangerAccountAction) RunGet(params struct {
 	req.PageSize = params.PageSize
 	req.PageNo = params.PageNo
 
-	req.UserName, err = this.UserName()
-	if err != nil {
-		this.Data["errorMessage"] = fmt.Errorf("获取用户信息失败：%v", err)
-		return
-	}
+	req.AdminUserId = uint64(this.AdminId())
 	list, err := risk_server.DangerAccountList(req)
 	if err != nil {
-		this.Data["errorMessage"] = fmt.Errorf("获取风险账号信息失败：%v", err)
+		this.Data["errorMessage"] = fmt.Sprintf("获取风险账号信息失败：%v", err)
 		return
 	}
 	req.ProcessState = 2
 	list2, err := risk_server.DangerAccountList(req)
 	if err != nil {
-		this.Data["errorMessage"] = fmt.Errorf("获取风险账号信息失败：%v", err)
+		this.Data["errorMessage"] = fmt.Sprintf("获取风险账号信息失败：%v", err)
 		return
 	}
+	fmt.Println(list.List)
 	list.List = append(list.List, list2.List...)
 	for k, v := range list.List {
-
-		if v["userName"] != req.UserName {
-			continue
-		}
-		os, err := server.Info(v["serverIp"].(string), req.UserName)
+		fmt.Println(v["serverIp"])
+		os, err := server.Info(v["serverIp"].(string))
 		if err != nil {
-			this.Data["errorMessage"] = fmt.Errorf("获取主机信息失败：%v", err)
+			this.Data["errorMessage"] = fmt.Sprintf("获取主机信息失败：%v", err)
 			return
+		}else if os == nil{	//无主机信息
+			continue
 		}
 		list.List[k]["os"] = os
 	}
@@ -81,7 +77,7 @@ func (this *DangerAccountAction) RunPost(params struct {
 }) {
 	err := hids.InitAPIServer()
 	if err != nil {
-		this.Error(err.Error(), 400)
+		this.Error(err.Error(),400)
 		return
 	}
 	req := &risk.ProcessReq{Opt: params.Opt}
@@ -91,7 +87,7 @@ func (this *DangerAccountAction) RunPost(params struct {
 
 	err = risk_server.ProcessDangerAccount(req)
 	if err != nil {
-		this.Error(err.Error(), 400)
+		this.Error(err.Error(),400)
 		return
 	}
 	this.Success()
@@ -138,20 +134,19 @@ func (this *DangerAccountListAction) RunGet(params struct {
 	req.MacCode = params.MacCode
 	req.Req.PageSize = params.PageSize
 	req.Req.PageNo = params.PageNo
-	req.Req.UserName = "luobing"
 
 	//待处理
 	req.Req.ProcessState = 1
 	list1, err := risk_server.DangerAccountDetailList(req)
 	if err != nil {
-		this.Data["errorMessage"] = fmt.Sprintf("获取风险账号详细列表失败：%v", err)
+		this.Data["errorMessage"] = fmt.Sprintf("获取风险账号详细列表失败：%v",err)
 		return
 	}
 	//已处理
 	req.Req.ProcessState = 2
 	list2, err := risk_server.DangerAccountDetailList(req)
 	if err != nil {
-		this.Data["errorMessage"] = fmt.Sprintf("获取风险账号详细列表失败：%v", err)
+		this.Data["errorMessage"] = fmt.Sprintf("获取风险账号详细列表失败：%v",err)
 		return
 	}
 	//漏洞列表
@@ -202,7 +197,7 @@ func (this *DangerAccountDetailAction) RunGet(params struct {
 
 	info, err := risk_server.DangerAccountDetail(params.MacCode, params.RiskId, params.ProcessState == 2)
 	if err != nil {
-		this.Data["errorMessage"] = fmt.Sprintf("获取风险账号详情信息失败：%v", err)
+		this.Data["errorMessage"] = fmt.Sprintf("获取风险账号详情信息失败：%v",err)
 		return
 	}
 	this.Data["DangerAccountDetails"] = info

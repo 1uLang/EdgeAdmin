@@ -1,7 +1,6 @@
 package examine
 
 import (
-	"fmt"
 	"github.com/1uLang/zhiannet-api/hids/model/examine"
 	examine_server "github.com/1uLang/zhiannet-api/hids/server/examine"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
@@ -27,17 +26,15 @@ func (this *DetailAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	info, err := examine_server.Details(params.MacCode)
+	info, err := examine_server.Details(&examine.DetailsReq{
+		MacCode: params.MacCode,
+		AdminUserId: uint64(this.AdminId()),
+	})
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	userName, err := this.UserName()
-	if err != nil {
-		this.ErrorPage(fmt.Errorf("获取当前用户信息失败：%v", err))
-		return
-	}
-	list, err := examine_server.List(&examine.SearchReq{UserName: userName, Type: -1, Score: -1, State: -1})
+	list, err := examine_server.List(&examine.SearchReq{UserId: uint64(this.AdminId()),Type: -1, Score: -1, State: -1})
 	if err != nil {
 		this.ErrorPage(err)
 		return

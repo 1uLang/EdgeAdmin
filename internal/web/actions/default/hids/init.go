@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/1uLang/zhiannet-api/hids/request"
 	"github.com/1uLang/zhiannet-api/hids/server"
-	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/helpers"
 	"github.com/iwind/TeaGo"
 )
@@ -14,7 +13,7 @@ import (
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
-			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeHids)).
+			Helper(helpers.NewUserMustAuth("")).
 			Data("teaMenu", "hids").
 			Prefix("/hids").
 			Get("", new(IndexAction)).

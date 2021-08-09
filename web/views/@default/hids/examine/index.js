@@ -1,6 +1,8 @@
 Tea.context(function () {
-    this.progressListData = []//{id:1,curPer:1,disabled:1}
+    this.localProgressData = localStorage.getItem("examinProgressData")
+    this.progressListData =  this.localProgressData ? JSON.parse(this.localProgressData) : [];//{id:1,curPer:1,disabled:1}
 
+    this.Items = this.examineItems !== ""? this.examineItems.split(","): []
     this.curIndex = -1
 
     this.bShowCheckDetail = false
@@ -13,6 +15,8 @@ Tea.context(function () {
     this.serverIp = ""
     this.bTimeOutTip = false
     this.bShowScanPath = false
+
+    let that = this
 
     this.sTopSelectItem = [
         {id: "01", value: "系统漏洞"},
@@ -29,61 +33,22 @@ Tea.context(function () {
         {id: "16", value: "异常进程"},
         {id: "17", value: "日志异常删除"},
     ]
-
+ 
     this.$delay(function () {
 
-        this.onReloadProgressData()
-        this.initTime()
+        
         if (this.errorMessage !== "" && this.errorMessage !== undefined) {
             teaweb.warn(this.errorMessage, function () {
             })
         }
 
-        let that = this
         // that.onCreateLoopTimeOut()
         window.addEventListener('beforeunload', function () {
             that.onReleaseUpdateTimeOut()
             // that.onReleaseTimeOut()
         })
     })
-
-    this.initTime = function (){
-        //判断体检完成时间初始值
-        if(this.startTime && this.endTime != ""){
-            document.getElementById("day-from-picker").value = this.startTime
-            document.getElementById("day-to-picker").value = this.endTime
-        }
-    }
-    this.onResetProgressData = function () {
-        if(this.datas && this.datas.length > 0){
-            if(this.progressListData && this.progressListData.length > 0){
-                this.progressListData.forEach(element => {
-                    let isFindId = false
-                    this.datas.forEach(item => {
-                        if(item.serverExamineResultInfo.serverIp == element.id){
-                            element.state = item.serverExamineResultInfo.state
-                            if(item.serverExamineResultInfo.progress==100){
-                                isFindId = true
-                                element.curPer = 100
-                            }
-                        }
-                    });
-                    if(!isFindId){
-                        element.disabled = 1
-                    }
-                });
-                this.progressListData = this.progressListData.filter((item) => {
-                    return item.disabled == 0;
-                });
-            }else{
-                this.datas.forEach(item => {
-                    let curData = {id:item.serverExamineResultInfo.serverIp,curPer:item.serverExamineResultInfo.progress,state:item.serverExamineResultInfo.state,disabled:0}
-                    this.progressListData.push(curData)
-                });
-            }
-            this.onUpdateProgressData()
-        }
-    }
+    
 
     this.onCallBack = function () {
         if (this.checkScans()) {
@@ -91,11 +56,11 @@ Tea.context(function () {
                 if (resp.code === 200) {
                     this.datas = resp.data.datas
                     this.state = resp.data.state
+                    this.Type = resp.data.Type
                     this.score = resp.data.score
                     this.examineItems = resp.data.examineItems
                     this.startTime = resp.data.startTime
                     this.endTime = resp.data.endTime
-                    this.initTime()
                 }
             })
         }
@@ -113,8 +78,8 @@ Tea.context(function () {
     }
     this.checkScans = function () {
         for (item of this.datas) {
-            if (item.serverExamineResultInfo.state === 1 ||
-                item.serverExamineResultInfo.state === 4) {
+            if (item.state === 1 ||
+                item.state === 4) {
                 return true
             }
         }
@@ -141,19 +106,19 @@ Tea.context(function () {
         this.refreshPage()
     }
 
-    this.refreshPage = function () {
-        if(this.startTime && this.startTime != ""){
-            let startTime = this.startTime
-            startTime = startTime.replace("T", " ");
-            startTime = startTime.replace("/", "-");
-
-            let endTime = this.endTime
-            endTime = endTime.replace("T", " ");
-            endTime = endTime.replace("/", "-");
-            window.location.href= "/hids/examine?state=" + this.state + "&score=" + this.score + '&startTime='+startTime+'&endTime='+endTime
-        }else{
-            window.location.href= "/hids/examine?state=" + this.state + "&score=" + this.score
+    this.onChangeResultState = function (state) {
+        if (this.Type != state) {
+            this.Type = state
         }
+        this.refreshPage()
+    }
+    this.refreshPage = function () {
+        let url = "/hids/examine?state=" + this.state + "&score=" + this.score + "&Type=" + this.Type
+        if (this.Items.length > 0) {
+            url += "&examineItems=" + this.Items.toString()
+        }
+        window.location.href= url
+
     }
 
     this.parseServerLocalIp = function (ip) {
@@ -174,6 +139,35 @@ Tea.context(function () {
 
         return false;
     }
+    //添加/删除元素
+    this.onAddSelectValue = function (index) {
+        let bValue = false;
+        if (this.checkSelectValue) {
+            bValue = this.checkSelectValue(index, this.Items);
+        }
+        if (bValue) {
+            this.Items = this.Items.filter((itemIndex) => {
+                return itemIndex != index;
+            });
+        } else {
+            this.Items.push(index);
+        }
+
+        this.refreshPage()
+    }
+
+
+    this.getShowSelectImage = function (id) {
+        let bValue = false;
+        if (this.checkSelectValue) {
+            bValue = this.checkSelectValue(id, this.Items);
+        }
+        if (bValue) {
+            return "/images/select_select.png";
+        }
+        return "/images/select_box.png";
+    }
+
     this.onChangeTimeFormat = function (time) {
         var resultTime = "";
         if (time) {
@@ -228,7 +222,7 @@ Tea.context(function () {
 
     this.onOpenCheck = function (item) {
         this.MacCode = item.macCode
-        this.serverIp = item.serverExamineResultInfo.serverIp
+        this.serverIp = item.serverIp
         this.sSelectCheckValue = ["01","02","03","04","13","14","15"]
         this.pCheckDetailData = [
             {
@@ -361,37 +355,36 @@ Tea.context(function () {
 
     this.getProgressItemInfo = function (id) {
         if(id){
-            for(var index=0;index<this.progressListData.length;index++){
-                if(this.progressListData[index].id == id){
-                    return this.progressListData[index]
+            for(var index=0;index<that.progressListData.length;index++){
+                if(that.progressListData[index].id == id){
+                    return that.progressListData[index]
                 }
             }
         }
         return null
     }
-
+    
     this.getProgressPerStr = function (curValue, maxValue,id,state) {
-
-        if(!this.getProgressItemInfo){return "0%"}
+        if(!that.getProgressItemInfo){return "0%"}
 
         if(curValue == 0 ){
             if(state==1){
-                this.onCreateUpdateTimeOut()
-                let curData = this.getProgressItemInfo(id)
+                that.onCreateUpdateTimeOut()
+                let curData = that.getProgressItemInfo(id)
                 if(curData){
                     if(curData.curPer == 0){
                         return "1%"
                     }
                     return curData.curPer+"%"
                 }
-                this.onCreateProgressItemInfo(id)
+                that.onCreateProgressItemInfo(id)
                 return "1%"
             }else{
-                this.onChangeProgressDataState(id,state)
+                that.onChangeProgressDataState(id,state)
                 return ""
             }
         }else if(curValue == 100){
-            this.onChangeProgressDataState(id,state)
+            that.onChangeProgressDataState(id,state)
         }
 
         if(curValue && maxValue && maxValue>0 && maxValue >= curValue){
@@ -407,17 +400,31 @@ Tea.context(function () {
         return "0%"
     }
 
+    // let that = this
+    // this.testFunc = function(curValue, maxValue,id,state){
+    //     console.log(that.getProgressPerStr)
+    //     console.log(that.getProgressPerStr(curValue, maxValue,id,state))
+    //     return "0%"
+    // }
+    // this.getInitProgressPerString = function(curValue, maxValue,id,state){
+    //     let that = this
+    //     this.testFunc = function(){
+    //         console.log(that.getProgressPerStr)
+    //         console.log(that.getProgressPerStr(curValue, maxValue,id,state))
+    //     }
+    //     this.testFunc()
+    // }
+
     this.getProgressPer = function (curValue, maxValue,id,state) {
-
-        if(!this.getProgressItemInfo){return "0%"}
-
+        if(!that.getProgressItemInfo){return "0%"}
+        
         if(curValue == 0 ){
             if(state && state==1){
-                let curData = this.getProgressItemInfo(id)
+                let curData = that.getProgressItemInfo(id)
                 if(curData){
                     return curData.curPer+"%"
                 }
-                this.onCreateProgressItemInfo(id)
+                that.onCreateProgressItemInfo(id)
                 return "1%"
             }
         }
@@ -431,18 +438,33 @@ Tea.context(function () {
         }
         return "0%"
     }
-
+    
     //选择时间之后的回调
     this.onTimeChange = function () {
         let startTime = document.getElementById("day-from-picker").value
-        startTime = startTime.replace("T", " ");
-        startTime = startTime.replace("/", "-");
+        if(startTime.length > 0){
+            let tempCharCount=startTime.split(":").length-1;
+            if(tempCharCount<=1){
+                document.getElementById("day-from-picker").value = ""
+            }else{
+                startTime = startTime.replace("T", " ");
+            }
+        }else{
+            document.getElementById("day-from-picker").value = ""
+        }
+
         let endTime = document.getElementById("day-to-picker").value
-        endTime = endTime.replace("T", " ");
-        endTime = endTime.replace("/", "-");
+        if(endTime.length > 0){
+            let tempCharCount=endTime.split(":").length-1;
+            if(tempCharCount<=1){
+                document.getElementById("day-to-picker").value = ""
+            }else{
+                endTime = endTime.replace("T", " ");
+            }
+        }else{
+            document.getElementById("day-to-picker").value = ""
+        }
         //todo req
-        if(startTime && startTime != "" && endTime && endTime != "")
-            window.location.href= "/hids/examine?state=" + this.state + "&score=" + this.score + '&startTime='+startTime+'&endTime='+endTime
     }
 
 
@@ -450,62 +472,54 @@ Tea.context(function () {
 
     this.onCreateProgressItemInfo = function (id) {
         let curData = {id:id,curPer:0,state:1,disabled:0}
-        this.progressListData.push(curData)
-        this.onSaveProgressData()
+        that.progressListData.push(curData)
+        that.onSaveProgressData()
     }
     this.onChangeProgressDataState = function (id,state) {
-        for(var index=0;index<this.progressListData.length;index++){
-            if(this.progressListData[index].id==id){
-                this.progressListData[index].state = state
+
+        for(var index=0;index<that.progressListData.length;index++){
+            if(that.progressListData[index].id==id){
+                that.progressListData[index].state = state
                 break
             }
         }
-        if(this.progressListData.length>0){
-            this.progressListData = this.progressListData.filter((item) => {
+        if(that.progressListData.length>0){
+            that.progressListData = that.progressListData.filter((item) => {
                 return item.state == 1;
             });
         }
-        console.log(this.progressListData);
-        this.onSaveProgressData()
+        that.onSaveProgressData()
     }
     // 进度的缓存数据
-    this.onReloadProgressData = function () {
-        let curProgressData = localStorage.getItem("examinProgressData");
-        if(curProgressData){
-            this.progressListData = JSON.parse(curProgressData)
-        }else{
-            this.progressListData = []
-        }
-    }
-
     this.onUpdateProgressData = function () {
-        for(var index=0;index<this.progressListData.length;index++){
-            if(this.progressListData[index].state==1){
-                this.progressListData[index].curPer = this.progressListData[index].curPer+5
-                if(this.progressListData[index].curPer>=95){
-                    this.progressListData[index].curPer = 95
+        for(var index=0;index<that.progressListData.length;index++){
+            if(that.progressListData[index].state==1){
+                that.progressListData[index].curPer = that.progressListData[index].curPer+5
+                if(that.progressListData[index].curPer>=95){
+                    that.progressListData[index].curPer = 95
                 }
             }
         }
-        this.onSaveProgressData()
+        that.onSaveProgressData()
     }
     this.onSaveProgressData = function () {
-        localStorage.setItem("examinProgressData", JSON.stringify(this.progressListData));
+        localStorage.setItem("examinProgressData", JSON.stringify(that.progressListData));
     }
+    
 
     //计时器
     this.onCreateUpdateTimeOut = function () {
-        if(!this.updateTimeId){
-            this.updateTimeId = createTimer(this.onUpdateProgressData, {timeout: 5000});
-            this.updateTimeId.start();
+        if(!that.updateTimeId){
+            that.updateTimeId = createTimer(that.onUpdateProgressData, {timeout: 5000});
+            that.updateTimeId.start();
         }
     }
 
     this.onReleaseUpdateTimeOut = function () {
 
-        if (this.updateTimeId) {
-            this.updateTimeId.stop()
-            this.updateTimeId = null
+        if (that.updateTimeId) {
+            that.updateTimeId.stop()
+            that.updateTimeId = null
         }
     }
 

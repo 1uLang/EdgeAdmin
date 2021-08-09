@@ -26,7 +26,8 @@ func (this *IndexAction) RunGet(params struct {
 	Must *actions.Must
 	//CSRF *actionutils.CSRF
 }) {
-	hids.InitAPIServer() //初始化
+	_ = hids.InitAPIServer()
+
 	defer this.Show()
 	this.Data["agents"] = nil
 
@@ -37,11 +38,7 @@ func (this *IndexAction) RunGet(params struct {
 	}
 
 	req := &agent.SearchReq{}
-	req.UserName, err = this.UserName()
-	if err != nil {
-		this.Data["errorMessage"] = fmt.Sprintf("获取用户信息失败：%v", err)
-		return
-	}
+	req.AdminUserId = uint64(this.AdminId())
 	req.PageNo = params.PageNo
 	req.PageSize = params.PageSize
 	req.ServerIp = params.ServerIp
@@ -71,11 +68,7 @@ func (this *IndexAction) RunPost(params struct {
 	}
 
 	req := &agent.SearchReq{}
-	req.UserName, err = this.UserName()
-	if err != nil {
-		this.ErrorPage(fmt.Errorf("获取用户信息失败：%v", err))
-		return
-	}
+	req.AdminUserId = uint64(this.AdminId())
 	req.PageNo = params.PageNo
 	req.PageSize = params.PageSize
 	req.ServerIp = params.ServerIp
