@@ -270,6 +270,11 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"url":  "/nfw/ips",
 					"code": "ips",
 				},
+				{
+					"name": "安全警报",
+					"url":  "/nfw/ips/alarm",
+					"code": "alarm",
+				},
 			},
 		},
 		{
@@ -380,11 +385,11 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			},
 		},
 		{
-			"code": "fortcloud",
-			"url":  "/fortcloud/assets",
+			"code":   "fortcloud",
+			"url":    "/fortcloud/assets",
 			"module": configloaders.AdminModuleCodeFort,
-			"name": "堡垒机",
-			"icon": "ioxhost",
+			"name":   "堡垒机",
+			"icon":   "ioxhost",
 			"subItems": []maps.Map{
 				{
 					"name": "资产管理",

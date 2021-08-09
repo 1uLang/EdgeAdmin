@@ -1,4 +1,4 @@
-package ips
+package alarm
 
 import (
 	"github.com/1uLang/zhiannet-api/common/model/subassemblynode"
@@ -18,6 +18,8 @@ func (this *IndexAction) Init() {
 
 func (this *IndexAction) RunGet(params struct {
 	NodeId   uint64
+	Keyword  string
+	FileId   string
 	PageSize int
 	Page     int
 }) {
@@ -31,6 +33,7 @@ func (this *IndexAction) RunGet(params struct {
 	if params.NodeId == 0 && len(node) > 0 {
 		params.NodeId = node[0].Id
 	}
+
 	if params.PageSize == 0 {
 		params.PageSize = 20
 	}
@@ -38,17 +41,20 @@ func (this *IndexAction) RunGet(params struct {
 		params.Page = 1
 	}
 
-	list, err := ips.GetIpsList(&ips.IpsReq{
-		NodeId:   params.NodeId,
-		PageSize: int(params.PageSize),
-		PageNum:  int(params.Page),
+	list, err := ips.GetIpsAlarmList(&ips.IpsAlarmReq{
+		IpsReq: ips.IpsReq{
+			NodeId:   params.NodeId,
+			PageSize: int(params.PageSize),
+			PageNum:  int(params.Page),
+		},
+		FileId: params.FileId,
 	})
-	if err != nil || list == nil {
-		list = &req_ips.IpsListResp{}
-	}
 	count := list.Total
 	page := this.NewPage(int64(count))
 	this.Data["page"] = page.AsHTML()
+	if err != nil || list == nil {
+		list = &req_ips.IpsAlarmListResp{}
+	}
 	if len(list.Rows) > 0 {
 		this.Data["tableData"] = list.Rows
 	} else {

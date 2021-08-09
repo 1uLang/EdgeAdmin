@@ -169,6 +169,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/acl"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/ips"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/ips/alarm"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/logs"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/nat"
 
