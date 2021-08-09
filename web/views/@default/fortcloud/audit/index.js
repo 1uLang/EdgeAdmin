@@ -64,11 +64,14 @@ Tea.context(function () {
 
     this.bShowAudioPlayBox = false
     this.onTestReplay = function (url) {
-        this.bShowAudioPlayBox = true
         var RECORDING_URL = url;
         var display = document.getElementById('display');
-        var tunnel = new Guacamole.StaticHTTPTunnel(RECORDING_URL);
-        var recording = new Guacamole.SessionRecording(tunnel);
+        let tempGuacamole = new Guacamole()
+        var tunnel = tempGuacamole.StaticHTTPTunnel(RECORDING_URL);
+        console.log(tunnel)
+        var recording = tempGuacamole.SessionRecording(tunnel);
+        console.log(recording)
+        console.log(recording.getDisplay())
         var recordingDisplay = recording.getDisplay();
         display.appendChild(recordingDisplay.getElement());
         recording.connect();
@@ -78,6 +81,7 @@ Tea.context(function () {
         recording.onpause = () => {
             console.log("onPauseHandle")
         };
+        this.bShowAudioPlayBox = true
 
     }
 })
