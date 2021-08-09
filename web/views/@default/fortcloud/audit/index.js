@@ -200,6 +200,7 @@ Tea.context(function () {
                 this.bAudioDisabled = false
             }
         };
+        this.bShowAudioPlayBox = true
 
     }
 })

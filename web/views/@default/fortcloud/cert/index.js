@@ -109,8 +109,64 @@ Tea.context(function () {
         })
     }
 
+    this.onAddSelectNoAuth = function (id, name) {
+        if (id && name) {
+            var tempData = {id: id, name: name, my: false}
+            this.selectNoAuthPeopleListData.push(tempData)
+        }
+    }
+    this.selectAllNoAuth = function () {
+        var tempElement = document.getElementById("noAuth-allSelect")
+        let noAuthList = document.getElementsByName("noAuthSelect")
+        if (tempElement.checked) {
+            for (var index = 0; index < noAuthList.length; index++) {
+                if (!noAuthList[index].checked && !noAuthList[index].disabled) {
+                    noAuthList[index].checked = true
+                    this.onAddSelectNoAuth(noAuthList[index].value, noAuthList[index].data)
+                }
+            }
+        } else {
 
-    //添加操作
+            for (var index = 0; index < noAuthList.length; index++) {
+                if (noAuthList[index].checked && !noAuthList[index].disabled) {
+                    noAuthList[index].checked = false
+                    this.onRemoveSelectNoAuth(noAuthList[index].value)
+                }
+            }
+        }
+
+    }
+
+    this.onListenClickNoAuthChange = function (item) {
+        if (item.my) {
+            return
+        }
+        let noAuthList = document.getElementsByName("noAuthSelect")
+        for (var index = 0; index < noAuthList.length; index++) {
+            if (noAuthList[index].value == item.id) {
+                if (noAuthList[index].checked) {
+                    noAuthList[index].checked = false
+                    this.onRemoveSelectNoAuth(item.id)
+                } else {
+                    noAuthList[index].checked = true
+                    this.onAddSelectNoAuth(item.id, item.name)
+                }
+                break
+            }
+        }
+        this.onCheckSelectAllNoAuth()
+    }
+    this.onCheckHadValue = function (id, table) {
+        if (table && id && table.length > 0 && id > 0) {
+            for (var index = 0; index < table.length; index++) {
+                if (table[index].id == id) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
     this.onCheckSelectAllNoAuth = function () {
         var tempElement = document.getElementById("noAuth-allSelect")
         for (var index = 0; index < this.allUsers.length; index++) {
@@ -141,8 +197,8 @@ Tea.context(function () {
                 }
             }
         }
-        
-        
+
+
 
     }
     this.onListenClickNoAuthChange = function (item) {
@@ -200,27 +256,6 @@ Tea.context(function () {
             }
 
         }
-    }
-
-    this.onGetAuthPeopleItemInfo = function (id, table) {
-        if (table && id && table.length > 0 && id > 0) {
-            for (var index = 0; index < table.length; index++) {
-                if (table[index].id == id) {
-                    return table[index]
-                }
-            }
-        }
-        return null
-    }
-    this.onCheckHadValue = function (id, table) {
-        if (table && id && table.length > 0 && id > 0) {
-            for (var index = 0; index < table.length; index++) {
-                if (table[index].id == id) {
-                    return true
-                }
-            }
-        }
-        return false
     }
 
 
@@ -307,7 +342,6 @@ Tea.context(function () {
         }
     }
 
-
     this.onCloseAuth = function () {
         this.bShowhAuth = false
         this.id = ""
@@ -331,6 +365,7 @@ Tea.context(function () {
         this.selectAuthPeopleListData = []
 
     }
+
     this.onOpenAuth = function (item) {
         //req
         this.cert_name = item.name

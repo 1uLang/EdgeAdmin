@@ -19,53 +19,64 @@
         <table id="tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
             <thead>
             <tr align="center">
-                <th class='table-head-bg' style="min-width: 106px;">签名ID</th>
-                <th class='table-head-bg' style="min-width: 102px;">操作</th>
-                <th class='table-head-bg' style="min-width: 293px;">源</th>
-                <th class='table-head-bg' style="min-width: 106px;">类型</th>
-                <th class='table-head-bg' style="min-width: 316px;">信息</th>
-                <th class='table-head-bg' style="width: 100px;min-width: 100px;max-width: 100px;">状态</th>
-                <th class='table-head-bg' style="width: 120px;min-width: 120px;max-width: 120px;">操作</th>
+                <th class='table-head-bg' style="min-width: 100px;width:150px;">时间戳</th>
+                <th class='table-head-bg' style="min-width: 80px;width:100px;">SID</th>
+                <th class='table-head-bg' style="min-width: 80px;width:100px;">操作</th>
+                <th class='table-head-bg' style="min-width: 80px;width:100px;">接口</th>
+                <th class='table-head-bg' style="min-width: 80px;width:100px;">源</th>
+                <th class='table-head-bg' style="width: 100px;min-width: 100px;max-width: 100px;">端口</th>
+                <th class='table-head-bg' style="width: 120px;min-width: 120px;max-width: 120px;">目标</th>
+                <th class='table-head-bg' style="width: 120px;min-width: 120px;max-width: 120px;">端口</th>
+                <th class='table-head-bg' style="width: 120px;min-width: 120px;max-width: 120px;">警报</th>
             </tr>
             </thead>
             <tbody id='tableBody'>
             <tr align="center" style="height: 40px;" v-for="item in tableData">
                 <td>
                     <div style="padding: 4px 0;">
-                        {{item.sid}}
+                        {{item.timestamp}}
                     </div>
                 </td>
                 <td>
                     <div style="padding: 4px 0;">
-                        {{item.action}}
+                        {{item.alert_sid}}
                     </div>
                 </td>
                 <td>
                     <div style="padding: 4px 0;">
-                        {{item.source}}
+                        {{item.alert_action}}
                     </div>
                 </td>
                 <td>
                     <div style="padding: 4px 0;">
-                        {{item.classtype}}
+                        {{item.in_iface}}
                     </div>
                 </td>
                 <td>
                     <div style="padding: 4px 0;">
-                        {{item.msg}}
+                        {{item.src_ip}}
                     </div>
                 </td>
                 <td>
-                    <div :class="{'status-open':item.enabled===1,'status-close':item.enabled===0}">
-                        {{getStatus(item.enabled)}}
+                    <div style="padding: 4px 0;">
+                        {{item.src_port}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.dest_ip}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.dest_port}}
                     </div>
                 </td>
                 <td>
                     <div style="display: flex;justify-content: space-around;">
-                        <div v-show="item.enabled==1" class="edit_btn" @click="onCloseCig(item.sid)">禁用</div>
-                        <div v-show="item.enabled==0" class="edit_btn" @click="onOpenCig(item.sid)">启用</div>
-                        <div class="edit_btn"
-                             @click="onChangeCig(item.id,item.action)">{{getEditName(item.action)}}</div>
+                        {{item.alert}}
+                        <!--<div class="edit_btn"
+                             @click="onChangeCig(item.id,item.action)">{{getEditName(item.action)}}</div>-->
                     </div>
                 </td>
             </tr>
