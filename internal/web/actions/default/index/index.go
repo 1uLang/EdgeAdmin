@@ -179,6 +179,17 @@ func (this *IndexAction) RunPost(params struct {
 		this.Data["from"] = "/updatePwd"
 		this.Fail("密码已过期，请立即修改")
 	}
+	//检测系统是否到期
+	code,expire,err := checkExpire()
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	if expire{
+		this.Data["from"] = "/renewal"
+		this.Data["systemCode"] = code
+		this.Fail("系统已到期，请立即续订")
+	}
 
 	adminId := resp.AdminId
 	params.Auth.StoreAdmin(adminId, params.Remember)
