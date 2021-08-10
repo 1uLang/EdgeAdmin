@@ -11,6 +11,7 @@ func init() {
 			Prefix("/").
 			GetPost("", new(IndexAction)).
 			GetPost("updatePwd", new(UpdatePwdAction)).
+			Post("renewal", new(RenewalAction)).
 			EndAll()
 	})
 }
