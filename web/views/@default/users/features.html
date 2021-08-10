@@ -7,8 +7,8 @@
     <csrf-token></csrf-token>
     <input type="hidden" name="userId" :value="user.id"/>
 
-    <table class="ui table definition selectable">
-        <tr>
+    <table class="ui table definition">
+        <!-- <tr>
             <td class="title">功能列表</td>
             <td>
                 <div class="feature-boxes">
@@ -18,7 +18,32 @@
                     </div>
                 </div>
             </td>
+        </tr> -->
+        <tr>
+            <td class="title">功能列表</td>
+            <td>
+                <div style="display: flex;flex-direction: column;margin-bottom: 5px;cursor: pointer;" v-for="item in menuData" >
+                    <div style="display: flex;flex-direction: row;align-items: center;" :style="{'background':item.id==moveIndex? '#f0f0f0':'none'}"
+                        @mouseenter="onMouseEnter(item.id)" @mouseleave="onMouseLeave(item.id)" @click="onShowChildItem(item.id)">
+                        <span v-show="item.children && item.children.length>0 && !item.bShowChild">&#9658;</span>
+                        <span v-show="item.children && item.children.length>0 && item.bShowChild">&#9660;</span>
+                        <img :src="getShowImageName(item.id)" width="14px" height="14px" style="margin: 0 5px;" @click.stop="onSelectValue(item.id)">
+                        <div style="width: 100%;font-size: 14px;" >{{item.name}}</div>
+                    </div>
+                    <div style="margin-left: 36px;cursor: default;"><span style="font-size: 14px;color: rgba(0, 0, 0, 0.5);padding-top: 5px;">{{item.description}}</span></div>
+                    <div v-if="item.children && item.children.length>0 && item.bShowChild" style="margin-left: 36px;margin-top: 5px;cursor: default;" v-for="childItem in item.children">
+                        <div style="display: flex;flex-direction: row;align-items: center;">
+                            <img :src="getItemShowImageName(childItem.id)" width="14px" height="14px" style="margin-right: 5px;cursor: pointer;" @click="onSelectChildValue(childItem.id,item.id)">
+                            <div style="width: 100%;font-size: 14px;">{{childItem.name}}</div>
+                        </div>
+                        <div style="margin-left: 19px;"><span style="font-size: 14px;color: rgba(0, 0, 0, 0.5);padding-top: 5px;">{{childItem.description}}</span></div>
+                    </div>
+                </div>
+            </td>
         </tr>
     </table>
-    <submit-btn></submit-btn>
+    <div style="width: 100%;display: flex;align-items: center;">
+        <div class="save-btn" @click="onSave()">保存</div>
+    </div>
 </form>
+
