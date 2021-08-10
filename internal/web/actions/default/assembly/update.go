@@ -2,8 +2,8 @@ package assembly
 
 import (
 	"github.com/1uLang/zhiannet-api/common/model/subassemblynode"
-	nc_model "github.com/1uLang/zhiannet-api/nextcloud/model"
 	subassemblynode_server "github.com/1uLang/zhiannet-api/common/server/subassemblynode"
+	nc_model "github.com/1uLang/zhiannet-api/nextcloud/model"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
@@ -112,5 +112,7 @@ func (this *UpdateAction) RunPost(params struct {
 		nc_model.InitialAdminUser()
 	}
 
+	assembly := &CreatePopupAction{}
+	go assembly.Check(params.AssemblyType)
 	this.Success()
 }
