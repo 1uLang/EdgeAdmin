@@ -1,3 +1,37 @@
 {$layout}
 
-会话列表
+<div style="display: flex;flex-direction: row;">
+    <input type="text" name="keyword" style="width:200px;border: 1px solid #d7d7d7;border-radius: 5px;" v-model="keyword" placeholder="搜索"/>
+    <div class="save-btn" @click="onSearch">搜索</div>
+</div>
+
+<table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;margin-top: 10px;">
+    <thead>
+        <tr align="center">
+            <th class='table-head-bg' style="min-width: 100px;max-width: 100px;">方向</th>
+            <th class='table-head-bg' style="min-width: 100px;max-width: 100px;">协议</th>
+            <th class='table-head-bg' style="min-width: 180px;max-width: 180px;">源</th>
+            <th class='table-head-bg' style="min-width: 180px;max-width: 180px;">网关</th>
+            <th class='table-head-bg' style="min-width: 180px;max-width: 180px;">目标</th>
+            <th class='table-head-bg' style="min-width: 140px;max-width: 140px;">状态</th>
+            <th class='table-head-bg' style="min-width: 120px;max-width: 120px;">Age(sec)</th>
+            <th class='table-head-bg' style="min-width: 120px;max-width: 120px;">Expires(sec)</th>
+            <th class='table-head-bg' style="min-width: 100px;max-width: 100px;">数据包</th>
+            <th class='table-head-bg' style="min-width: 100px;max-width: 100px;">字节</th>
+        </tr>
+    </thead>
+    <tbody id='tableBody'>
+        <tr align="center" style="height: 40px;" v-for="item in tableData">
+            <td>{{getDirection(item.directionState)}}</td>
+            <td>{{item.httpType}}</td>
+            <td>{{item.source}}</td>
+            <td>{{item.gateway}}</td>
+            <td>{{item.tagAddr}}</td>
+            <td>{{getTagState(item.state)}}</td>
+            <td>{{item.ageSec}}</td>
+            <td>{{item.expires}}</td>
+            <td>{{item.dataSize}}</td>
+            <td>{{item.byteSize}}</td>
+        </tr>
+    </tbody>
+</table>

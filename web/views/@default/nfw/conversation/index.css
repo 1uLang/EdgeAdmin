@@ -1,0 +1,18 @@
+.save-btn{
+    width: 60px;
+    height: 30px;
+    margin-left: 15px;
+    background-color: #0090cb;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+}
+
+.table-head-bg{
+    height: 32px;
+    background: #f0f0f0;
+}
