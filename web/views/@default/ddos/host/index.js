@@ -178,7 +178,10 @@ Tea.context(function () {
                 if (resp.code === 200) {
                     teaweb.success("释放成功", function () {
                         that.$delay(function () {
-                            that.shieldSearchList(1)
+                            setTimeout(function() {
+                                that.shieldSearchList(1)
+                            }, 1000);  //1秒后将会调用执行remind()函数
+
                         },1000)
                     })
                 }
