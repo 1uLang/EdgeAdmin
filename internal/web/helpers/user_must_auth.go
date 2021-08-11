@@ -528,6 +528,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"code": "audit",
 			"url":  "/audit/db",
 			"name": "安全审计",
+			"module": configloaders.AdminModuleCodeAudit,
 			"icon": "sellsy",
 			"subItems": []maps.Map{
 				{
@@ -564,6 +565,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 		}, {
 			"code": "databackup",
 			"url":  "/databackup",
+			"module": configloaders.AdminModuleCodeBackup,
 			"name": "数据备份",
 			"icon": "copy",
 		},
