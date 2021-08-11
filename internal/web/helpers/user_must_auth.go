@@ -274,6 +274,10 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"name": "安全警报",
 					"url":  "/nfw/ips/alarm",
 					"code": "alarm",
+				}, {
+					"name": "会话",
+					"url":  "/nfw/conversation",
+					"code": "conversation",
 				},
 			},
 		},

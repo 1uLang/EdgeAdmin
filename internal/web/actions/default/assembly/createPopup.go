@@ -6,6 +6,14 @@ import (
 	nc_req "github.com/1uLang/zhiannet-api/nextcloud/request"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/actions"
+
+	audit_request "github.com/1uLang/zhiannet-api/audit/request"
+	ddos_request "github.com/1uLang/zhiannet-api/ddos/request"
+	hids_request "github.com/1uLang/zhiannet-api/hids/server"
+	nessus_request "github.com/1uLang/zhiannet-api/nessus/server"
+	awvs_request "github.com/1uLang/zhiannet-api/nextcloud/request"
+	nextcloud_request "github.com/1uLang/zhiannet-api/nextcloud/request"
+	opnsense_request "github.com/1uLang/zhiannet-api/opnsense/request"
 )
 
 type CreatePopupAction struct {
@@ -131,5 +139,37 @@ func (this *CreatePopupAction) RunPost(params struct {
 			return
 		}
 	}
+	go this.Check(params.AssemblyType)
 	this.Success()
+}
+
+func (this *CreatePopupAction) Check(AssemblyType int) {
+	switch AssemblyType {
+	case 1: //DDoS防护
+		check := new(ddos_request.LoginReq)
+		check.Run()
+	case 2: //云防火墙
+		check := new(opnsense_request.ApiKey)
+		check.Run()
+	case 3: //主机漏洞扫描
+		check := new(nessus_request.CheckRequest)
+		check.Run()
+
+	case 4: //WEB漏洞扫描
+		check := new(awvs_request.CheckRequest)
+		check.Run()
+
+	case 5: //主机防护
+		check := new(hids_request.CheckRequest)
+		check.Run()
+	case 6: //安全审计
+		check := new(audit_request.LoginReq)
+		check.Run()
+	case 7: //堡垒机
+		//check := new(audit_request.LoginReq)
+		//check.Run()
+	case 8: //数据备份
+		check := new(nextcloud_request.CheckRequest)
+		check.Run()
+	}
 }
