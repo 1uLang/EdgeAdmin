@@ -13,6 +13,7 @@ require (
 	github.com/dlclark/regexp2 v1.4.0
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/go-yaml/yaml v2.1.0+incompatible
+	github.com/gofrs/uuid v4.0.0+incompatible
 	github.com/golang/protobuf v1.5.2
 	github.com/google/go-cmp v0.5.6 // indirect
 	github.com/iwind/TeaGo v0.0.0-20210720011303-fc255c995afa
