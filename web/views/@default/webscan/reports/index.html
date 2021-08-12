@@ -11,13 +11,16 @@
 </div>
 <!-- <p class="comment" v-if="reports.length == 0 && nodeErr == ''">暂时还没有目标。</p> -->
 <div style="width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;">
-    <table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;">
+
+    <p class="comment" v-if="reports.length === 0 && nodeErr == ''">暂时还没有报告。</p>
+    <table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;"  v-if="reports.length > 0">
         <thead>
         <tr align="center">
             <th class='table-head-bg' style="width: 60px;">
                 <input id="js-all-checkbox" type="checkbox" @click="checkAll">
             </th>
             <th class='table-head-bg' style="width: 243px;">目标</th>
+            <th class='table-head-bg' style="width: 243px;">类型</th>
             <th class='table-head-bg' style="width: 275px;">创建时间</th>
             <th class='table-head-bg' style="width: 262px;">状态</th>
             <th class='table-head-bg' style="width: 191px;">下载</th>
@@ -30,6 +33,8 @@
             </td>
             <td v-if="item.source">{{parseDesc(item.source.description)}}</td>
             <td v-else >{{item.address}}</td>
+            <td v-if="item.owner">主机漏洞扫描</td>
+            <td v-else>Web漏洞扫描</td>
             <td>{{onChangeTimeFormat(item.generation_date)}}</td>
             <td>{{onChangeStatusFormat(item.status)}}</td>
             <td>

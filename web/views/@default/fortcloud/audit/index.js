@@ -55,12 +55,6 @@ Tea.context(function () {
         })
     }
 
-    this.$delay(function () {
-        console.log(window.location.origin)
-        console.log(window.location.hostname)
-        console.log(window.location.host)
-        console.log(window.location.port)
-    })
     //回放
     this.bShowAudioPlayBox = false
     this.bAudioDisabled = true
