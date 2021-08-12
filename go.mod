@@ -16,7 +16,7 @@ require (
 	github.com/gofrs/uuid v4.0.0+incompatible
 	github.com/golang/protobuf v1.5.2
 	github.com/google/go-cmp v0.5.6 // indirect
-	github.com/iwind/TeaGo v0.0.0-20210720011303-fc255c995afa
+	github.com/iwind/TeaGo v0.0.0-20210809112119-a57ed0e84e34
 	github.com/iwind/gosock v0.0.0-20210722083328-12b2d66abec3
 	github.com/miekg/dns v1.1.35
 	github.com/sirupsen/logrus v1.8.1

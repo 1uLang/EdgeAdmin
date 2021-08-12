@@ -25,15 +25,15 @@ const (
 	AdminModuleCodeConfig    AdminModuleCode = "config"    // 平台管理
 	AdminModuleCodeClusters  AdminModuleCode = "clusters"  // 边缘节点
 
-	AdminModuleCodeDdos    AdminModuleCode = "ddos"    // ddos
-	AdminModuleCodeWebScan AdminModuleCode = "webscan" // webscan
-	AdminModuleCodeHids    AdminModuleCode = "hids"    // hids 主机防护
-	AdminModuleCodeNfw     AdminModuleCode = "nfw"     // 下一代防火墙
-	AdminModuleCodeMonitor AdminModuleCode = "monitor" //监控告警
-	AdminModuleCodeWAF     AdminModuleCode = "waf"     //web防火墙
-	AdminModuleCodeAudit   AdminModuleCode = "audit"   //审计系统
-	AdminModuleCodeFort    AdminModuleCode = "fortcloud"    //堡垒机
-	AdminModuleCodeBackup  AdminModuleCode = "backup"  //数据备份
+	AdminModuleCodeDdos    AdminModuleCode = "ddos"      // ddos
+	AdminModuleCodeWebScan AdminModuleCode = "webscan"   // webscan
+	AdminModuleCodeHids    AdminModuleCode = "hids"      // hids 主机防护
+	AdminModuleCodeNfw     AdminModuleCode = "nfw"       // 下一代防火墙
+	AdminModuleCodeMonitor AdminModuleCode = "monitor"   //监控告警
+	AdminModuleCodeWAF     AdminModuleCode = "waf"       //web防火墙
+	AdminModuleCodeAudit   AdminModuleCode = "audit"     //审计系统
+	AdminModuleCodeFort    AdminModuleCode = "fortcloud" //堡垒机
+	AdminModuleCodeBackup  AdminModuleCode = "backup"    //数据备份
 )
 
 var sharedAdminModuleMapping = map[int64]*AdminModuleList{} // adminId => AdminModuleList
@@ -171,7 +171,7 @@ func UpdateAdminTheme(adminId int64, theme string) {
 func AllModuleMaps() []maps.Map {
 	m := []maps.Map{
 		{
-			"name": "平台首页",
+			"name": "业务概览",
 			"code": AdminModuleCodeDashboard,
 			"url":  "/dashboard",
 		},
@@ -181,7 +181,7 @@ func AllModuleMaps() []maps.Map {
 			"url":  "/assembly",
 		},
 		{
-			"name": "DDos防护",
+			"name": "DDoS防护",
 			"code": AdminModuleCodeDdos,
 			"url":  "/ddos/host",
 		},
@@ -191,19 +191,9 @@ func AllModuleMaps() []maps.Map {
 			"url":  "/nfw/nat",
 		},
 		{
-			"name": "网站服务",
+			"name": "WAF服务",
 			"code": AdminModuleCodeServer,
 			"url":  "/servers",
-		},
-		{
-			"name": "边缘节点",
-			"code": AdminModuleCodeClusters,
-			"url":  "/clusters",
-		},
-		{
-			"name": "域名解析",
-			"code": AdminModuleCodeDNS,
-			"url":  "/dns",
 		},
 		{
 			"name": "主机防护",
@@ -216,10 +206,25 @@ func AllModuleMaps() []maps.Map {
 			"url":  "/webscan/targets",
 		},
 		{
-			"name": "监控告警",
-			"code": AdminModuleCodeMonitor,
-			"url":  "/monitor",
+			"name": "堡垒机",
+			"code": AdminModuleCodeFort,
+			"url":  "/fortcloud/assets",
 		},
+		{
+			"name": "安全审计",
+			"code": AdminModuleCodeAudit,
+			"url":  "/audit/db",
+		},
+		{
+			"name": "数据备份",
+			"code": AdminModuleCodeBackup,
+			"url":  "/databackup",
+		},
+		//{
+		//	"name": "监控告警",
+		//	"code": AdminModuleCodeMonitor,
+		//	"url":  "/monitor",
+		//},
 		{
 			"name": "系统设置",
 			"code": AdminModuleCodeSetting,

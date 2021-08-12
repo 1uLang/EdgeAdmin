@@ -1,17 +1,13 @@
 package users
 
 import (
-	"fmt"
-	hids_user_model "github.com/1uLang/zhiannet-api/hids/model/user"
-	hids_user_server "github.com/1uLang/zhiannet-api/hids/server/user"
-	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/users/userutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/lists"
 	"github.com/iwind/TeaGo/maps"
+	"strings"
 )
 
 type FeaturesAction struct {
@@ -47,19 +43,35 @@ func (this *FeaturesAction) RunGet(params struct {
 	for _, userFeature := range userFeaturesResp.Features {
 		userFeatureCodes = append(userFeatureCodes, userFeature.Code)
 	}
-
 	featureMaps := []maps.Map{}
+	selectList := []string{}
+	idx := 0
 	for _, feature := range allFeatures {
-		featureMaps = append(featureMaps, maps.Map{
+		if lists.ContainsString(userFeatureCodes, feature.Code){
+			selectList = append(selectList, feature.Code)
+		}
+		item := maps.Map{
 			"name":        feature.Name,
 			"code":        feature.Code,
+			"bShowChild":  false,
 			"description": feature.Description,
-			"isChecked":   lists.ContainsString(userFeatureCodes, feature.Code),
-		})
+			"children":    []maps.Map{},
+		}
+		//子菜单
+		if codes := strings.Split(feature.Code, "."); len(codes) == 2 {
+
+			subItems := featureMaps[idx-1]["children"].([]maps.Map)
+			subItems = append(subItems, item)
+			featureMaps[idx-1]["children"] = subItems
+		} else {
+			featureMaps = append(featureMaps, item)
+			idx++
+		}
 	}
 
 	this.Data["features"] = featureMaps
-
+	this.Data["selectList"] = selectList
+	this.Data["userId"] = params.UserId
 	this.Show()
 }
 
@@ -68,7 +80,7 @@ func (this *FeaturesAction) RunPost(params struct {
 	Codes  []string
 
 	Must *actions.Must
-	CSRF *actionutils.CSRF
+	//CSRF *actionutils.CSRF
 }) {
 	defer this.CreateLogInfo("设置用户 %d 的功能列表", params.UserId)
 
@@ -83,31 +95,6 @@ func (this *FeaturesAction) RunPost(params struct {
 	moduleCodes := map[string]bool{}
 	for _, code := range params.Codes {
 		moduleCodes[code] = true
-	}
-	var user *pb.User
-	//判断是否拥有了主机防护功能  有 则对应创建该用户
-	if _, isExist := moduleCodes[configloaders.AdminModuleCodeHids]; isExist {
-
-		userResp, err := this.RPC().UserRPC().FindEnabledUser(this.AdminContext(), &pb.FindEnabledUserRequest{UserId: params.UserId})
-		if err != nil {
-			this.ErrorPage(err)
-			return
-		}
-		user = userResp.User
-		if user == nil {
-			this.NotFound("user", params.UserId)
-			return
-		}
-		err = hids.InitAPIServer()
-		if err != nil {
-			this.ErrorPage(fmt.Errorf("主机防护组件初始化失败：%v", err))
-			return
-		}
-		_, err = hids_user_server.Add(&hids_user_model.AddReq{UserName: user.Username, Password: "dengbao-" + user.Username, Role: 3})
-		if err != nil {
-			this.ErrorPage(fmt.Errorf("主机防护组件同步信息失败：%v", err))
-			return
-		}
 	}
 
 	this.Success()

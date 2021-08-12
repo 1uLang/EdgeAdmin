@@ -16,3 +16,7 @@
     height: 32px;
     background: #f0f0f0;
 }
+
+.field > select {
+    padding: 4px !important;
+  }
