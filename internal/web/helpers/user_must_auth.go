@@ -279,6 +279,11 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"url":  "/nfw/ips/alarm",
 					"code": "alarm",
 				},
+				{
+					"name": "病毒库",
+					"url":  "/nfw/virus",
+					"code": "virus",
+				},
 			},
 		},
 		{
