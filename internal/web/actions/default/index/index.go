@@ -3,7 +3,6 @@ package index
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/1uLang/zhiannet-api/common/server/edge_users_server"
 	"time"
 
 	"github.com/1uLang/zhiannet-api/common/cache"
@@ -146,7 +145,7 @@ func (this *IndexAction) RunPost(params struct {
 		if err != nil {
 			utils.PrintError(err)
 		}
-		info, err := edge_users_server.GetUserInfoByName(params.Username)
+		info, err := edge_admins_server.GetUserInfoByName(params.Username)
 		if err != nil {
 			this.ErrorPage(err)
 		}
