@@ -19,14 +19,13 @@
         <table id="tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
             <thead>
             <tr align="center">
-                <th class='table-head-bg' style="min-width: 100px;width:150px;">时间戳</th>
-                <th class='table-head-bg' style="min-width: 80px;width:100px;">SID</th>
+                <th class='table-head-bg' style="min-width: 100px;width:150px;">时间</th>
                 <th class='table-head-bg' style="min-width: 80px;width:100px;">操作</th>
                 <th class='table-head-bg' style="min-width: 80px;width:100px;">接口</th>
                 <th class='table-head-bg' style="min-width: 80px;width:100px;">源</th>
-                <th class='table-head-bg' style="width: 100px;min-width: 100px;max-width: 100px;">端口</th>
+                <th class='table-head-bg' style="width: 100px;min-width: 100px;max-width: 100px;">源端口</th>
                 <th class='table-head-bg' style="width: 120px;min-width: 120px;max-width: 120px;">目标</th>
-                <th class='table-head-bg' style="width: 120px;min-width: 120px;max-width: 120px;">端口</th>
+                <th class='table-head-bg' style="width: 120px;min-width: 120px;max-width: 120px;">目标端口</th>
                 <th class='table-head-bg' style="width: 120px;min-width: 120px;max-width: 120px;">警报</th>
             </tr>
             </thead>
@@ -34,14 +33,11 @@
             <tr align="center" style="height: 40px;" v-for="item in tableData">
                 <td>
                     <div style="padding: 4px 0;">
-                        {{item.timestamp}}
+
+                        {{getTime(item.timestamp)}}
                     </div>
                 </td>
-                <td>
-                    <div style="padding: 4px 0;">
-                        {{item.alert_sid}}
-                    </div>
-                </td>
+
                 <td>
                     <div style="padding: 4px 0;">
                         {{item.alert_action}}

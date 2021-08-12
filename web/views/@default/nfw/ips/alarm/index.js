@@ -10,22 +10,11 @@ Tea.context(function () {
     })
 
 
-    this.getStatus= function (status) { 
-        switch(status){
-            case 1:
-                return "已开启"
-            case 0:
-                return "已停用"  
-            default:
-                return "已停用"
-        }
+    this.getTime= function (time) {
+        var d = new Date(time);
+        return d.toLocaleDateString()+" "+d.toLocaleTimeString()
     }
-    this.parseAction = function (action) {
-        if (action === "alert")
-            return "警报"
-        else
-            return "丢弃"
-    }
+
     this.getEditName= function (act) {
         if(act == "drop"){
             return "警报"

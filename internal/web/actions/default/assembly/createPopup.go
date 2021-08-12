@@ -14,6 +14,7 @@ import (
 	awvs_request "github.com/1uLang/zhiannet-api/nextcloud/request"
 	nextcloud_request "github.com/1uLang/zhiannet-api/nextcloud/request"
 	opnsense_request "github.com/1uLang/zhiannet-api/opnsense/request"
+	term_request "github.com/1uLang/zhiannet-api/next-terminal/server"
 )
 
 type CreatePopupAction struct {
@@ -166,8 +167,8 @@ func (this *CreatePopupAction) Check(AssemblyType int) {
 		check := new(audit_request.LoginReq)
 		check.Run()
 	case 7: //堡垒机
-		//check := new(audit_request.LoginReq)
-		//check.Run()
+		check := new(term_request.CheckRequest)
+		check.Run()
 	case 8: //数据备份
 		check := new(nextcloud_request.CheckRequest)
 		check.Run()
