@@ -26,14 +26,10 @@
                     <th class='table-head-bg' style="min-width: 100px;max-width: 100px;">方向</th>
                     <th class='table-head-bg' style="min-width: 100px;max-width: 100px;">协议</th>
                     <th class='table-head-bg' style="min-width: 180px;max-width: 180px;">源</th>
-                    <th class='table-head-bg' style="min-width: 180px;max-width: 180px;">网关</th>
                     <th class='table-head-bg' style="min-width: 180px;max-width: 180px;">目标</th>
                     <th class='table-head-bg' style="min-width: 140px;max-width: 140px;">状态</th>
-                    <th class='table-head-bg' style="min-width: 120px;max-width: 120px;">Age(sec)</th>
-                    <th class='table-head-bg' style="min-width: 120px;max-width: 120px;">Expires(sec)</th>
                     <th class='table-head-bg' style="min-width: 100px;max-width: 100px;">数据包</th>
                     <th class='table-head-bg' style="min-width: 100px;max-width: 100px;">字节</th>
-                    <th class='table-head-bg' style="min-width: 100px;max-width: 100px;">Rule</th>
                 </tr>
             </thead>
             <tbody id='tableBody'>
@@ -41,14 +37,10 @@
                     <td>{{getDirection(item.dir)}}</td>
                     <td>{{item.proto}}</td>
                     <td>{{getAddr(item.src_addr,item.src_port)}}</td>
-                    <td>{{getAddr(item.gw_addr,item.gw_port)}}</td>
                     <td>{{getAddr(item.dst_addr,item.dst_port)}}</td>
                     <td>{{item.state}}</td>
-                    <td>{{item.age}}</td>
-                    <td>{{item.expire}}</td>
                     <td>{{item.pkts}}</td>
                     <td>{{getNumber(item.bytes)}}</td>
-                    <td>{{item.descr}}</td>
                 </tr>
             </tbody>
         </table>
