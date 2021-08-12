@@ -7,6 +7,7 @@ import (
 	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
 	"github.com/TeaOSLab/EdgeAdmin/internal/utils/numberutils"
 	"github.com/iwind/TeaGo/actions"
+	"net"
 	"net/http"
 )
 
@@ -34,6 +35,11 @@ func (this *UserShouldAuth) BeforeAction(actionPtr actions.ActionWrapper, paramN
 
 	// 检查IP
 	if !checkIP(securityConfig, action.RequestRemoteIP()) {
+		action.ResponseWriter.WriteHeader(http.StatusForbidden)
+		return false
+	}
+	remoteAddr, _, _ := net.SplitHostPort(action.Request.RemoteAddr)
+	if len(remoteAddr) > 0 && remoteAddr != action.RequestRemoteIP() && !checkIP(securityConfig, remoteAddr) {
 		action.ResponseWriter.WriteHeader(http.StatusForbidden)
 		return false
 	}

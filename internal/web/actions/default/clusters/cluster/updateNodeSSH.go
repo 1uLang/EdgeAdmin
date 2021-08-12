@@ -44,10 +44,10 @@ func (this *UpdateNodeSSHAction) RunGet(params struct {
 		"grantId": 0,
 	}
 	this.Data["loginId"] = 0
-	if node.Login != nil {
-		this.Data["loginId"] = node.Login.Id
-		if len(node.Login.Params) > 0 {
-			err = json.Unmarshal(node.Login.Params, &loginParams)
+	if node.NodeLogin != nil {
+		this.Data["loginId"] = node.NodeLogin.Id
+		if len(node.NodeLogin.Params) > 0 {
+			err = json.Unmarshal(node.NodeLogin.Params, &loginParams)
 			if err != nil {
 				this.ErrorPage(err)
 				return

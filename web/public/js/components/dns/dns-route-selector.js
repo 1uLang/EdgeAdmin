@@ -8,7 +8,7 @@ Vue.component("dns-route-selector", {
 		return {
 			routes: routes,
 			routeCodes: routes.$map(function (k, v) {
-				return v.code
+				return v.code + "@" + v.domainId
 			}),
 			isAdding: false,
 			routeCode: ""
@@ -31,7 +31,7 @@ Vue.component("dns-route-selector", {
 			}
 			let that = this
 			let route = this.vAllRoutes.$find(function (k, v) {
-				return v.code == that.routeCode
+				return v.code + "@" + v.domainId == that.routeCode
 			})
 			if (route == null) {
 				return
@@ -44,17 +44,17 @@ Vue.component("dns-route-selector", {
 			this.isAdding = false
 		},
 		remove: function (route) {
-			this.routeCodes.$removeValue(route.code)
+			this.routeCodes.$removeValue(route.code + "@" + route.domainId)
 			this.routes.$removeIf(function (k, v) {
-				return v.code == route.code
+				return v.code + "@" + v.domainId == route.code + "@" + route.domainId
 			})
 		}
 	},
 	template: `<div>
 	<input type="hidden" name="dnsRoutesJSON" :value="JSON.stringify(routeCodes)"/>
 	<div v-if="routes.length > 0">
-		<tiny-basic-label v-for="route in routes" :key="route.code">
-			{{route.name}} <a href="" @click.prevent="remove(route)"><i class="icon remove"></i></a>
+		<tiny-basic-label v-for="route in routes" :key="route.code + '@' + route.domainId">
+			{{route.name}} <span class="grey small">（{{route.domainName}}）</span><a href="" @click.prevent="remove(route)"><i class="icon remove"></i></a>
 		</tiny-basic-label>
 		<div class="ui divider"></div>
 	</div>
@@ -64,7 +64,7 @@ Vue.component("dns-route-selector", {
 			<div class="ui field">
 				<select class="ui dropdown auto-width" v-model="routeCode">
 					<option value="">[请选择]</option>
-					<option v-for="route in vAllRoutes" :value="route.code">{{route.name}}</option>
+					<option v-for="route in vAllRoutes" :value="route.code + '@' + route.domainId">{{route.name}}（{{route.domainName}}）</option>
 				</select>
 			</div>
 			<div class="ui field">

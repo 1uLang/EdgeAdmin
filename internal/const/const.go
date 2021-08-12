@@ -1,7 +1,7 @@
 package teaconst
 
 const (
-	Version = "0.2.5"
+	Version = "0.2.9"
 
 	ProductName   = "Edge Admin"
 	ProcessName   = "edge-admin"
@@ -16,4 +16,5 @@ const (
 	CookieSID = "edgesid"
 
 	SystemdServiceName = "edge-admin"
+	Tag = "plus"
 )

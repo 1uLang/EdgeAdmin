@@ -77,7 +77,6 @@ func main() {
 		}
 		fmt.Println("change demo mode successfully")
 	})
-
 	//初始化 第三方包的配置文件
 	model.ApiDbPath = Tea.ConfigFile("api_db.yaml")
 	model.InitMysqlLink()

@@ -344,7 +344,6 @@ Vue.component("metric-chart", {
 					}
 				]
 			})
-
 			// IP相关操作
 			if (this.item.keys != null && this.item.keys.$contains("${remoteAddr}")) {
 				let that = this

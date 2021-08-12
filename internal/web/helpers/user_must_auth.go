@@ -9,6 +9,7 @@ import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/utils"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
+	"net"
 	"net/http"
 	"reflect"
 	"strings"
@@ -65,6 +66,11 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 
 	// 检查IP
 	if !checkIP(securityConfig, action.RequestRemoteIP()) {
+		action.ResponseWriter.WriteHeader(http.StatusForbidden)
+		return false
+	}
+	remoteAddr, _, _ := net.SplitHostPort(action.Request.RemoteAddr)
+	if len(remoteAddr) > 0 && remoteAddr != action.RequestRemoteIP() && !checkIP(securityConfig, remoteAddr) {
 		action.ResponseWriter.WriteHeader(http.StatusForbidden)
 		return false
 	}
@@ -319,6 +325,17 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"url":  "/servers/components/waf",
 					"code": "waf",
 				},
+				//{
+				//	"name": "日志策略",
+				//	"url":  "/servers/accesslogs",
+				//	"code": "accesslog",
+				//	"isOn": teaconst.IsPlus,
+				//},
+				//{
+				//	"name": "IP名单",
+				//	"url":  "/servers/iplists",
+				//	"code": "iplist",
+				//},
 				{
 					"name": "证书管理",
 					"url":  "/servers/certs",
@@ -334,6 +351,11 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"url":  "/dns/providers",
 					"code": "providers",
 				},
+				//{
+				//	"name": "统计指标",
+				//	"url":  "/servers/metrics",
+				//	"code": "metric",
+				//},
 			},
 		},
 		{
@@ -405,6 +427,21 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"name": "资产管理",
 					"url":  "/fortcloud/assets",
 					"code": "assets",
+			//"code":   "ns",
+			//"module": configloaders.AdminModuleCodeNS,
+			//"name":   "自建DNS",
+			//"icon":   "cubes",
+			//"isOn":   teaconst.IsPlus,
+			//"subItems": []maps.Map{
+			//	{
+			//		"name": "域名管理",
+			//		"url":  "/ns/domains",
+			//		"code": "domain",
+			//	},
+			//	{
+			//		"name": "集群管理",
+			//		"url":  "/ns/clusters",
+			//		"code": "cluster",
 				},
 				{
 					"name": "授权凭证",
@@ -420,6 +457,16 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"name": "运维审计",
 					"url":  "/fortcloud/audit",
 					"code": "audit",
+				},
+				{
+					"name": "全局配置",
+					"url":  "/ns/settings",
+					"code": "setting",
+				},
+				{
+					"name": "解析测试",
+					"url":  "/ns/test",
+					"code": "test",
 				},
 			},
 		},
