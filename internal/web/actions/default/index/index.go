@@ -3,6 +3,7 @@ package index
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/1uLang/zhiannet-api/common/server/edge_users_server"
 	"time"
 
 	"github.com/1uLang/zhiannet-api/common/cache"
@@ -145,10 +146,19 @@ func (this *IndexAction) RunPost(params struct {
 		if err != nil {
 			utils.PrintError(err)
 		}
-		//登录次数+1
-		edge_admins_server.LoginErrIncr(fmt.Sprintf("admin_%v", params.Username))
-		num, _ := cache.GetInt(fmt.Sprintf("admin_%v", params.Username))
-		this.Fail(fmt.Sprintf("请输入正确的用户名密码，您还可以尝试%v次，（账号将被临时锁定30分钟）", 5-num))
+		info, err := edge_users_server.GetUserInfoByName(params.Username)
+		if err != nil {
+			this.ErrorPage(err)
+		}
+		if info != nil && (info.State == 0 || info.Ison == 0) {
+			this.Fail("当前账号被禁用")
+		} else {
+			//登录次数+1
+			edge_admins_server.LoginErrIncr(fmt.Sprintf("admin_%v", params.Username))
+			num, _ := cache.GetInt(fmt.Sprintf("admin_%v", params.Username))
+			this.Fail(fmt.Sprintf("请输入正确的用户名密码，您还可以尝试%v次，（账号将被临时锁定30分钟）", 5-num))
+		}
+
 	}
 
 	// 检查OTP-*/
@@ -174,18 +184,18 @@ func (this *IndexAction) RunPost(params struct {
 	}
 
 	//密码过期检查
-	//if res, _ := edge_admins_server.CheckPwdInvalid(uint64(resp.AdminId)); res {
-	//	params.Auth.SetUpdatePwdToken(resp.AdminId)
-	//	this.Data["from"] = "/updatePwd"
-	//	this.Fail("密码已过期，请立即修改")
-	//}
+	if res, _ := edge_admins_server.CheckPwdInvalid(uint64(resp.AdminId)); res {
+		params.Auth.SetUpdatePwdToken(resp.AdminId)
+		this.Data["from"] = "/updatePwd"
+		this.Fail("密码已过期，请立即修改")
+	}
 	//检测系统是否到期
-	code,expire,err := checkExpire()
+	code, expire, err := checkExpire()
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	if expire{
+	if expire {
 		this.Data["from"] = "/renewal"
 		this.Data["systemCode"] = code
 		this.Fail("系统已到期，请立即续订")
