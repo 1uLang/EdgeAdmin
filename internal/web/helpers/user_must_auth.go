@@ -269,7 +269,13 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"name": "IPS规则",
 					"url":  "/nfw/ips",
 					"code": "ips",
-				}, {
+				},
+				{
+					"name": "防病毒规则",
+					"url":  "/nfw/virus",
+					"code": "virus",
+				},
+				{
 					"name": "会话列表",
 					"url":  "/nfw/conversation",
 					"code": "conversation",
@@ -278,11 +284,6 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"name": "安全警报",
 					"url":  "/nfw/ips/alarm",
 					"code": "alarm",
-				},
-				{
-					"name": "病毒库",
-					"url":  "/nfw/virus",
-					"code": "virus",
 				},
 			},
 		},
