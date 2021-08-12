@@ -73,9 +73,9 @@ func (this *IndexAction) RunGet(params struct {
 		this.Data["version"] = teaconst.Version
 	}
 	//this.Data["faviconFileId"] = config.FaviconFileId
-	//if params.Token != "" {
-	//	this.Success()
-	//}
+	if params.Token != "" {
+		this.Success()
+	}
 	this.Data["faviconFileId"] = uiConfig.FaviconFileId
 
 	securityConfig, err := configloaders.LoadSecurityConfig()
