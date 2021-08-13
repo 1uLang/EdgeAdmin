@@ -40,9 +40,9 @@ func (this *IndexAction) RunGet(params struct{}) {
 			"dayFrom":      keyResp.AuthorityKey.DayFrom,
 			"dayTo":        keyResp.AuthorityKey.DayTo,
 			"macAddresses": keyResp.AuthorityKey.MacAddresses,
-			//"hostname":     keyResp.AuthorityKey.Hostname,
-			"hostname":     "CloudSafe",
-			"company":      keyResp.AuthorityKey.Company,
+			"hostname":     keyResp.AuthorityKey.Hostname,
+			"company":     "CloudSafe",
+			//"company":      keyResp.AuthorityKey.Company,
 			"isExpired":    !isActive,
 			"updatedTime":  timeutil.FormatTime("Y-m-d H:i:s", keyResp.AuthorityKey.UpdatedAt),
 		}
