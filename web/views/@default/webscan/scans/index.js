@@ -23,8 +23,10 @@ Tea.context(function () {
     this.bShowDetail = false
 
     this.showDetailItem = null
+    this.showDetailScanId = ""
 
     this.onCloseDetail = function () {
+        this.showDetailScanId = ""
         this.bShowDetail = false
     };
 
@@ -284,6 +286,7 @@ Tea.context(function () {
     this.onShowDetail = function (item) {
         this.showDetailItem = item
         this.scanId = item.scan_id
+        this.hostVulFlag = false
         this.scanSessionId = item.current_session.scan_session_id
         //获取漏洞详情报表
         this.$get(".statistics").params({
@@ -415,11 +418,12 @@ Tea.context(function () {
                 scanSessionId: this.scanSessionId,
             }).success(resp => {
                 if (resp.code === 200) {
+                    this.showDetailScanId = vul.scan_id
                     this.detailInfo = resp.data.data
                     this.detailInfo.affects_url = "URL:           " + this.detailInfo.affects_url
                     this.bShowDetail = true
                 } else {
-                    this.bShowDetail = false
+                    this.onCloseDetail()
                 }
             })
         } else {
@@ -429,11 +433,12 @@ Tea.context(function () {
                 scanSessionId: this.scanSessionId,
             }).success(resp => {
                 if (resp.code === 200) {
+                    this.showDetailScanId = vul.scan_id
                     this.detailInfo = resp.data.data
                     this.detailInfo.affects_url = "URL:           " + this.scanAddr
                     this.bShowDetail = true
                 } else {
-                    this.bShowDetail = false
+                    this.onCloseDetail()
                 }
             })
         }
