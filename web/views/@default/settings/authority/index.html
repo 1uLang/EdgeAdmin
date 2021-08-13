@@ -13,23 +13,12 @@
             </td>
         </tr>
         <tr>
-            <td>公司/组织名</td>
+            <td class="title">公司/组织名</td>
             <td>{{key.company}}</td>
         </tr>
+
         <tr>
-            <td class="title">开始日期</td>
-            <td>{{key.dayFrom}}</td>
-        </tr>
-        <tr>
-            <td class="title">结束日期</td>
-            <td>{{key.dayTo}}
-                <div v-if="key.isExpired" style="margin-top: 0.5em">
-                    <span class="red">已过期，请尽快更新认证信息。</span>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>主机名</td>
+            <td class="title">主机名</td>
             <td>{{key.hostname}}
                 <p class="comment">认证服务所在服务器主机名。</p>
             </td>
