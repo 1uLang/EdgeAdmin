@@ -26,7 +26,7 @@ func fileExist(path string) bool {
 }
 
 // 读取当前服务到期配置
-func loadServerExpireConfig() (*ExpireConfig, error) {
+func LoadServerExpireConfig() (*ExpireConfig, error) {
 	configFile := Tea.ConfigFile("expire.yaml")
 	if !fileExist(configFile) {
 		return &ExpireConfig{}, nil
@@ -74,7 +74,7 @@ func writeServerConfig(expireConfig *ExpireConfig) error {
 
 func checkExpire() (string, bool, error) {
 
-	expireConfig, err := loadServerExpireConfig()
+	expireConfig, err := LoadServerExpireConfig()
 	if err != nil {
 		return "", false, err
 	}

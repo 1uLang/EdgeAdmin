@@ -125,6 +125,7 @@ import (
 	// 设置相关
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/authority"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/authority/expire"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/authority/nodes"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/authority/nodes/node"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/backup"

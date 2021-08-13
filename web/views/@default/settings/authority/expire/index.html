@@ -1,0 +1,30 @@
+{$layout}
+{$template "../menu"}
+<p class="comment" v-if="info == null || !info.isOn">未开启系统授权</p>
+<div v-else>
+    <div class="margin"></div>
+    <table class="ui table definition selectable">
+        <tr>
+            <td>状态</td>
+            <td>
+                <span class="green">已认证</span>
+            </td>
+        </tr>
+        <tr>
+            <td>公司/组织名</td>
+            <td>{{info.name}}</td>
+        </tr>
+        <tr>
+            <td class="title">系统序列号</td>
+            <td>{{info.code}}</td>
+        </tr>
+        <tr>
+            <td class="title">结束日期</td>
+            <td>{{info.dayTo}}
+                <div v-if="key.isExpired" style="margin-top: 0.5em">
+                    <span class="red">已过期，请尽快更新认证信息。</span>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
