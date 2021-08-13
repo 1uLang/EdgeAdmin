@@ -46,7 +46,7 @@ func (this *RenewalAction) RunPost(params struct {
 		this.ErrorPage(fmt.Errorf("无效的密钥"))
 		return
 	}
-	config, err := loadServerExpireConfig()
+	config, err := LoadServerExpireConfig()
 	if err != nil {
 		this.ErrorPage(err)
 		return
