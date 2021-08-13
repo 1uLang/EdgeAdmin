@@ -418,7 +418,7 @@ Tea.context(function () {
                 scanSessionId: this.scanSessionId,
             }).success(resp => {
                 if (resp.code === 200) {
-                    this.showDetailScanId = vul.scan_id
+                    this.showDetailScanId = vul.vt_id
                     this.detailInfo = resp.data.data
                     this.detailInfo.affects_url = "URL:           " + this.detailInfo.affects_url
                     this.bShowDetail = true
@@ -433,7 +433,7 @@ Tea.context(function () {
                 scanSessionId: this.scanSessionId,
             }).success(resp => {
                 if (resp.code === 200) {
-                    this.showDetailScanId = vul.scan_id
+                    this.showDetailScanId = vul.vt_id
                     this.detailInfo = resp.data.data
                     this.detailInfo.affects_url = "URL:           " + this.scanAddr
                     this.bShowDetail = true
