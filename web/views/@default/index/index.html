@@ -270,7 +270,9 @@
 		}
 		reqApi("post","",tempFormData,null,
 				(res)=>{
-					console.log(res.data)
+					if(res.code != 200){
+						window.location.reload()
+					}
 					if (res.data.from!=null && res.data.from.length > 0) {
 						window.location = this.data.from;
 					} else {
