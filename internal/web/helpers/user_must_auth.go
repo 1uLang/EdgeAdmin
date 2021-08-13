@@ -458,16 +458,16 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"url":  "/fortcloud/audit",
 					"code": "audit",
 				},
-				{
-					"name": "全局配置",
-					"url":  "/ns/settings",
-					"code": "setting",
-				},
-				{
-					"name": "解析测试",
-					"url":  "/ns/test",
-					"code": "test",
-				},
+				//{
+				//	"name": "全局配置",
+				//	"url":  "/ns/settings",
+				//	"code": "setting",
+				//},
+				//{
+				//	"name": "解析测试",
+				//	"url":  "/ns/test",
+				//	"code": "test",
+				//},
 			},
 		},
 		//{
