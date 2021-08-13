@@ -156,11 +156,12 @@ func (this *DetailListAction) RunGet(params struct {
 
 	var list1,list2 risk.DetailResp
 
-	details, err := risk_server.DangerAccountDetailList(req)
+	details, err := risk_server.AbnormalAccountDetailList(req)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
+	fmt.Println(details)
 	for _,v := range details.AbnormalAccountInfoList {
 		if v["state"].(float64) == 7 {
 			list2.AbnormalAccountInfoList = append(list2.AbnormalAccountInfoList, v)
