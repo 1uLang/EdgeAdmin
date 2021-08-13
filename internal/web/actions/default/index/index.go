@@ -158,7 +158,7 @@ func (this *IndexAction) RunPost(params struct {
 		if err != nil {
 			this.ErrorPage(err)
 		}
-		if info != nil && (info.State == 0 || info.Ison == 0) {
+		if (info != nil && info.Id > 0) && (info.State == 0 || info.Ison == 0) {
 			this.Fail("当前账号被禁用")
 		} else {
 			//登录次数+1
