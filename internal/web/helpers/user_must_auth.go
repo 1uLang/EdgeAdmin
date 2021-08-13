@@ -276,11 +276,11 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"url":  "/nfw/ips",
 					"code": "ips",
 				},
-				{
-					"name": "防病毒规则",
-					"url":  "/nfw/virus",
-					"code": "virus",
-				},
+				//{
+				//	"name": "防病毒规则",
+				//	"url":  "/nfw/virus",
+				//	"code": "virus",
+				//},
 				{
 					"name": "会话列表",
 					"url":  "/nfw/conversation",
@@ -427,21 +427,21 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"name": "资产管理",
 					"url":  "/fortcloud/assets",
 					"code": "assets",
-			//"code":   "ns",
-			//"module": configloaders.AdminModuleCodeNS,
-			//"name":   "自建DNS",
-			//"icon":   "cubes",
-			//"isOn":   teaconst.IsPlus,
-			//"subItems": []maps.Map{
-			//	{
-			//		"name": "域名管理",
-			//		"url":  "/ns/domains",
-			//		"code": "domain",
-			//	},
-			//	{
-			//		"name": "集群管理",
-			//		"url":  "/ns/clusters",
-			//		"code": "cluster",
+					//"code":   "ns",
+					//"module": configloaders.AdminModuleCodeNS,
+					//"name":   "自建DNS",
+					//"icon":   "cubes",
+					//"isOn":   teaconst.IsPlus,
+					//"subItems": []maps.Map{
+					//	{
+					//		"name": "域名管理",
+					//		"url":  "/ns/domains",
+					//		"code": "domain",
+					//	},
+					//	{
+					//		"name": "集群管理",
+					//		"url":  "/ns/clusters",
+					//		"code": "cluster",
 				},
 				{
 					"name": "授权凭证",
@@ -458,16 +458,16 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"url":  "/fortcloud/audit",
 					"code": "audit",
 				},
-				{
-					"name": "全局配置",
-					"url":  "/ns/settings",
-					"code": "setting",
-				},
-				{
-					"name": "解析测试",
-					"url":  "/ns/test",
-					"code": "test",
-				},
+				//{
+				//	"name": "全局配置",
+				//	"url":  "/ns/settings",
+				//	"code": "setting",
+				//},
+				//{
+				//	"name": "解析测试",
+				//	"url":  "/ns/test",
+				//	"code": "test",
+				//},
 			},
 		},
 		//{

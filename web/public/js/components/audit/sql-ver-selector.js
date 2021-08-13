@@ -58,19 +58,19 @@ Vue.component("sql-ver-selector", {
             {"name":"4.2"},
         ]
         switch(assemblyType){
-            case "0":
+            case 0:
                 assemblys = assembly0
                 break;
-            case "1":
+            case 1:
                 assemblys = assembly1
                 break;
-            case "2":
+            case 2:
                 assemblys = assembly2
                 break;
-            case "3":
+            case 3:
                 assemblys = assembly3
                 break;
-            case "4":
+            case 4:
                 assemblys = assembly4
                 break;
             default:

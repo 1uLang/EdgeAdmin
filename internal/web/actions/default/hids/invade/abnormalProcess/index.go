@@ -57,7 +57,7 @@ func (this *IndexAction) RunGet(params struct {
 		}
 		list.AbnormalProcessCountInfoList[k]["os"] = os
 	}
-	fmt.Println(list.AbnormalProcessCountInfoList)
+
 	this.Data["datas"] = list.AbnormalProcessCountInfoList
 	this.Data["serverIp"] = params.ServerIp
 }

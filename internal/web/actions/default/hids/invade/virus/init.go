@@ -11,7 +11,7 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth("")).
-			Data("teaMenu", "hids").
+			Data("teaMenu", "invade").
 			Prefix("/hids/invade/virus").
 			GetPost("", new(IndexAction)).
 			Get("/detailList", new(DetailListAction)). //病毒木马 详情列表

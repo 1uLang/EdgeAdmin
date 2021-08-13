@@ -11,7 +11,7 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth("")).
-			Data("teaMenu", "hids").
+			Data("teaMenu", "invade").
 			Prefix("/hids/invade/abnormalProcess").
 			GetPost("", new(IndexAction)).
 			Get("/detailList", new(DetailListAction)). //异常进程 详情列表
