@@ -280,6 +280,12 @@ Tea.context(function () {
             that.updateTimeId.stop()
             that.updateTimeId = null
         }
+        if(that.progressListData.length>0){
+            that.progressListData = that.progressListData.filter((item) => {
+                return item.state == 1;
+            });
+            that.onSaveProgressData()
+        }
     }
 });
   
