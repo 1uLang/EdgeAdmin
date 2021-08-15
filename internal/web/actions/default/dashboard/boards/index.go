@@ -56,7 +56,7 @@ func (this *IndexAction) RunGet(params struct{}) {
 		"countUserNodes":    resp.CountUserNodes,
 
 		"canGoServers":  configloaders.AllowModule(this.AdminId(), configloaders.AdminModuleCodeServer),
-		"canGoNodes":    configloaders.AllowModule(this.AdminId(), configloaders.AdminModuleCodeNode),
+		"canGoNodes":    configloaders.AllowModule(this.AdminId(), configloaders.AdminModuleCodeServer),
 		"canGoSettings": configloaders.AllowModule(this.AdminId(), configloaders.AdminModuleCodeSetting),
 		"canGoUsers":    configloaders.AllowModule(this.AdminId(), configloaders.AdminModuleCodeUser),
 	}

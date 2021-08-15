@@ -10,7 +10,7 @@ import (
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
-			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeDNS)).
+			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
 			Helper(clusterutils.NewClustersHelper()).
 			Prefix("/dns/tasks").
 			GetPost("/listPopup", new(ListPopupAction)).

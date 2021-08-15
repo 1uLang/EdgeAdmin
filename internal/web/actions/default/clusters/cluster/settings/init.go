@@ -20,7 +20,7 @@ import (
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
-			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeNode)).
+			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
 			Helper(clusters.NewClusterHelper()).
 			Prefix("/clusters/cluster/settings").
 			GetPost("", new(IndexAction)).

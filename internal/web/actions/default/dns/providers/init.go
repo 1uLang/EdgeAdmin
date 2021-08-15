@@ -9,7 +9,7 @@ import (
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
-			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeDNS)).
+			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
 			// 服务商
 			Prefix("/dns/providers").
 			Data("teaMenu", "providers").

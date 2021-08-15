@@ -74,6 +74,7 @@ func (this *ScanAction) RunPost(params struct {
 		req.ScanConfig.WebShellPath = params.WebShellPath
 		err = examine_server.ScanServerNow(req)
 	} else {
+		fmt.Println(params.MacCode)
 		err = examine_server.ScanServerCancel(params.MacCode)
 	}
 

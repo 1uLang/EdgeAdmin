@@ -153,8 +153,8 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 	if !action.Data.Has("teaSubMenu") {
 		action.Data["teaSubMenu"] = ""
 	}
-	action.Data["teaCheckNodeTasks"] = configloaders.AllowModule(adminId, configloaders.AdminModuleCodeNode)
-	action.Data["teaCheckDNSTasks"] = configloaders.AllowModule(adminId, configloaders.AdminModuleCodeDNS)
+	action.Data["teaCheckNodeTasks"] = configloaders.AllowModule(adminId, configloaders.AdminModuleCodeServer)
+	action.Data["teaCheckDNSTasks"] = configloaders.AllowModule(adminId, configloaders.AdminModuleCodeServer)
 
 	// 菜单
 	action.Data["firstMenuItem"] = ""
