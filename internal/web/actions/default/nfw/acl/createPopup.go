@@ -20,26 +20,29 @@ func (this *CreatePopupAction) RunGet(params struct{}) {
 }
 
 func (this *CreatePopupAction) RunPost(params struct {
-	NodeId     uint64
-	Interface  string
-	Type       string
-	Direction  string
-	Ipprotocol string
-	Protocol   string
-	Src        string
-	Srcinput   string
-	Srcmask    string
-	Dst        string
-	Dstinput   string
-	Dstmask    string
-	Descr      string
-	Id         string
-
-	Must *actions.Must
+	NodeId       uint64
+	Interface    string
+	Type         string
+	Direction    string
+	Ipprotocol   string
+	Protocol     string
+	Src          string
+	Srcinput     string
+	Srcmask      string
+	Dst          string
+	Dstinput     string
+	Dstmask      string
+	Descr        string
+	Id           string
+	Srcbeginport string
+	Srcendport   string
+	Dstbeginport string
+	Dstendport   string
+	Must         *actions.Must
 	//CSRF *actionutils.CSRF
 }) {
 	//this.Data["params"] = params
-	////this.Show()
+	//this.Show()
 	//this.Success()
 	//return
 	params.Must.
@@ -52,18 +55,22 @@ func (this *CreatePopupAction) RunPost(params struct {
 		Require("请选择或输入目标")
 
 	data := &acl.SaveAclReq{
-		NodeId:     params.NodeId,
-		Interface:  params.Interface,
-		Type:       params.Type,
-		Direction:  params.Direction,
-		Ipprotocol: params.Ipprotocol,
-		Protocol:   params.Protocol,
-		Src:        params.Srcinput,
-		Srcmask:    params.Srcmask,
-		Dst:        params.Dstinput,
-		Dstmask:    params.Dstmask,
-		Descr:      params.Descr,
-		ID:         params.Id,
+		NodeId:       params.NodeId,
+		Interface:    params.Interface,
+		Type:         params.Type,
+		Direction:    params.Direction,
+		Ipprotocol:   params.Ipprotocol,
+		Protocol:     params.Protocol,
+		Src:          params.Srcinput,
+		Srcmask:      params.Srcmask,
+		Dst:          params.Dstinput,
+		Dstmask:      params.Dstmask,
+		Descr:        params.Descr,
+		ID:           params.Id,
+		SrcBeginPort: params.Srcbeginport,
+		SrcEndPort:   params.Srcendport,
+		DstBeginPort: params.Dstbeginport,
+		DstEndPort:   params.Dstendport,
 	}
 	tips, err := acl.SaveAcl(data)
 	if err != nil {

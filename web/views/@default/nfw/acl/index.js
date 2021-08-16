@@ -25,15 +25,19 @@ Tea.context(function () {
     this.descr = ""         //描述值
 
     this.srcbeginport = ""
+    this.srcbeginportValue = ""
     this.srcbeginports = []
     this.srcbeginportinput = ""
     this.srcendport = ""
+    this.srcendportValue = ""
     this.srcendports = []
     this.srcendportinput = ""
     this.dstbeginport = ""
+    this.dstbeginportValue = ""
     this.dstbeginports = []
     this.dstbeginportinput = ""
     this.dstendport = ""
+    this.dstendportValue = ""
     this.dstendports = []
     this.dstendportinput = ""
     // this.targerRangeStartId = 1 //修改中 目标范围的开始值
@@ -123,6 +127,34 @@ Tea.context(function () {
 
     //保存配置
     this.onSaveConfig = function () {
+        console.log(this.srcbeginportValue)
+        console.log(this.srcbeginport)
+        console.log(this.srcbeginportinput)
+        console.log(this.srcendport)
+        console.log(this.srcendportinput)
+
+        console.log(this.dstbeginport)
+        console.log(this.dstbeginportinput)
+        console.log(this.dstendport)
+        console.log(this.dstendportinput)
+        // return
+        let srcbeginport = this.srcbeginportValue
+        if(srcbeginport == ""){
+            srcbeginport = this.srcbeginportinput
+        }
+        let srcendport = this.srcendportValue
+        if(srcendport == ""){
+            srcendport = this.srcendportinput
+        }
+
+        let dstbeginport = this.dstbeginportValue
+        if(dstbeginport == ""){
+            dstbeginport = this.dstbeginportinput
+        }
+        let dstendport = this.dstendportValue
+        if(dstendport == ""){
+            dstendport = this.dstendportinput
+        }
         Tea.action("/nfw/acl/createPopup")
             .params({
                 nodeId: this.selectNode,
@@ -138,6 +170,10 @@ Tea.context(function () {
                 direction: this.direction,
                 ipprotocol: this.ipprotocol,
                 protocol: this.protocol,
+                srcbeginport: srcbeginport,
+                srcendport: srcendport,
+                dstbeginport: dstbeginport,
+                dstendport: dstendport,
 
             })
             .post()
@@ -357,24 +393,37 @@ Tea.context(function () {
                     this.srcbeginport = ""
                     this.srcbeginportinput = ""
                     this.srcbeginports = resp.data.srcbeginport
-
+                    let otherValue = ""
                     for (var i = 0; i < resp.data.srcbeginport.length; i++) { //目标下拉
+                        if(resp.data.srcbeginport[i].data_other){
+                            otherValue = resp.data.srcbeginport[i].value
+                        }
                         if (resp.data.srcbeginport[i].selected == true) {
                             this.srcbeginport = resp.data.srcbeginport[i].value
                             this.srcbeginportinput = resp.data.srcbeginport[i].value
-                            //输入类型
-                            if (resp.data.srcbeginport[i].data_other == true && !this.checkPortInput(this.srcbeginportinput,resp.data.srcbeginport)) {
-                                this.srcbeginport = ""
-                                resp.data.srcbeginport[i].value = ""
-                            }
+
+                        }
+                        //下拉选择类型
+                        if (resp.data.srcbeginport[i].data_other == true && this.checkPortSelect(resp.data.srcbeginport[i].value,resp.data.srcbeginport)) {
+                            resp.data.srcbeginport[i].value = ""
                         }
                     }
                     //添加时  赋值默认数据
                     if(this.srcbeginport == "" && this.srcbeginportinput == ""){
-                        this.srcbeginportinput = "any"
+                        if(otherValue == ""){
+                            this.srcbeginportinput = "any"
+                            this.srcbeginport = "any"
+                        }else{
+                            this.srcbeginportinput = otherValue
+                            this.srcbeginport = otherValue
+                        }
+
                     }
                     this.srcbeginports = resp.data.srcbeginport
-
+                    this.srcbeginportValue = this.srcbeginportinput
+                    console.log(this.srcbeginport)
+                    console.log(this.srcbeginportinput)
+                    console.log(this.srcbeginports)
                 }
 
                 //源 结束端口
@@ -382,23 +431,34 @@ Tea.context(function () {
                     this.srcendport = ""
                     this.srcendportinput = ""
                     this.srcendports = resp.data.srcendport
-
+                    let otherValue = ""
                     for (var i = 0; i < resp.data.srcendport.length; i++) { //目标下拉
+                        if(resp.data.srcendport[i].data_other){
+                            otherValue = resp.data.srcendport[i].value
+                        }
                         if (resp.data.srcendport[i].selected == true) {
                             this.srcendport = resp.data.srcendport[i].value
                             this.srcendportinput = resp.data.srcendport[i].value
-                            //输入类型
-                            if (resp.data.srcendport[i].data_other == true && !this.checkPortInput(this.srcendportinput,resp.data.srcendport)) {
-                                this.srcendport = ""
-                                resp.data.srcendport[i].value = ""
-                            }
+
+                        }
+                        //下拉选择类型
+                        if (resp.data.srcendport[i].data_other == true && this.checkPortSelect(resp.data.srcendport[i].value,resp.data.srcendport)) {
+                            resp.data.srcendport[i].value = ""
                         }
                     }
                     //添加时  赋值默认数据
                     if(this.srcendport == "" && this.srcendportinput == ""){
-                        this.srcendportinput = "any"
+                        if(otherValue == ""){
+                            this.srcendportinput = "any"
+                            this.srcendport = "any"
+                        }else{
+                            this.srcendportinput = otherValue
+                            this.srcendport = otherValue
+                        }
+
                     }
                     this.srcendports = resp.data.srcendport
+                    this.srcendportValue = this.srcendportinput
 
 
                 }
@@ -445,23 +505,34 @@ Tea.context(function () {
                     this.dstbeginport = ""
                     this.dstbeginportinput = ""
                     this.dstbeginports = resp.data.dstbeginport
-
+                    let otherValue = ""
                     for (var i = 0; i < resp.data.dstbeginport.length; i++) { //目标下拉
+                        if(resp.data.dstbeginport[i].data_other){
+                            otherValue = resp.data.dstbeginport[i].value
+                        }
                         if (resp.data.dstbeginport[i].selected == true) {
                             this.dstbeginport = resp.data.dstbeginport[i].value
                             this.dstbeginportinput = resp.data.dstbeginport[i].value
-                            //输入类型
-                            if (resp.data.dstbeginport[i].data_other == true && !this.checkPortInput(this.dstbeginportinput,resp.data.dstbeginport)) {
-                                this.dstbeginport = ""
-                                resp.data.dstbeginport[i].value = ""
-                            }
+
+                        }
+                        //下拉类型
+                        if (resp.data.dstbeginport[i].data_other == true && this.checkPortSelect(resp.data.dstbeginport[i].value,resp.data.dstbeginport)) {
+                            resp.data.dstbeginport[i].value = ""
                         }
                     }
                     //添加时  赋值默认数据
                     if(this.dstbeginport == "" && this.dstbeginportinput == ""){
-                        this.dstbeginportinput = "any"
+                        if(otherValue == ""){
+                            this.dstbeginportinput = "any"
+                            this.dstbeginport = "any"
+                        }else{
+                            this.dstbeginportinput = otherValue
+                            this.dstbeginport = otherValue
+                        }
+
                     }
                     this.dstbeginports = resp.data.dstbeginport
+                    this.dstbeginportValue = this.dstbeginportinput
 
 
                 }
@@ -472,23 +543,34 @@ Tea.context(function () {
                     this.dstendport = ""
                     this.dstendportinput = ""
                     this.dstendports = resp.data.dstendport
-
+                    let otherValue = ""
                     for (var i = 0; i < resp.data.dstendport.length; i++) { //目标下拉
+                        if(resp.data.dstendport[i].data_other){
+                            otherValue = resp.data.dstendport[i].value
+                        }
                         if (resp.data.dstendport[i].selected == true) {
                             this.dstendport = resp.data.dstendport[i].value
                             this.dstendportinput = resp.data.dstendport[i].value
-                            //输入类型
-                            if (resp.data.dstendport[i].data_other == true && !this.checkPortInput(this.dstendportinput,resp.data.dstendport)) {
-                                this.dstendport = ""
-                                resp.data.dstendport[i].value = ""
-                            }
+
+                        }
+                        //下拉类型
+                        if (resp.data.dstendport[i].data_other == true && this.checkPortSelect(resp.data.dstendport[i].value,resp.data.dstendport)) {
+                            resp.data.dstendport[i].value = ""
                         }
                     }
                     //添加时  赋值默认数据
                     if(this.dstendport == "" && this.dstendportinput == ""){
-                        this.dstendportinput = "any"
+                        if(otherValue == ""){
+                            this.dstendportinput = "any"
+                            this.dstendport = "any"
+                        }else{
+                            this.dstendportinput = otherValue
+                            this.dstendport = otherValue
+                        }
+
                     }
                     this.dstendports = resp.data.dstendport
+                    this.dstendportValue = this.dstendportinput
 
 
                 }
@@ -521,17 +603,17 @@ Tea.context(function () {
         return false
     }
 
-    //判断输入是否是输入类型
-    this.checkPortInput = function(portinput, srcportlist){
+    //判断 是否是下拉选择
+    this.checkPortSelect = function(port, srcportlist){
         for (var i = 0; i < srcportlist.length; i++) { //目标下拉
             if (!srcportlist[i].data_other ) {
-                if(portinput == srcportlist[i].value){
-                    return false
+                if(port == srcportlist[i].value){
+                    return true
                 }
 
             }
         }
-        return true
+        return false
     }
 
 })
