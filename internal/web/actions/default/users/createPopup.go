@@ -2,6 +2,7 @@ package users
 
 import (
 	"fmt"
+
 	"github.com/1uLang/zhiannet-api/audit/model/audit_user_relation"
 	"github.com/1uLang/zhiannet-api/audit/request"
 	"github.com/1uLang/zhiannet-api/audit/server/user"
@@ -101,7 +102,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 	// 创建nextcloud账号，并写入数据库
 	adminToken := nc_req.GetAdminToken()
 	userPwd := `adminAd#@2021`
-	err = nc_req.CreateUser(adminToken, params.Username, userPwd)
+	err = nc_req.CreateUserV2(adminToken, params.Username, userPwd)
 	if err != nil {
 		this.ErrorPage(err)
 		return
