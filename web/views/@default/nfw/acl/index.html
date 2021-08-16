@@ -167,7 +167,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="title">源端口*</td>
+                    <td class="title">源*</td>
                     <td>
                         <!-- <nfw-sourceNetType-selector :v-idc-id="sourceTypeId"></nfw-sourceNetType-selector> -->
                         <!-- 不知道为啥上面的显示不出来可能服务器认为我在攻击他 先用下面的显示-->
@@ -175,13 +175,12 @@
                                                 :v-srcinput.sync="srcinput"></nfw-agreement-selector>
                     </td>
                 </tr>
-                <!--<tr v-show="nShowState===3">
-                    <td class="title">源*</td>
+                <tr>
+                    <td class="title">源端口 </td>
                     <td>
-                        <nfw-target-selector :v-dst="dst" :v-node-id="selectNode" :v-id="id" :v-dstmask.sync="dstmask"
-                                             :v-masks="masks" :v-dsts="dsts" :v-srcinput.synv="srcinput"></nfw-target-selector>
+                        <nfw-srcbeginport-selector :v-protocol="protocol" :v-srcbeginport.sync="srcbeginport"  :v-srcbeginport-list="srcbeginports" :v-srcbeginportinput="srcbeginportinput"></nfw-srcbeginport-selector>
                     </td>
-                </tr>-->
+                </tr>
                 <!--<tr v-show="nShowState===2">
                     <td class="title">目标*</td>
                     <td v-show="nShowState===2">
@@ -196,7 +195,7 @@
                     </td>
                 </tr>-->
                 <tr>
-                    <td class="title">目标端口*</td>
+                    <td class="title">目标*</td>
                     <td>
                         <nfw-target-selector :v-dst="dst" :v-node-id="selectNode" :v-id="id" :v-dstmask.sync="dstmask"
                                              :v-masks="masks" :v-dsts="dsts"
