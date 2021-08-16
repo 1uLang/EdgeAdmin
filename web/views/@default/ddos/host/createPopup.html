@@ -11,16 +11,22 @@
                 <input type="text" name="nodeId" maxlength="50" ref="focus" :value="node" style="display: none"/>
             </td>
         </tr>
-        <tr>
-            <td class="title">所属用户 *</td>
-            <td>
-                <user-selector></user-selector>
-            </td>
-        </tr>
+<!--        <tr>-->
+<!--            <td class="title">所属用户 *</td>-->
+<!--            <td>-->
+<!--                <user-selector></user-selector>-->
+<!--            </td>-->
+<!--        </tr>-->
         <tr>
             <td class="title">高防IP *</td>
             <td>
                 <input type="text" name="addr" maxlength="50" ref="focus"/>
+            </td>
+        </tr>
+        <tr>
+            <td>备注</td>
+            <td>
+                <textarea rows="3" name="remark"></textarea>
             </td>
         </tr>
     </table>

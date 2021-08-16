@@ -2,7 +2,7 @@
 
 <div style="display: flex;justify-content: space-between;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
     <div style="display: inline-flex;margin-top: 10px;">
-        <span style="margin-right: 15px;" :class="{'mouse-style':nShowState===2}" @click="changeState(1)">主机列表</span>
+        <span style="margin-right: 15px;" :class="{'mouse-style':nShowState===2}" @click="changeState(1)">高防IP列表</span>
         <div v-show="nShowState===1" class="mouse-style" @click="onAddNodeIP">[添加高防IP]</div>
         <div v-show="nShowState===2" style="color: #0090cb;">策略配置 ({{searchAddress}})</div>
     </div>
@@ -40,8 +40,8 @@
     <table class="ui table selectable celled" border="1" style="border-collapse: collapse;">
         <thead>
             <tr align="center">
-                <th class='table-head-bg' style="width: 129px;" rowspan="2">主机</th>
-                <th class='table-head-bg' style="width: 109px;" rowspan="2">所属用户</th>
+                <th class='table-head-bg' style="width: 129px;" rowspan="2">高防IP</th>
+                <th class='table-head-bg' style="width: 109px;" rowspan="2">备注</th>
                 <th class='table-head-bg' style="width: 122px;" colspan="2">带宽</th>
                 <th class='table-head-bg' style="width: 465px;" colspan="8">频率</th>
                 <th class='table-head-bg' style="width: 165px;" colspan="3">连接</th>
@@ -67,7 +67,7 @@
         <tbody>
             <tr align="center" style="height: 40px;" v-for="item in list" >
                 <td>{{item.addr}}</td>
-                <td>{{item.user_name}}</td>
+                <td>{{item.remark}}</td>
                 <td>{{item.bandwidth_in}}</td>
                 <td>{{item.bandwidth_out}}</td>
                 <td>{{item.rate_syn}}</td>
