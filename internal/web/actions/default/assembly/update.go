@@ -3,7 +3,7 @@ package assembly
 import (
 	"github.com/1uLang/zhiannet-api/common/model/subassemblynode"
 	subassemblynode_server "github.com/1uLang/zhiannet-api/common/server/subassemblynode"
-	nc_model "github.com/1uLang/zhiannet-api/nextcloud/model"
+	nc_model "github.com/1uLang/zhiannet-api/nextcloud/request"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
