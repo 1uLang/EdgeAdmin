@@ -108,7 +108,7 @@ func (this *UpdateAction) RunPost(params struct {
 	}
 
 	// 刷新nextcloud缓存
-	if params.State == 8 {
+	if params.AssemblyType == 8 {
 		nc_model.InitialAdminUser()
 	}
 
