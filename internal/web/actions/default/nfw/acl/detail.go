@@ -32,19 +32,23 @@ func (this *DetailAction) RunGet(params struct {
 		return
 	}
 	//接口
-	this.Data["interface"] = info.Interface   //接口
-	this.Data["disabled"] = info.Disabled     //状态 是否启用
-	this.Data["type"] = info.Type             //操作
-	this.Data["direction"] = info.Direction   //方向
-	this.Data["ipprotocol"] = info.Ipprotocol //ip/tcp版本
-	this.Data["protocol"] = info.Protocol     //协议
-	this.Data["srcnot"] = info.Srcnot         //源反转
-	this.Data["src"] = info.Src               //源
-	this.Data["srcmask"] = info.Srcmask       //源掩码
-	this.Data["dstnot"] = info.Dstnot         //目标反转
-	this.Data["dst"] = info.Dst               //目标
-	this.Data["dstmask"] = info.Dstmask       //目标掩码
-	this.Data["descr"] = info.Descr           //描述
+	this.Data["interface"] = info.Interface       //接口
+	this.Data["disabled"] = info.Disabled         //状态 是否启用
+	this.Data["type"] = info.Type                 //操作
+	this.Data["direction"] = info.Direction       //方向
+	this.Data["ipprotocol"] = info.Ipprotocol     //ip/tcp版本
+	this.Data["protocol"] = info.Protocol         //协议
+	this.Data["srcnot"] = info.Srcnot             //源反转
+	this.Data["src"] = info.Src                   //源
+	this.Data["srcmask"] = info.Srcmask           //源掩码
+	this.Data["dstnot"] = info.Dstnot             //目标反转
+	this.Data["dst"] = info.Dst                   //目标
+	this.Data["dstmask"] = info.Dstmask           //目标掩码
+	this.Data["descr"] = info.Descr               //描述
+	this.Data["srcbeginport"] = info.SrcBeginPort //源 开始端口
+	this.Data["srcendport"] = info.SrcEndPort     //源 结束端口
+	this.Data["dstbeginport"] = info.DstBeginPort //目标 开始端口
+	this.Data["dstendport"] = info.DstEndPort     //目标 结束端口
 
 	//
 	//// 创建日志
