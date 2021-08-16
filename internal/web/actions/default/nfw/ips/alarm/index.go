@@ -49,6 +49,10 @@ func (this *IndexAction) RunGet(params struct {
 		},
 		FileId: params.FileId,
 	})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
 	count := list.Total
 	page := this.NewPage(int64(count))
 	this.Data["page"] = page.AsHTML()
