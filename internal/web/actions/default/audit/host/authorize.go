@@ -1,10 +1,9 @@
 package host
 
 import (
-	"fmt"
-	"github.com/1uLang/zhiannet-api/audit/request"
-	"github.com/1uLang/zhiannet-api/audit/server"
-	"github.com/1uLang/zhiannet-api/audit/server/audit_host"
+	"github.com/1uLang/zhiannet-api/common/model/audit_assets_relation"
+	"github.com/1uLang/zhiannet-api/common/server/audit_assets_relation_server"
+	"github.com/1uLang/zhiannet-api/common/server/edge_admins_server"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/actions"
 )
@@ -28,47 +27,105 @@ func (this *AuthorizeAction) RunGet(params struct {
 	params.Must.
 		Field("id", params.Id).
 		Require("请选择主机")
+	//获取管理端用户
+	list, _, err := edge_admins_server.GetList()
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
 
-	list, err := audit_host.GetAuthEmail(&server.AuthReq{
-		Id: params.Id,
-		User: &request.UserReq{
-			AdminUserId: uint64(this.AdminId()),
-		},
+	//获取授权中的列表
+	authUse, _, err := audit_assets_relation_server.GetList(&audit_assets_relation.ListReq{
+		//AdminUserId: uint64(this.AdminId()),
+		AssetsId:   []uint64{params.Id},
+		AssetsType: 1,
+		PageSize:   999,
 	})
-	//var email string
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	authMap := map[uint64]uint64{}
+	if len(authUse) > 0 {
+		for _, v := range authUse {
+			authMap[v.AdminUserId] = v.AdminUserId
+		}
+	}
 	allUsers, authUsers := make([]UserList, 0), make([]UserList, 0)
-	if err != nil || list == nil {
-
-	} else {
-		for _, v := range list.Data.UserList {
-			if v.IsOn {
-
-				if v.My {
+	if len(list) > 0 {
+		for _, v := range list {
+			var isOn bool
+			if _, ok := authMap[v.Id]; ok {
+				isOn = true
+			}
+			if isOn {
+				if v.Id == uint64(this.AdminId()) {
 					allUsers = append(allUsers, UserList{
 						Id:   v.Id,
-						Name: v.Name,
-						My:   v.My,
-						IsOn: v.IsOn,
+						Name: v.Username,
+						IsOn: isOn,
+						My:   v.Id == uint64(this.AdminId()),
 					})
 				} else {
 					authUsers = append(authUsers, UserList{
 						Id:   v.Id,
-						Name: v.Name,
-						My:   v.My,
-						IsOn: v.IsOn,
+						Name: v.Username,
+						IsOn: isOn,
+						My:   v.Id == uint64(this.AdminId()),
 					})
 				}
+
 			} else {
 				allUsers = append(allUsers, UserList{
 					Id:   v.Id,
-					Name: v.Name,
-					My:   v.My,
-					IsOn: v.IsOn,
+					Name: v.Username,
+					IsOn: isOn,
+					My:   v.Id == uint64(this.AdminId()),
 				})
 			}
 
 		}
 	}
+	//list, err := audit_host.GetAuthEmail(&server.AuthReq{
+	//	Id: params.Id,
+	//	User: &request.UserReq{
+	//		AdminUserId: uint64(this.AdminId()),
+	//	},
+	//})
+	////var email string
+	//allUsers, authUsers := make([]UserList, 0), make([]UserList, 0)
+	//if err != nil || list == nil {
+	//
+	//} else {
+	//	for _, v := range list.Data.UserList {
+	//		if v.IsOn {
+	//
+	//			if v.My {
+	//				allUsers = append(allUsers, UserList{
+	//					Id:   v.Id,
+	//					Name: v.Name,
+	//					My:   v.My,
+	//					IsOn: v.IsOn,
+	//				})
+	//			} else {
+	//				authUsers = append(authUsers, UserList{
+	//					Id:   v.Id,
+	//					Name: v.Name,
+	//					My:   v.My,
+	//					IsOn: v.IsOn,
+	//				})
+	//			}
+	//		} else {
+	//			allUsers = append(allUsers, UserList{
+	//				Id:   v.Id,
+	//				Name: v.Name,
+	//				My:   v.My,
+	//				IsOn: v.IsOn,
+	//			})
+	//		}
+	//
+	//	}
+	//}
 	//email = strings.TrimSpace(email)
 	this.Data["allUsers"] = allUsers
 	this.Data["authUsers"] = authUsers
@@ -80,25 +137,39 @@ func (this *AuthorizeAction) RunPost(params struct {
 	Must  *actions.Must
 }) {
 
+	if len(params.Users) == 0 {
+		params.Users = []uint64{uint64(this.AdminId())}
+	}
 	params.Must.
 		Field("id", params.Id).
 		Require("请选择主机")
 
-	res, err := audit_host.AuthHost(&server.AuthReq{
-		User: &request.UserReq{
-			AdminUserId: uint64(this.AdminId()),
-		},
-		Id:  params.Id,
-		Ids: params.Users,
-		//Email: emails,
+	//res, err := audit_host.AuthHost(&server.AuthReq{
+	//	User: &request.UserReq{
+	//		AdminUserId: uint64(this.AdminId()),
+	//	},
+	//	Id:  params.Id,
+	//	Ids: params.Users,
+	//	//Email: emails,
+	//})
+	//if err != nil || res.Code != 0 {
+	//	if err == nil {
+	//		err = fmt.Errorf(res.Msg)
+	//	}
+	//	this.ErrorPage(err)
+	//	return
+	//}
+
+	users := append([]uint64{uint64(this.AdminId())}, params.Users...)
+	res := audit_assets_relation_server.Reset(&audit_assets_relation.AddReq{
+		AdminUserId: users,
+		AssetsId:    params.Id,
+		AssetsType:  1,
 	})
-	if err != nil || res.Code != 0 {
-		if err == nil {
-			err = fmt.Errorf(res.Msg)
-		}
-		this.ErrorPage(err)
+	defer this.CreateLogInfo("修改 安全审计-主机 -授权 %v", res)
+	if res != nil {
+		this.ErrorPage(res)
 		return
 	}
-	defer this.CreateLogInfo("修改 安全审计-主机 -授权 %v", res.Msg)
 	this.Success()
 }
