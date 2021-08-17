@@ -5,7 +5,6 @@
 {$var "header"}
 <script src="/js/timeFactory.js"></script>
 {$end}
-
 <div class="card-div" style="margin-top: 20px;height: 90px;">
     <form class="ui form" autocomplete="off">
         <div style="display: flex;flex-direction: row;margin: 0px 15px 15px 15px;height: 40px;align-items: center;">
@@ -94,7 +93,7 @@
             <td v-else>{{item.score}}分</td>
             <td v-if="item.state == 0">-</td>
             <td v-else>{{item.startTime}}</td>
-            <td v-if="item.state == 2">{{item.lastUpdateTime}}</td>
+            <td v-if="item.state == 2">{{item.reportTime}}</td>
             <td v-else>-</td>
             <td>
                 <div style="display: flex;justify-content: space-around;">
