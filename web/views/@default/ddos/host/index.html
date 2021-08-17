@@ -82,7 +82,10 @@
                 <td>{{item.tcp_conn_out}}</td>
                 <td>{{item.udp_conn}}</td>
                 <td style="cursor: pointer;color: #0090cb;" @click="onOpenConfig(item.addr)">配置</td>
-                <td style="cursor: pointer;color: #0090cb;" @click="onDeleteConfig(item.host_id)">删除</td>
+                <td style="cursor: pointer;color: #0090cb;" >
+                    <div @click="onUpdateConfig(item)">修改</div>
+                    <div @click="onDeleteConfig(item.host_id)">删除</div>
+                </td>
             </tr>
         </tbody>
     </table>
