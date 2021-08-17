@@ -26,12 +26,15 @@ Tea.context(function () {
 
     this.onAddNodeIP = function () {
         let node = this.getNodeId()
-        teaweb.popup(Tea.url(".createPopup?nodeId=" + node), {
+        teaweb.popup(Tea.url(".createPopup?nodeId=" + node),
+
+            {
             callback: function () {
                 teaweb.success("保存成功", function () {
                     teaweb.reload();
                 });
             },
+                height: "23em"
         });
     }
     this.showHost = function () { //重新加载该页面

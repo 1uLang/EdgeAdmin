@@ -167,7 +167,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="title">源端口*</td>
+                    <td class="title">源*</td>
                     <td>
                         <!-- <nfw-sourceNetType-selector :v-idc-id="sourceTypeId"></nfw-sourceNetType-selector> -->
                         <!-- 不知道为啥上面的显示不出来可能服务器认为我在攻击他 先用下面的显示-->
@@ -175,35 +175,49 @@
                                                 :v-srcinput.sync="srcinput"></nfw-agreement-selector>
                     </td>
                 </tr>
-                <!--<tr v-show="nShowState===3">
-                    <td class="title">源*</td>
+                <tr>
+                    <td class="title">源端口 </td>
                     <td>
-                        <nfw-target-selector :v-dst="dst" :v-node-id="selectNode" :v-id="id" :v-dstmask.sync="dstmask"
-                                             :v-masks="masks" :v-dsts="dsts" :v-srcinput.synv="srcinput"></nfw-target-selector>
-                    </td>
-                </tr>-->
-                <!--<tr v-show="nShowState===2">
-                    <td class="title">目标*</td>
-                    <td v-show="nShowState===2">
-                        <nfw-target-selector :v-idc-id="targetTypeId"></nfw-target-selector>
-
-                        <div style="display: flex;justify-content: start;flex-direction: row;">
-                            <input type="text" name="source" maxlength="50" :value="targetValue"/>
-                            <select class="ui dropdown auto-width" name="targetId" v-model="targetId">
-                                <option v-for="item in masks" :value="item.id">{{item.value}}</option>
-                            </select>
+                        <div style="display: flex;flex-direction: row;">
+                            <div style="width: 50%;">
+                                <div style="margin-bottom: 5px;font-size: 14px;">从:</div>
+                                <nfw-srcbeginport-selector :v-protocol="protocol" :v-srcbeginport.sync="srcbeginport"  :v-srcbeginport-list="srcbeginports"
+                                                           :v-srcbeginport-input.sync="srcbeginportinput" :v-srcbeginport-value.sync="srcbeginportValue"></nfw-srcbeginport-selector>
+                            </div>
+                            <div style="width: 50%;">
+                                <div style="margin-bottom: 5px;font-size: 14px;">到:</div>
+                                <nfw-srcendport-selector :v-protocol="protocol" :v-srcbeginport="srcbeginport"  :v-srcbeginport-list="srcendports"
+                                                         :v-srcendport-input.sync="srcendportinput" :v-srcendport.sync="srcendport" :v-srcendport-value.sync="srcendportValue"></nfw-srcendport-selector>
+                            </div>
                         </div>
                     </td>
-                </tr>-->
+                </tr>
+
                 <tr>
-                    <td class="title">目标端口*</td>
+                    <td class="title">目标*</td>
                     <td>
                         <nfw-target-selector :v-dst="dst" :v-node-id="selectNode" :v-id="id" :v-dstmask.sync="dstmask"
                                              :v-masks="masks" :v-dsts="dsts"
                                              :v-dstinput.sync="dstinput"></nfw-target-selector>
                     </td>
                 </tr>
-
+                <tr>
+                    <td class="title">目标端口 </td>
+                    <td>
+                        <div style="display: flex;flex-direction: row;">
+                            <div style="width: 50%;">
+                                <div style="margin-bottom: 5px;font-size: 14px;">从:</div>
+                                <nfw-dstbeginport-selector :v-protocol="protocol" :v-dstbeginport.sync="dstbeginport"  :v-dstbeginport-list="dstbeginports"
+                                                           :v-dstbeginport-input.sync="dstbeginportinput" :v-dstbeginport-value.sync="dstbeginportValue"></nfw-dstbeginport-selector>
+                            </div>
+                            <div style="width: 50%;">
+                                <div style="margin-bottom: 5px;font-size: 14px;">到:</div>
+                                <nfw-dstendport-selector :v-protocol="protocol" :v-dstbeginport="dstbeginport"  :v-dstbeginport-list="dstendports"
+                                                         :v-dstendport-input.sync="dstendportinput" :v-dstendport.sync="dstendport" :v-dstendport-value.sync="dstendportValue"></nfw-dstendport-selector>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
                 <tr>
                     <td class="title">描述</td>
                     <td>

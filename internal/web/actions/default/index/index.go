@@ -192,11 +192,11 @@ func (this *IndexAction) RunPost(params struct {
 	}
 
 	//密码过期检查
-	if res, _ := edge_admins_server.CheckPwdInvalid(uint64(resp.AdminId)); res {
-		params.Auth.SetUpdatePwdToken(resp.AdminId)
-		this.Data["from"] = "/updatePwd"
-		this.Fail("密码已过期，请立即修改")
-	}
+	//if res, _ := edge_admins_server.CheckPwdInvalid(uint64(resp.AdminId)); res {
+	//	params.Auth.SetUpdatePwdToken(resp.AdminId)
+	//	this.Data["from"] = "/updatePwd"
+	//	this.Fail("密码已过期，请立即修改")
+	//}
 	//检测系统是否到期
 	code, expire, err := checkExpire()
 	if err != nil {
