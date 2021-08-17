@@ -105,7 +105,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 	adminToken := nc_req.GetAdminToken()
 	userPwd := `adminAd#@2021`
 	un := "admin_" + params.Username
-	err = nc_req.CreateUser(adminToken, un, userPwd)
+	err = nc_req.CreateUserV2(adminToken, un, userPwd)
 	if err != nil {
 		this.ErrorPage(err)
 		return
