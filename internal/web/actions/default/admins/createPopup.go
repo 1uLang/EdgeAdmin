@@ -2,13 +2,7 @@ package admins
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/1uLang/zhiannet-api/common/server/edge_admins_server"
-	"log"
-
-	"github.com/1uLang/zhiannet-api/audit/model/audit_user_relation"
-	"github.com/1uLang/zhiannet-api/audit/request"
-	"github.com/1uLang/zhiannet-api/audit/server/user"
 	"github.com/1uLang/zhiannet-api/nextcloud/model"
 	nc_req "github.com/1uLang/zhiannet-api/nextcloud/request"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
@@ -124,29 +118,29 @@ func (this *CreatePopupAction) RunPost(params struct {
 	}
 
 	//创建审计系统账号
-	auditResp, auditErr := user.AddUser(&user.AddUserReq{
-		User:        &request.UserReq{AdminUserId: uint64(this.AdminId())},
-		Email:       "",
-		IsAdmin:     1,
-		NickName:    params.Username,
-		Opt:         1,
-		Password:    params.Pass1,
-		Phonenumber: "",
-		RoleIds:     []uint64{},
-		RoleName:    "平台管理员",
-		Sex:         1,
-		Status:      1,
-		UserName:    params.Username,
-	})
-	if auditErr != nil || auditResp == nil {
-		log.Println(auditErr)
-		this.ErrorPage(fmt.Errorf("创建账号失败"))
-		return
-	}
-	if auditResp.Code != 0 {
-		this.ErrorPage(fmt.Errorf(auditResp.Msg))
-		return
-	}
+	//auditResp, auditErr := user.AddUser(&user.AddUserReq{
+	//	User:        &request.UserReq{AdminUserId: uint64(this.AdminId())},
+	//	Email:       "",
+	//	IsAdmin:     1,
+	//	NickName:    params.Username,
+	//	Opt:         1,
+	//	Password:    params.Pass1,
+	//	Phonenumber: "",
+	//	RoleIds:     []uint64{},
+	//	RoleName:    "平台管理员",
+	//	Sex:         1,
+	//	Status:      1,
+	//	UserName:    params.Username,
+	//})
+	//if auditErr != nil || auditResp == nil {
+	//	log.Println(auditErr)
+	//	this.ErrorPage(fmt.Errorf("创建账号失败"))
+	//	return
+	//}
+	//if auditResp.Code != 0 {
+	//	this.ErrorPage(fmt.Errorf(auditResp.Msg))
+	//	return
+	//}
 
 	createResp, err := this.RPC().AdminRPC().CreateAdmin(this.AdminContext(), &pb.CreateAdminRequest{
 		Username:    params.Username,
@@ -180,14 +174,14 @@ func (this *CreatePopupAction) RunPost(params struct {
 	}
 
 	//关联审计系统账号
-	_, err = audit_user_relation.Add(&audit_user_relation.AuditReq{
-		AdminUserId: uint64(createResp.AdminId),
-		AuditUserId: uint64(auditResp.Data.Id),
-	})
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
+	//_, err = audit_user_relation.Add(&audit_user_relation.AuditReq{
+	//	AdminUserId: uint64(createResp.AdminId),
+	//	AuditUserId: uint64(auditResp.Data.Id),
+	//})
+	//if err != nil {
+	//	this.ErrorPage(err)
+	//	return
+	//}
 
 	defer this.CreateLogInfo("创建系统用户 %d", createResp.AdminId)
 

@@ -27,7 +27,6 @@ Tea.context(function () {
     this.onAddNodeIP = function () {
         let node = this.getNodeId()
         teaweb.popup(Tea.url(".createPopup?nodeId=" + node),
-
             {
             callback: function () {
                 teaweb.success("保存成功", function () {
@@ -36,6 +35,18 @@ Tea.context(function () {
             },
                 height: "23em"
         });
+    }
+    this.onUpdateConfig = function (item){
+        console.log(item)
+        teaweb.popup(Tea.url(".updatePopup?nodeId=" + item.node_id+"&addr="+item.addr+"&remark="+item.remark+"&hostId="+item.host_id),
+            {
+                callback: function () {
+                    teaweb.success("修改成功", function () {
+                        teaweb.reload();
+                    });
+                },
+                height: "23em"
+            });
     }
     this.showHost = function () { //重新加载该页面
         let node = ''
