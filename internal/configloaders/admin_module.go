@@ -1,7 +1,6 @@
 package configloaders
 
 import (
-	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
 	"github.com/TeaOSLab/EdgeAdmin/internal/rpc"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/systemconfigs"
@@ -192,13 +191,13 @@ func AllModuleMaps() []maps.Map {
 			"url":  "/nfw/nat",
 		},
 	}
-	if teaconst.IsPlus {
-		m = append(m, maps.Map{
-			"name": "自建DNS",
-			"code": AdminModuleCodeNS,
-			"url":  "/ns",
-		})
-	}
+	//if teaconst.IsPlus {
+	//	m = append(m, maps.Map{
+	//		"name": "自建DNS",
+	//		"code": AdminModuleCodeNS,
+	//		"url":  "/ns",
+	//	})
+	//}
 	m = append(m, []maps.Map{
 		{
 			"name": "WAF服务",
