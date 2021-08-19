@@ -26,9 +26,9 @@
                     <div class="ui field">
                         <input type="text" name="address" placeholder="请输入主机IP" v-model="address"/>
                     </div>
-                    <!-- <div class="ui field">
+                    <div class="ui field">
                         <input type="text" name="nodeId"  :value="nodeId"  style="display: none"  />
-                    </div> -->
+                    </div>
                     <div class="ui field">
                         <button type="submit" class="ui button">搜索</button>
                     </div>
@@ -46,7 +46,7 @@
                 <th class='table-head-bg' style="width: 465px;" colspan="8">频率</th>
                 <th class='table-head-bg' style="width: 165px;" colspan="3">连接</th>
                 <th class='table-head-bg' style="width: 75px;" rowspan="2">防护策略</th>
-                <th class='table-head-bg' style="width: 60px;" rowspan="2">操作</th>
+                <th class='table-head-bg' style="width: 120px;" rowspan="2">操作</th>
             </tr>
             <tr align="center">   
                 <th>IN</th> 
@@ -83,8 +83,10 @@
                 <td>{{item.udp_conn}}</td>
                 <td style="cursor: pointer;color: #0090cb;" @click="onOpenConfig(item.addr)">配置</td>
                 <td style="cursor: pointer;color: #0090cb;" >
-                    <div @click="onUpdateConfig(item)">修改</div>
-                    <div @click="onDeleteConfig(item.host_id)">删除</div>
+                    <div style="display: flex;flex-direction: row;justify-content: space-around;">
+                        <div class="edit_btn" @click="onUpdateConfig(item)">修改</div>
+                        <div class="del-btn" @click="onDeleteConfig(item.id)">删除</div>
+                    </div>
                 </td>
             </tr>
         </tbody>
