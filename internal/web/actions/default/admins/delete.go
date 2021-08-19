@@ -14,6 +14,12 @@ type DeleteAction struct {
 func (this *DeleteAction) RunPost(params struct {
 	AdminId int64
 }) {
+
+	if params.AdminId == this.AdminId(){
+		this.Fail("无权限")
+		return
+	}
+
 	defer this.CreateLogInfo("删除系统用户 %d", params.AdminId)
 
 	_, err := this.RPC().AdminRPC().DeleteAdmin(this.AdminContext(), &pb.DeleteAdminRequest{AdminId: params.AdminId})
