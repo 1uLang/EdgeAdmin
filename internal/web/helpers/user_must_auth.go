@@ -356,7 +356,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 		{
 			"code": "certs",
 			"name": "证书服务",
-			"icon": "certificate",
+			"icon": "leanpub",
 			"url":  "/servers/certs",
 			"module": configloaders.AdminModuleCodeCerts,
 		},
