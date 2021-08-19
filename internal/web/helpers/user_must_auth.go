@@ -337,11 +337,6 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 				//	"code": "iplist",
 				//},
 				{
-					"name": "证书管理",
-					"url":  "/servers/certs",
-					"code": "certs",
-				},
-				{
 					"name": "集群列表",
 					"url":  "/clusters",
 					"code": "clusters",
@@ -357,6 +352,13 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 				//	"code": "metric",
 				//},
 			},
+		},
+		{
+			"code": "certs",
+			"name": "证书服务",
+			"icon": "certificate",
+			"url":  "/servers/certs",
+			"module": configloaders.AdminModuleCodeCerts,
 		},
 		{
 			"code":   "hids",

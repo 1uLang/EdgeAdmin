@@ -18,7 +18,6 @@ func InitAPIServer() error {
 	Username = info.Username
 	Password = info.Password
 	ServerUrl = info.Addr
-	fmt.Println(info)
 	return nil
 }
 func NewServerRequest(username, password string) (*next_terminal_server.Request, error) {

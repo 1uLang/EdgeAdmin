@@ -12,10 +12,11 @@ type AdminModuleCode = string
 const (
 	AdminModuleCodeDashboard AdminModuleCode = "dashboard" // 看板
 	AdminModuleCodeServer    AdminModuleCode = "server"    // 网站
+	AdminModuleCodeCerts     AdminModuleCode = "certs"     // 证书服务
 	AdminModuleCodeNode      AdminModuleCode = "node"      // 节点
 	AdminModuleCodeDNS       AdminModuleCode = "dns"       // DNS
 	AdminModuleCodeNS        AdminModuleCode = "ns"        // 域名服务
-	AdminModuleCodeAdmin     AdminModuleCode = "config"     // 系统用户
+	AdminModuleCodeAdmin     AdminModuleCode = "config"    // 系统用户
 	AdminModuleCodeUser      AdminModuleCode = "user"      // 平台用户
 	AdminModuleCodeFinance   AdminModuleCode = "finance"   // 财务
 	AdminModuleCodeLog       AdminModuleCode = "log"       // 日志
@@ -203,6 +204,11 @@ func AllModuleMaps() []maps.Map {
 			"name": "WAF服务",
 			"code": AdminModuleCodeServer,
 			"url":  "/servers",
+		},
+		{
+			"name": "证书服务",
+			"code": AdminModuleCodeCerts,
+			"url":  "/servers/certs",
 		},
 		{
 			"name": "主机防护",
