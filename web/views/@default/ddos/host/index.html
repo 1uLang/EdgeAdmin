@@ -18,24 +18,24 @@
     </div>
 </div>
 <div v-if="nShowState===1">
-    <form method="get" class="ui form" action="host">
-        <div class="ui margin"></div>
-        <div class="ui menu basic text">
-            <div class="item">
-                <div class="ui fields inline">
-                    <div class="ui field">
-                        <input type="text" name="address" placeholder="请输入主机IP" v-model="address"/>
-                    </div>
-                    <div class="ui field">
-                        <input type="text" name="nodeId"  :value="nodeId"  style="display: none"  />
-                    </div>
-                    <div class="ui field">
-                        <button type="submit" class="ui button">搜索</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
+<!--    <form method="get" class="ui form" action="host">-->
+<!--        <div class="ui margin"></div>-->
+<!--        <div class="ui menu basic text">-->
+<!--            <div class="item">-->
+<!--                <div class="ui fields inline">-->
+<!--                    <div class="ui field">-->
+<!--                        <input type="text" name="address" placeholder="请输入主机IP" v-model="address"/>-->
+<!--                    </div>-->
+<!--                    <div class="ui field">-->
+<!--                        <input type="text" name="nodeId"  :value="nodeId"  style="display: none"  />-->
+<!--                    </div>-->
+<!--                    <div class="ui field">-->
+<!--                        <button type="submit" class="ui button">搜索</button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </form>-->
     <!-- <p class="comment" v-if="total == 0">暂时还没有主机高防IP。</p> -->
     <table class="ui table selectable celled" border="1" style="border-collapse: collapse;">
         <thead>
