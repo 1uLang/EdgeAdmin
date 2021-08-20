@@ -36,19 +36,19 @@ func (this *IndexAction) RunGet(params struct {
 		params.PageSize = 999
 	}
 	list, err := scans_server.List(&scans.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, AdminUserId: uint64(this.AdminId())})
-	//if err != nil && list != nil {
-	//	this.ErrorPage(err)
-	//	return
-	//}
+	if err != nil && list != nil {
+		this.ErrorPage(err)
+		return
+	}
 	var scansMaps []interface{}
 	if lists, ok := list["scans"]; ok {
 		scansMaps = lists.([]interface{})
 	}
 	nessus_list, err := nessus_scans_server.History(&nessus_scans_model.HistoryReq{ AdminUserId: uint64(this.AdminId())})
-	//if err != nil {
-	//	this.ErrorPage(err)
-	//	return
-	//}
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
 	scansMaps = append(scansMaps, nessus_list...)
 	if len(nessus_list) > 0 || len(scansMaps)> 0{
 		this.Data["scans"] = scansMaps
