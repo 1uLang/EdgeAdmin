@@ -36,7 +36,7 @@
             <label-on :v-is-on="policy.isOn"></label-on>
         </td>
         <td>
-            <a :href="Tea.url('.policy', {policyId: policy.id})">详情</a> &nbsp; <a href="" @click.prevent="deletePolicy(policy.id)">删除</a>
+            <a :href="Tea.url('.policy', {policyId: policy.id})">详情</a> &nbsp; <a href="" style="color: #db2828" @click.prevent="deletePolicy(policy.id)">删除</a>
         </td>
     </tr>
 </table>
