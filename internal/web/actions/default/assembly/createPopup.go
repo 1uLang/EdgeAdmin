@@ -11,10 +11,11 @@ import (
 	ddos_request "github.com/1uLang/zhiannet-api/ddos/request"
 	hids_request "github.com/1uLang/zhiannet-api/hids/server"
 	nessus_request "github.com/1uLang/zhiannet-api/nessus/server"
+	term_request "github.com/1uLang/zhiannet-api/next-terminal/server"
 	awvs_request "github.com/1uLang/zhiannet-api/nextcloud/request"
 	nextcloud_request "github.com/1uLang/zhiannet-api/nextcloud/request"
 	opnsense_request "github.com/1uLang/zhiannet-api/opnsense/request"
-	term_request "github.com/1uLang/zhiannet-api/next-terminal/server"
+	teaweb_request "github.com/1uLang/zhiannet-api/resmon/request"
 )
 
 type CreatePopupAction struct {
@@ -113,6 +114,11 @@ func (this *CreatePopupAction) RunPost(params struct {
 		params.Must.
 			Field("secret", params.Secret).
 			Require("请输入password")
+
+	case 9: //节点监控
+		params.Must.
+			Field("key", params.Key).
+			Require("请输入密钥")
 	}
 	req := &subassemblynode_model.Subassemblynode{
 		Name:   params.Name,
@@ -171,6 +177,10 @@ func (this *CreatePopupAction) Check(AssemblyType int) {
 		check.Run()
 	case 8: //数据备份
 		check := new(nextcloud_request.CheckRequest)
+		check.Run()
+
+	case 9: //节点监控
+		check := new(teaweb_request.CheckRequest)
 		check.Run()
 	}
 }

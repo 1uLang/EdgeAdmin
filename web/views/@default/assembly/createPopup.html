@@ -182,7 +182,16 @@
             </td>
         </tr>
         </tbody>
-
+        <!--  节点监控      -->
+        <tbody v-if="showAPIAUTHVisible == 9">
+        <tr>
+            <td>密钥 *</td>
+            <td>
+                <input type="text" name="key" maxlength="100"/>
+                <p class="comment">调用节点监控所使用的API密钥</p>
+            </td>
+        </tr>
+        </tbody>
 	</table>
 	<submit-btn></submit-btn>
 </form>
