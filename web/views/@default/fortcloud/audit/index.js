@@ -116,6 +116,10 @@ Tea.context(function () {
     this.onCloseReplay = function () { 
         this.bShowAudioPlayBox = false
         this.recording = null
+        this.isPlaying = false
+        this.playPosition = 0
+        this.curProgress = 0
+        this.bAudioDisabled = true
     }
 
     this.onPlayReplay = function () { 
