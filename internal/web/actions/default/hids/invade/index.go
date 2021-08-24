@@ -50,7 +50,7 @@ func (this *IndexAction) RunGet(params struct{}) {
 	args := &risk.RiskSearchReq{}
 
 	args.AdminUserId = uint64(this.AdminId())
-	args.PageSize = 1
+	args.PageSize = 100
 
 	for idx, fn := range fns {
 		//invadeWg.Add(1)
