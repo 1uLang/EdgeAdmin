@@ -217,4 +217,6 @@ import (
 
 	//数据备份
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/databackup"
+	// 主机监控
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/resmon"
 )
