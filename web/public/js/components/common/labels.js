@@ -25,5 +25,5 @@ Vue.component("micro-basic-label", {
 
 Vue.component("label-on-conn", {
 	props: ["v-is-conn"],
-	template: '<div><span v-if="vIsConn" class="ui label tiny green basic">运行中</span><span v-if="!vIsConn" class="ui label tiny red basic">不可用</span></div>'
+	template: '<div><span v-if="vIsConn" class="ui label tiny green basic">运行中</span><span v-if="!vIsConn" class="ui label tiny  basic" style="color: #bebebe">不可用</span></div>'
 })

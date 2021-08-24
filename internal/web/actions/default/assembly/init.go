@@ -32,6 +32,7 @@ var typeMap = map[int]string{
 	6: "安全审计",
 	7: "堡垒机",
 	8: "数据备份",
+	9: "节点监控",
 }
 var idcMap = map[int]string{
 	1: "成都IDC",

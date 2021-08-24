@@ -42,7 +42,7 @@
         <td class="center">{{infos[index].countClusters}}</td>
         <td class="center"><label-on :v-is-on="policy.isOn"></label-on></td>
         <td>
-            <a :href="'/servers/components/cache/policy?cachePolicyId=' + policy.id">详情</a> &nbsp; <a href="" @click.prevent="deletePolicy(policy.id)">删除</a>
+            <a :href="'/servers/components/cache/policy?cachePolicyId=' + policy.id">详情</a> &nbsp; <a href="" style="color: #db2828" @click.prevent="deletePolicy(policy.id)">删除</a>
         </td>
     </tr>
 </table>

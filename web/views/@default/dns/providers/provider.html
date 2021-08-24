@@ -144,7 +144,7 @@
 			<a href="" @click.prevent="syncDomain(index, domain)" v-if="!domain.isSyncing">同步</a>
 			<span v-else>正在同步...</span>&nbsp;
 			<a href="" @click.prevent="updateDomain(domain.id)" v-if="!domain.isSyncing">修改</a> &nbsp;
-			<a href="" @click.prevent="deleteDomain(domain)" v-if="!domain.isSyncing">删除</a>
+			<a href="" style="color: #db2828" @click.prevent="deleteDomain(domain)" v-if="!domain.isSyncing">删除</a>
 		</td>
 	</tr>
 </table>

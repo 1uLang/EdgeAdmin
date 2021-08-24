@@ -27,7 +27,7 @@
         <td><label-on :v-is-on="chart.isOn"></label-on></td>
         <td>
             <a :href="Tea.url('.chart', {chartId: chart.id})">详情</a> &nbsp;
-            <a href="" @click.prevent="deleteChart(chart.id)">删除</a>
+            <a href="" style="color: #db2828" @click.prevent="deleteChart(chart.id)">删除</a>
         </td>
     </tr>
 </table>

@@ -163,8 +163,9 @@ func (this *IndexAction) RunPost(params struct {
 		} else {
 			//登录次数+1
 			edge_admins_server.LoginErrIncr(fmt.Sprintf("admin_%v", params.Username))
-			num, _ := cache.GetInt(fmt.Sprintf("admin_%v", params.Username))
-			this.Fail(fmt.Sprintf("请输入正确的用户名密码，您还可以尝试%v次，（账号将被临时锁定30分钟）", 5-num))
+			//num, _ := cache.GetInt(fmt.Sprintf("admin_%v", params.Username))
+			this.Fail("登录失败，请重新登录")
+			//this.Fail(fmt.Sprintf("请输入正确的用户名密码，您还可以尝试%v次，（账号将被临时锁定30分钟）", 5-num))
 		}
 
 	}

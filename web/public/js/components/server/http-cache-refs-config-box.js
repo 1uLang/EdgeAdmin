@@ -161,7 +161,7 @@ Vue.component("http-cache-refs-config-box", {
 					</td>
 					<td>
 						<a href="" @click.prevent="updateRef(index, cacheRef)">修改</a> &nbsp;
-						<a href="" @click.prevent="removeRef(index)">删除</a>
+						<a href="" style="color: #db2828" @click.prevent="removeRef(index)">删除</a>
 					</td>
 				</tr>
 			</tbody>
