@@ -224,8 +224,8 @@ Tea.context(function () {
 
         //打开主机体检弹窗
         teaweb.popup(Tea.url(".examine?macCode="+item.macCode+'&serverIp='+item.serverIp), {
-            height: "430px",
-            weight:"710px"
+            height: "410px",
+            width: "720px"
         })
     }
 
