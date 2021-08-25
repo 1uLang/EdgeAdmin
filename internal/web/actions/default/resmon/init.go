@@ -1,21 +1,21 @@
-package examine
+package resmon
 
 import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/helpers"
 	"github.com/iwind/TeaGo"
 )
 
-//主机体检
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth("")).
-			Data("teaMenu", "examine").
-			Prefix("/hids/examine").
+			Data("teaMenu", "resmon").
+			Prefix("/resmon").
 			GetPost("", new(IndexAction)).
-			Get("/detail", new(DetailAction)).
-			Post("/scans", new(ScanAction)).
-			Get("/examine", new(ExamineAction)).
+			GetPost("/createPopup", new(CreatePopupAction)).
+			Post("/delete", new(DeleteAction)).
+			Post("/update", new(UpdateAction)).
+			Get("/agents", new(AgentAction)).
 			EndAll()
 	})
 }
