@@ -181,6 +181,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/logs"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/nat"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/virus"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/virus_log"
 
 	//监控告警
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/monitor"
@@ -219,4 +220,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/databackup"
 	// 主机监控
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/resmon"
+
+	// 主机列表
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hostlist"
 )

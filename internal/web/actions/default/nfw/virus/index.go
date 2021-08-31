@@ -4,10 +4,11 @@ import (
 	"github.com/1uLang/zhiannet-api/common/model/subassemblynode"
 	opnsense_server "github.com/1uLang/zhiannet-api/opnsense/server"
 	"github.com/1uLang/zhiannet-api/opnsense/server/clamav"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/maps"
 	"regexp"
 	"strings"
+
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 )
 
 type IndexAction struct {
@@ -78,5 +79,5 @@ func (this *IndexAction) RunGet(params struct {
 	this.Data["selectNode"] = params.NodeId
 
 	this.Show()
-	//this.Success()
+
 }

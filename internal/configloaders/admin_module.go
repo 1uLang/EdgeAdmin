@@ -26,15 +26,16 @@ const (
 	AdminModuleCodeConfig    AdminModuleCode = "config"    // 平台管理
 	AdminModuleCodeClusters  AdminModuleCode = "clusters"  // 边缘节点
 
-	AdminModuleCodeDdos    AdminModuleCode = "ddos"      // ddos
-	AdminModuleCodeWebScan AdminModuleCode = "webscan"   // webscan
-	AdminModuleCodeHids    AdminModuleCode = "hids"      // hids 主机防护
-	AdminModuleCodeNfw     AdminModuleCode = "nfw"       // 下一代防火墙
-	AdminModuleCodeMonitor AdminModuleCode = "monitor"   //监控告警
-	AdminModuleCodeWAF     AdminModuleCode = "waf"       //web防火墙
-	AdminModuleCodeAudit   AdminModuleCode = "audit"     //审计系统
-	AdminModuleCodeFort    AdminModuleCode = "fortcloud" //堡垒机
-	AdminModuleCodeBackup  AdminModuleCode = "backup"    //数据备份
+	AdminModuleCodeDdos     AdminModuleCode = "ddos"      // ddos
+	AdminModuleCodeWebScan  AdminModuleCode = "webscan"   // webscan
+	AdminModuleCodeHids     AdminModuleCode = "hids"      // hids 主机防护
+	AdminModuleCodeNfw      AdminModuleCode = "nfw"       // 下一代防火墙
+	AdminModuleCodeMonitor  AdminModuleCode = "monitor"   //监控告警
+	AdminModuleCodeWAF      AdminModuleCode = "waf"       //web防火墙
+	AdminModuleCodeAudit    AdminModuleCode = "audit"     //审计系统
+	AdminModuleCodeFort     AdminModuleCode = "fortcloud" //堡垒机
+	AdminModuleCodeBackup   AdminModuleCode = "backup"    //数据备份
+	AdminModuleCodeHostlist AdminModuleCode = "hostlist"  //主机列表
 )
 
 var sharedAdminModuleMapping = map[int64]*AdminModuleList{} // adminId => AdminModuleList
