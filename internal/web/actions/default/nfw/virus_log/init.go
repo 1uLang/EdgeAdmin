@@ -1,4 +1,4 @@
-package virus
+package virus_log
 
 import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
@@ -11,10 +11,10 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeNfw)).
-			Helper(settingsutils.NewHelper("virus")).
-			Data("teaMenu", "virus").
-			Prefix("/nfw/virus").
-			Get("", new(IndexAction)).
+			Helper(settingsutils.NewHelper("virusLog")).
+			//Data("teaMenu", "virusLog").
+			Prefix("/nfw/virusLog").
+			Get("", new(VirusLogAction)).
 			EndAll()
 	})
 }

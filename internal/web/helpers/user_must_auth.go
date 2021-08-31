@@ -281,11 +281,11 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"url":  "/nfw/ips",
 					"code": "ips",
 				},
-				//{
-				//	"name": "防病毒规则",
-				//	"url":  "/nfw/virus",
-				//	"code": "virus",
-				//},
+				{
+					"name": "病毒库",
+					"url":  "/nfw/virus",
+					"code": "virus",
+				},
 				{
 					"name": "会话列表",
 					"url":  "/nfw/conversation",
@@ -359,10 +359,10 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			},
 		},
 		{
-			"code": "certs",
-			"name": "证书服务",
-			"icon": "leanpub",
-			"url":  "/servers/certs",
+			"code":   "certs",
+			"name":   "证书服务",
+			"icon":   "leanpub",
+			"url":    "/servers/certs",
 			"module": configloaders.AdminModuleCodeCerts,
 		},
 		{
@@ -627,6 +627,12 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"url":    "/databackup",
 			"module": configloaders.AdminModuleCodeBackup,
 			"name":   "数据备份",
+			"icon":   "copy",
+		}, {
+			"code":   "hostlist",
+			"url":    "/hostlist",
+			"module": configloaders.AdminModuleCodeHostlist,
+			"name":   "主机列表",
 			"icon":   "copy",
 		},
 		//		{

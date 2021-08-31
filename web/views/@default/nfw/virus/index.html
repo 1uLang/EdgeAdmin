@@ -1,39 +1,56 @@
 {$layout}
+<!--<div style="width: 100%;height: 40px;display: flex;justify-content: flex-end;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;margin-top: 10px;">
+    <div style="display: inline-flex;align-items: center;">
+        <div style="text-align: center;">云防火墙节点：</div>
+        <div class="ui field">
+            <div class="ui field">
+                <select class="ui dropdown auto-width" name="selectNode" v-model="selectNode"
+                        @change="GetSelectNode">
+                    <option v-for="item in nodes" :value="item.id">{{item.name}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>-->
+<div class="margin"></div>
+<form method="post" class="ui form" data-tea-action="$" data-tea-success="success">
+    <table class="ui table definition selectable">
 
-<div style="padding: 10px 30px;">
-    <div style="border-bottom: 1px solid #d7d7d7;padding-bottom: 10px;margin-bottom: 10px;display: flex;flex-direction: row;align-items: end;">
-        <img src="/images/virus_pic.svg" width="50px" height="50px">
-        <div style="margin: 0 25px;padding-top: 15px;">
-            <span style="font-size:28px;color: #333;font-weight: normal;">病毒库版本</span>
-        </div>
-        <div style="padding-top: 15px;">
-            <span style="font-size:28px;color: #169bd5;font-weight: normal;">{{version.version}}</span>
-        </div>
-    </div>
-    <div style="margin-top: 15px;">
-        <div style="display: flex;flex-direction: row;margin-bottom: 50px;">
-            <div style="width: 300px;">
-                <span class="front_txt">最后更新时间</span>
-            </div>
-            <span class="after_txt">{{version.update_time}}</span>
-        </div>
-        <div style="display: flex;flex-direction: row;margin-bottom: 50px;">
-            <div style="width: 300px;">
-                <span class="front_txt">主要特征数</span>
-            </div>
-            <span class="after_txt">{{version.main_total}}</span>
-        </div>
-        <div style="display: flex;flex-direction: row;margin-bottom: 50px;">
-            <div style="width: 300px;">
-                <span class="front_txt">更新特征数</span>
-            </div>
-            <span class="after_txt">{{version.update_total}}</span>
-        </div>
-        <div style="display: flex;flex-direction: row;margin-bottom: 50px;">
-            <div style="width: 300px;">
-                <span class="front_txt">总特征数</span>
-            </div>
-            <span class="after_txt">{{version.all_total}}</span>
-        </div>
-    </div>
-</div>
+        <tr>
+            <td class="title">ClamAV引擎版本</td>
+            <td>
+                <input disabled type="text" name="version" :value="version.version"/>
+                <p class="comment"></p>
+            </td>
+        </tr>
+        <tr>
+            <td class="title">最后更新时间</td>
+            <td>
+                <input disabled type="text" name="update_time" :value="version.update_time"/>
+                <p class="comment"></p>
+            </td>
+        </tr>
+        <tr>
+            <td class="title">主要特征数</td>
+            <td>
+                <input disabled type="text" name="main_total" :value="version.main_total"/>
+                <p class="comment"></p>
+            </td>
+        </tr>
+        <tr>
+            <td class="title">更新特征数</td>
+            <td>
+                <input disabled type="text" name="update_total" :value="version.update_total"/>
+                <p class="comment"></p>
+            </td>
+        </tr>
+        <tr>
+            <td class="title">总特征数</td>
+            <td>
+                <input disabled type="text" name="all_total" :value="version.all_total"/>
+                <p class="comment"></p>
+            </td>
+        </tr>
+    </table>
+    <!-- <submit-btn></submit-btn> -->
+</form>
