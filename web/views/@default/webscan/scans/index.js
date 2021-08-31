@@ -375,6 +375,13 @@ Tea.context(function () {
         }
         return resultStatus;
     };
+    this.onChangeTimeFormat3 = function (time) {
+        if (time) {
+            var tempTime = time.substring(0, time.indexOf("+"));
+            resultTime = tempTime.replace("T", " ");
+        }
+        return resultTime;
+    }
     this.onChangeTimeFormat2 = function (time) {
         if (time) {
             let m = parseInt(time / 60)

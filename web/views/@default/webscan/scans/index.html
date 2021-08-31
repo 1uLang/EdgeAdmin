@@ -252,7 +252,7 @@
                         <td :class="{'red0-color':item.severity>3,'red-color':item.severity===3, 'yellow-color':item.severity===2,'blue-color':item.severity===1,'green-color':item.severity===0}">{{onChangeSeverityFormat(item.severity)}}</td>
                         <td>{{item.vt_name}}</td>
                         <td>{{item.affects_url}}</td>
-                        <td>{{onChangeTimeFormat(item.vt_created)}}</td>
+                        <td>{{onChangeTimeFormat3(item.vt_created)}}</td>
                         <!--                        <td>{{onChangeTimeFormat(item.last_seen)}}</td>-->
                     </tr>
                     </tbody>

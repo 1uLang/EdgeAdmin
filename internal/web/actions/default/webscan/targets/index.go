@@ -45,6 +45,7 @@ func (this *IndexAction) RunGet(params struct {
 	//	this.ErrorPage(err)
 	//	return
 	//}
+	fmt.Println(list,this.AdminId(),err)
 	var targetsMaps []interface{}
 	if lists, ok := list["targets"]; ok {
 		targetsMaps = lists.([]interface{})

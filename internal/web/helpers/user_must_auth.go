@@ -336,11 +336,11 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 				//	"code": "accesslog",
 				//	"isOn": teaconst.IsPlus,
 				//},
-				//{
-				//	"name": "IP名单",
-				//	"url":  "/servers/iplists",
-				//	"code": "iplist",
-				//},
+				{
+					"name": "IP名单",
+					"url":  "/servers/iplists",
+					"code": "iplist",
+				},
 				{
 					"name": "集群列表",
 					"url":  "/clusters",
