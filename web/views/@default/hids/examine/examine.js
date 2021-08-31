@@ -46,7 +46,7 @@ Tea.context(function () {
 
         return false;
     }
-
+    
     this.onSelectCheckValue = function (index) {
         let bValue = false;
         if (this.checkSelectValue) {
