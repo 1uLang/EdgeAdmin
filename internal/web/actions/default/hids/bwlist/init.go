@@ -1,4 +1,4 @@
-package examine
+package bwlist
 
 import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
@@ -6,17 +6,15 @@ import (
 	"github.com/iwind/TeaGo"
 )
 
-//主机体检
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeHids)).
-			Data("teaMenu", "examine").
-			Prefix("/hids/examine").
-			GetPost("", new(IndexAction)).
-			Get("/detail", new(DetailAction)).
-			Post("/scans", new(ScanAction)).
-			Get("/examine", new(ExamineAction)).
+			Data("teaMenu", "bwlist").
+			Prefix("/hids/bwlist").
+			Get("", new(IndexAction)).
+			GetPost("/del", new(DelAction)). //添删除ip
+			GetPost("/createPopup", new(CreatePopupAction)).
 			EndAll()
 	})
 }
