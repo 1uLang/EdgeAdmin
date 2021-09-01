@@ -8,7 +8,6 @@ Tea.context(function () {
 
     let that = this
 
-
     this.sBottomSelectItem = [
         {id: "13", value: "反弹shell"},
         {id: "14", value: "异常账号"},
@@ -47,11 +46,11 @@ Tea.context(function () {
 
         return false;
     }
-
+    
     this.onSelectCheckValue = function (index) {
         let bValue = false;
-        if (that.checkSelectValue) {
-            bValue = that.checkSelectValue(id, that.sSelectCheckValue);
+        if (this.checkSelectValue) {
+            bValue = this.checkSelectValue(index, this.sSelectCheckValue);
         }
         if (bValue) {
             this.sSelectCheckValue = this.sSelectCheckValue.filter((itemIndex) => {
@@ -64,8 +63,8 @@ Tea.context(function () {
 
     this.getShowSelectValueImage = function (id) {
         let bValue = false;
-        if (this.checkSelectValue) {
-            bValue = this.checkSelectValue(id, this.sSelectCheckValue);
+        if (that.checkSelectValue) {
+            bValue = that.checkSelectValue(id, that.sSelectCheckValue);
         }
         if (bValue) {
             return "/images/select_select.png";
