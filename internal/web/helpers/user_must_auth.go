@@ -296,6 +296,11 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"url":  "/nfw/ips/alarm",
 					"code": "alarm",
 				},
+				{
+					"name": "APT检测",
+					"url":  "/nfw/maltrail/index",
+					"code": "maltrail",
+				},
 			},
 		},
 		{

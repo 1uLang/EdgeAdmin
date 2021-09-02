@@ -1,0 +1,57 @@
+{$layout}
+
+
+<form method="get" class="ui form" action="index">
+    <div class="ui margin"></div>
+    <div class="ui menu basic text">
+        <div class="item">
+            <div class="ui fields inline">
+                <div class="ui field">
+                    <input type="text" name="date" placeholder="开始日期" v-model="date" value="" style="width:8em" id="day-from-picker"/>
+                </div>
+                <!-- <div class="ui field">
+                    <input type="text" name="nodeId"  :value="nodeId"  style="display: none"  />
+                </div> -->
+                <div class="ui field">
+                    <button type="submit" class="ui button">搜索</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div style="width: 100%;height: 650px;overflow-x: auto; overflow-y: auto;">
+    <table id="tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+        <thead>
+        <tr align="center">
+            <th class='table-head-bg' style="width: 130px;">时间</th>
+            <th class='table-head-bg' style="width: 100px;">源IP</th>
+            <th class='table-head-bg' style="width: 100px;">源端口</th>
+            <th class='table-head-bg' style="width: 100px;">目标IP</th>
+            <th class='table-head-bg' style="width: 80px;">目标端口</th>
+            <th class='table-head-bg' style="width: 50px;">协议</th>
+            <th class='table-head-bg' style="width: 50px;">类型</th>
+            <th class='table-head-bg' style="width: 100px;">追踪</th>
+            <th class='table-head-bg' style="width: 200px;">详情</th>
+            <th class='table-head-bg' style="width: 200px;">参考</th>
+        </tr>
+        </thead>
+        <tbody id='tableBody'>
+        <tr align="center" style="height: 40px;" v-for="item in list">
+            <td>{{item.time}}</td>
+            <td>{{item.src_ip}}</td>
+            <td>{{item.src_port}}</td>
+            <td>{{item.dst_ip}}</td>
+            <td>{{item.dst_port}}</td>
+            <td>{{item.proto}}</td>
+            <td>{{item.type}}</td>
+            <td>{{item.trail}}</td>
+            <td>{{item.info}}</td>
+            <td>{{item.reference}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="page" v-html="page"></div>
+
+
+

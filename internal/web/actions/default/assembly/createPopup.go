@@ -10,12 +10,14 @@ import (
 	audit_request "github.com/1uLang/zhiannet-api/audit/request"
 	ddos_request "github.com/1uLang/zhiannet-api/ddos/request"
 	hids_request "github.com/1uLang/zhiannet-api/hids/server"
+	maltrail_request "github.com/1uLang/zhiannet-api/maltrail/request"
 	nessus_request "github.com/1uLang/zhiannet-api/nessus/server"
 	term_request "github.com/1uLang/zhiannet-api/next-terminal/server"
 	awvs_request "github.com/1uLang/zhiannet-api/nextcloud/request"
 	nextcloud_request "github.com/1uLang/zhiannet-api/nextcloud/request"
 	opnsense_request "github.com/1uLang/zhiannet-api/opnsense/request"
 	teaweb_request "github.com/1uLang/zhiannet-api/resmon/request"
+	zstack_request "github.com/1uLang/zhiannet-api/zstack/request"
 )
 
 type CreatePopupAction struct {
@@ -100,7 +102,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 		params.Must.
 			Field("secret", params.Secret).
 			Require("请输入secret")
-	case 6, 7: //审计系统 堡垒机
+	case 6, 7, 10, 11: //审计系统 堡垒机 云底座，apt
 		params.Must.
 			Field("key", params.Key).
 			Require("请输入username")
@@ -181,6 +183,12 @@ func (this *CreatePopupAction) Check(AssemblyType int) {
 
 	case 9: //节点监控
 		check := new(teaweb_request.CheckRequest)
+		check.Run()
+	case 10: //云底座
+		check := new(zstack_request.LoginReq)
+		check.Run()
+	case 11: //apt检测
+		check := new(maltrail_request.LoginReq)
 		check.Run()
 	}
 }
