@@ -30,6 +30,7 @@ const (
 	AdminModuleCodeWebScan  AdminModuleCode = "webscan"   // webscan
 	AdminModuleCodeHids     AdminModuleCode = "hids"      // hids 主机防护
 	AdminModuleCodeNfw      AdminModuleCode = "nfw"       // 下一代防火墙
+	AdminModuleCodeMaltrail AdminModuleCode = "maltrail"  // apt检测
 	AdminModuleCodeMonitor  AdminModuleCode = "monitor"   //监控告警
 	AdminModuleCodeWAF      AdminModuleCode = "waf"       //web防火墙
 	AdminModuleCodeAudit    AdminModuleCode = "audit"     //审计系统

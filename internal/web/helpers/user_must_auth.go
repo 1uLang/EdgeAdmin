@@ -296,12 +296,19 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"url":  "/nfw/ips/alarm",
 					"code": "alarm",
 				},
-				{
-					"name": "APT检测",
-					"url":  "/nfw/maltrail/index",
-					"code": "maltrail",
-				},
+				//{
+				//	"name": "APT检测",
+				//	"url":  "/nfw/maltrail/index",
+				//	"code": "maltrail",
+				//},
 			},
+		},
+		{
+			"code":   "maltrail",
+			"url":    "/maltrail/index",
+			"module": configloaders.AdminModuleCodeMaltrail,
+			"name":   "APT检测",
+			"icon":   "adn",
 		},
 		{
 			"code":   "servers",
@@ -643,7 +650,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"url":    "/hostlist",
 			"module": configloaders.AdminModuleCodeHostlist,
 			"name":   "主机列表",
-			"icon":   "copy",
+			"icon":   "tv",
 		},
 		//		{
 		//			"name": "查询分析",

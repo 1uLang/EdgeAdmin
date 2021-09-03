@@ -7,6 +7,7 @@ import (
 	"github.com/iwind/TeaGo/maps"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 )
@@ -67,8 +68,13 @@ func (this *IndexAction) RunGet(params struct {
 		if len(day) >= 2 {
 			dayly = day[1]
 		}
+		sTime := time.Now()
+		sTimes, err := time.ParseInLocation("Mon Jan _2 15:04:05 2006", dayly, time.Local)
+		if err != nil {
+			sTimes = sTime
+		}
 		this.Data["version"] = maps.Map{
-			"update_time":  dayly,
+			"update_time":  sTimes.Format("2006-01-02 15:04:05"),
 			"version":      version.Version.Clamav,
 			"all_total":    version.Version.Signatures,
 			"update_total": update_total,

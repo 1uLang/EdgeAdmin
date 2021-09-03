@@ -179,10 +179,12 @@ import (
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/ips"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/ips/alarm"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/logs"
-	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/maltrail"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/nat"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/virus"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/virus_log"
+
+	//apt 检测
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/maltrail"
 
 	//监控告警
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/monitor"

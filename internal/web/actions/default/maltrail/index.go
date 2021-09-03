@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/1uLang/zhiannet-api/common/cache"
+	"github.com/1uLang/zhiannet-api/common/model/subassemblynode"
 	"github.com/1uLang/zhiannet-api/maltrail/server"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"time"
@@ -18,18 +19,32 @@ func (this *IndexAction) Init() {
 }
 
 func (this *IndexAction) RunGet(params struct {
-	Date     string
+	DayFrom  string
 	Page     int
 	PageSize int
+	NodeId   uint64
 }) {
-	if params.Date == "" {
-		params.Date = time.Now().Format("2006-01-02")
+	if params.DayFrom == "" {
+		params.DayFrom = time.Now().Format("2006-01-02")
 	}
+
+	node, _, err := server.GetMaltrailNodeList()
+	if err != nil || node == nil {
+		node = make([]*subassemblynode.Subassemblynode, 0)
+		//this.ErrorPage(err)
+		//return
+	}
+	//nat 规则列表
+	if params.NodeId == 0 && len(node) > 0 {
+		params.NodeId = node[0].Id
+	}
+	fmt.Println("params.NodeId", params.NodeId)
 	list := make([]*server.ListResp, 0)
-	key := fmt.Sprintf("maltrail-list-%v", params.Date)
+	key := fmt.Sprintf("maltrail-list-%v-%v", params.NodeId, params.DayFrom)
 	lists, err := cache.CheckCache(key, func() (interface{}, error) {
 		list, err := server.GetList(&server.ListReq{
-			Date: params.Date,
+			Date:   params.DayFrom,
+			NodeId: params.NodeId,
 		})
 		return list, err
 	}, 60, true)
@@ -42,7 +57,9 @@ func (this *IndexAction) RunGet(params struct {
 	page := this.NewPage(int64(len(list)))
 	this.Data["page"] = page.AsHTML()
 
-	this.Data["date"] = params.Date
+	this.Data["dayFrom"] = params.DayFrom
+	this.Data["nodes"] = node
+	this.Data["selectNode"] = params.NodeId
 	if params.PageSize == 0 {
 		params.PageSize = 20
 	}

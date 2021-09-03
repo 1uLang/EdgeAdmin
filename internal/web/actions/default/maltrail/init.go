@@ -9,10 +9,10 @@ import (
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
-			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeNfw)).
+			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeMaltrail)).
 			//Helper(settingsutils.NewHelper("virus")).
 			Data("teaMenu", "maltrail").
-			Prefix("/nfw/maltrail/index").
+			Prefix("/maltrail/index").
 			Get("", new(IndexAction)).
 			EndAll()
 	})

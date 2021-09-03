@@ -93,4 +93,8 @@ Tea.context(function () {
         window.location.href = '/nfw/ips?nodeId=' + node
 
     }
+
+    this.ReplaceGt = function (str){
+        return str.replace("-&gt;","->")
+    }
 })
