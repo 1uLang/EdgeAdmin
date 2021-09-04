@@ -38,7 +38,6 @@ func (this *IndexAction) RunGet(params struct {
 	if params.NodeId == 0 && len(node) > 0 {
 		params.NodeId = node[0].Id
 	}
-	fmt.Println("params.NodeId", params.NodeId)
 	list := make([]*server.ListResp, 0)
 	key := fmt.Sprintf("maltrail-list-%v-%v", params.NodeId, params.DayFrom)
 	lists, err := cache.CheckCache(key, func() (interface{}, error) {
