@@ -63,7 +63,7 @@ func (this *IndexAction) RunGet(params struct {
 			update_total = string(dataSlice[1])
 		}
 
-		day := strings.Split(version.Version.Main, " on ")
+		day := strings.Split(version.Version.Daily, " on ")
 		dayly := ""
 		if len(day) >= 2 {
 			dayly = day[1]

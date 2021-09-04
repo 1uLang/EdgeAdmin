@@ -60,7 +60,7 @@ func (this *IndexAction) RunGet(params struct {
 	this.Data["ddos"] = ddos
 
 	this.Data["nodeId"] = params.NodeId
-	this.Data["address"] = params.Address
+	this.Data["Address"] = params.Address
 	this.Data["level"] = params.Level
 
 }
