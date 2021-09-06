@@ -184,7 +184,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/virus_log"
 
 	//apt 检测
-	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/maltrail"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/apt"
 
 	//监控告警
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/monitor"
