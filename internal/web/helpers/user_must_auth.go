@@ -298,14 +298,14 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 				},
 				//{
 				//	"name": "APT检测",
-				//	"url":  "/nfw/maltrail/index",
-				//	"code": "maltrail",
+				//	"url":  "/nfw/apt/logs",
+				//	"code": "apt",
 				//},
 			},
 		},
 		{
-			"code":   "maltrail",
-			"url":    "/maltrail/index",
+			"code":   "apt",
+			"url":    "/apt/logs",
 			"module": configloaders.AdminModuleCodeMaltrail,
 			"name":   "APT检测",
 			"icon":   "adn",
