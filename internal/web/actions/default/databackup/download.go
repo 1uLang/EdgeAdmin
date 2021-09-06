@@ -19,6 +19,7 @@ func (this *DownLoadAction) Init() {
 
 func (this *DownLoadAction) RunGet(params struct {
 	Name string
+	Fp   string
 }) {
 	// 获取token
 	token, err := model.QueryTokenByUID(this.AdminId(), 1)
@@ -39,7 +40,8 @@ func (this *DownLoadAction) RunGet(params struct {
 	// this.Data["url"] = dURL
 
 	// 获取下载字节流
-	rsp, err := request.DownLoadFile(token, params.Name)
+	// rsp, err := request.DownLoadFile(token, params.Name)
+	rsp, err := request.DownLoadFileWithPath(token, params.Fp)
 	if err != nil {
 		this.ErrorPage(fmt.Errorf("下载文件失败：%w", err))
 		return

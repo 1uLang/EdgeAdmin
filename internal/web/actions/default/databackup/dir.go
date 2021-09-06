@@ -6,16 +6,17 @@ import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 )
 
-type DeleteAction struct {
+type DirAction struct {
 	actionutils.ParentAction
 }
 
-func (this *DeleteAction) Init() {
+func (this *DirAction) Init() {
 	this.Nav("", "", "")
 }
 
-func (this *DeleteAction) RunPost(params struct {
-	Fp string
+func (this *DirAction) RunPost(params struct {
+	Purl string
+	Name string
 }) {
 	// 获取token
 	token, err := model.QueryTokenByUID(this.AdminId(), 1)
@@ -24,15 +25,11 @@ func (this *DeleteAction) RunPost(params struct {
 		return
 	}
 
-	// 删除文件
-	// err = request.DeleteFile(token, params.Name)
-	err = request.DeleteFileWithPath(token, params.Fp)
+	err = request.CreateFoler(token,params.Purl,params.Name)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-
-	defer this.CreateLogInfo("删除数据备份文件 %v", params.Fp)
 
 	this.Success()
 }
