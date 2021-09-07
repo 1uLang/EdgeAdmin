@@ -15,7 +15,7 @@ func (this *DeleteAction) Init() {
 }
 
 func (this *DeleteAction) RunPost(params struct {
-	Name string
+	Fp string
 }) {
 	// 获取token
 	token, err := model.QueryTokenByUID(this.AdminId(), 1)
@@ -25,13 +25,14 @@ func (this *DeleteAction) RunPost(params struct {
 	}
 
 	// 删除文件
-	err = request.DeleteFile(token, params.Name)
+	// err = request.DeleteFile(token, params.Name)
+	err = request.DeleteFileWithPath(token, params.Fp)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
 
-	defer this.CreateLogInfo("删除数据备份文件 %v", params.Name)
+	defer this.CreateLogInfo("删除数据备份文件 %v", params.Fp)
 
 	this.Success()
 }

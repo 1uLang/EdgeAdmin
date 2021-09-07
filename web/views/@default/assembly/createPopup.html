@@ -198,6 +198,41 @@
             </td>
         </tr>
         </tbody>
-    </table>
-    <submit-btn></submit-btn>
+        <!--  云底座      -->
+        <tbody v-if="showAPIAUTHVisible == 10">
+        <tr>
+            <td>username *</td>
+            <td>
+                <input type="text" name="key" maxlength="100"/>
+                <p class="comment">登录云底座所使用的账号</p>
+            </td>
+        </tr>
+        <tr>
+            <td>password *</td>
+            <td>
+                <input type="password" name="secret" maxlength="100"/>
+                <p class="comment">登录云底座所使用的密码</p>
+            </td>
+        </tr>
+        </tbody>
+
+        <!--  apt      -->
+        <tbody v-if="showAPIAUTHVisible == 11">
+        <tr>
+            <td>username *</td>
+            <td>
+                <input type="text" name="key" maxlength="100"/>
+                <p class="comment">登录apt所使用的账号</p>
+            </td>
+        </tr>
+        <tr>
+            <td>password *</td>
+            <td>
+                <input type="password" name="secret" maxlength="100"/>
+                <p class="comment">登录apt所使用的密码</p>
+            </td>
+        </tr>
+        </tbody>
+	</table>
+	<submit-btn></submit-btn>
 </form>

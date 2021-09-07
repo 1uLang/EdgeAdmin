@@ -2,6 +2,7 @@ package admins
 
 import (
 	"encoding/json"
+
 	"github.com/1uLang/zhiannet-api/common/server/edge_admins_server"
 	"github.com/1uLang/zhiannet-api/nextcloud/model"
 	nc_req "github.com/1uLang/zhiannet-api/nextcloud/request"
@@ -98,6 +99,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 	// 创建nextcloud账号，并写入数据库
 	adminToken := nc_req.GetAdminToken()
 	userPwd := `adminAd#@2021`
+	// userPwd := params.Pass1
 	un := "admin_" + params.Username
 	err = nc_req.CreateUserV2(adminToken, un, userPwd)
 	if err != nil {

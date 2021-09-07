@@ -66,9 +66,9 @@ Tea.context(function () {
     }
     this.search = function () {
         if (this.nShowState == 1) {
-            window.location.href = "/ddos/logs?NodeId=" + this.nodeId + "&Level=" + this.level
+            window.location.href = "/ddos/logs?NodeId=" + this.nodeId + "&Level=" + this.level+ "&address=" + this.Address
         } else if (this.nShowState == 3) {
-            this.$get(".link").params({NodeId: this.nodeId , Level: this.level}).success(resp => {
+            this.$get(".link").params({NodeId: this.nodeId , Level: this.level,address:this.Address}).success(resp => {
                 if (resp.code === 200) {
                     if (resp.data.links)
                         this.links = resp.data.links
