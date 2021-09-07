@@ -36,7 +36,6 @@ func (this *IndexAction) RunGet(params struct {
 				"conn_state": v.ConnState == 1,
 				"key":        v.Key,
 				"secret":     v.Secret,
-				"idc_name":   idcMap[v.Idc],
 				"type_name":  typeMap[v.Type],
 			}
 		}

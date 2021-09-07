@@ -55,7 +55,7 @@ func (this *UpdateAction) RunPost(params struct {
 	Addr         string
 	Port         int64
 	AssemblyType int
-	IdcId        int
+	Idc          string
 	//Status       int
 	State     int
 	Key       string
@@ -69,7 +69,9 @@ func (this *UpdateAction) RunPost(params struct {
 
 	params.Must.
 		Field("name", params.Name).
-		Require("请输入节点名称")
+		Require("请输入节点名称").
+		Field("idc", params.Idc).
+		Require("请输入数据中心")
 
 	params.Must.
 		Field("addr", params.Addr).
@@ -84,11 +86,6 @@ func (this *UpdateAction) RunPost(params struct {
 	if !isExist {
 		this.Fail("请选择节点类型")
 	}
-	//检测数据中心
-	_, isExist = idcMap[params.IdcId]
-	if !isExist {
-		this.Fail("请选择数据中心")
-	}
 
 	_, err := subassemblynode_server.Edit(&subassemblynode.Subassemblynode{
 		Id:     params.Id,
@@ -96,7 +93,7 @@ func (this *UpdateAction) RunPost(params struct {
 		Addr:   params.Addr,
 		Port:   params.Port,
 		Type:   params.AssemblyType,
-		Idc:    params.IdcId,
+		Idc:    params.Idc,
 		State:  1,
 		Key:    params.Key,
 		Secret: params.Secret,

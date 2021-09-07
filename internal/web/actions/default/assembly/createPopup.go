@@ -35,7 +35,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 	Name         string
 	Addr         string
 	Port         int64
-	IdcId        int
+	Idc          string
 	Key          string
 	Secret       string
 	AssemblyType int
@@ -47,7 +47,9 @@ func (this *CreatePopupAction) RunPost(params struct {
 }) {
 	params.Must.
 		Field("name", params.Name).
-		Require("请输入节点名称")
+		Require("请输入节点名称").
+		Field("idc", params.Idc).
+		Require("请输入数据中心称")
 
 	params.Must.
 		Field("addr", params.Addr).
@@ -61,11 +63,6 @@ func (this *CreatePopupAction) RunPost(params struct {
 	_, isExist := typeMap[params.AssemblyType]
 	if !isExist {
 		this.Fail("请选择节点类型")
-	}
-	//检测数据中心
-	_, isExist = idcMap[params.IdcId]
-	if !isExist {
-		this.Fail("请选择数据中心")
 	}
 	switch params.AssemblyType {
 	case 1: //ddos防火墙
@@ -124,7 +121,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 		Name:   params.Name,
 		Addr:   params.Addr,
 		Port:   params.Port,
-		Idc:    params.IdcId,
+		Idc:    params.Idc,
 		Type:   params.AssemblyType,
 		State:  1,
 		Key:    params.Key,
