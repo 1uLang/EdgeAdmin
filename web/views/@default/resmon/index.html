@@ -4,9 +4,13 @@
 {$end}
 
 <div>
-    <div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
+    <!--<div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
         <div style="cursor: pointer;margin-top: 10px;" @click="onAddHost">[添加主机]</div>
-    </div>
+    </div>-->
+
+    <first-menu>
+        <menu-item @click.prevent="onAddHost">添加主机</menu-item>
+    </first-menu>
 
     <div style="width: 100%;height: 600px;margin-top: 10px;overflow-x: auto; overflow-y: auto;">
         <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
