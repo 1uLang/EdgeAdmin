@@ -8,6 +8,7 @@ replace github.com/TeaOSLab/EdgeCommon => ../EdgeCommon
 
 require (
 	github.com/1uLang/zhiannet-api v0.0.0-00010101000000-000000000000
+	github.com/SebastiaanKlippert/go-wkhtmltopdf v1.7.1 // indirect
 	github.com/TeaOSLab/EdgeCommon v0.0.0-00010101000000-000000000000
 	github.com/cespare/xxhash v1.1.0
 	github.com/dlclark/regexp2 v1.4.0
@@ -26,5 +27,6 @@ require (
 	golang.org/x/sys v0.0.0-20210616094352-59db8d763f22
 	google.golang.org/genproto v0.0.0-20210617175327-b9e0b3197ced // indirect
 	google.golang.org/grpc v1.38.0
+	gopkg.in/fatih/set.v0 v0.2.1 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 )
