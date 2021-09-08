@@ -7,6 +7,7 @@ import (
 	"github.com/1uLang/zhiannet-api/nextcloud/model"
 	"github.com/1uLang/zhiannet-api/nextcloud/request"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/iwind/TeaGo/actions"
 )
 
 type DownLoadAction struct {
@@ -20,7 +21,16 @@ func (this *DownLoadAction) Init() {
 func (this *DownLoadAction) RunGet(params struct {
 	Name string
 	Fp   string
+
+	Must *actions.Must
 }) {
+	params.Must.
+		Field("id", params.Fp).
+		Require("请输入文件id")
+	if params.Fp == "" {
+		this.Fail("fp不能为空")
+	}
+
 	// 获取token
 	token, err := model.QueryTokenByUID(this.AdminId(), 1)
 	if err != nil {

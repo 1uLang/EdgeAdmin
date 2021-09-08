@@ -8,6 +8,7 @@ replace github.com/TeaOSLab/EdgeCommon => ../EdgeCommon
 
 require (
 	github.com/1uLang/zhiannet-api v0.0.0-00010101000000-000000000000
+	github.com/SebastiaanKlippert/go-wkhtmltopdf v1.7.1 // indirect
 	github.com/TeaOSLab/EdgeCommon v0.0.0-00010101000000-000000000000
 	github.com/cespare/xxhash v1.1.0
 	github.com/dlclark/regexp2 v1.4.0
