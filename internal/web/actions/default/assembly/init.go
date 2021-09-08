@@ -16,7 +16,6 @@ func init() {
 			Get("", new(IndexAction)).
 			GetPost("/createPopup", new(CreatePopupAction)).
 			GetPost("/update", new(UpdateAction)).
-			Post("/idc/options", new(IDCOptionsAction)).
 			Post("/options", new(OptionsAction)).
 			Post("/delete", new(DeleteAction)).
 			EndAll()
@@ -35,9 +34,4 @@ var typeMap = map[int]string{
 	9:  "节点监控",
 	10: "云底座",
 	11: "APT检测",
-}
-var idcMap = map[int]string{
-	1: "成都IDC",
-	2: "杭州IDC",
-	3: "济南IDC",
 }

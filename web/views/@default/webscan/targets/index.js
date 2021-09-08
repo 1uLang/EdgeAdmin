@@ -216,4 +216,16 @@ Tea.context(function () {
         }
 
     };
+    this.details = function (item) {
+        let host = false
+        if (item.owner)
+            host = true
+        teaweb.popup(Tea.url("/webscan/targets/update?id=" + item.id + "&addr=" + item.address + "&desc=" + item.description + "&host=" + host), {
+            callback: function () {
+                teaweb.success("保存成功", function () {
+                    teaweb.reload();
+                });
+            },
+        });
+    }
 });

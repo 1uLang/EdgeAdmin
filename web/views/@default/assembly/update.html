@@ -36,7 +36,13 @@
         <tr>
             <td>数据中心 *</td>
             <td>
-                <idc-selector :v-idc-id="node.idc"></idc-selector>
+                <div style="display: flex;flex-direction: column;">
+                    <input type="text" name="idc" maxlength="100"/>
+                    <span style="font-size: 12px;color: #aaa;margin-top: 5px;">
+                        组件IP所属数据中心
+                    </span>
+                </div>
+                <!--                <idc-selector></idc-selector>-->
             </td>
         </tr>
         <tr>
