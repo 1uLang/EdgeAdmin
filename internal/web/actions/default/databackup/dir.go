@@ -30,13 +30,13 @@ func (this *DirAction) RunPost(params struct {
 	// 获取token
 	token, err := model.QueryTokenByUID(this.AdminId(), 1)
 	if err != nil {
-		this.ErrorPage(err)
+		this.FailField("error",err.Error())
 		return
 	}
 
 	err = request.CreateFoler(token, params.Purl, params.Name)
 	if err != nil {
-		this.ErrorPage(err)
+		this.FailField("error",err.Error())
 		return
 	}
 
