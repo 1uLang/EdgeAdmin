@@ -11,6 +11,8 @@ func init() {
 			Helper(helpers.NewUserMustAuth("")).
 			Prefix("/hostlist").
 			GetPost("", new(IndexAction)).
+			Prefix("/create").
+			GetPost("", new(CreatePopupAction)).
 			EndAll()
 	})
 }

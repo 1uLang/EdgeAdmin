@@ -236,6 +236,13 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			},
 		},
 		{
+			"code":   "hostlist",
+			"url":    "/hostlist",
+			"module": configloaders.AdminModuleCodeHostlist,
+			"name":   "云主机管理",
+			"icon":   "tv",
+		},
+		{
 			"code":   "ddos",
 			"url":    "/ddos/host",
 			"module": configloaders.AdminModuleCodeDdos,
@@ -683,13 +690,6 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"module": configloaders.AdminModuleCodeBackup,
 			"name":   "数据备份",
 			"icon":   "copy",
-		},
-		{
-			"code":   "hostlist",
-			"url":    "/hostlist",
-			"module": configloaders.AdminModuleCodeHostlist,
-			"name":   "主机列表",
-			"icon":   "tv",
 		},
 		//		{
 		//			"name": "查询分析",
