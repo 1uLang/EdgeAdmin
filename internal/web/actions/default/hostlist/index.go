@@ -2,6 +2,7 @@ package hostlist
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/1uLang/zhiannet-api/zstack/request/host"
 	"github.com/1uLang/zhiannet-api/zstack/server/host_server"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
@@ -29,18 +30,21 @@ func (this *IndexAction) RunGet(params struct{}) {
 			momory := memorySize / 1024 / 1024 / 1024
 			//cTime, _ := time.ParseInLocation("Mon 02, 2006 03:04:05", v.Get("createDate").String(), time.Local)
 			row := map[string]interface{}{
+				"uuid":       v.Get("uuid").String(),
 				"name":       v.Get("name").String(),
 				"cpu":        v.Get("cpuNum").Int(),
-				"memory":     momory,
+				"memory":     fmt.Sprintf("%v G", momory),
 				"ip":         v.Get("vmNics.0.ip").String(),
-				"state":      v.Get("state").String(),
-				"createDate": v.Get("createDate").String(),
+				"physicsIP":  v.Get("managementIp").String(),
+				"status":     v.Get("state").String(),
+				"createTime": v.Get("createDate").String(),
 				//"createDate":cTime.Format("2006-01-02 15:04:05"),
+				"prohibitMigrating": v.Get("prohibitMigrating").Bool(),
 			}
 			lists = append(lists, row)
 		}
 	}
-	this.Data["list"] = lists
+	this.Data["tableData"] = lists
 
 	this.Show()
 }

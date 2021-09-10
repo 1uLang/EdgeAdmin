@@ -1,15 +1,14 @@
-.sure-btn{
-    height: 32px;
-    margin-left: 15px;
-    padding: 0 20px !important;
-    color: #fff;
-    background-color: #276ac6;
-    font-size: 14px;
-    font-weight: normal;
-    border-radius: 5px;
-    text-align: center;
-    line-height: 32px;
+.menu-define-color{
+    color: #000;
     cursor: pointer;
+    margin-right: 15px;
+    margin-top: 10px;
+}
+.menu-select-color{
+    color: #276ac6;
+    cursor: pointer;
+    margin-right: 15px;
+    margin-top: 10px;
 }
 
 .table-head-bg{
@@ -33,87 +32,106 @@
     border-radius: 5px;
     border: 1px solid #db2828;
 }
+.status-blue{
+    display: inline-block;
+    color: #0090cb;
+    font-weight: 700;
+    padding: 4px 6px;
+    border-radius: 5px;
+    border: 1px solid #0090cb;
+}
+.status-grey{
+    display: inline-block;
+    color: #d7d7d7;
+    font-weight: 700;
+    padding: 4px 6px;
+    border-radius: 5px;
+    border: 1px solid #d7d7d7;
+}
 
 .edit_btn{
     color: #0090cb;
     cursor: pointer;
 }
-
-.del-btn{
-    color: #D51F16;
+.disabled_btn{
+    color: #d7d7d7;
     cursor: pointer;
 }
+.add-btn{
+    min-width: 20px;
+    max-width: 20px;
+    min-height: 20px;
+    max-height: 20px;
+    margin-right: 10px;
+    border: 1px solid #333;
+    font-size: 20px;
+    text-align: center;
+    line-height: 17px;
+    font-weight: bolder;
+    border-radius: 50%;
+}
 
-
-<!-- 授权css -->
-
-.clean-btn{
-    width: 60px;
+.contain-style{
+    width: 100%;
     height: 30px;
-    color: #333;
+    border: 1px solid #d7d7d7; 
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+.click-contain-style{
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    position: absolute;
+}
+
+.save-btn{
+    width: 80px;
+    height: 35px;
+    background-color: #276ac6;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
     border-radius: 5px;
     text-align: center;
-    line-height: 30px;
+    line-height: 35px;
     cursor: pointer;
-    border: 1px solid #d7d7d7;
 }
+.clean-btn{
+    width: 80px;
+    height: 35px;
+    margin-right: 20px;
+    background-color: #d7d7d7;
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 35px;
+    cursor: pointer;
+}
+
 .dialog-style{
     position: fixed;
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.7);
     z-index: 1;display: flex;
     justify-content: center;
     align-items: center;
 }
-
 .dialog-bg-style{
-    width: 600px;
+    width: 700px;
     height: 400px;
-    background: inherit;
-    background-color: rgba(255, 255, 255, 1);
-    box-sizing: border-box;
-    border-width: 1px;
-    border-style: solid;
-    border-color: rgba(215, 215, 215, 1);
-    border-radius: 0px;
-    box-shadow: none;
-}
-
-.auth-middle-btn-stype{
-    width: 80px;
-    height: 30px;
-    line-height: 30px;
-    text-align: center;
-    border: 1px solid #d7d7d7;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.auth-people-box-style{
-    width: 150px;
-    height: 250px;
+    background-color: #fff;
     display: flex;
     flex-direction: column;
-    border: 1px solid #d7d7d7;
-}
-
-.auth-people-title-style{
-    border-bottom: 1px solid #d7d7d7;
-    padding: 5px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.auth-people-content-style{
-    padding: 5px;
-    display: flex;
-    flex-direction: row;
     justify-content: start;
-    align-items: center;
-    cursor: default;
 }
+

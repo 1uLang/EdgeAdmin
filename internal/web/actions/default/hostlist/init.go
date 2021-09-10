@@ -11,8 +11,20 @@ func init() {
 			Helper(helpers.NewUserMustAuth("")).
 			Prefix("/hostlist").
 			GetPost("", new(IndexAction)).
-			Prefix("/create").
+			Prefix("/hostlist/create").
 			GetPost("", new(CreatePopupAction)).
+			Prefix("/hostlist/activity").
+			GetPost("", new(ActivityAction)).
+			Prefix("/hostlist/spec").
+			GetPost("", new(SpecAction)).
+			Prefix("/hostlist/image").
+			GetPost("", new(ImageAction)).
+			Prefix("/hostlist/network").
+			GetPost("", new(NetworkAction)).
+			Prefix("/hostlist/disk").
+			GetPost("", new(DiskAction)).
+			Prefix("/hostlist/candidate").
+			GetPost("", new(CandidateAction)).
 			EndAll()
 	})
 }
