@@ -1,0 +1,39 @@
+<!-- 病毒管理 -->
+{$layout}
+{$template "/datepicker"}
+{$var "header"}
+{$end}
+
+
+<div style="height: 40px;margin-top: 10px;display: flex;flex-direction: row;align-items: center;">
+    <span style="font-size: 14px;margin-right: 5px;height: 32px;line-height: 32px;">主机：</span>
+    <select class="ui dropdown auto-width" v-model="ipSelectIndex">
+        <option value="">请选择</option>
+        <option v-for="item in ipData" :value="item.id">{{item.ip}}</option>
+    </select>
+</div>
+<p class="comment" v-if="tableData.length == 0">暂时没有漏洞风险。</p>
+<div style="width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;margin-top: 10px" v-else>
+    <table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;">
+        <thead>
+        <tr align="center">
+            <th class='table-head-bg' style="width: 110px;">主机IP</th>
+            <th class='table-head-bg' style="width: 150px;">主机名称</th>
+            <th class='table-head-bg' style="width: 300px;">sha1值</th>
+            <th class='table-head-bg' style="width: 300px;">路径</th>
+            <th class='table-head-bg' style="width: 150px;">发现时间</th>
+        </tr>
+        </thead>
+        <tbody id='tableBody'>
+        <tr align="center" style="height: 40px;" v-for="item in tableData">
+            <td>{{item.hostIP}}</td>
+            <td>{{item.hostName}}</td>
+            <td>{{item.shaValue}}</td>
+            <td>{{item.pathValue}}</td>
+            <td>{{onChangeTimeFormat(item.findTime)}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<!-- <div class="page" v-html="page"></div> -->
+
