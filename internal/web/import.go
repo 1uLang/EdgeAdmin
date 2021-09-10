@@ -165,6 +165,9 @@ import (
 	// web漏洞扫描
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/waf"
 
+	// wazuh 主机防护
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/wazuh"
+
 	// web漏洞扫描
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/webscan"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/webscan/reports"

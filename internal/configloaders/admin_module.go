@@ -41,6 +41,8 @@ const (
 
 var sharedAdminModuleMapping = map[int64]*AdminModuleList{} // adminId => AdminModuleList
 
+var HIDSType = "safedog"
+
 func loadAdminModuleMapping() (map[int64]*AdminModuleList, error) {
 	if len(sharedAdminModuleMapping) > 0 {
 		return sharedAdminModuleMapping, nil
