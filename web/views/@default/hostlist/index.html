@@ -60,18 +60,29 @@
                 </td>
                 <td>
                     <div style="display: flex;justify-content: space-around;padding: 4px 0;">
-                        <div  class="{'edit_btn':item.status!='Running','disabled_btn':item.status=='Running'}" @click="onOpen(item)">启用</div>
-                        <div class="{'edit_btn':item.status!='Stopped','disabled_btn':item.status=='Stopped'}" @click="onStop(item)">停用</div>
+                        <div :class="{'edit_btn':item.status!='Running','disabled_btn':item.status=='Running'}" @click="onOpen(item)">启用</div>
+                        <div :class="{'edit_btn':item.status!='Stopped','disabled_btn':item.status=='Stopped'}" @click="onStop(item)">停用</div>
                         <div class="edit_btn" style="position: relative;" @click.stop="onMore(item.uuid)">更多&#9660;
                             <div v-if="nSelectId == item.uuid"
-                                style="position: absolute;width: 80px;height: 120px;background-color: #fff;right: 0px;z-index: 999;
-                                display: flex;flex-direction: column;justify-content: space-around;border: 1px solid #d7d7d7;cursor: default;"
+                                style="position: absolute;width: 90px;height: auto;background-color: #fff;right: 0px;z-index: 999;
+                                display: flex;flex-direction: column;justify-content: start;border: 1px solid #d7d7d7;cursor: default;"
                                 @click.stop>
-                                <span style="cursor: pointer;color: #333;" @click="onRestartPower(item)">重启电源</span>
-                                <span  style="cursor: pointer;color: #333;" @click="onPausePower(item)">暂停电源</span>
-                                <span style="cursor: pointer;color: #333;" @click="onRebackPower(item)">恢复电源</span>
-                                <span v-if="!item.prohibitMigrating" style="cursor: pointer;color: #333;" @click="onMoveHost(item)">迁移主机</span>
-                                <span style="cursor: pointer;color: #333;" @click="onDeleteHost(item)">删除主机</span>
+                                <div @mouseenter="mouseEnter(1)" @mouseleave="mouseLeave()"
+                                    style="height: 36px;cursor: pointer;color: #333;line-height: 36px;text-align: center;" @click="onRestartPower(item)"
+                                    :style="{'color':item.status == 'Running' ? '#333':'#999','background-color':nMoreBtnSelet==1 ? '#f6f6f6':'#fff'}">重启电源</div>
+                                <div @mouseenter="mouseEnter(2)" @mouseleave="mouseLeave()"
+                                style="height: 36px;cursor: pointer;color: #333;line-height: 36px;text-align: center;" @click="onPausePower(item)"
+                                :style="{'color':item.status == 'Running' ? '#333':'#999','background-color':nMoreBtnSelet==2 ? '#f6f6f6':'#fff'}" >暂停电源</div>
+                                <div @mouseenter="mouseEnter(3)" @mouseleave="mouseLeave()"
+                                    style="height: 36px;cursor: pointer;color: #333;line-height: 36px;text-align: center;" @click="onRebackPower(item)"
+                                    :style="{'color':item.status == 'Paused' ? '#333':'#999','background-color':nMoreBtnSelet==3 ? '#f6f6f6':'#fff'}" >恢复电源</div>
+                                <div v-if="!item.prohibitMigrating" @mouseenter="mouseEnter(4)" @mouseleave="mouseLeave()"
+                                    style="height: 36px;cursor: pointer;color: #333;line-height: 36px;text-align: center;" @click="onMoveHost(item)"
+                                    :style="{'color':(item.status != 'Stopping' && item.status != 'Rebooting' && item.status != 'Migrating') ? '#333':'#999',
+                                            'background-color':nMoreBtnSelet==4 ? '#f6f6f6':'#fff'}">迁移主机</div>
+                                <div @mouseenter="mouseEnter(5)" @mouseleave="mouseLeave()"
+                                    style="height: 36px;cursor: pointer;color: #333;line-height: 36px;text-align: center;" @click="onDeleteHost(item)"
+                                    :style="{'background-color':nMoreBtnSelet==5 ? '#f6f6f6':'#fff'}">删除主机</div>
                             </div>
                         </div>
                     </div>

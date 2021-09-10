@@ -12,6 +12,7 @@ Tea.context(function () {
     this.nShowRuleType = 1  //1 计算规格 2 镜像  3 网格   4 物理列表  5根云盘
 
     this.nPhysicsSelect = -1
+    this.nMoreBtnSelet = -1
 
     this.nSelectHostRule = -1
     this.nSelectMirrorRule = -1
@@ -209,7 +210,7 @@ Tea.context(function () {
     }
 
     this.onMoveHost = function (item) {
-        if (item.status != 'Stopping' || item.status != 'Rebooting' || item.status != 'Migrating') {
+        if (item.status != 'Stopping' && item.status != 'Rebooting' && item.status != 'Migrating') {
             this.onMore(-1)
             this.onOpenPhysics(item.uuid)
             this.migrationUuid = item.uuid
@@ -445,49 +446,55 @@ Tea.context(function () {
             }
         }
     }
+    this.mouseEnter = function(id){
+        this.nMoreBtnSelet = id
+    }
+    this.mouseLeave = function(){
+        this.nMoreBtnSelet = -1
+    }
 
-    // this.tableData = [
-    //     {
-    //         uuid: 1,
-    //         name: "云主机1",
-    //         cpu: "4",
-    //         memory: "4GB",
-    //         ip: "192.168.0.1",
-    //         physicsIP: "192.168.1.0",
-    //         status: 1,
-    //         createTime: "2021-01-01T12:58:15.123"
-    //     },
-    //     {
-    //         uuid: 2,
-    //         name: "云主机1",
-    //         cpu: "4",
-    //         memory: "8GB",
-    //         ip: "192.168.0.2",
-    //         physicsIP: "192.168.2.0",
-    //         status: 2,
-    //         createTime: "2021-01-01T12:58:15.123"
-    //     },
-    //     {
-    //         uuid: 3,
-    //         name: "云主机1",
-    //         cpu: "4",
-    //         memory: "16GB",
-    //         ip: "192.168.0.3",
-    //         physicsIP: "192.168.3.0",
-    //         status: 3,
-    //         createTime: "2021-01-01T12:58:15.123"
-    //     },
-    //     {
-    //         uuid: 4,
-    //         name: "云主机1",
-    //         cpu: "4",
-    //         memory: "32GB",
-    //         ip: "192.168.0.4",
-    //         physicsIP: "192.168.4.0",
-    //         status: 4,
-    //         createTime: "2021-01-01T12:58:15.123"
-    //     },
-    // ]
+    this.tableData = [
+        {
+            uuid: 1,
+            name: "云主机1",
+            cpu: "4",
+            memory: "4GB",
+            ip: "192.168.0.1",
+            physicsIP: "192.168.1.0",
+            status: "Running",
+            createTime: "2021-01-01T12:58:15.123"
+        },
+        {
+            uuid: 2,
+            name: "云主机1",
+            cpu: "4",
+            memory: "8GB",
+            ip: "192.168.0.2",
+            physicsIP: "192.168.2.0",
+            status: 2,
+            createTime: "2021-01-01T12:58:15.123"
+        },
+        {
+            uuid: 3,
+            name: "云主机1",
+            cpu: "4",
+            memory: "16GB",
+            ip: "192.168.0.3",
+            physicsIP: "192.168.3.0",
+            status: 3,
+            createTime: "2021-01-01T12:58:15.123"
+        },
+        {
+            uuid: 4,
+            name: "云主机1",
+            cpu: "4",
+            memory: "32GB",
+            ip: "192.168.0.4",
+            physicsIP: "192.168.4.0",
+            status: 4,
+            createTime: "2021-01-01T12:58:15.123"
+        },
+    ]
 
     this.hostRuleData = [
         {uuid: 1, name: "主机1", cpu: "4", memory: "4GB", createTime: "2021-01-01T12:58:15.123"},

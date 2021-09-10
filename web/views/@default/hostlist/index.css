@@ -55,7 +55,7 @@
 }
 .disabled_btn{
     color: #d7d7d7;
-    cursor: pointer;
+    cursor: default;
 }
 .add-btn{
     min-width: 20px;
