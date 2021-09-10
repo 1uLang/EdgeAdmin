@@ -1,0 +1,116 @@
+// 主机防护使用wazuh组件
+// +build wazuh
+
+package wazuh
+
+import (
+	"github.com/1uLang/zhiannet-api/wazuh/model/agents"
+	"github.com/1uLang/zhiannet-api/wazuh/server"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+)
+
+type BaselineAction struct {
+	actionutils.ParentAction
+}
+
+func (this *BaselineAction) Init() {
+	this.Nav("", "", "baseline")
+}
+
+func (this *BaselineAction) RunGet(params struct {
+	Agent string
+}) {
+
+	err := InitAPIServer()
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	agent, err := server.AgentList(&agents.ListReq{
+		//AdminUserId: this.AdminId(),
+	})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	if len(agent.AffectedItems) == 0 {
+		this.FailField("agent", "请先添加资产")
+	}
+	if params.Agent == "" {
+		params.Agent = "007"
+	}
+	list, err := server.BaselineList(agents.SCAListReq{
+		Agent:  params.Agent,
+		Limit:  1,
+		Offset: 0,
+	})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+
+	page := this.NewPage(list.TotalAffectedItems)
+	this.Data["page"] = page.AsHTML()
+
+	list, err = server.BaselineList(agents.SCAListReq{
+		Agent:  params.Agent,
+		Limit:  page.Size,
+		Offset: page.Offset,
+	})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	this.Data["baseline"] = list.AffectedItems
+
+	agts := map[string]map[string]string{}
+	for _, v := range agent.AffectedItems {
+		agts[v.ID] = map[string]string{
+			"ip":   v.IP,
+			"name": v.Name,
+		}
+	}
+	this.Data["agents"] = agts
+	this.Data["agent"] = params.Agent
+
+	this.Show()
+}
+
+type BaselineDetailsAction struct {
+	actionutils.ParentAction
+}
+
+func (this *BaselineDetailsAction) Init() {
+	this.Nav("", "", "details")
+}
+
+func (this *BaselineDetailsAction) RunGet(params struct {
+	Agent  string
+	Policy string
+}) {
+	list, err := server.BaselineDetailsList(agents.SCADetailsListReq{
+		Agent:  params.Agent,
+		Policy: params.Policy,
+		Limit:  1,
+		Offset: 0,
+	})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	page := this.NewPage(list.TotalAffectedItems)
+	this.Data["page"] = page.AsHTML()
+
+	list, err = server.BaselineDetailsList(agents.SCADetailsListReq{
+		Agent:  params.Agent,
+		Policy: params.Policy,
+		Limit:  page.Size,
+		Offset: page.Offset,
+	})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	this.Data["details"] = list.AffectedItems
+	this.Show()
+}
