@@ -76,9 +76,10 @@
                                 <div @mouseenter="mouseEnter(3)" @mouseleave="mouseLeave()"
                                     style="height: 36px;cursor: pointer;color: #333;line-height: 36px;text-align: center;" @click="onRebackPower(item)"
                                     :style="{'color':item.status == 'Paused' ? '#333':'#999','background-color':nMoreBtnSelet==3 ? '#f6f6f6':'#fff'}" >恢复电源</div>
-                                <div v-if="!item.prohibitMigrating" @mouseenter="mouseEnter(4)" @mouseleave="mouseLeave()"
+                                <!--v-if="!item.prohibitMigrating"-->
+                                <div  @mouseenter="mouseEnter(4)" @mouseleave="mouseLeave()"
                                     style="height: 36px;cursor: pointer;color: #333;line-height: 36px;text-align: center;" @click="onMoveHost(item)"
-                                    :style="{'color':(item.status != 'Stopping' && item.status != 'Rebooting' && item.status != 'Migrating') ? '#333':'#999',
+                                    :style="{'color':(item.status != 'Stopping' && item.status != 'Rebooting' && item.status != 'Migrating' && !item.prohibitMigrating) ? '#333':'#999',
                                             'background-color':nMoreBtnSelet==4 ? '#f6f6f6':'#fff'}">迁移主机</div>
                                 <div @mouseenter="mouseEnter(5)" @mouseleave="mouseLeave()"
                                     style="height: 36px;cursor: pointer;color: #333;line-height: 36px;text-align: center;" @click="onDeleteHost(item)"
