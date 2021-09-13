@@ -210,7 +210,7 @@ Tea.context(function () {
     }
 
     this.onMoveHost = function (item) {
-        if (item.status != 'Stopping' && item.status != 'Rebooting' && item.status != 'Migrating') {
+        if (item.status != 'Stopping' && item.status != 'Rebooting' && item.status != 'Migrating' && !item.prohibitMigrating) {
             this.onMore(-1)
             this.onOpenPhysics(item.uuid)
             this.migrationUuid = item.uuid
@@ -453,119 +453,119 @@ Tea.context(function () {
         this.nMoreBtnSelet = -1
     }
 
-    this.tableData = [
-        {
-            uuid: 1,
-            name: "云主机1",
-            cpu: "4",
-            memory: "4GB",
-            ip: "192.168.0.1",
-            physicsIP: "192.168.1.0",
-            status: "Running",
-            createTime: "2021-01-01T12:58:15.123"
-        },
-        {
-            uuid: 2,
-            name: "云主机1",
-            cpu: "4",
-            memory: "8GB",
-            ip: "192.168.0.2",
-            physicsIP: "192.168.2.0",
-            status: 2,
-            createTime: "2021-01-01T12:58:15.123"
-        },
-        {
-            uuid: 3,
-            name: "云主机1",
-            cpu: "4",
-            memory: "16GB",
-            ip: "192.168.0.3",
-            physicsIP: "192.168.3.0",
-            status: 3,
-            createTime: "2021-01-01T12:58:15.123"
-        },
-        {
-            uuid: 4,
-            name: "云主机1",
-            cpu: "4",
-            memory: "32GB",
-            ip: "192.168.0.4",
-            physicsIP: "192.168.4.0",
-            status: 4,
-            createTime: "2021-01-01T12:58:15.123"
-        },
-    ]
+    // this.tableData = [
+    //     {
+    //         uuid: 1,
+    //         name: "云主机1",
+    //         cpu: "4",
+    //         memory: "4GB",
+    //         ip: "192.168.0.1",
+    //         physicsIP: "192.168.1.0",
+    //         status: "Running",
+    //         createTime: "2021-01-01T12:58:15.123"
+    //     },
+    //     {
+    //         uuid: 2,
+    //         name: "云主机1",
+    //         cpu: "4",
+    //         memory: "8GB",
+    //         ip: "192.168.0.2",
+    //         physicsIP: "192.168.2.0",
+    //         status: 2,
+    //         createTime: "2021-01-01T12:58:15.123"
+    //     },
+    //     {
+    //         uuid: 3,
+    //         name: "云主机1",
+    //         cpu: "4",
+    //         memory: "16GB",
+    //         ip: "192.168.0.3",
+    //         physicsIP: "192.168.3.0",
+    //         status: 3,
+    //         createTime: "2021-01-01T12:58:15.123"
+    //     },
+    //     {
+    //         uuid: 4,
+    //         name: "云主机1",
+    //         cpu: "4",
+    //         memory: "32GB",
+    //         ip: "192.168.0.4",
+    //         physicsIP: "192.168.4.0",
+    //         status: 4,
+    //         createTime: "2021-01-01T12:58:15.123"
+    //     },
+    // ]
 
-    this.hostRuleData = [
-        {uuid: 1, name: "主机1", cpu: "4", memory: "4GB", createTime: "2021-01-01T12:58:15.123"},
-        {uuid: 2, name: "主机2", cpu: "4", memory: "8GB", createTime: "2021-02-01T12:58:15.123"},
-        {uuid: 3, name: "主机3", cpu: "4", memory: "16GB", createTime: "2021-03-01T12:58:15.123"},
-        {uuid: 4, name: "主机4", cpu: "4", memory: "32GB", createTime: "2021-04-01T12:58:15.123"},
-    ]
-
-    this.mirrorRuleData = [
-        {
-            uuid: 1,
-            name: "CentOS7",
-            mirrorType: "系统镜像1",
-            mirrorFormat: "IOS",
-            platform: "Linux",
-            size: "950M",
-            createTime: "2021-01-01T12:58:15.123"
-        },
-        {
-            uuid: 2,
-            name: "Ubuntu2.0",
-            mirrorType: "系统镜像2",
-            mirrorFormat: "WINDOW",
-            platform: "Linux",
-            size: "900M",
-            createTime: "2021-02-01T12:58:15.123"
-        },
-        {
-            uuid: 3,
-            name: "CentOS8",
-            mirrorType: "系统镜像3",
-            mirrorFormat: "IOS1",
-            platform: "Linux",
-            size: "850M",
-            createTime: "2021-03-01T12:58:15.123"
-        },
-        {
-            uuid: 4,
-            name: "CentOS9",
-            mirrorType: "系统镜像4",
-            mirrorFormat: "WINDOW2",
-            platform: "Linux",
-            size: "750M",
-            createTime: "2021-04-01T12:58:15.123"
-        },
-    ]
-
-    this.gridRuleData = {
-        public: [
-            {uuid: 1, name: "L3Network-1", netType: "扁平网络", ip: "192.168.0.1/24", ipType: "IPv4", ipUse: "IPv4"},
-            {uuid: 2, name: "L3Network-2", netType: "扁平网络", ip: "192.168.0.1/24", ipType: "IPv4", ipUse: "IPv4"},
-            {uuid: 3, name: "L3Network-3", netType: "扁平网络", ip: "192.168.0.1/24", ipType: "IPv4", ipUse: "IPv4"},
-            {uuid: 4, name: "L3Network-4", netType: "扁平网络", ip: "192.168.0.1/24", ipType: "IPv4", ipUse: "IPv4"},
-        ],
-        private: [
-            {uuid: 1, name: "P3Network-1", netType: "扁平网络", ip: "192.168.0.1/24", ipType: "IPv4", ipUse: "IPv4"},
-            {uuid: 2, name: "P3Network-2", netType: "扁平网络", ip: "192.168.0.1/24", ipType: "IPv4", ipUse: "IPv4"},
-            {uuid: 3, name: "P3Network-3", netType: "扁平网络", ip: "192.168.0.1/24", ipType: "IPv4", ipUse: "IPv4"},
-            {uuid: 4, name: "P3Network-4", netType: "扁平网络", ip: "192.168.0.1/24", ipType: "IPv4", ipUse: "IPv4"},
-        ]
-
-    }
-
+    // this.hostRuleData = [
+    //     {uuid: 1, name: "主机1", cpu: "4", memory: "4GB", createTime: "2021-01-01T12:58:15.123"},
+    //     {uuid: 2, name: "主机2", cpu: "4", memory: "8GB", createTime: "2021-02-01T12:58:15.123"},
+    //     {uuid: 3, name: "主机3", cpu: "4", memory: "16GB", createTime: "2021-03-01T12:58:15.123"},
+    //     {uuid: 4, name: "主机4", cpu: "4", memory: "32GB", createTime: "2021-04-01T12:58:15.123"},
+    // ]
+    //
+    // this.mirrorRuleData = [
+    //     {
+    //         uuid: 1,
+    //         name: "CentOS7",
+    //         mirrorType: "系统镜像1",
+    //         mirrorFormat: "IOS",
+    //         platform: "Linux",
+    //         size: "950M",
+    //         createTime: "2021-01-01T12:58:15.123"
+    //     },
+    //     {
+    //         uuid: 2,
+    //         name: "Ubuntu2.0",
+    //         mirrorType: "系统镜像2",
+    //         mirrorFormat: "WINDOW",
+    //         platform: "Linux",
+    //         size: "900M",
+    //         createTime: "2021-02-01T12:58:15.123"
+    //     },
+    //     {
+    //         uuid: 3,
+    //         name: "CentOS8",
+    //         mirrorType: "系统镜像3",
+    //         mirrorFormat: "IOS1",
+    //         platform: "Linux",
+    //         size: "850M",
+    //         createTime: "2021-03-01T12:58:15.123"
+    //     },
+    //     {
+    //         uuid: 4,
+    //         name: "CentOS9",
+    //         mirrorType: "系统镜像4",
+    //         mirrorFormat: "WINDOW2",
+    //         platform: "Linux",
+    //         size: "750M",
+    //         createTime: "2021-04-01T12:58:15.123"
+    //     },
+    // ]
+    //
+    // this.gridRuleData = {
+    //     public: [
+    //         {uuid: 1, name: "L3Network-1", netType: "扁平网络", ip: "192.168.0.1/24", ipType: "IPv4", ipUse: "IPv4"},
+    //         {uuid: 2, name: "L3Network-2", netType: "扁平网络", ip: "192.168.0.1/24", ipType: "IPv4", ipUse: "IPv4"},
+    //         {uuid: 3, name: "L3Network-3", netType: "扁平网络", ip: "192.168.0.1/24", ipType: "IPv4", ipUse: "IPv4"},
+    //         {uuid: 4, name: "L3Network-4", netType: "扁平网络", ip: "192.168.0.1/24", ipType: "IPv4", ipUse: "IPv4"},
+    //     ],
+    //     private: [
+    //         {uuid: 1, name: "P3Network-1", netType: "扁平网络", ip: "192.168.0.1/24", ipType: "IPv4", ipUse: "IPv4"},
+    //         {uuid: 2, name: "P3Network-2", netType: "扁平网络", ip: "192.168.0.1/24", ipType: "IPv4", ipUse: "IPv4"},
+    //         {uuid: 3, name: "P3Network-3", netType: "扁平网络", ip: "192.168.0.1/24", ipType: "IPv4", ipUse: "IPv4"},
+    //         {uuid: 4, name: "P3Network-4", netType: "扁平网络", ip: "192.168.0.1/24", ipType: "IPv4", ipUse: "IPv4"},
+    //     ]
+    //
+    // }
+    //
     this.physicsHost = [
-        {uuid: 1, name: "Host-1", ip: "192.168.0.1/24", vrSkill: "KVM"},
-        {uuid: 2, name: "Host-2", ip: "192.168.0.2/24", vrSkill: "KVM"},
-        {uuid: 3, name: "Host-3", ip: "192.168.0.3/24", vrSkill: "KVM"},
-        {uuid: 4, name: "Host-4", ip: "192.168.0.4/24", vrSkill: "KVM"},
+    //     {uuid: 1, name: "Host-1", ip: "192.168.0.1/24", vrSkill: "KVM"},
+    //     {uuid: 2, name: "Host-2", ip: "192.168.0.2/24", vrSkill: "KVM"},
+    //     {uuid: 3, name: "Host-3", ip: "192.168.0.3/24", vrSkill: "KVM"},
+    //     {uuid: 4, name: "Host-4", ip: "192.168.0.4/24", vrSkill: "KVM"},
     ]
-    this.diskRuleData = [
-        {uuid: 1, name: "10G", size: "10G", createTime: "Sep 8, 2021 9:51:34 AM"},
-        {uuid: 2, name: "40G", size: "40G", createTime: "Sep 8, 2021 9:51:34 AM"},
-    ]
+    // this.diskRuleData = [
+    //     {uuid: 1, name: "10G", size: "10G", createTime: "Sep 8, 2021 9:51:34 AM"},
+    //     {uuid: 2, name: "40G", size: "40G", createTime: "Sep 8, 2021 9:51:34 AM"},
+    // ]
 })
