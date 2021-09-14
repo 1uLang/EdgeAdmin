@@ -1,7 +1,7 @@
 Tea.context(function () {
 
     this.hanleOpen = function () {
-        teaweb.popup(Tea.url("/hids/agents/create"), {});
+        teaweb.popup(Tea.url("/hids/agents/create"), {height:'23em',width:'50em'});
     };
     this.onDelete = function (agent){
 
@@ -15,4 +15,14 @@ Tea.context(function () {
         })
 
     }
+
+    this.onChangeTimeFormat = function (time) {
+        var resultTime = "";
+        if (time) {
+            var tempTime = time.substring(0, time.lastIndexOf("Z"));
+            resultTime = tempTime.replace("T", " ");
+        }
+        return resultTime;
+    };
+
 });

@@ -21,6 +21,7 @@ Tea.context(function () {
     this.nSelectGridRuleDataType = 1
     this.sShowGridData = []
     this.migrationUuid = -1   //需要迁移的云主机uuid
+    this.specEditUuid = -1   //需要修改规格的云主机uuid
 
     let that = this
     this.$delay(function () {
@@ -216,6 +217,14 @@ Tea.context(function () {
             this.migrationUuid = item.uuid
         }
     }
+    this.onEditHost = function (item) {
+        if (item.status == 'Stopped') {
+            this.onMore(-1)
+            this.onOpenHostRule(item.uuid)
+            this.specEditUuid = item.uuid
+            // this.onSelectHostRule()
+        }
+    }
     this.onDeleteHost = function (item) {
         this.onMore(-1)
         teaweb.confirm("确定要删除该主机？", function () {
@@ -333,7 +342,24 @@ Tea.context(function () {
         if (curSelectItem) {
             this.hostRule = curSelectItem.name
             this.onCloseRule()
+
+            //修改云主机的计算规格
+            if (this.specEditUuid != -1) {
+                let that = this
+                that.$post(".activity")
+                    .params({
+                        event: "spec",
+                        uuid: that.specEditUuid,
+                        specUuid: curSelectItem.uuid,
+                    })
+                    .refresh()
+
+
+                this.specEditUuid = -1
+            }
         }
+
+
     }
 
     //mirror
@@ -446,10 +472,10 @@ Tea.context(function () {
             }
         }
     }
-    this.mouseEnter = function(id){
+    this.mouseEnter = function (id) {
         this.nMoreBtnSelet = id
     }
-    this.mouseLeave = function(){
+    this.mouseLeave = function () {
         this.nMoreBtnSelet = -1
     }
 
@@ -559,10 +585,10 @@ Tea.context(function () {
     // }
     //
     this.physicsHost = [
-    //     {uuid: 1, name: "Host-1", ip: "192.168.0.1/24", vrSkill: "KVM"},
-    //     {uuid: 2, name: "Host-2", ip: "192.168.0.2/24", vrSkill: "KVM"},
-    //     {uuid: 3, name: "Host-3", ip: "192.168.0.3/24", vrSkill: "KVM"},
-    //     {uuid: 4, name: "Host-4", ip: "192.168.0.4/24", vrSkill: "KVM"},
+        //     {uuid: 1, name: "Host-1", ip: "192.168.0.1/24", vrSkill: "KVM"},
+        //     {uuid: 2, name: "Host-2", ip: "192.168.0.2/24", vrSkill: "KVM"},
+        //     {uuid: 3, name: "Host-3", ip: "192.168.0.3/24", vrSkill: "KVM"},
+        //     {uuid: 4, name: "Host-4", ip: "192.168.0.4/24", vrSkill: "KVM"},
     ]
     // this.diskRuleData = [
     //     {uuid: 1, name: "10G", size: "10G", createTime: "Sep 8, 2021 9:51:34 AM"},

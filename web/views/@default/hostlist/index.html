@@ -81,6 +81,10 @@
                                     style="height: 36px;cursor: pointer;color: #333;line-height: 36px;text-align: center;" @click="onMoveHost(item)"
                                     :style="{'color':(item.status != 'Stopping' && item.status != 'Rebooting' && item.status != 'Migrating' && !item.prohibitMigrating) ? '#333':'#999',
                                             'background-color':nMoreBtnSelet==4 ? '#f6f6f6':'#fff'}">迁移主机</div>
+                                <div  @mouseenter="mouseEnter(6)" @mouseleave="mouseLeave()"
+                                      style="height: 36px;cursor: pointer;color: #333;line-height: 36px;text-align: center;" @click="onEditHost(item)"
+                                      :style="{'color':(item.status == 'Stopped') ? '#333':'#999',
+                                            'background-color':nMoreBtnSelet==6 ? '#f6f6f6':'#fff'}">修改规格</div>
                                 <div @mouseenter="mouseEnter(5)" @mouseleave="mouseLeave()"
                                     style="height: 36px;cursor: pointer;color: #333;line-height: 36px;text-align: center;" @click="onDeleteHost(item)"
                                     :style="{'background-color':nMoreBtnSelet==5 ? '#f6f6f6':'#fff'}">删除主机</div>
@@ -318,7 +322,7 @@
         </div>
         <div v-if="nShowRuleType==4" style="width: 100%;height: 100%;">
             <div style="width: 100%;;display: flex;justify-content: space-between;align-items: center;border-bottom: 1px solid #d7d7d7;">
-                <div style="margin:10px;font-weight: 700;">选择计算机规格</div>
+                <div style="margin:10px;font-weight: 700;">选择物理机</div>
                 <div style="padding:10px;cursor: pointer;" @click="onCloseRule">X</div>
             </div>
             <div style="margin-top: 10px;min-height: 295px;overflow-x: auto; overflow-y: auto;">

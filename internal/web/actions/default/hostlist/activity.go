@@ -14,6 +14,7 @@ func (this *ActivityAction) RunPost(params struct {
 	Event    string
 	Uuid     string //云主机Ip
 	HostUuid string //物理机ID
+	SpecUuid string //规格ID
 }) {
 
 	switch params.Event {
@@ -38,7 +39,7 @@ func (this *ActivityAction) RunPost(params struct {
 			Uuid: params.Uuid,
 		})
 
-	case "migration":
+	case "migration": //迁移
 		host_server.MigrationHost(&host.ActionReq{
 			Uuid:     params.Uuid,
 			HostUUid: params.HostUuid,
@@ -46,6 +47,11 @@ func (this *ActivityAction) RunPost(params struct {
 	case "delete":
 		host_server.DeleteHost(&host.ActionReq{
 			Uuid: params.Uuid,
+		})
+	case "spec":
+		host_server.UpdateSpec(&host.UpdateSpecReq{
+			SpecUUid: params.SpecUuid,
+			HostUUid: params.Uuid,
 		})
 	}
 

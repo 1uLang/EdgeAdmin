@@ -9,17 +9,15 @@ import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 )
 
-type BaselineAction struct {
+type BaseLineAction struct {
 	actionutils.ParentAction
 }
 
-func (this *BaselineAction) Init() {
+func (this *BaseLineAction) Init() {
 	this.Nav("", "", "baseline")
 }
 
-func (this *BaselineAction) RunGet(params struct {
-	Agent string
-}) {
+func (this *BaseLineAction) RunGet(params struct{}) {
 
 	err := InitAPIServer()
 	if err != nil {
@@ -36,55 +34,38 @@ func (this *BaselineAction) RunGet(params struct {
 	if len(agent.AffectedItems) == 0 {
 		this.FailField("agent", "请先添加资产")
 	}
-	if params.Agent == "" {
-		params.Agent = "007"
-	}
-	list, err := server.BaselineList(agents.SCAListReq{
-		Agent:  params.Agent,
-		Limit:  1,
-		Offset: 0,
-	})
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-
-	page := this.NewPage(list.TotalAffectedItems)
-	this.Data["page"] = page.AsHTML()
-
-	list, err = server.BaselineList(agents.SCAListReq{
-		Agent:  params.Agent,
-		Limit:  page.Size,
-		Offset: page.Offset,
-	})
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-	this.Data["baseline"] = list.AffectedItems
-
-	agts := map[string]map[string]string{}
+	baselines := agents.SCAListResp{}
 	for _, v := range agent.AffectedItems {
-		agts[v.ID] = map[string]string{
-			"ip":   v.IP,
-			"name": v.Name,
+		list, err := server.BaselineList(agents.SCAListReq{
+			Agent: v.ID,
+		})
+		if err != nil {
+			this.ErrorPage(err)
+			return
 		}
+		for k := range list.AffectedItems {
+			list.AffectedItems[k].AgentID = v.ID
+			list.AffectedItems[k].AgentIP = v.IP
+			list.AffectedItems[k].AgentName = v.Name
+		}
+		baselines.AffectedItems = append(baselines.AffectedItems, list.AffectedItems...)
 	}
-	this.Data["agents"] = agts
-	this.Data["agent"] = params.Agent
+	this.Data["baselines"] = baselines.AffectedItems
+
+	this.Data["agents"] = agent.AffectedItems
 
 	this.Show()
 }
 
-type BaselineDetailsAction struct {
+type BaseLineDetailsAction struct {
 	actionutils.ParentAction
 }
 
-func (this *BaselineDetailsAction) Init() {
+func (this *BaseLineDetailsAction) Init() {
 	this.Nav("", "", "details")
 }
 
-func (this *BaselineDetailsAction) RunGet(params struct {
+func (this *BaseLineDetailsAction) RunGet(params struct {
 	Agent  string
 	Policy string
 }) {
@@ -93,6 +74,7 @@ func (this *BaselineDetailsAction) RunGet(params struct {
 		Policy: params.Policy,
 		Limit:  1,
 		Offset: 0,
+		Result: "failed",
 	})
 	if err != nil {
 		this.ErrorPage(err)
