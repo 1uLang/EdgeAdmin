@@ -96,7 +96,8 @@ func (this *CreatePopupAction) RunPost(params struct {
 
 	// 创建nextcloud账号，并写入数据库
 	adminToken := nc_req.GetAdminToken()
-	userPwd := `adminAd#@2021`
+	// userPwd := `adminAd#@2021`
+	userPwd := params.Pass2
 	err = nc_req.CreateUserV2(adminToken, params.Username, userPwd)
 	if err != nil {
 		this.ErrorPage(err)
