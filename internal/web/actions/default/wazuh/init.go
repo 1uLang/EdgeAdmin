@@ -28,9 +28,9 @@ func init() {
 			Get("/vulnerability", new(VulnerabilityAction)).
 			Data("teaMenu", "virus").
 			Get("/virus", new(VirusAction)).
-			Data("teaMenu", "baseline").
-			Get("/baseline", new(BaselineAction)).
-			Get("/baseline/details", new(BaselineDetailsAction)).
+			Data("teaMenu", "baseLine").
+			Get("/baseLine", new(BaseLineAction)).
+			Get("/baseLineDetails", new(BaseLineDetailsAction)).
 			EndAll()
 	})
 }
