@@ -70,14 +70,8 @@ func (this *VirusAction) RunGet(params struct {
 		return
 	}
 	this.Data["virus"] = list.Hits
-	agts := map[string]map[string]string{}
-	for _, v := range agent.AffectedItems {
-		agts[v.ID] = map[string]string{
-			"ip":   v.IP,
-			"name": v.Name,
-		}
-	}
-	this.Data["agents"] = agts
+
+	this.Data["agents"] = agent.AffectedItems
 
 	this.Data["agent"] = params.Agent
 

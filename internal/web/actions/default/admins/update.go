@@ -3,9 +3,12 @@ package admins
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/1uLang/zhiannet-api/common/server/edge_admins_server"
 	hids_user_model "github.com/1uLang/zhiannet-api/hids/model/user"
 	hids_user_server "github.com/1uLang/zhiannet-api/hids/server/user"
+	"github.com/1uLang/zhiannet-api/nextcloud/model"
+	nc_req "github.com/1uLang/zhiannet-api/nextcloud/request"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
@@ -144,6 +147,31 @@ func (this *UpdateAction) RunPost(params struct {
 		editPwd = true
 	}
 
+	// 修改nc密码
+	pt, err := model.GetUsername(params.AdminId, 1)
+	if err != nil {
+		this.ErrorPage(err)
+	}
+	ncName, pp, err := nc_req.ParseToken(pt)
+	if err != nil {
+		this.ErrorPage(err)
+	}
+	if pp != params.Pass2 {
+		err = nc_req.UpdateUserPassword(params.Pass2, ncName)
+		if err != nil {
+			this.ErrorPage(err)
+		}
+		token := &model.LoginReq{
+			User:     ncName,
+			Password: params.Pass2,
+		}
+		ncToken := nc_req.GenerateToken(token)
+		err = model.StoreNCToken(ncName, ncToken)
+		if err != nil {
+			this.ErrorPage(err)
+		}
+	}
+	
 	modules := []*systemconfigs.AdminModule{}
 	for _, code := range params.ModuleCodes {
 		modules = append(modules, &systemconfigs.AdminModule{

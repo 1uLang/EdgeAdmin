@@ -453,8 +453,8 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					},
 					{
 						"name": "合规基线",
-						"url":  "/hids/baseline",
-						"code": "baseline",
+						"url":  "/hids/baseLine",
+						"code": "baseLine",
 					},
 				},
 			}}...)
@@ -488,7 +488,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"code":   "fortcloud",
 			"url":    "/fortcloud/assets",
 			"module": configloaders.AdminModuleCodeFort,
-			"name":   "堡垒机",
+			"name":   "云堡垒机",
 			"icon":   "ioxhost",
 			"subItems": []maps.Map{
 				{

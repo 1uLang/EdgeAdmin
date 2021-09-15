@@ -28,3 +28,8 @@
     line-height: 32px;
     cursor: pointer;
 }
+.table-head-bg{
+     height: 32px;
+     background: #f0f0f0;
+ }
+
