@@ -15,6 +15,7 @@ func init() {
 			Helper(settingutils.NewAdvancedHelper("authority")).
 			Prefix("/settings/authority/expire").
 			Get("", new(IndexAction)).
+			GetPost("/renew", new(RenewAction)).
 			EndAll()
 	})
 }
