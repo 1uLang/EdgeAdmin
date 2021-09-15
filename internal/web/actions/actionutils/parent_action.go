@@ -76,6 +76,9 @@ func (this *ParentAction) TinyMenu(menuItem string) {
 }
 
 func (this *ParentAction) AdminId() int64 {
+	if this.Context == nil {
+		return 1
+	}
 	return this.Context.GetInt64("adminId")
 }
 func (this *ParentAction) UserName() (string, error) {

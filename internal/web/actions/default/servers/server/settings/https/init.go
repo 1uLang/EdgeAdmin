@@ -10,8 +10,10 @@ import (
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/sslconfigs"
 	"github.com/iwind/TeaGo"
+	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/logs"
 	"github.com/iwind/TeaGo/types"
+	"strconv"
 )
 
 var chanWAFServer chan uint64
@@ -46,11 +48,19 @@ func selectWAFServerChan() {
 
 }
 func getServerInfo(serverId int64) {
+
 	this := new(IndexAction)
+	this.Context = new(actions.ActionContext)
 
 	//get
-	server, _, isOk := serverutils.FindServer(this.Parent(), serverId)
-	if !isOk {
+	serverResp, err := this.RPC().ServerRPC().FindEnabledServer(this.AdminContext(), &pb.FindEnabledServerRequest{ServerId: serverId})
+	if err != nil {
+		logs.Errorf("rpc FindEnabledServer error : " + err.Error())
+		return
+	}
+	server := serverResp.Server
+	if server == nil {
+		logs.Errorf("not found server with id '" + strconv.FormatInt(serverId, 10) + "'")
 		return
 	}
 	httpsConfig := &serverconfigs.HTTPSProtocolConfig{}

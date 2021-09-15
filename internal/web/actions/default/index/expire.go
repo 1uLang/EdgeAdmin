@@ -72,7 +72,7 @@ func writeServerConfig(expireConfig *ExpireConfig) error {
 	return nil
 }
 
-func checkExpire() (string, bool, error) {
+func CheckExpire() (string, bool, error) {
 
 	expireConfig, err := LoadServerExpireConfig()
 	if err != nil {

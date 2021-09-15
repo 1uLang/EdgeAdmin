@@ -199,7 +199,7 @@ func (this *IndexAction) RunPost(params struct {
 	//	this.Fail("密码已过期，请立即修改")
 	//}
 	//检测系统是否到期
-	code, expire, err := checkExpire()
+	code, expire, err := CheckExpire()
 	if err != nil {
 		this.ErrorPage(err)
 		return
