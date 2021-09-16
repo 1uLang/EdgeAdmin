@@ -19,14 +19,22 @@ func (this *IndexAction) Run(params struct {
 	rpcClient, err := rpc.SharedRPC()
 	if err != nil {
 		this.Fail("服务器出了点小问题：" + err.Error())
+		return
 	}
-	userResp, err := rpcClient.UserRPC().FindEnabledUser(rpcClient.Context(int64(params.Auth.AdminId())), &pb.FindEnabledUserRequest{UserId: int64(params.Auth.AdminId())})
+	userResp, err := rpcClient.AdminRPC().FindEnabledAdmin(rpcClient.Context(int64(params.Auth.AdminId())),
+		&pb.FindEnabledAdminRequest{AdminId: int64(params.Auth.AdminId())})
 	if err != nil {
 		this.Fail("获取用户信息失败")
 		return
 	}
 	// 记录日志
-	err = dao.SharedLogDAO.CreateAdminLog(rpcClient.Context(int64(params.Auth.AdminId())), oplogs.LevelInfo, this.Request.URL.Path, "退出系统，用户名："+userResp.User.Username, this.RequestRemoteIP())
+	err = dao.SharedLogDAO.CreateAdminLog(rpcClient.Context(
+		int64(params.Auth.AdminId())),
+		oplogs.LevelInfo,
+		this.Request.URL.Path,
+		"退出系统，用户名："+
+			userResp.Admin.Username,
+		this.RequestRemoteIP())
 	if err != nil {
 		utils.PrintError(err)
 	}
