@@ -25,7 +25,7 @@ func (this *BaseLineAction) RunGet(params struct{}) {
 		return
 	}
 	agent, err := server.AgentList(&agents.ListReq{
-		//AdminUserId: this.AdminId(),
+		AdminUserId: this.AdminId(),
 	})
 	if err != nil {
 		this.ErrorPage(err)
