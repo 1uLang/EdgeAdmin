@@ -233,6 +233,23 @@
             </td>
         </tr>
         </tbody>
+        <!--  主机防护(新)      -->
+        <tbody v-if="showAPIAUTHVisible == 12">
+        <tr>
+            <td>username *</td>
+            <td>
+                <input type="text" name="key" maxlength="100"/>
+                <p class="comment">登录主机防护(新)所使用的账号</p>
+            </td>
+        </tr>
+        <tr>
+            <td>password *</td>
+            <td>
+                <input type="password" name="secret" maxlength="100"/>
+                <p class="comment">登录主机防护(新)所使用的密码</p>
+            </td>
+        </tr>
+        </tbody>
 	</table>
 	<submit-btn></submit-btn>
 </form>

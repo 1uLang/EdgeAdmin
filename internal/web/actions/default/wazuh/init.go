@@ -1,5 +1,4 @@
 // 主机防护使用wazuh组件
-// +build wazuh
 
 package wazuh
 
@@ -31,6 +30,12 @@ func init() {
 			Data("teaMenu", "baseLine").
 			Get("/baseLine", new(BaseLineAction)).
 			Get("/baseLineDetails", new(BaseLineDetailsAction)).
+			Data("teaMenu", "attck").
+			Get("/attck", new(AttckAction)).
+			Data("teaMenu", "invades").
+			Get("/invades", new(InvadeAction)).
+			Data("teaMenu", "syscheck").
+			Get("/syscheck", new(SysCheckAction)).
 			EndAll()
 	})
 }
