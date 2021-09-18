@@ -384,82 +384,89 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"url":    "/servers/certs",
 			"module": configloaders.AdminModuleCodeCerts,
 		},
-	}
-	if configloaders.HIDSType == "safedog" {
-		leftMaps = append(leftMaps, []maps.Map{
-			{
-				"code":   "hids",
-				"url":    "/hids/examine",
-				"module": configloaders.AdminModuleCodeHids,
-				"name":   "主机防护",
-				"icon":   "linux",
-				"subItems": []maps.Map{
-					{
-						"name": "主机体检",
-						"url":  "/hids/examine",
-						"code": "examine",
-					},
-					{
-						"name": "漏洞风险",
-						"url":  "/hids/risk",
-						"code": "risk",
-					},
-					{
-						"name": "入侵威胁",
-						"url":  "/hids/invade",
-						"code": "invade",
-					},
-					{
-						"name": "合规基线",
-						"url":  "/hids/baseline",
-						"code": "baseline",
-					},
-					{
-						"name": "Agent管理",
-						"url":  "/hids/agent",
-						"code": "agent",
-					},
-					{
-						"name": "黑白名单",
-						"url":  "/hids/bwlist",
-						"code": "bwlist",
-					},
+		{
+			"code":   "hids",
+			"url":    "/hids/examine",
+			"module": configloaders.AdminModuleCodeHids,
+			"name":   "主机防护",
+			"icon":   "linux",
+			"subItems": []maps.Map{
+				{
+					"name": "主机体检",
+					"url":  "/hids/examine",
+					"code": "examine",
 				},
-			}}...)
-	} else { //wazuh
-
-		leftMaps = append(leftMaps, []maps.Map{
-			{
-				"code":   "hids",
-				"url":    "/hids/agents",
-				"module": configloaders.AdminModuleCodeHids,
-				"name":   "主机防护",
-				"icon":   "linux",
-				"subItems": []maps.Map{
-					{
-						"name": "资产管理",
-						"url":  "/hids/agents",
-						"code": "agents",
-					},
-					{
-						"name": "漏洞风险",
-						"url":  "/hids/vulnerability",
-						"code": "vulnerability",
-					},
-					{
-						"name": "病毒管理",
-						"url":  "/hids/virus",
-						"code": "virus",
-					},
-					{
-						"name": "合规基线",
-						"url":  "/hids/baseLine",
-						"code": "baseLine",
-					},
+				{
+					"name": "漏洞风险",
+					"url":  "/hids/risk",
+					"code": "risk",
 				},
-			}}...)
-	}
-	leftMaps = append(leftMaps, []maps.Map{
+				{
+					"name": "入侵威胁",
+					"url":  "/hids/invade",
+					"code": "invade",
+				},
+				{
+					"name": "合规基线",
+					"url":  "/hids/baseline",
+					"code": "baseline",
+				},
+				{
+					"name": "Agent管理",
+					"url":  "/hids/agent",
+					"code": "agent",
+				},
+				{
+					"name": "黑白名单",
+					"url":  "/hids/bwlist",
+					"code": "bwlist",
+				},
+			},
+		},
+		{
+			"code":   "nhids",
+			"url":    "/hids/agents",
+			"module": configloaders.AdminModuleCodeHids,
+			"name":   "主机防护",
+			"icon":   "linux",
+			"subItems": []maps.Map{
+				{
+					"name": "资产管理",
+					"url":  "/hids/agents",
+					"code": "agents",
+				},
+				{
+					"name": "漏洞风险",
+					"url":  "/hids/vulnerability",
+					"code": "vulnerability",
+				},
+				{
+					"name": "病毒检测",
+					"url":  "/hids/virus",
+					"code": "virus",
+				},
+				{
+					"name": "合规基线",
+					"url":  "/hids/baseLine",
+					"code": "baseLine",
+				},
+				{
+					"name": "安全事件",
+					"url":  "/hids/attck",
+					"code": "attck",
+				},
+				{
+					"name": "文件监控",
+					"url":  "/hids/syscheck",
+					"code": "syscheck",
+				},
+				//{
+				//	"name": "入侵威胁",
+				//	"url":  "/hids/invades",
+				//	"code": "invades",
+				//},
+			},
+		},
 		{
 			"code":   "webscan",
 			"url":    "/webscan/targets",
@@ -798,7 +805,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 				},
 			},
 		},
-	}...)
+	}
 	leftResult := []maps.Map{}
 	for _, m := range leftMaps {
 		//去掉财务信息

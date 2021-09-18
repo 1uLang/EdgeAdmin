@@ -17,6 +17,7 @@ import (
 	nextcloud_request "github.com/1uLang/zhiannet-api/nextcloud/request"
 	opnsense_request "github.com/1uLang/zhiannet-api/opnsense/request"
 	teaweb_request "github.com/1uLang/zhiannet-api/resmon/request"
+	wazuh_request "github.com/1uLang/zhiannet-api/wazuh/server"
 	zstack_request "github.com/1uLang/zhiannet-api/zstack/request"
 )
 
@@ -99,7 +100,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 		params.Must.
 			Field("secret", params.Secret).
 			Require("请输入secret")
-	case 6, 7, 10, 11: //审计系统 堡垒机 云底座，apt
+	case 6, 7, 10, 11, 12: //审计系统 堡垒机 云底座，apt,wazuh
 		params.Must.
 			Field("key", params.Key).
 			Require("请输入username")
@@ -186,6 +187,9 @@ func (this *CreatePopupAction) Check(AssemblyType int) {
 		check.Run()
 	case 11: //apt检测
 		check := new(maltrail_request.LoginReq)
+		check.Run()
+	case 12: //wazuh检测
+		check := new(wazuh_request.CheckRequest)
 		check.Run()
 	}
 }

@@ -6,20 +6,18 @@ import (
 	"github.com/1uLang/zhiannet-api/wazuh/model/agents"
 	"github.com/1uLang/zhiannet-api/wazuh/server"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
-	"time"
 )
 
-type VulnerabilityAction struct {
+type InvadeAction struct {
 	actionutils.ParentAction
 }
 
-func (this *VulnerabilityAction) Init() {
-	this.Nav("", "", "vulnerability")
+func (this *InvadeAction) Init() {
+	this.Nav("", "", "virus")
 }
 
-func (this *VulnerabilityAction) RunGet(params struct {
-	Agent    string
-	Severity string
+func (this *InvadeAction) RunGet(params struct {
+	Agent string
 }) {
 
 	err := InitAPIServer()
@@ -44,16 +42,15 @@ func (this *VulnerabilityAction) RunGet(params struct {
 	}
 	if params.Agent == "" {
 		params.Agent = agent.AffectedItems[0].ID
+		//params.Agent = "007"
 	}
-	list, err := server.VulnerabilityList(agents.ESListReq{
-		Agent:    params.Agent,
-		Severity: params.Severity,
-		Limit:    1,
-		Offset:   0,
-		Start:    time.Now().AddDate(0, 0, -1).Unix(),
-		End:      time.Now().Unix(),
+	list, err := server.InvadeThreatESList(agents.ESListReq{
+		Agent:  params.Agent,
+		Limit:  1,
+		Offset: 0,
+		//Start:  time.Now().AddDate(0, 0, -1).Unix(),
+		//End:    time.Now().Unix(),
 		//Start: 1630982235, End: 1631068635,
-		//AdminUserId: this.AdminId()
 	})
 	if err != nil {
 		this.ErrorPage(err)
@@ -63,31 +60,23 @@ func (this *VulnerabilityAction) RunGet(params struct {
 	page := this.NewPage(int64(list.Total))
 	this.Data["page"] = page.AsHTML()
 
-	list, err = server.VulnerabilityList(agents.ESListReq{
-		Agent:    params.Agent,
-		Severity: params.Severity,
-		Limit:    int(page.Size),
-		Offset:   int(page.Offset),
-		Start:    time.Now().AddDate(0, 0, -1).Unix(),
-		End:      time.Now().Unix(),
+	list, err = server.InvadeThreatESList(agents.ESListReq{
+		Agent:  params.Agent,
+		Limit:  int(page.Size),
+		Offset: int(page.Offset),
+		//Start:  time.Now().AddDate(0, 0, -1).Unix(),
+		//End:    time.Now().Unix(),
 		//Start: 1630982235, End: 1631068635,
 	})
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	this.Data["vulnerabilitys"] = list.Hits
+	this.Data["invades"] = list.Hits
 
 	this.Data["agents"] = agent.AffectedItems
 
-	this.Data["severitys"] = []map[string]string{
-		{"k": "Critical", "v": "危急"},
-		{"k": "High", "v": "高危"},
-		{"k": "Medium", "v": "中危"},
-		{"k": "Low", "v": "低危"},
-	}
-
 	this.Data["agent"] = params.Agent
-	this.Data["severity"] = params.Severity
+
 	this.Show()
 }
