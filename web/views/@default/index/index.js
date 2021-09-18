@@ -20,7 +20,7 @@ Tea.context(function () {
 
 	this.onGetRefreshToken = function () {
 		let that = this
-        this.refreshCsrfToken();
+        that.refreshCsrfToken();
         setInterval(function () {
 			that.refreshCsrfToken();
         }, 10 * 60 * 1000);
@@ -80,7 +80,7 @@ Tea.context(function () {
           var tempOTPCode = document.getElementById("otpCode").value;
           tempFormData.append("otpCode", tempOTPCode);
         }
-		
+
 		let that = this
         reqApi(
           "post",
@@ -100,9 +100,14 @@ Tea.context(function () {
           (res) => {
             if (res.data.from == "/updatePwd") { //如果是密码过期
 				that.callBackFunc = function () {
+					document.getElementById("password").value = "";
 					that.showPageState = 2
 					that.onGetRefreshToken();
 					that.onGetToken();
+					setTimeout(()=>{
+						document.getElementById("resetPassword").value = "";
+						document.getElementById("confirmPassword").value = "";
+					},10)
 				}
 				that.onOpenErrorDialog(res.message)
               
@@ -164,8 +169,8 @@ Tea.context(function () {
           null,
           (res) => {
 			that.callBackFunc = function () {
+				
 				that.showPageState = 1
-				document.getElementById("password").value = "";
 				that.onGetRefreshToken();
 				that.onGetToken();
 			}
@@ -173,6 +178,8 @@ Tea.context(function () {
           },
           (res) => {
 			that.callBackFunc = function () {
+				document.getElementById("resetPassword").value = "";
+				document.getElementById("confirmPassword").value = "";
 				that.onGetRefreshToken();
 				that.onGetToken();
 			 }

@@ -26,6 +26,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 .dialog-define-style{
@@ -37,6 +38,7 @@
   text-align: center;
   line-height: 36px;
   color: #fff;
+  cursor: pointer;
 }
 
 .dialog-style{

@@ -9,6 +9,7 @@ function reqApi(method,url,data,param,sucHandle,failHandle,doneHandle){
             "X-Requested-With": "XMLHttpRequest"
         }
     }
+    console.log(11111)
     axios(config).then(res=>{
         let response = res.data
         if(response.code==200){

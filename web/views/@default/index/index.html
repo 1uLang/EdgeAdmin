@@ -62,7 +62,7 @@
 					一站式等保合规建设服务平台
 				</div>
 				<div class="input-contain-style">
-					<img src="/images/image_login_user.png" style="margin-left: 5%;margin-right: 5%;width: 8%;">
+					<img src="/images/image_login_lock.png" style="margin-left: 5%;margin-right: 5%;width: 8%;">
 					<input style="border: none;outline: none;font-size: 1vw;width: 75%;" type="password" id="resetPassword" name="password" placeholder="请输入新密码"/>
 			   	</div>
 
@@ -94,12 +94,13 @@
 				<div class="login-btn-style" @click="onRenewal">续订</div>
 			</div>
 		</div>
-	</div>
-	<div v-if="false" class="dialog-style" @click.stop>
-		<div class="dialog-bg-style">
-			<img :src="tipImage" style="width: 100px;height: 100px;margin-bottom: 20px;">
-			<div style="margin-top: 15px;margin-bottom: 15px;">{{errorMsg}}</div>
-			<div class="dialog-define-style" @click="onCloseDialog">确定</div>
+
+		<div v-if="bShowDialog" class="dialog-style" @click.stop>
+			<div class="dialog-bg-style">
+				<img :src="tipImage" style="width: 100px;height: 100px;margin-bottom: 20px;">
+				<div style="margin-top: 15px;margin-bottom: 15px;">{{errorMsg}}</div>
+				<div class="dialog-define-style" @click="onCloseDialog">确定</div>
+			</div>
 		</div>
 	</div>
   </body>
