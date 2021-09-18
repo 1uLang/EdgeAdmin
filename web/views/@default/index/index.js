@@ -6,6 +6,7 @@ Tea.context(function () {
 
 	this.bShowDialog = false
 	this.errorMsg = ""
+	this.tipImage = ""
 	this.callBackFunc = null
 
 	this.$delay(function () {
@@ -214,8 +215,8 @@ Tea.context(function () {
 		}else{
 			this.errorMsg = "请求发生异常"
 		}
+		this.tipImage="/images/image_login_tip_warring.png"
 		this.bShowDialog = true
-		console.log("onOpenErrorDialog")
 	}
 	this.onOpenSucDialog = function(tipMsg){
 		if(tipMsg && tipMsg.length>0){
@@ -223,8 +224,9 @@ Tea.context(function () {
 		}else{
 			this.errorMsg = "操作成功"
 		}
+		this.tipImage="/images/image_login_tip_suc.png"
 		this.bShowDialog = true
-		console.log("onOpenSucDialog")
+		
 		
 	}
 	this.onCloseDialog = function(){
