@@ -220,12 +220,17 @@ func AllModuleMaps() []maps.Map {
 			"url":  "/hids/examine",
 		},
 		{
+			"name": "主机防护(新)",
+			"code": "nhids",
+			"url":  "/hids/agents",
+		},
+		{
 			"name": "漏洞扫描",
 			"code": AdminModuleCodeWebScan,
 			"url":  "/webscan/targets",
 		},
 		{
-			"name": "堡垒机",
+			"name": "云堡垒机",
 			"code": AdminModuleCodeFort,
 			"url":  "/fortcloud/assets",
 		},
