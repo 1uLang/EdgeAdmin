@@ -426,7 +426,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 		{
 			"code":   "nhids",
 			"url":    "/hids/agents",
-			"module": configloaders.AdminModuleCodeHids,
+			"module": "nhids",
 			"name":   "主机防护",
 			"icon":   "linux",
 			"subItems": []maps.Map{
