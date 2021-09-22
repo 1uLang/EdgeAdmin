@@ -1,0 +1,58 @@
+{$layout "layout_popup"}
+
+<h3>添加渠道</h3>
+
+<form class="ui form" method="post" data-tea-action="$" data-tea-success="success">
+    <csrf-token></csrf-token>
+    <table class="ui table definition selectable">
+        <tr>
+            <td class="title">渠道名称 *</td>
+            <td>
+                <input type="text" name="channelName" model="channelName" maxlength="100"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="title">渠道域名</td>
+            <td>
+                <input type="text" name="channelHost" model="channelHost" maxlength="100"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="title">产品名称</td>
+            <td>
+                <input type="text" name="productName" model="productName" maxlength="100"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="title">产品LOGO</td>
+            <td>
+                <div style="display: flex;flex-direction: column;">
+                    <img :src="productLogo" width="30px" height="30px" style="margin-bottom: 10px;">
+                    <input id="imageInput" type="file" accept="image/png,image/jpeg,image/jpg" name="productLogo" model="productLogo" @change="onImageChangeHandle"/>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="title">联系人</td>
+            <td>
+                <input type="text" name="linkPerson" model="linkPerson" maxlength="100"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="title">联系电话</td>
+            <td>
+                <input type="number" name="phoneNum" model="phoneNum" maxlength="100"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="title">备注</td>
+            <td>
+                <textarea type="text" name="markStr" model="markStr" style="resize:none" rows="3"></textarea>
+            </td>
+        </tr>
+    </table>
+    <div style="width: 100%;display: inline-flex;justify-content: center;align-items: center;">
+        <submit-btn></submit-btn>
+    </div>
+    
+</form>
