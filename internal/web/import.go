@@ -134,6 +134,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/login"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/monitor-nodes"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/monitor-nodes/node"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/platform-backup"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/profile"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/security"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/server"
