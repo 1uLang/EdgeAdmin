@@ -13,6 +13,7 @@ Tea.context(function () {
 		sessionStorage.setItem("leftSelectCode","dashboard")
 		localStorage.removeItem("ddosSelectNodeId")
 		localStorage.removeItem("nfwSelectNodeId")
+		localStorage.removeItem("hidsSelectAgentId");
 		this.onGetRefreshToken()
 		this.onGetToken()
 	});
@@ -28,7 +29,7 @@ Tea.context(function () {
 
 	this.refreshCsrfToken = function () {
 		let that = this
-        reqApi("get", "/csrf/token", null, null, 
+        reqApi("get", "/csrf/token", null, null,
 		(res) => {
 			that.tempCsrfToke = res.data.token;
         },
@@ -40,7 +41,7 @@ Tea.context(function () {
 
     this.onGetToken = function () {
 		let that = this
-        reqApi("get", "/?token=1", null, null, 
+        reqApi("get", "/?token=1", null, null,
 		(res) => {
 			that.tempToken = res.data.token;
         },
@@ -110,7 +111,7 @@ Tea.context(function () {
 					},10)
 				}
 				that.onOpenErrorDialog(res.message)
-              
+
             } else if (res.data.from == "/renewal") {//到期 续订
 
 			  	that.callBackFunc = function () {
@@ -119,12 +120,12 @@ Tea.context(function () {
 			 	}
 				that.onOpenErrorDialog(res.message)
             } else if (res.data.from == "/页面过期") {//刷新页面
-              
+
 			  	that.callBackFunc = function () {
 					window.location.reload();
 			 	}
 				that.onOpenErrorDialog(res.message)
-             
+
             } else {
 				that.callBackFunc = function () {
 					that.onGetRefreshToken();
@@ -233,8 +234,8 @@ Tea.context(function () {
 		}
 		this.tipImage="/images/image_login_tip_suc.png"
 		this.bShowDialog = true
-		
-		
+
+
 	}
 	this.onCloseDialog = function(){
 		this.bShowDialog = false
