@@ -220,7 +220,7 @@ func AllModuleMaps() []maps.Map {
 			"url":  "/hids/examine",
 		},
 		{
-			"name": "主机防护(新)",
+			"name": "端点防护",
 			"code": "nhids",
 			"url":  "/hids/agents",
 		},

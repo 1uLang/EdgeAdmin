@@ -427,13 +427,18 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"code":   "nhids",
 			"url":    "/hids/agents",
 			"module": "nhids",
-			"name":   "主机防护",
-			"icon":   "linux",
+			"name":   "端点防护",
+			"icon":   "laptop",
 			"subItems": []maps.Map{
 				{
 					"name": "资产管理",
 					"url":  "/hids/agents",
 					"code": "agents",
+				},
+				{
+					"name": "安全事件",
+					"url":  "/hids/attck",
+					"code": "attck",
 				},
 				{
 					"name": "漏洞风险",
@@ -449,11 +454,6 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"name": "合规基线",
 					"url":  "/hids/baseLine",
 					"code": "baseLine",
-				},
-				{
-					"name": "安全事件",
-					"url":  "/hids/attck",
-					"code": "attck",
 				},
 				{
 					"name": "文件监控",
