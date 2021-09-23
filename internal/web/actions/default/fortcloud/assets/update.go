@@ -12,18 +12,19 @@ import (
 type UpdateAction struct {
 	actionutils.ParentAction
 }
+
 func (this *UpdateAction) checkAndNewServerRequest() (*next_terminal_server.Request, error) {
-	if fortcloud.ServerUrl == "" {
-		err := fortcloud.InitAPIServer()
-		if err != nil {
-			return nil, err
-		}
+
+	err := fortcloud.InitAPIServer()
+	if err != nil {
+		return nil, err
 	}
+
 	return fortcloud.NewServerRequest(fortcloud.Username, fortcloud.Password)
 }
 
 func (this *UpdateAction) RunPost(params struct {
-	Id   string
+	Id          string
 	HostName    string
 	Ip          string
 	Type        string
@@ -33,7 +34,7 @@ func (this *UpdateAction) RunPost(params struct {
 	Protocol    string
 	Username    string
 	CertId      string
-	Must *actions.Must
+	Must        *actions.Must
 }) {
 
 	params.Must.
