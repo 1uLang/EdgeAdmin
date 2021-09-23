@@ -12,20 +12,20 @@
         <tr align="center">
             <th class='table-head-bg' style="width: 180px;">文件名</th>
             <th class='table-head-bg' style="width: 150px;">备份时间</th>
-            <th class='table-head-bg' style="width: 100px;">尺寸</th>
+            <th class='table-head-bg' style="width: 100px;">大小</th>
             <th class='table-head-bg' style="width: 150px;">操作</th>
         </tr>
         </thead>
         <tbody id='tableBody'>
         <tr align="center" style="height: 40px;" v-for="item in tableData">
-            <td>{{item.fileName}}</td>
-            <td>{{item.copyTime}}</td>
-            <td>{{item.flieSize}}</td>
+            <td>{{item.name}}</td>
+            <td>{{getTime(item.create_time)}}</td>
+            <td>{{item.size}}</td>
             <td>
                 <div style="display: flex;justify-content: space-around;">
                     <div class="edit_btn" @click="onDownLoadFlie(item)" >下载</div>
                     <div class="edit_btn" @click="onResetFile(item)" >恢复</div>
-                    <div class="red-edit-btn" @click="onDeleteFile(item.id)" >删除</div>
+                    <div class="red-edit-btn" @click="onDeleteFile(item)" >删除</div>
                 </div>
             </td>
         </tr>

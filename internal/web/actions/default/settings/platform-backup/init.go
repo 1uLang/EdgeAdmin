@@ -14,6 +14,14 @@ func init() {
 			Helper(settingutils.NewHelper("platform-backup")).
 			Prefix("/settings/platform-backup").
 			Get("", new(IndexAction)).
+			Prefix("/settings/platform-backup/backup").
+			GetPost("", new(BackupAction)).
+			Prefix("/settings/platform-backup/delete").
+			GetPost("", new(DeleteAction)).
+			Prefix("/settings/platform-backup/clean").
+			GetPost("", new(Delete30DayAction)).
+			Prefix("/settings/platform-backup/recover").
+			GetPost("", new(RecoverAction)).
 			EndAll()
 	})
 }
