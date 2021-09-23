@@ -16,7 +16,7 @@ func init() {
 	configloaders.HIDSType = "wazuh"
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
-			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeHids)).
+			Helper(helpers.NewUserMustAuth("nhids")).
 			Data("teaMenu", "hids").
 			Prefix("/hids").
 			Data("teaMenu", "agents").

@@ -5,6 +5,7 @@ Tea.context(function () {
 		teaweb.confirm("确定要删除这个节点吗？", function () {
 			this.$post("/nodes/delete")
 				.params({
+					clusterId: this.clusterId,
 					nodeId: nodeId
 				})
 				.refresh();
