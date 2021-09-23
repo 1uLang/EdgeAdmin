@@ -446,7 +446,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"code": "vulnerability",
 				},
 				{
-					"name": "病毒检测",
+					"name": "病毒查杀",
 					"url":  "/hids/virus",
 					"code": "virus",
 				},

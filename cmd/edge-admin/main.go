@@ -6,7 +6,6 @@ import (
 
 	ag_ser "github.com/1uLang/zhiannet-api/agent/server"
 	"github.com/1uLang/zhiannet-api/common/cache"
-	"github.com/1uLang/zhiannet-api/common/cron"
 	nc_model "github.com/1uLang/zhiannet-api/nextcloud/model"
 	"github.com/TeaOSLab/EdgeAdmin/internal/apps"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configs"
@@ -86,7 +85,7 @@ func main() {
 	nc_model.InitialAdminUser()
 	cache.ApiDbPath = Tea.ConfigFile("api_db.yaml")
 	cache.InitClient()
-	cron.InitCron()
+	//cron.InitCron()
 	app.Run(func() {
 		adminNode := nodes.NewAdminNode()
 		adminNode.Run()
