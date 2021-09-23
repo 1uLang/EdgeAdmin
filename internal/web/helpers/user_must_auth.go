@@ -235,13 +235,13 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 				},
 			},
 		},
-		{
-			"code":   "hostlist",
-			"url":    "/hostlist",
-			"module": configloaders.AdminModuleCodeHostlist,
-			"name":   "云主机管理",
-			"icon":   "tv",
-		},
+		//{
+		//	"code":   "hostlist",
+		//	"url":    "/hostlist",
+		//	"module": configloaders.AdminModuleCodeHostlist,
+		//	"name":   "云主机管理",
+		//	"icon":   "tv",
+		//},
 		{
 			"code":   "ddos",
 			"url":    "/ddos/host",
