@@ -118,8 +118,9 @@ Tea.context(function () {
 					that.showPageState = 3
 					setTimeout(()=>{
 						document.getElementById("systemCode").value = res.data.systemCode;
+						document.getElementById("secret").value = "";
 					},10)
-                	
+
 			 	}
 				that.onOpenErrorDialog(res.message)
             } else if (res.data.from == "/页面过期") {//刷新页面
