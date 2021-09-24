@@ -116,7 +116,10 @@ Tea.context(function () {
 
 			  	that.callBackFunc = function () {
 					that.showPageState = 3
-                	document.getElementById("systemCode").value = res.data.systemCode;
+					setTimeout(()=>{
+						document.getElementById("systemCode").value = res.data.systemCode;
+					},10)
+                	
 			 	}
 				that.onOpenErrorDialog(res.message)
             } else if (res.data.from == "/页面过期") {//刷新页面
