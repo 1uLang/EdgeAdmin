@@ -33,7 +33,7 @@ func (this *IndexAction) RunGet(params struct {
 		return
 	}
 	if len(ddos) == 0 {
-		this.Data["errorMessage"] = fmt.Errorf("未配置DDoS防火墙节点")
+		this.Data["errorMessage"] = fmt.Sprintf("未配置DDoS防火墙节点")
 		return
 	}
 	if params.NodeId == 0 {

@@ -53,10 +53,16 @@ func (this *CreateAction) RunGet(params struct{}) {
 		"4": "hids-agent.pkg",
 	}
 	this.Data["commands"] = maps.Map{
-		"1": "sudo systemctl daemon-reload\nsudo systemctl enable wazuh-agent\nsudo systemctl start wazuh-agent",
-		"2": "sudo systemctl daemon-reload\nsudo systemctl enable wazuh-agent\nsudo systemctl start wazuh-agent",
+		"1": "sudo systemctl daemon-reload && sudo systemctl enable wazuh-agent && sudo systemctl start wazuh-agent",
+		"2": "sudo systemctl daemon-reload && sudo systemctl enable wazuh-agent && sudo systemctl start wazuh-agent",
 		"3": "",
 		"4": "sudo /Library/Ossec/bin/wazuh-control start",
+	}
+	this.Data["uninstalls"] = maps.Map{
+		"1": "yum remove wazuh-agent",
+		"2": "dpkg -P wazuh-agent",
+		"3": "msiexec.exe /x hids-agent.msi /qn",
+		"4": "",
 	}
 	this.Show()
 }

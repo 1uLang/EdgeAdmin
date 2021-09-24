@@ -31,7 +31,6 @@ func (this *AgentsAction) RunGet(params struct{}) {
 		this.ErrorPage(err)
 		return
 	}
-
 	this.Data["agents"] = list.AffectedItems
 	this.Show()
 }
