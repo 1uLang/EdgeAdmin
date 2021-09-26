@@ -29,6 +29,17 @@ func (this *CreatePopupAction) RunGet(params struct{}) {
 	this.Show()
 }
 
+var roleMenus = map[int][]string{
+	//安全管理员
+	1: {"dashboard", "assembly.assembly", "assembly.resmon", "hostlist", "ddos.host", "ddos.whiteblacklist",
+		"nfw.nat", "nfw.acl", "nfw.ips", "nfw.virus", "nfw.conversation", "apt", "servers", "certs",
+		"hids", "webscan", "fortcloud", "audit", "databackup"},
+	//审计管理员
+	2: {"assembly.log", "ddos.logs", "nfw.alarm"},
+	//系统管理员
+	3: {"assembly.users", "assembly.admins", "assembly.recipients", "settings"},
+}
+
 func (this *CreatePopupAction) RunPost(params struct {
 	Fullname    string
 	Username    string
@@ -36,14 +47,22 @@ func (this *CreatePopupAction) RunPost(params struct {
 	Pass2       string
 	ModuleCodes []string
 	IsSuper     bool
+	Role        int
 	CanLogin    bool
-
 	// OTP
 	OtpOn bool
 
 	Must *actions.Must
 	CSRF *actionutils.CSRF
 }) {
+	if params.Role == 0 {
+		params.IsSuper = true
+	} else if params.Role > 3 || params.Role < 0 {
+		this.FailField("role", "角色参数错误")
+	} else {
+		params.ModuleCodes = roleMenus[params.Role]
+	}
+
 	params.Must.
 		Field("fullname", params.Fullname).
 		Require("请输入系统用户全名")

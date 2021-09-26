@@ -1,6 +1,9 @@
 package configloaders
 
-import "github.com/TeaOSLab/EdgeCommon/pkg/systemconfigs"
+import (
+	"github.com/TeaOSLab/EdgeCommon/pkg/systemconfigs"
+	"strings"
+)
 
 type AdminModuleList struct {
 	IsSuper  bool
@@ -9,12 +12,12 @@ type AdminModuleList struct {
 	Theme    string
 }
 
-func (this *AdminModuleList) Allow(module string) bool {
+func (this *AdminModuleList) Allow(module string, memu ...bool) bool {
 	if this.IsSuper {
 		return true
 	}
 	for _, m := range this.Modules {
-		if m.Code == module {
+		if m.Code == module || (strings.HasPrefix(m.Code, module) && (len(memu) == 0 || !memu[0])) {
 			return true
 		}
 	}

@@ -3,12 +3,12 @@ package admins
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/1uLang/zhiannet-api/nextcloud/model"
+	nc_req "github.com/1uLang/zhiannet-api/nextcloud/request"
 
 	"github.com/1uLang/zhiannet-api/common/server/edge_admins_server"
 	hids_user_model "github.com/1uLang/zhiannet-api/hids/model/user"
 	hids_user_server "github.com/1uLang/zhiannet-api/hids/server/user"
-	"github.com/1uLang/zhiannet-api/nextcloud/model"
-	nc_req "github.com/1uLang/zhiannet-api/nextcloud/request"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
@@ -55,7 +55,16 @@ func (this *UpdateAction) RunGet(params struct {
 		return
 	}
 	countAccessKeys := countAccessKeyResp.Count
-
+	role := 0
+	if !admin.IsSuper {
+		if admin.Modules[0].Code == roleMenus[1][0] {
+			role = 1
+		} else if admin.Modules[0].Code == roleMenus[2][0] {
+			role = 2
+		} else {
+			role = 3
+		}
+	}
 	this.Data["admin"] = maps.Map{
 		"id":              admin.Id,
 		"fullname":        admin.Fullname,
@@ -65,23 +74,10 @@ func (this *UpdateAction) RunGet(params struct {
 		"canLogin":        admin.CanLogin,
 		"otpLoginIsOn":    otpLoginIsOn,
 		"countAccessKeys": countAccessKeys,
+		"role":            role,
 	}
-
-	// 权限
-	moduleMaps := configloaders.AllModuleMaps()
-	for _, m := range moduleMaps {
-		code := m.GetString("code")
-		isChecked := false
-		for _, module := range admin.Modules {
-			if module.Code == code {
-				isChecked = true
-				break
-			}
-		}
-		m["isChecked"] = isChecked
-	}
-	this.Data["modules"] = moduleMaps
-
+	this.Data["isSuper"] = admin.IsSuper
+	this.Data["disable"] = this.AdminId() == params.AdminId
 	this.Show()
 }
 
@@ -96,7 +92,7 @@ func (this *UpdateAction) RunPost(params struct {
 	IsOn        bool
 	IsSuper     bool
 	CanLogin    bool
-
+	Role        int
 	// OTP
 	OtpOn bool
 
@@ -105,6 +101,13 @@ func (this *UpdateAction) RunPost(params struct {
 }) {
 	defer this.CreateLogInfo("修改系统用户 %d", params.AdminId)
 
+	if params.Role == 0 {
+		params.IsSuper = true
+	} else if params.Role > 3 || params.Role < 0 {
+		this.FailField("role", "角色参数错误")
+	} else {
+		params.ModuleCodes = roleMenus[params.Role]
+	}
 	params.Must.
 		Field("fullname", params.Fullname).
 		Require("请输入系统用户全名")
@@ -171,7 +174,7 @@ func (this *UpdateAction) RunPost(params struct {
 			this.ErrorPage(err)
 		}
 	}
-	
+
 	modules := []*systemconfigs.AdminModule{}
 	for _, code := range params.ModuleCodes {
 		modules = append(modules, &systemconfigs.AdminModule{
