@@ -811,3 +811,13 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 func (this *userMustAuth) login(action *actions.ActionObject) {
 	action.RedirectURL("/")
 }
+
+func (this *userMustAuth) FirstMenuUrl(adminId int64) string {
+	menus := this.modules(adminId)
+
+	if sub := menus[0].GetSlice("subItems"); sub != nil {
+		return sub[0].(maps.Map).GetString("url")
+	} else {
+		return menus[0].GetString("url")
+	}
+}

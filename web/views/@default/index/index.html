@@ -274,7 +274,7 @@
 						window.location.reload()
 					}
 					if (res.data.from!=null && res.data.from.length > 0) {
-						window.location = this.data.from;
+						window.location = res.data.from;
 					} else {
 						window.location = "/dashboard";
 					}
