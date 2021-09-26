@@ -25,4 +25,25 @@ Tea.context(function () {
         return resultTime;
     };
 
+    this.dbClickId = -1
+    this.onDoubleClick = function(id){
+        this.dbClickId = id
+    }
+
+    this.onCheckKeyDown = function(frm, event){
+        var event = window.event ? window.event : event;
+        if (event.keyCode == 13) {
+            this.onSaveRemark();
+        }
+    }
+
+    this.onSaveRemark = function(){
+        var tempInput = document.getElementById("inputTxt")
+        if(tempInput){
+            console.log(tempInput.value)
+        }
+        
+        this.dbClickId =-1
+    }
+
 });

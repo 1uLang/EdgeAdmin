@@ -26,7 +26,15 @@
         <tr align="center" style="height: 50px;" v-for="item in agents">
             <td>{{item.ip}}</td>
             <td>{{item.name}}</td>
-            <td>{{item.remake}}</td>
+            <td>
+                <div v-if="dbClickId!=item.id" @dblclick="onDoubleClick(item.id)">
+                    {{item.remake}}
+                </div>
+                <div v-else>
+                    <input id="inputTxt" type="text" value="" style="width:230px;height: 32px;font-size: 13px;border: 1px solid #d7d7d7;border-radius: 5px;" @keydown="onCheckKeyDown"/>
+                </div>
+                
+            </td>
             <td>{{item.os.name + " " + item.os.version}}</td>
             <td>{{onChangeTimeFormat(item.dateAdd)}}</td>
             <td>{{onChangeTimeFormat(item.lastKeepAlive)}}</td>
