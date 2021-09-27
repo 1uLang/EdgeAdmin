@@ -221,5 +221,8 @@ func (this *IndexAction) RunPost(params struct {
 	//记录登录成功30分钟
 	cache.SetNx(fmt.Sprintf("login_success_adminid_%v", adminId), time.Minute*30)
 	cache.DelKey(fmt.Sprintf("admin_%v", params.Username))
+
+	//跳转首页
+	this.Data["from"] = helpers.NewUserMustAuth("").FirstMenuUrl(adminId)
 	this.Success()
 }

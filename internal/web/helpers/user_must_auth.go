@@ -416,11 +416,11 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"url":  "/hids/agent",
 					"code": "agent",
 				},
-				{
-					"name": "黑白名单",
-					"url":  "/hids/bwlist",
-					"code": "bwlist",
-				},
+				//{
+				//	"name": "黑白名单",
+				//	"url":  "/hids/bwlist",
+				//	"code": "bwlist",
+				//},
 			},
 		},
 		{
@@ -824,4 +824,14 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 // 跳转到登录页
 func (this *userMustAuth) login(action *actions.ActionObject) {
 	action.RedirectURL("/")
+}
+
+func (this *userMustAuth) FirstMenuUrl(adminId int64) string {
+	menus := this.modules(adminId)
+
+	if sub := menus[0].GetSlice("subItems"); sub != nil {
+		return sub[0].(maps.Map).GetString("url")
+	} else {
+		return menus[0].GetString("url")
+	}
 }
