@@ -29,17 +29,13 @@ Tea.context(function () {
             return perm
         } else {
             let perms = perm.split(",")
-            let permsStr = ""
-            perms.forEach(function (item) {
-                console.log(item)
-                var tempPerm = item.substring(0, item.lastIndexOf(" (allowed):"));
-                let lastidx = tempPerm.lastIndexOf(" ")
-                if (lastidx >= 0) {
-                    tempPerm = tempPerm.substring(lastidx);
-                }
-                permsStr += tempPerm + ' '
-            })
-            return permsStr
+            let item = perms[0]
+            var tempPerm = item.substring(0, item.lastIndexOf(" (allowed):"));
+            let lastidx = tempPerm.lastIndexOf(" ")
+            if (lastidx >= 0) {
+                tempPerm = tempPerm.substring(lastidx);
+            }
+            return tempPerm
         }
     }
     this.onChangeEvent = function (event) {
