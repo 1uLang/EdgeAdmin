@@ -296,7 +296,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"code": "virus",
 				},
 				{
-					"name": "漏洞库",
+					"name": "漏洞特征",
 					"url":  "/nfw/vulnerability",
 					"code": "vulnerability",
 				},
