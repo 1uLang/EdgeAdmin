@@ -159,7 +159,7 @@ func (this *UpdateAction) RunPost(params struct {
 	if err != nil {
 		this.ErrorPage(err)
 	}
-	if pp != params.Pass2 {
+	if pp != params.Pass2 && params.Pass2 != "" {
 		err = nc_req.UpdateUserPassword(params.Pass2, ncName)
 		if err != nil {
 			this.ErrorPage(err)
