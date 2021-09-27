@@ -1,7 +1,6 @@
 package virus_log
 
 import (
-	"fmt"
 	"github.com/1uLang/zhiannet-api/common/model/subassemblynode"
 	request_clamav "github.com/1uLang/zhiannet-api/opnsense/request/clamav"
 	opnsense_server "github.com/1uLang/zhiannet-api/opnsense/server"
@@ -51,7 +50,7 @@ func (this *VirusLogAction) RunGet(params struct {
 	page := this.NewPage(int64(count))
 	this.Data["page"] = page.AsHTML()
 	if len(list.Rows) > 0 {
-		list.Rows[8].Line = fmt.Sprintf("Mon Sep 27 16:16:05 2021  -> Database update  faile.")
+		//list.Rows[8].Line = fmt.Sprintf("Mon Sep 27 16:16:05 2021  -> Database update  faile.")
 
 		this.Data["tableData"] = list.Rows
 	} else {
