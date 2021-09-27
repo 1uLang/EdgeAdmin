@@ -185,6 +185,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/nat"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/virus"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/virus_log"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nfw/vulnerability"
 
 	//apt 检测
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/apt"
