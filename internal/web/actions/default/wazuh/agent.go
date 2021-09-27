@@ -6,6 +6,7 @@ import (
 	"github.com/1uLang/zhiannet-api/wazuh/model/agents"
 	"github.com/1uLang/zhiannet-api/wazuh/server"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/iwind/TeaGo/maps"
 )
 
 type AgentsAction struct {
@@ -31,7 +32,18 @@ func (this *AgentsAction) RunGet(params struct{}) {
 		this.ErrorPage(err)
 		return
 	}
+	active := 0
+	for _, v := range list.AffectedItems {
+		if v.Status == "active" {
+			active++
+		}
+	}
 	this.Data["agents"] = list.AffectedItems
+	this.Data["dashboard"] = maps.Map{
+		"total":   list.TotalAffectedItems,
+		"active":  active,
+		"offline": list.TotalAffectedItems - int64(active),
+	}
 	this.Show()
 }
 

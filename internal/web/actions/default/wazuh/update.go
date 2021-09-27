@@ -16,9 +16,19 @@ func (this *UpdateAction) Init() {
 	this.Nav("", "", "agents")
 }
 
+func (this *UpdateAction) RunGet(params struct {
+	Agent  string
+	Remake string
+}) {
+
+	this.Data["agent"] = params.Agent
+	this.Data["remake"] = params.Remake
+	this.Show()
+}
 func (this *UpdateAction) RunPost(params struct {
 	Agent  string
 	Remake string
+	CSRF   *actionutils.CSRF
 }) {
 
 	err := InitAPIServer()
