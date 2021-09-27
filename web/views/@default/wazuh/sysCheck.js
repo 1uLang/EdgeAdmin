@@ -23,6 +23,25 @@ Tea.context(function () {
         }
 
     })
+    this.onChangePerm = function (perm) {
+
+        if (perm.length === 9 && (perm[0] === 'r' || perm[0] === '-')) { //linux
+            return perm
+        } else {
+            let perms = perm.split(",")
+            let permsStr = ""
+            perms.forEach(function (item) {
+                console.log(item)
+                var tempPerm = item.substring(0, item.lastIndexOf(" (allowed):"));
+                let lastidx = tempPerm.lastIndexOf(" ")
+                if (lastidx >= 0) {
+                    tempPerm = tempPerm.substring(lastidx);
+                }
+                permsStr += tempPerm + ' '
+            })
+            return permsStr
+        }
+    }
     this.onChangeEvent = function (event) {
         switch (event) {
             case 'deleted':
