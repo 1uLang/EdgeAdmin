@@ -5,9 +5,12 @@ import (
 	"github.com/1uLang/zhiannet-api/common/cache"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
+	"github.com/TeaOSLab/EdgeAdmin/internal/rpc"
 	"github.com/TeaOSLab/EdgeAdmin/internal/setup"
 	"github.com/TeaOSLab/EdgeAdmin/internal/utils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
+	"github.com/iwind/TeaGo/lists"
 	"github.com/iwind/TeaGo/maps"
 	"net"
 	"net/http"
@@ -168,7 +171,6 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 		initMethod.Call([]reflect.Value{})
 	}
 
-	//fmt.Println("action.Request.RequestURI===",action.Request.RequestURI)
 	//非检测请求  登录信息续期
 	if !utils.UrlIn(action.Request.RequestURI) {
 		res, _ := cache.GetInt(fmt.Sprintf("login_success_adminid_%v", adminId))
@@ -384,82 +386,45 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 			"url":    "/servers/certs",
 			"module": configloaders.AdminModuleCodeCerts,
 		},
-	}
-	if configloaders.HIDSType == "safedog" {
-		leftMaps = append(leftMaps, []maps.Map{
-			{
-				"code":   "hids",
-				"url":    "/hids/examine",
-				"module": configloaders.AdminModuleCodeHids,
-				"name":   "主机防护",
-				"icon":   "linux",
-				"subItems": []maps.Map{
-					{
-						"name": "主机体检",
-						"url":  "/hids/examine",
-						"code": "examine",
-					},
-					{
-						"name": "漏洞风险",
-						"url":  "/hids/risk",
-						"code": "risk",
-					},
-					{
-						"name": "入侵威胁",
-						"url":  "/hids/invade",
-						"code": "invade",
-					},
-					{
-						"name": "合规基线",
-						"url":  "/hids/baseline",
-						"code": "baseline",
-					},
-					{
-						"name": "Agent管理",
-						"url":  "/hids/agent",
-						"code": "agent",
-					},
-					{
-						"name": "黑白名单",
-						"url":  "/hids/bwlist",
-						"code": "bwlist",
-					},
+		{
+			"code":   "hids",
+			"url":    "/hids/examine",
+			"module": configloaders.AdminModuleCodeHids,
+			"name":   "主机防护",
+			"icon":   "linux",
+			"subItems": []maps.Map{
+				{
+					"name": "主机体检",
+					"url":  "/hids/examine",
+					"code": "examine",
 				},
-			}}...)
-	} else { //wazuh
-
-		leftMaps = append(leftMaps, []maps.Map{
-			{
-				"code":   "hids",
-				"url":    "/hids/agents",
-				"module": configloaders.AdminModuleCodeHids,
-				"name":   "主机防护",
-				"icon":   "linux",
-				"subItems": []maps.Map{
-					{
-						"name": "资产管理",
-						"url":  "/hids/agents",
-						"code": "agents",
-					},
-					{
-						"name": "漏洞风险",
-						"url":  "/hids/vulnerability",
-						"code": "vulnerability",
-					},
-					{
-						"name": "病毒管理",
-						"url":  "/hids/virus",
-						"code": "virus",
-					},
-					{
-						"name": "合规基线",
-						"url":  "/hids/baseLine",
-						"code": "baseLine",
-					},
+				{
+					"name": "漏洞风险",
+					"url":  "/hids/risk",
+					"code": "risk",
 				},
-			}}...)
-	}
-	leftMaps = append(leftMaps, []maps.Map{
+				{
+					"name": "入侵威胁",
+					"url":  "/hids/invade",
+					"code": "invade",
+				},
+				{
+					"name": "合规基线",
+					"url":  "/hids/baseline",
+					"code": "baseline",
+				},
+				{
+					"name": "Agent管理",
+					"url":  "/hids/agent",
+					"code": "agent",
+				},
+				{
+					"name": "黑白名单",
+					"url":  "/hids/bwlist",
+					"code": "bwlist",
+				},
+			},
+		},
 		{
 			"code":   "webscan",
 			"url":    "/webscan/targets",
@@ -798,8 +763,19 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 				},
 			},
 		},
-	}...)
+	}
 	leftResult := []maps.Map{}
+	// 开通的功能
+	featureCodes := []string{}
+	rpcClient, err := rpc.SharedRPC()
+	if err == nil {
+		userFeatureResp, err := rpcClient.AdminRPC().FindEnabledAdmin(rpcClient.Context(adminId), &pb.FindEnabledAdminRequest{AdminId: adminId})
+		if err == nil {
+			for _, feature := range userFeatureResp.Admin.Modules {
+				featureCodes = append(featureCodes, feature.Code)
+			}
+		}
+	}
 	for _, m := range leftMaps {
 		//去掉财务信息
 		//if m.GetString("code") == "finance" && !configloaders.ShowFinance() {
@@ -807,8 +783,25 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 		//}
 
 		module := m.GetString("module")
-		if configloaders.AllowModule(adminId, module) {
+		code := m.GetString("code")
+		if configloaders.AllowModule(adminId, module, true) {
 			leftResult = append(leftResult, m)
+		} else { //判断子菜单是否已授权
+			sub := m.GetSlice("subItems")
+			newSub := []maps.Map{}
+			if sub != nil {
+				for _, item := range sub {
+					sub := item.(maps.Map)
+					subCode := sub.GetString("code")
+					if lists.ContainsString(featureCodes, code+"."+subCode) { //表示子菜单包含
+						newSub = append(newSub, sub)
+					}
+				}
+			}
+			if len(newSub) > 0 {
+				m["subItems"] = newSub
+				leftResult = append(leftResult, m)
+			}
 		}
 	}
 	return leftResult
@@ -817,4 +810,14 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 // 跳转到登录页
 func (this *userMustAuth) login(action *actions.ActionObject) {
 	action.RedirectURL("/")
+}
+
+func (this *userMustAuth) FirstMenuUrl(adminId int64) string {
+	menus := this.modules(adminId)
+
+	if sub := menus[0].GetSlice("subItems"); sub != nil {
+		return sub[0].(maps.Map).GetString("url")
+	} else {
+		return menus[0].GetString("url")
+	}
 }

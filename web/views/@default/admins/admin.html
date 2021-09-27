@@ -30,23 +30,25 @@
         </td>
     </tr>
     <tr>
-        <td>是否为超级管理员</td>
+        <td>角色</td>
         <td>
-            <span v-if="admin.isSuper" class="green">Y</span>
-            <span v-else class="disabled">N</span>
+            <span v-if="admin.role === 0" class="green">超级管理员</span>
+            <span v-else-if="admin.role === 1" class="green">安全管理员</span>
+            <span v-else-if="admin.role === 2" class="green">审计管理员</span>
+            <span v-else class="green">系统管理员</span>
         </td>
     </tr>
-    <tr v-show="!admin.isSuper">
-        <td>权限</td>
-        <td>
-            <div class="modules-box" v-if="modules.length > 0">
-                <div class="module-box" v-for="module in modules">
-                    <i class="icon circle small grey"></i> {{module.name}}
-                </div>
-            </div>
-            <span v-else class="disabled">暂时还没有可以管理的模块。</span>
-        </td>
-    </tr>
+    <!--    <tr v-show="!admin.isSuper">-->
+    <!--        <td>权限</td>-->
+    <!--        <td>-->
+    <!--            <div class="modules-box" v-if="modules.length > 0">-->
+    <!--                <div class="module-box" v-for="module in modules">-->
+    <!--                    <i class="icon circle small grey"></i> {{module.name}}-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--            <span v-else class="disabled">暂时还没有可以管理的模块。</span>-->
+    <!--        </td>-->
+    <!--    </tr>-->
 </table>
 
 <h3>OTP认证</h3>
@@ -59,7 +61,9 @@
         </td>
     </tr>
     <tr v-if="otp != null && otp.isOn">
-        <td colspan="2"><more-options-indicator>更多信息</more-options-indicator></td>
+        <td colspan="2">
+            <more-options-indicator>更多信息</more-options-indicator>
+        </td>
     </tr>
     <tr v-if="otp != null && otp.isOn && moreOptionsVisible">
         <td>认证二维码</td>

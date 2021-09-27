@@ -38,6 +38,16 @@ func (this *AdminAction) RunGet(params struct {
 	}
 	countAccessKeys := countAccessKeyResp.Count
 
+	role := 0
+	if !admin.IsSuper {
+		if admin.Modules[0].Code == roleMenus[1][0] {
+			role = 1
+		} else if admin.Modules[0].Code == roleMenus[2][0] {
+			role = 2
+		} else {
+			role = 3
+		}
+	}
 	this.Data["admin"] = maps.Map{
 		"id":              admin.Id,
 		"fullname":        admin.Fullname,
@@ -46,6 +56,7 @@ func (this *AdminAction) RunGet(params struct {
 		"isSuper":         admin.IsSuper,
 		"canLogin":        admin.CanLogin,
 		"countAccessKeys": countAccessKeys,
+		"role":            role,
 	}
 
 	// 权限

@@ -11,32 +11,32 @@ type AdminModuleCode = string
 
 const (
 	AdminModuleCodeDashboard AdminModuleCode = "dashboard" // 看板
-	AdminModuleCodeServer    AdminModuleCode = "server"    // 网站
+	AdminModuleCodeServer    AdminModuleCode = "servers"   // 网站
 	AdminModuleCodeCerts     AdminModuleCode = "certs"     // 证书服务
 	AdminModuleCodeNode      AdminModuleCode = "node"      // 节点
 	AdminModuleCodeDNS       AdminModuleCode = "dns"       // DNS
 	AdminModuleCodeNS        AdminModuleCode = "ns"        // 域名服务
-	AdminModuleCodeAdmin     AdminModuleCode = "config"    // 系统用户
+	AdminModuleCodeAdmin     AdminModuleCode = "assembly"  // 系统用户
 	AdminModuleCodeUser      AdminModuleCode = "user"      // 平台用户
 	AdminModuleCodeFinance   AdminModuleCode = "finance"   // 财务
 	AdminModuleCodeLog       AdminModuleCode = "log"       // 日志
-	AdminModuleCodeSetting   AdminModuleCode = "setting"   // 设置
+	AdminModuleCodeSetting   AdminModuleCode = "settings"  // 设置
 	AdminModuleCodeAssembly  AdminModuleCode = "assembly"  // 只要登录就可以访问的模块
 	AdminModuleCodeCommon    AdminModuleCode = "common"    // 只要登录就可以访问的模块
-	AdminModuleCodeConfig    AdminModuleCode = "config"    // 平台管理
+	AdminModuleCodeConfig    AdminModuleCode = "assembly"  // 平台管理
 	AdminModuleCodeClusters  AdminModuleCode = "clusters"  // 边缘节点
 
-	AdminModuleCodeDdos     AdminModuleCode = "ddos"      // ddos
-	AdminModuleCodeWebScan  AdminModuleCode = "webscan"   // webscan
-	AdminModuleCodeHids     AdminModuleCode = "hids"      // hids 主机防护
-	AdminModuleCodeNfw      AdminModuleCode = "nfw"       // 下一代防火墙
-	AdminModuleCodeMaltrail AdminModuleCode = "apt"       // apt检测
-	AdminModuleCodeMonitor  AdminModuleCode = "monitor"   //监控告警
-	AdminModuleCodeWAF      AdminModuleCode = "waf"       //web防火墙
-	AdminModuleCodeAudit    AdminModuleCode = "audit"     //审计系统
-	AdminModuleCodeFort     AdminModuleCode = "fortcloud" //堡垒机
-	AdminModuleCodeBackup   AdminModuleCode = "backup"    //数据备份
-	AdminModuleCodeHostlist AdminModuleCode = "hostlist"  //主机列表
+	AdminModuleCodeDdos     AdminModuleCode = "ddos"       // ddos
+	AdminModuleCodeWebScan  AdminModuleCode = "webscan"    // webscan
+	AdminModuleCodeHids     AdminModuleCode = "hids"       // hids 主机防护
+	AdminModuleCodeNfw      AdminModuleCode = "nfw"        // 下一代防火墙
+	AdminModuleCodeMaltrail AdminModuleCode = "apt"        // apt检测
+	AdminModuleCodeMonitor  AdminModuleCode = "monitor"    //监控告警
+	AdminModuleCodeWAF      AdminModuleCode = "waf"        //web防火墙
+	AdminModuleCodeAudit    AdminModuleCode = "audit"      //审计系统
+	AdminModuleCodeFort     AdminModuleCode = "fortcloud"  //堡垒机
+	AdminModuleCodeBackup   AdminModuleCode = "databackup" //数据备份
+	AdminModuleCodeHostlist AdminModuleCode = "hostlist"   //主机列表
 )
 
 var sharedAdminModuleMapping = map[int64]*AdminModuleList{} // adminId => AdminModuleList
@@ -103,7 +103,7 @@ func CheckAdmin(adminId int64) bool {
 }
 
 // AllowModule 检查模块是否允许访问
-func AllowModule(adminId int64, module string) bool {
+func AllowModule(adminId int64, module string, menu ...bool) bool {
 	locker.Lock()
 	defer locker.Unlock()
 
@@ -116,7 +116,7 @@ func AllowModule(adminId int64, module string) bool {
 	}
 	list, ok := sharedAdminModuleMapping[adminId]
 	if ok {
-		return list.Allow(module)
+		return list.Allow(module, menu...)
 	}
 
 	return false

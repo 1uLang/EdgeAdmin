@@ -1,6 +1,6 @@
 {$layout}
 {$template "admin_menu"}
-
+{{disable}}
 <form method="post" class="ui form" data-tea-action="$" data-tea-success="success">
     <csrf-token></csrf-token>
     <input type="hidden" name="adminId" :value="admin.id"/>
@@ -39,23 +39,33 @@
                 <p class="comment">选中后才可以登录当前的管理平台。</p>
             </td>
         </tr>
-        <tr>
+
+        <tr v-if="isSuper">
             <td>是否为超级管理员</td>
             <td>
-                <checkbox name="isSuper" v-model="admin.isSuper"></checkbox>
+                <checkbox name="isSuper" v-model="isSuper" onclick="return false;"></checkbox>
                 <p class="comment">超级管理员自动拥有所有的管理权限。</p>
             </td>
         </tr>
-        <tr v-show="!admin.isSuper">
-            <td>权限</td>
+        <tr v-else>
+            <td>角色</td>
             <td>
-                <div class="modules-box">
-                    <div class="module-box" v-for="module in modules">
-                        <checkbox name="moduleCodes" :v-value="module.code" v-model="module.isChecked">{{module.name}}</checkbox>
-                    </div>
-                </div>
+                <input name="role" type="radio" value="1" v-model="admin.role" :disabled="disable">安全管理员
+                <input name="role" type="radio" value="2" v-model="admin.role" :disabled="disable"  style="margin-left:20px">审计管理员
+                <input name="role" type="radio" value="3" v-model="admin.role" :disabled="disable"  style="margin-left:20px">系统管理员
+                <p class="comment">三权分立用户权限设置。</p>
             </td>
         </tr>
+        <!--		<tr v-show="!isSuper">-->
+        <!--			<td>权限</td>-->
+        <!--			<td>-->
+        <!--				<div class="modules-box">-->
+        <!--					<div class="module-box" v-for="module in modules">-->
+        <!--						<checkbox name="moduleCodes" :v-value="module.code">{{module.name}}</checkbox>-->
+        <!--					</div>-->
+        <!--				</div>-->
+        <!--			</td>-->
+        <!--		</tr>-->
         <tr>
             <td>OTP认证</td>
             <td>
