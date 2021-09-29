@@ -22,7 +22,7 @@
             <td class="title">结束日期</td>
             <td>
                 <span style="float: left">{{info.dayTo}}</span>
-                <div v-if="key.isExpired" style="margin-top: 0.5em;float: left">
+                <div v-if="info.isExpired" style="margin-top: 0.5em;float: left">
                     <span class="red">已过期，请尽快更新认证信息。</span>
                 </div>
                 <div style="float: left" class="sure-btn" @click="onOpenRenew">续订</div>
