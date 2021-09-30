@@ -13,6 +13,7 @@ func init() {
 			Data("teaMenu", "users").
 			Prefix("/users").
 			Get("", new(IndexAction)).
+			Get("/sub", new(SubAction)).
 			GetPost("/createPopup", new(CreatePopupAction)).
 			Get("/user", new(UserAction)).
 			GetPost("/update", new(UpdateAction)).

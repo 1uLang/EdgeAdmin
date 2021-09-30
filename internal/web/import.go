@@ -231,4 +231,7 @@ import (
 
 	// 主机列表
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hostlist"
+
+	//渠道管理
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/channels"
 )

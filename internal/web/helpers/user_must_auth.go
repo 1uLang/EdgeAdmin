@@ -214,6 +214,11 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"code": "resmon",
 				},
 				{
+					"name": "渠道管理",
+					"url":  "/channels",
+					"code": "channels",
+				},
+				{
 					"name": "平台用户",
 					"url":  "/users",
 					"code": "users",

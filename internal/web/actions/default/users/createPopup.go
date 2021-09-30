@@ -38,6 +38,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 	Remark    string
 	ClusterId int64
 	OtpOn     bool
+	ChannelId uint64
 
 	Must *actions.Must
 	CSRF *actionutils.CSRF
@@ -157,6 +158,9 @@ func (this *CreatePopupAction) RunPost(params struct {
 	if err != nil {
 		this.ErrorPage(err)
 		return
+	}
+	if params.ChannelId > 0 { //修改渠道ID
+		edge_users_server.UpdateChannel(uint64(createResp.UserId), params.ChannelId)
 	}
 	defer this.CreateLogInfo("创建用户 %d", createResp.UserId)
 

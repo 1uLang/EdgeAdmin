@@ -1,8 +1,6 @@
 package users
 
 import (
-	"fmt"
-
 	"github.com/1uLang/zhiannet-api/common/model/edge_logins"
 	"github.com/1uLang/zhiannet-api/common/server/edge_logins_server"
 	"github.com/1uLang/zhiannet-api/common/server/edge_users_server"
@@ -34,16 +32,18 @@ func (this *UpdateAction) RunGet(params struct {
 		return
 	}
 
-	userResp, err := this.RPC().UserRPC().FindEnabledUser(this.AdminContext(), &pb.FindEnabledUserRequest{UserId: params.UserId})
+	//userResp, err := this.RPC().UserRPC().FindEnabledUser(this.AdminContext(), &pb.FindEnabledUserRequest{UserId: params.UserId})
+
+	user, err := edge_users_server.GetUserInfo(uint64(params.UserId))
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	user := userResp.User
-	if user == nil {
-		this.NotFound("user", params.UserId)
-		return
-	}
+	//user := userResp.User
+	//if user == nil {
+	//	this.NotFound("user", params.UserId)
+	//	return
+	//}
 
 	// AccessKey数量
 	countAccessKeyResp, err := this.RPC().UserAccessKeyRPC().CountAllEnabledUserAccessKeys(this.AdminContext(), &pb.CountAllEnabledUserAccessKeysRequest{UserId: params.UserId})
@@ -64,21 +64,22 @@ func (this *UpdateAction) RunGet(params struct {
 	}
 
 	this.Data["user"] = maps.Map{
-		"id":              user.Id,
+		"id":              user.ID,
 		"username":        user.Username,
 		"fullname":        user.Fullname,
 		"email":           user.Email,
 		"tel":             user.Tel,
 		"remark":          user.Remark,
 		"mobile":          user.Mobile,
-		"isOn":            user.IsOn,
+		"isOn":            user.Ison,
 		"countAccessKeys": countAccessKeys,
 		"otpLoginIsOn":    otpLogin,
+		"channelId":       user.ChannelId,
 	}
 
 	this.Data["clusterId"] = 0
-	if user.NodeCluster != nil {
-		this.Data["clusterId"] = user.NodeCluster.Id
+	if user.Clusterid > 0 {
+		this.Data["clusterId"] = user.Clusterid
 	}
 
 	this.Show()
@@ -97,6 +98,7 @@ func (this *UpdateAction) RunPost(params struct {
 	IsOn      bool
 	ClusterId int64
 	OtpOn     bool
+	ChannelId uint64
 
 	Must *actions.Must
 	CSRF *actionutils.CSRF
@@ -174,6 +176,11 @@ func (this *UpdateAction) RunPost(params struct {
 		//更新密码修改时间
 		edge_users_server.UpdatePwdAt(uint64(params.UserId))
 	}
+
+	if params.ChannelId > 0 { //修改渠道ID
+		edge_users_server.UpdateChannel(uint64(params.UserId), params.ChannelId)
+	}
+
 	otpLogin, err := edge_logins_server.GetInfoByUid(uint64(params.UserId))
 	if err != nil {
 		this.ErrorPage(err)
@@ -203,7 +210,7 @@ func (this *UpdateAction) RunPost(params struct {
 			return
 		}
 	} else {
-		fmt.Println("otp=====", otpLogin)
+		//fmt.Println("otp=====", otpLogin)
 		if otpLogin != nil && otpLogin.Id > 0 {
 			_, err = edge_logins_server.UpdateOpt(uint64(otpLogin.Id), 0)
 			if err != nil {
@@ -223,7 +230,7 @@ func (this *UpdateAction) RunPost(params struct {
 	if err != nil {
 		this.ErrorPage(err)
 	}
-	if pp != params.Pass2 && params.Pass2 != ""{
+	if pp != params.Pass2 && params.Pass2 != "" {
 		err = nc_req.UpdateUserPassword(params.Pass2, ncName)
 		if err != nil {
 			this.ErrorPage(err)

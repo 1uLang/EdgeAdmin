@@ -1,13 +1,13 @@
 Tea.context(function () {
     
-    this.channelName = ""
-    this.channelHost = ""
-    this.productName = ""
-    this.productLogo = "/images/logo.png"
-    this.linkPerson = ""
-    this.phoneNum = ""
-    this.markStr = ""
-    
+    // this.name = ""
+    // this.domain = ""
+    // this.productName = ""
+    // this.logo = "" ////images/logo.png
+    // this.user = ""
+    // this.mobile = ""
+    // this.remake = ""
+    console.log(this.name)
     
     this.onImageChangeHandle = function(){
         var imageInput = document.getElementById("imageInput")
@@ -22,7 +22,7 @@ Tea.context(function () {
         var reader = new FileReader()
         reader.readAsDataURL(filePath)
         reader.onload = function(result){
-            that.productLogo = reader.result
+            that.logo = reader.result
         }
     }
     

@@ -22,12 +22,12 @@ Tea.context(function () {
     }
     
     this.onLookDetail = function(item){
-
+        window.location = "/users?selectChan=" + item.id
     }
     
     //替换参数
     this.onChangeItem = function(item){
-        teaweb.popup(Tea.url(".create?xxxxx"), {
+        teaweb.popup(Tea.url(".create?id="+item.id), {
             width:"600px",
             height:"570px",
             callback: function () {
@@ -39,12 +39,16 @@ Tea.context(function () {
     }
 
     this.onDeleteItem = function(item){
-
+        teaweb.confirm("确定删除？",function() {
+            this.$post(".delete").params({
+                id: item.id,
+            }).refresh()
+        })
     }
     
-    this.tableData = [
-        {id:1,companyName:"河北发发发公司",linkPerson:"张哥",phoneNum:"1300000000",productName:"发发发等保平台",clientCount:"3",status:1,createTime:"2021-09-13 08:22:22"},
-        {id:1,companyName:"河北发发发公司",linkPerson:"张哥",phoneNum:"1300000000",productName:"发发发等保平台",clientCount:"3",status:0,createTime:"2021-09-13 08:22:22"},
-        {id:1,companyName:"河北发发发公司",linkPerson:"张哥",phoneNum:"1300000000",productName:"发发发等保平台",clientCount:"3",status:1,createTime:"2021-09-13 08:22:22"},
-    ]
+    // this.tableData = [
+    //     {id:1,name:"河北发发发公司",user:"张哥",mobile:"1300000000",productName:"发发发等保平台",clientCount:"3",status:1,createTime:"2021-09-13 08:22:22"},
+    //     {id:1,name:"河北发发发公司",user:"张哥",mobile:"1300000000",productName:"发发发等保平台",clientCount:"3",status:0,createTime:"2021-09-13 08:22:22"},
+    //     {id:1,name:"河北发发发公司",user:"张哥",mobile:"1300000000",productName:"发发发等保平台",clientCount:"3",status:1,createTime:"2021-09-13 08:22:22"},
+    // ]
 });
