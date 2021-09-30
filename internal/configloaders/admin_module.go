@@ -195,6 +195,11 @@ func AllModuleMaps() []maps.Map {
 			"code": AdminModuleCodeNfw,
 			"url":  "/nfw/nat",
 		},
+		{
+			"name": "APT检测",
+			"code": AdminModuleCodeMaltrail,
+			"url":  "/apt/logs",
+		},
 	}
 	//if teaconst.IsPlus {
 	//	m = append(m, maps.Map{
