@@ -30,7 +30,7 @@ func (this *CreateAction) RunGet(params struct {
 	this.Data["status"] = info.Status
 	this.Data["domain"] = info.Domain
 	this.Data["remake"] = info.Remake
-	this.Data["logo"] = info.Logo
+	this.Data["logo"] = fmt.Sprintf("/ui/image/%v", info.Logo)
 	this.Data["id"] = info.Id
 	if params.Id == 0 {
 		this.Data["status"] = 1
@@ -99,7 +99,7 @@ func (this *CreateAction) RunPost(params struct {
 		if err != nil {
 			this.ErrorPage(err)
 		}
-		logoname = fmt.Sprintf("/ui/image/%v", fileId)
+		logoname = fmt.Sprintf("%v", fileId)
 	}
 	req := &channels.Channels{
 		Name:        params.Name,

@@ -63,7 +63,7 @@ func (this *IndexAction) RunGet(params struct {
 				"status":      v.Status,
 				"createTime":  createTime,
 				"domain":      v.Domain,
-				"logo":        v.Logo,
+				"logo":        fmt.Sprintf("/ui/image/%v", v.Logo),
 				"remake":      v.Remake,
 				"clientCount": clientCount,
 			}
@@ -122,7 +122,7 @@ func (this *IndexAction) RunPost(params struct {
 				"status":      v.Status,
 				"createTime":  createTime,
 				"domain":      v.Domain,
-				"logo":        v.Logo,
+				"logo":        fmt.Sprintf("/ui/image/%v", v.Logo),
 				"remake":      v.Remake,
 				"clientCount": clientCount,
 			}
