@@ -16,7 +16,7 @@ type SubAction struct {
 }
 
 func (this *SubAction) Init() {
-	this.Nav("", "", "")
+	this.Nav("", "", "sub")
 }
 
 func (this *SubAction) RunGet(params struct {
