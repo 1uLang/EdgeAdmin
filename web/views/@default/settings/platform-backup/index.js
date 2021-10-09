@@ -31,8 +31,9 @@ Tea.context(function () {
     this.onDownLoadFlie = function (item) {
         let that = this
         let url = "/remote.php/dav/files/admin/平台数据/" + item.name
+        let filename=item.name
         that.$get("/databackup/download").params({
-            name: item.Name,
+            name: filename,
             fp: url
         }).timeout(120).success((res) => {
             that.onDownload(res, "application/zip")
