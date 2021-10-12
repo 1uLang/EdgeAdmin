@@ -28,6 +28,9 @@ Tea.context(function () {
     
     this.delImage = function () {
         this.logo = ''
+        //imageInput
+        var imageInput = document.getElementById("imageInput")
+        imageInput.value = ""
     }
     
 })
