@@ -8,6 +8,7 @@ import (
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
 	"io"
+	"strings"
 )
 
 type CreateAction struct {
@@ -48,6 +49,7 @@ func (this *CreateAction) RunPost(params struct {
 	User        string
 	Remake      string
 	Status      int
+	OldLogo     string
 	Must        *actions.Must
 	CSRF        *actionutils.CSRF
 }) {
@@ -100,7 +102,14 @@ func (this *CreateAction) RunPost(params struct {
 			this.ErrorPage(err)
 		}
 		logoname = fmt.Sprintf("%v", fileId)
+	} else {
+		if params.OldLogo == "" {
+			logoname = ""
+		} else {
+			logoname = strings.Replace(params.OldLogo, "/ui/image/", "", 1)
+		}
 	}
+
 	req := &channels.Channels{
 		Name:        params.Name,
 		User:        params.User,

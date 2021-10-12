@@ -41,8 +41,7 @@
                 <td :class="{disabled:!user.isOn}">{{user.username}}</td>
                 <td :class="{disabled:!user.isOn}">{{user.fullname}}</td>
                 <td>
-                <span v-if="user.channel != null">{{user.channel.name}} <link-icon
-                            :href="'/users?selectChan=' + user.channel.id"></link-icon></span>
+                <span v-if="user.channel != null">{{user.channel.name}} </span>
                     <span v-else class="disabled">-</span>
                 </td>
                 <td>
