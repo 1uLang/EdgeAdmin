@@ -1,8 +1,9 @@
 package waf
 
 import (
+	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/models"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 )
 
@@ -14,7 +15,10 @@ func (this *DeleteGroupAction) RunPost(params struct {
 	FirewallPolicyId int64
 	GroupId          int64
 }) {
-	firewallPolicy, err := models.SharedHTTPFirewallPolicyDAO.FindEnabledPolicyConfig(this.AdminContext(), params.FirewallPolicyId)
+	// 日志
+	defer this.CreateLog(oplogs.LevelInfo, "删除WAF策略 %d 的规则分组 %d", params.FirewallPolicyId, params.GroupId)
+
+	firewallPolicy, err := dao.SharedHTTPFirewallPolicyDAO.FindEnabledHTTPFirewallPolicyConfig(this.AdminContext(), params.FirewallPolicyId)
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -39,9 +43,9 @@ func (this *DeleteGroupAction) RunPost(params struct {
 	}
 
 	_, err = this.RPC().HTTPFirewallPolicyRPC().UpdateHTTPFirewallPolicyGroups(this.AdminContext(), &pb.UpdateHTTPFirewallPolicyGroupsRequest{
-		FirewallPolicyId: params.FirewallPolicyId,
-		InboundJSON:      inboundJSON,
-		OutboundJSON:     outboundJSON,
+		HttpFirewallPolicyId: params.FirewallPolicyId,
+		InboundJSON:          inboundJSON,
+		OutboundJSON:         outboundJSON,
 	})
 	if err != nil {
 		this.ErrorPage(err)

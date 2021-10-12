@@ -19,5 +19,4 @@ func (this *DownloadAction) RunGet(params struct {
 }) {
 	this.AddHeader("Content-Disposition", "attachment; filename=\""+params.File+"\";")
 	this.WriteString(params.Text)
-
 }

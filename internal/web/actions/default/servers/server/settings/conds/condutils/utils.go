@@ -14,9 +14,11 @@ type CondJSComponent struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	Component   string `json:"component"`
+	ParamsTitle string `json:"paramsTitle"`
+	IsRequest   bool   `json:"isRequest"`
 }
 
-// 读取所有可用的条件
+// ReadAllAvailableCondTypes 读取所有可用的条件
 func ReadAllAvailableCondTypes() []*CondJSComponent {
 	result := []*CondJSComponent{}
 

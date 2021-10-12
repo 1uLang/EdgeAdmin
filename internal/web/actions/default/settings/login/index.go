@@ -1,6 +1,7 @@
 package login
 
 import (
+	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
@@ -41,6 +42,8 @@ func (this *IndexAction) RunPost(params struct {
 
 	Must *actions.Must
 }) {
+	defer this.CreateLogInfo("修改登录设置")
+
 	params.Must.
 		Field("username", params.Username).
 		Require("请输入登录用户名").
@@ -69,6 +72,13 @@ func (this *IndexAction) RunPost(params struct {
 		Username: params.Username,
 		Password: params.Password,
 	})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+
+	// 通知更新
+	err = configloaders.NotifyAdminModuleMappingChange()
 	if err != nil {
 		this.ErrorPage(err)
 		return

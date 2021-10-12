@@ -22,15 +22,16 @@ func (this *CreateRulePopupAction) RunGet(params struct {
 }) {
 	// check points
 	checkpointList := []maps.Map{}
-	for _, def := range firewallconfigs.AllCheckpoints {
-		if (params.Type == "inbound" && def.IsRequest) || (params.Type == "outbound" && !def.IsRequest) {
+	for _, checkpoint := range firewallconfigs.AllCheckpoints {
+		if (params.Type == "inbound" && checkpoint.IsRequest) || params.Type == "outbound" {
 			checkpointList = append(checkpointList, maps.Map{
-				"name":        def.Name,
-				"prefix":      def.Prefix,
-				"description": def.Description,
-				"hasParams":   len(def.Params) > 0,
-				"params":      def.Params,
-				"options":     def.Options,
+				"name":        checkpoint.Name,
+				"prefix":      checkpoint.Prefix,
+				"description": checkpoint.Description,
+				"hasParams":   checkpoint.HasParams,
+				"params":      checkpoint.Params,
+				"options":     checkpoint.Options,
+				"isComposed":  checkpoint.IsComposed,
 			})
 		}
 	}
@@ -52,13 +53,14 @@ func (this *CreateRulePopupAction) RunGet(params struct {
 }
 
 func (this *CreateRulePopupAction) RunPost(params struct {
-	RuleId      int64
-	Prefix      string
-	Operator    string
-	Param       string
-	OptionsJSON []byte
-	Value       string
-	Case        bool
+	RuleId           int64
+	Prefix           string
+	Operator         string
+	Param            string
+	ParamFiltersJSON []byte
+	OptionsJSON      []byte
+	Value            string
+	Case             bool
 
 	Must *actions.Must
 }) {
@@ -75,6 +77,17 @@ func (this *CreateRulePopupAction) RunPost(params struct {
 	} else {
 		rule.Param = "${" + params.Prefix + "}"
 	}
+
+	paramFilters := []*firewallconfigs.ParamFilter{}
+	if len(params.ParamFiltersJSON) > 0 {
+		err := json.Unmarshal(params.ParamFiltersJSON, &paramFilters)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+	}
+	rule.ParamFilters = paramFilters
+
 	rule.Operator = params.Operator
 	rule.Value = params.Value
 	rule.IsCaseInsensitive = params.Case
@@ -89,7 +102,7 @@ func (this *CreateRulePopupAction) RunPost(params struct {
 
 		rule.CheckpointOptions = map[string]interface{}{}
 		for _, option := range options {
-			rule.CheckpointOptions[option.GetString("code")] = option.GetString("value")
+			rule.CheckpointOptions[option.GetString("code")] = option.Get("value")
 		}
 	}
 

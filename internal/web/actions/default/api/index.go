@@ -1,9 +1,15 @@
 package api
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/nodeconfigs"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
+	"github.com/iwind/TeaGo/logs"
 	"github.com/iwind/TeaGo/maps"
+	"time"
 )
 
 type IndexAction struct {
@@ -36,11 +42,65 @@ func (this *IndexAction) RunGet(params struct{}) {
 		}
 
 		for _, node := range nodesResp.Nodes {
+			// 状态
+			status := &nodeconfigs.NodeStatus{}
+			if len(node.StatusJSON) > 0 {
+				err = json.Unmarshal(node.StatusJSON, &status)
+				if err != nil {
+					logs.Error(err)
+					continue
+				}
+				status.IsActive = status.IsActive && time.Now().Unix()-status.UpdatedAt <= 60 // N秒之内认为活跃
+			}
+
+			// Rest地址
+			restAccessAddrs := []string{}
+			if node.RestIsOn {
+				if len(node.RestHTTPJSON) > 0 {
+					httpConfig := &serverconfigs.HTTPProtocolConfig{}
+					err = json.Unmarshal(node.RestHTTPJSON, httpConfig)
+					if err != nil {
+						this.ErrorPage(err)
+						return
+					}
+					_ = httpConfig.Init()
+					if httpConfig.IsOn && len(httpConfig.Listen) > 0 {
+						for _, listen := range httpConfig.Listen {
+							restAccessAddrs = append(restAccessAddrs, listen.FullAddresses()...)
+						}
+					}
+				}
+
+				if len(node.RestHTTPSJSON) > 0 {
+					httpsConfig := &serverconfigs.HTTPSProtocolConfig{}
+					err = json.Unmarshal(node.RestHTTPSJSON, httpsConfig)
+					if err != nil {
+						this.ErrorPage(err)
+						return
+					}
+					_ = httpsConfig.Init()
+					if httpsConfig.IsOn && len(httpsConfig.Listen) > 0 {
+						restAccessAddrs = append(restAccessAddrs, httpsConfig.FullAddresses()...)
+					}
+				}
+			}
+
 			nodeMaps = append(nodeMaps, maps.Map{
-				"id":          node.Id,
-				"isOn":        node.IsOn,
-				"name":        node.Name,
-				"accessAddrs": node.AccessAddrs,
+				"id":              node.Id,
+				"isOn":            node.IsOn,
+				"name":            node.Name,
+				"accessAddrs":     node.AccessAddrs,
+				"restAccessAddrs": restAccessAddrs,
+				"status": maps.Map{
+					"isActive":     status.IsActive,
+					"updatedAt":    status.UpdatedAt,
+					"hostname":     status.Hostname,
+					"cpuUsage":     status.CPUUsage,
+					"cpuUsageText": fmt.Sprintf("%.2f%%", status.CPUUsage*100),
+					"memUsage":     status.MemoryUsage,
+					"memUsageText": fmt.Sprintf("%.2f%%", status.MemoryUsage*100),
+					"buildVersion": status.BuildVersion,
+				},
 			})
 		}
 	}

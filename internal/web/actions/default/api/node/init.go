@@ -1,6 +1,7 @@
 package node
 
 import (
+	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/settings/settingutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/helpers"
 	"github.com/iwind/TeaGo"
@@ -9,8 +10,8 @@ import (
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
-			Helper(helpers.NewUserMustAuth()).
-			Helper(settingutils.NewHelper("apiNodes")).
+			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeSetting)).
+			Helper(settingutils.NewAdvancedHelper("apiNodes")).
 			Prefix("/api/node").
 
 			// 这里不受Helper的约束
@@ -22,6 +23,7 @@ func init() {
 			Get("", new(IndexAction)).
 			GetPost("/update", new(UpdateAction)).
 			Get("/install", new(InstallAction)).
+			Get("/logs", new(LogsAction)).
 
 			EndAll()
 	})

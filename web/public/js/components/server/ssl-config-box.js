@@ -1,5 +1,5 @@
 Vue.component("ssl-config-box", {
-	props: ["v-ssl-policy", "v-protocol"],
+	props: ["v-ssl-policy", "v-protocol", "v-server-id"],
 	created: function () {
 		let that = this
 		setTimeout(function () {
@@ -95,7 +95,13 @@ Vue.component("ssl-config-box", {
 		// 选择证书
 		selectCert: function () {
 			let that = this
-			teaweb.popup("/servers/components/ssl/selectPopup", {
+			let selectedCertIds = []
+			if (this.policy != null && this.policy.certs.length > 0) {
+				this.policy.certs.forEach(function (cert) {
+					selectedCertIds.push(cert.id.toString())
+				})
+			}
+			teaweb.popup("/servers/certs/selectPopup?selectedCertIds=" + selectedCertIds, {
 				width: "50em",
 				height: "30em",
 				callback: function (resp) {
@@ -108,13 +114,32 @@ Vue.component("ssl-config-box", {
 		// 上传证书
 		uploadCert: function () {
 			let that = this
-			teaweb.popup("/servers/components/ssl/uploadPopup", {
+			teaweb.popup("/servers/certs/uploadPopup", {
 				height: "28em",
 				callback: function (resp) {
 					teaweb.success("上传成功", function () {
 						that.policy.certRefs.push(resp.data.certRef)
 						that.policy.certs.push(resp.data.cert)
 					})
+				}
+			})
+		},
+
+		// 申请证书
+		requestCert: function () {
+			// 已经在证书中的域名
+			let excludeServerNames = []
+			if (this.policy != null && this.policy.certs.length > 0) {
+				this.policy.certs.forEach(function (cert) {
+					excludeServerNames.$pushAll(cert.dnsNames)
+				})
+			}
+
+			let that = this
+			teaweb.popup("/servers/server/settings/https/requestCertPopup?serverId=" + this.vServerId + "&excludeServerNames=" + excludeServerNames.join(","), {
+				callback: function () {
+					that.policy.certRefs.push(resp.data.certRef)
+					that.policy.certs.push(resp.data.cert)
 				}
 			})
 		},
@@ -277,7 +302,7 @@ Vue.component("ssl-config-box", {
 		// 选择客户端CA证书
 		selectClientCACert: function () {
 			let that = this
-			teaweb.popup("/servers/components/ssl/selectPopup?isCA=1", {
+			teaweb.popup("/servers/certs/selectPopup?isCA=1", {
 				width: "50em",
 				height: "30em",
 				callback: function (resp) {
@@ -290,7 +315,7 @@ Vue.component("ssl-config-box", {
 		// 上传CA证书
 		uploadClientCACert: function () {
 			let that = this
-			teaweb.popup("/servers/components/ssl/uploadPopup?isCA=1", {
+			teaweb.popup("/servers/certs/uploadPopup?isCA=1", {
 				height: "28em",
 				callback: function (resp) {
 					teaweb.success("上传成功", function () {
@@ -316,7 +341,7 @@ Vue.component("ssl-config-box", {
 	<table class="ui table definition selectable">
 		<tbody>
 			<tr v-show="vProtocol == 'https'">
-				<td class="title">用HTTP/2</td>
+				<td class="title">启用HTTP/2</td>
 				<td>
 					<div class="ui checkbox">
 						<input type="checkbox" value="1" v-model="policy.http2Enabled"/>
@@ -329,7 +354,7 @@ Vue.component("ssl-config-box", {
 				<td>
 					<div v-if="policy.certs != null && policy.certs.length > 0">
 						<div class="ui label small" v-for="(cert, index) in policy.certs">
-							{{cert.name}} / {{cert.dnsNames}} / 有效至{{formatTime(cert.timeEndAt)}} &nbsp; <a href="" title="删除" @click.prevent="removeCert()"><i class="icon remove"></i></a>
+							{{cert.name}} / {{cert.dnsNames}} / 有效至{{formatTime(cert.timeEndAt)}} &nbsp; <a href="" title="删除" @click.prevent="removeCert(index)"><i class="icon remove"></i></a>
 						</div>
 						<div class="ui divider"></div>
 					</div>
@@ -338,7 +363,8 @@ Vue.component("ssl-config-box", {
 						<div class="ui divider"></div>
 					</div>
 					<button class="ui button tiny" type="button" @click.prevent="selectCert()">选择已有证书</button> &nbsp;
-					<button class="ui button tiny" type="button" @click.prevent="uploadCert()">上传新证书</button>
+					<button class="ui button tiny" type="button" @click.prevent="uploadCert()">上传新证书</button> &nbsp;
+					<button class="ui button tiny" type="button" @click.prevent="requestCert()" v-if="vServerId != null && vServerId > 0">申请免费证书</button>
 				</td>
 			</tr>
 			<tr>
@@ -364,7 +390,7 @@ Vue.component("ssl-config-box", {
 						<div class="ui divider"></div>
 						<div class="cipher-suites-box">
 							已添加套件({{policy.cipherSuites.length}})：
-							<div v-for="cipherSuite in policy.cipherSuites" class="ui label tiny" style="margin-bottom: 0.5em">
+							<div v-for="cipherSuite in policy.cipherSuites" class="ui label tiny basic" style="margin-bottom: 0.5em">
 								<input type="hidden" name="cipherSuites" :value="cipherSuite"/>
 								<span v-html="formatCipherSuite(cipherSuite)"></span> &nbsp; <a href="" title="删除套件" @click.prevent="removeCipherSuite(cipherSuite)"><i class="icon remove"></i></a>
 								<a href="" title="拖动改变顺序"><i class="icon bars handle"></i></a>
@@ -431,7 +457,7 @@ Vue.component("ssl-config-box", {
 				<td class="color-border">HSTS生效的域名</td>
 				<td colspan="2">
 					<div class="names-box">
-					<span class="ui label tiny" v-for="(domain, arrayIndex) in hsts.domains" :class="{blue:hstsDomainEditingIndex == arrayIndex}">{{domain}}
+					<span class="ui label tiny basic" v-for="(domain, arrayIndex) in hsts.domains" :class="{blue:hstsDomainEditingIndex == arrayIndex}">{{domain}}
 						<input type="hidden" name="hstsDomains" :value="domain"/> &nbsp;
 						<a href="" @click.prevent="editHstsDomain(arrayIndex)" title="修改"><i class="icon pencil"></i></a>
 						<a href="" @click.prevent="removeHstsDomain(arrayIndex)" title="删除"><i class="icon remove"></i></a>

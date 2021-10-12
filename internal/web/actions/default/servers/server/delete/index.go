@@ -1,8 +1,9 @@
 package delete
 
 import (
-	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
 )
 
@@ -23,7 +24,11 @@ func (this *IndexAction) RunPost(params struct {
 	ServerId int64
 	Must     *actions.Must
 }) {
-	_, err := this.RPC().ServerRPC().DisableServer(this.AdminContext(), &pb.DisableServerRequest{ServerId: params.ServerId})
+	// 记录日志
+	defer this.CreateLog(oplogs.LevelInfo, "删除代理服务 %d", params.ServerId)
+
+	// 执行删除
+	_, err := this.RPC().ServerRPC().DeleteServer(this.AdminContext(), &pb.DeleteServerRequest{ServerId: params.ServerId})
 	if err != nil {
 		this.ErrorPage(err)
 		return

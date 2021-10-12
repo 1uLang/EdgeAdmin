@@ -2,7 +2,7 @@
 	width: 8em;
 	position: fixed;
 	top: 7.5em;
-	bottom: 0.5em;
+	bottom: 2.4em;
 	overflow-y: auto;
 	overflow-x: hidden;
 	border-right: 1px #ddd solid;
@@ -63,7 +63,6 @@
 	}
 }
 
-
 .left-box::-webkit-scrollbar {
 	width: 4px;
 }
@@ -76,6 +75,18 @@
 	top: 10.5em;
 }
 
+.left-box.without-tabbar {
+	top: 3em;
+}
+
+.left-box.with-menu {
+	top: 10em;
+}
+
+.left-box.without-menu {
+	top: 6em;
+}
+
 .right-box {
 	position: fixed;
 	top: 7.5em;
@@ -83,8 +94,12 @@
 	right: 0;
 	left: 18em;
 	padding-right: 2em;
-	padding-bottom: 1em;
+	padding-bottom: 2em;
 	overflow-y: auto;
+}
+
+body.expanded .right-box {
+	left: 10em;
 }
 
 .right-box.tiny {
@@ -94,4 +109,21 @@
 
 .right-box::-webkit-scrollbar {
 	width: 4px;
+}
+
+.right-box.without-tabbar {
+	top: 3em;
+}
+
+.right-box.with-menu {
+	top: 10em;
+}
+
+.right-box.without-menu {
+	top: 6em;
+}
+
+// main
+.main.without-footer .left-box {
+	bottom: 0.2em;
 }

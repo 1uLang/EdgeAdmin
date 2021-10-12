@@ -1,10 +1,12 @@
 package pages
 
 import (
+	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/server/settings/webutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
+	"github.com/iwind/TeaGo/types"
 )
 
 type IndexAction struct {
@@ -19,7 +21,18 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	ServerId int64
 }) {
-	webConfig, err := webutils.FindWebConfigWithServerId(this.Parent(), params.ServerId)
+	// 分组设置
+	groupResp, err := this.RPC().ServerGroupRPC().FindEnabledServerGroupConfigInfo(this.AdminContext(), &pb.FindEnabledServerGroupConfigInfoRequest{
+		ServerId: params.ServerId,
+	})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	this.Data["hasGroupConfig"] = groupResp.HasPagesConfig
+	this.Data["groupSettingURL"] = "/servers/groups/group/settings/pages?groupId=" + types.String(groupResp.ServerGroupId)
+
+	webConfig, err := dao.SharedHTTPWebDAO.FindWebConfigWithServerId(this.AdminContext(), params.ServerId)
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -38,6 +51,9 @@ func (this *IndexAction) RunPost(params struct {
 	ShutdownJSON string
 	Must         *actions.Must
 }) {
+	// 日志
+	defer this.CreateLog(oplogs.LevelInfo, "修改Web %d 的设置", params.WebId)
+
 	// TODO 检查配置
 
 	_, err := this.RPC().HTTPWebRPC().UpdateHTTPWebPages(this.AdminContext(), &pb.UpdateHTTPWebPagesRequest{

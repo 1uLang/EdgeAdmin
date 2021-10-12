@@ -1,4 +1,5 @@
+api.yaml
 server.yaml
 api_db.yaml
-api.yaml
 *.pem
+*.cache.json

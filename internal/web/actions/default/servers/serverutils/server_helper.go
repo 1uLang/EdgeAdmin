@@ -3,6 +3,7 @@ package serverutils
 import (
 	"encoding/json"
 	"errors"
+	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
 	"github.com/TeaOSLab/EdgeAdmin/internal/rpc"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
@@ -75,13 +76,32 @@ func (this *ServerHelper) createLeftMenu(action *actions.ActionObject) {
 		return
 	}
 
+	// 协议簇
+	family := ""
+	if serverConfig.IsHTTPFamily() {
+		family = "http"
+	} else if serverConfig.IsTCPFamily() {
+		family = "tcp"
+	} else if serverConfig.IsUnixFamily() {
+		family = "unix"
+	} else if serverConfig.IsUDPFamily() {
+		family = "udp"
+	}
+	action.Data["serverFamily"] = family
+
 	// TABBAR
 	selectedTabbar, _ := action.Data["mainTab"]
 	tabbar := actionutils.NewTabbar()
 	tabbar.Add("服务列表", "", "/servers", "", false)
-	//tabbar.Add("看板", "", "/servers/server/board?serverId="+serverIdString, "dashboard", selectedTabbar == "board")
-	tabbar.Add("日志", "", "/servers/server/log?serverId="+serverIdString, "history", selectedTabbar == "log")
-	//tabbar.Add("统计", "", "/servers/server/stat?serverId="+serverIdString, "chart area", selectedTabbar == "stat")
+	if teaconst.IsPlus {
+		tabbar.Add("看板", "", "/servers/server/boards?serverId="+serverIdString, "dashboard", selectedTabbar == "board")
+	}
+	if family == "http" {
+		tabbar.Add("统计", "", "/servers/server/stat?serverId="+serverIdString, "chart area", selectedTabbar == "stat")
+	}
+	if family == "http" {
+		tabbar.Add("日志", "", "/servers/server/log?serverId="+serverIdString, "history", selectedTabbar == "log")
+	}
 	tabbar.Add("设置", "", "/servers/server/settings?serverId="+serverIdString, "setting", selectedTabbar == "setting")
 	tabbar.Add("删除", "", "/servers/server/delete?serverId="+serverIdString, "trash", selectedTabbar == "delete")
 	{
@@ -125,6 +145,16 @@ func (this *ServerHelper) createLogMenu(secondMenuItem string, serverIdString st
 		"url":      "/servers/server/log?serverId=" + serverIdString,
 		"isActive": secondMenuItem == "index",
 	})
+	menuItems = append(menuItems, maps.Map{
+		"name":     "今天",
+		"url":      "/servers/server/log/today?serverId=" + serverIdString,
+		"isActive": secondMenuItem == "today",
+	})
+	menuItems = append(menuItems, maps.Map{
+		"name":     "历史",
+		"url":      "/servers/server/log/history?serverId=" + serverIdString,
+		"isActive": secondMenuItem == "history",
+	})
 	return menuItems
 }
 
@@ -132,9 +162,29 @@ func (this *ServerHelper) createLogMenu(secondMenuItem string, serverIdString st
 func (this *ServerHelper) createStatMenu(secondMenuItem string, serverIdString string, serverConfig *serverconfigs.ServerConfig) []maps.Map {
 	menuItems := []maps.Map{}
 	menuItems = append(menuItems, maps.Map{
-		"name":     "统计",
+		"name":     "流量统计",
 		"url":      "/servers/server/stat?serverId=" + serverIdString,
 		"isActive": secondMenuItem == "index",
+	})
+	menuItems = append(menuItems, maps.Map{
+		"name":     "地域分布",
+		"url":      "/servers/server/stat/regions?serverId=" + serverIdString,
+		"isActive": secondMenuItem == "region",
+	})
+	menuItems = append(menuItems, maps.Map{
+		"name":     "运营商",
+		"url":      "/servers/server/stat/providers?serverId=" + serverIdString,
+		"isActive": secondMenuItem == "provider",
+	})
+	menuItems = append(menuItems, maps.Map{
+		"name":     "终端",
+		"url":      "/servers/server/stat/clients?serverId=" + serverIdString,
+		"isActive": secondMenuItem == "client",
+	})
+	menuItems = append(menuItems, maps.Map{
+		"name":     "WAF",
+		"url":      "/servers/server/stat/waf?serverId=" + serverIdString,
+		"isActive": secondMenuItem == "waf",
 	})
 	return menuItems
 }
@@ -148,10 +198,15 @@ func (this *ServerHelper) createSettingsMenu(secondMenuItem string, serverIdStri
 			"isActive": secondMenuItem == "basic",
 			"isOff":    !serverConfig.IsOn,
 		},
+		{
+			"name":     "DNS",
+			"url":      "/servers/server/settings/dns?serverId=" + serverIdString,
+			"isActive": secondMenuItem == "dns",
+		},
 	}
 
 	// HTTP
-	if serverConfig.IsHTTP() {
+	if serverConfig.IsHTTPFamily() {
 		menuItems = append(menuItems, maps.Map{
 			"name":     "域名",
 			"url":      "/servers/server/settings/serverNames?serverId=" + serverIdString,
@@ -190,7 +245,13 @@ func (this *ServerHelper) createSettingsMenu(secondMenuItem string, serverIdStri
 			"isActive": false,
 		})
 		menuItems = append(menuItems, maps.Map{
-			"name":     "路径规则",
+			"name":     "URL跳转",
+			"url":      "/servers/server/settings/redirects?serverId=" + serverIdString,
+			"isActive": secondMenuItem == "redirects",
+			"isOn":     serverConfig.Web != nil && len(serverConfig.Web.HostRedirects) > 0,
+		})
+		menuItems = append(menuItems, maps.Map{
+			"name":     "路由规则",
 			"url":      "/servers/server/settings/locations?serverId=" + serverIdString,
 			"isActive": secondMenuItem == "locations",
 			"isOn":     serverConfig.Web != nil && len(serverConfig.Web.Locations) > 0,
@@ -217,6 +278,7 @@ func (this *ServerHelper) createSettingsMenu(secondMenuItem string, serverIdStri
 			"name":     "访问控制",
 			"url":      "/servers/server/settings/access?serverId=" + serverIdString,
 			"isActive": secondMenuItem == "access",
+			"isOn":     serverConfig.Web != nil && serverConfig.Web.Auth != nil && serverConfig.Web.Auth.IsOn,
 		})
 		menuItems = append(menuItems, maps.Map{
 			"name":     "字符编码",
@@ -237,10 +299,10 @@ func (this *ServerHelper) createSettingsMenu(secondMenuItem string, serverIdStri
 			"isOn":     serverConfig.Web != nil && serverConfig.Web.StatRef != nil && serverConfig.Web.StatRef.IsOn,
 		})
 		menuItems = append(menuItems, maps.Map{
-			"name":     "Gzip压缩",
-			"url":      "/servers/server/settings/gzip?serverId=" + serverIdString,
-			"isActive": secondMenuItem == "gzip",
-			"isOn":     serverConfig.Web != nil && serverConfig.Web.GzipRef != nil && serverConfig.Web.GzipRef.IsOn,
+			"name":     "内容压缩",
+			"url":      "/servers/server/settings/compression?serverId=" + serverIdString,
+			"isActive": secondMenuItem == "compression",
+			"isOn":     serverConfig.Web != nil && serverConfig.Web.Compression != nil && serverConfig.Web.Compression.IsOn,
 		})
 		menuItems = append(menuItems, maps.Map{
 			"name":     "特殊页面",
@@ -252,7 +314,7 @@ func (this *ServerHelper) createSettingsMenu(secondMenuItem string, serverIdStri
 			"name":     "HTTP Header",
 			"url":      "/servers/server/settings/headers?serverId=" + serverIdString,
 			"isActive": secondMenuItem == "header",
-			"isOn":     serverConfig.Web != nil && ((serverConfig.Web.RequestHeaderPolicyRef != nil && serverConfig.Web.RequestHeaderPolicyRef.IsOn) || (serverConfig.Web.ResponseHeaderPolicyRef != nil && serverConfig.Web.ResponseHeaderPolicyRef.IsOn)),
+			"isOn":     this.hasHTTPHeaders(serverConfig.Web),
 		})
 		menuItems = append(menuItems, maps.Map{
 			"name":     "Websocket",
@@ -260,7 +322,33 @@ func (this *ServerHelper) createSettingsMenu(secondMenuItem string, serverIdStri
 			"isActive": secondMenuItem == "websocket",
 			"isOn":     serverConfig.Web != nil && serverConfig.Web.WebsocketRef != nil && serverConfig.Web.WebsocketRef.IsOn,
 		})
-	} else if serverConfig.IsTCP() {
+		menuItems = append(menuItems, maps.Map{
+			"name":     "WebP",
+			"url":      "/servers/server/settings/webp?serverId=" + serverIdString,
+			"isActive": secondMenuItem == "webp",
+			"isOn":     serverConfig.Web != nil && serverConfig.Web.WebP != nil && serverConfig.Web.WebP.IsOn,
+		})
+
+		menuItems = append(menuItems, maps.Map{
+			"name":     "Fastcgi",
+			"url":      "/servers/server/settings/fastcgi?serverId=" + serverIdString,
+			"isActive": secondMenuItem == "fastcgi",
+			"isOn":     serverConfig.Web != nil && serverConfig.Web.FastcgiRef != nil && serverConfig.Web.FastcgiRef.IsOn,
+		})
+
+		menuItems = append(menuItems, maps.Map{
+			"name":     "-",
+			"url":      "",
+			"isActive": false,
+		})
+
+		menuItems = append(menuItems, maps.Map{
+			"name":     "访客IP地址",
+			"url":      "/servers/server/settings/remoteAddr?serverId=" + serverIdString,
+			"isActive": secondMenuItem == "remoteAddr",
+			"isOn":     serverConfig.Web != nil && serverConfig.Web.RemoteAddr != nil && serverConfig.Web.RemoteAddr.IsOn,
+		})
+	} else if serverConfig.IsTCPFamily() {
 		menuItems = append(menuItems, maps.Map{
 			"name":     "TCP",
 			"url":      "/servers/server/settings/tcp?serverId=" + serverIdString,
@@ -279,19 +367,25 @@ func (this *ServerHelper) createSettingsMenu(secondMenuItem string, serverIdStri
 			"isActive": secondMenuItem == "reverseProxy",
 			"isOn":     serverConfig.ReverseProxyRef != nil && serverConfig.ReverseProxyRef.IsOn,
 		})
-	} else if serverConfig.IsUnix() {
+	} else if serverConfig.IsUnixFamily() {
 		menuItems = append(menuItems, maps.Map{
 			"name":     "Unix",
 			"url":      "/servers/server/settings/unix?serverId=" + serverIdString,
 			"isActive": secondMenuItem == "unix",
 			"isOn":     serverConfig.Unix != nil && serverConfig.Unix.IsOn && len(serverConfig.Unix.Listen) > 0,
 		})
-	} else if serverConfig.IsUDP() {
+	} else if serverConfig.IsUDPFamily() {
 		menuItems = append(menuItems, maps.Map{
 			"name":     "UDP",
 			"url":      "/servers/server/settings/udp?serverId=" + serverIdString,
 			"isActive": secondMenuItem == "udp",
 			"isOn":     serverConfig.UDP != nil && serverConfig.UDP.IsOn && len(serverConfig.UDP.Listen) > 0,
+		})
+		menuItems = append(menuItems, maps.Map{
+			"name":     "反向代理",
+			"url":      "/servers/server/settings/reverseProxy?serverId=" + serverIdString,
+			"isActive": secondMenuItem == "reverseProxy",
+			"isOn":     serverConfig.ReverseProxyRef != nil && serverConfig.ReverseProxyRef.IsOn,
 		})
 	}
 
@@ -307,4 +401,22 @@ func (this *ServerHelper) createDeleteMenu(secondMenuItem string, serverIdString
 		"isActive": secondMenuItem == "index",
 	})
 	return menuItems
+}
+
+// 检查是否已设置Header
+func (this *ServerHelper) hasHTTPHeaders(web *serverconfigs.HTTPWebConfig) bool {
+	if web == nil {
+		return false
+	}
+	if web.RequestHeaderPolicyRef != nil {
+		if web.RequestHeaderPolicyRef.IsOn && web.RequestHeaderPolicy != nil && !web.RequestHeaderPolicy.IsEmpty() {
+			return true
+		}
+	}
+	if web.ResponseHeaderPolicyRef != nil {
+		if web.ResponseHeaderPolicyRef.IsOn && web.ResponseHeaderPolicy != nil && !web.ResponseHeaderPolicy.IsEmpty() {
+			return true
+		}
+	}
+	return false
 }

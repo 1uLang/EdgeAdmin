@@ -18,6 +18,8 @@ Tea.context(function () {
 	this.newAPINodePort = "8001"
 	this.apiRequesting = false
 
+	this.apiHostInput = false // 是否手工输入
+
 	this.apiSubmit = function () {
 		this.apiRequesting = true
 	}
@@ -39,6 +41,13 @@ Tea.context(function () {
 
 	this.goBackIntro = function () {
 		this.step = this.STEP_INTRO
+	}
+
+	this.inputAPIHost = function () {
+		this.apiHostInput = true
+		this.$delay(function () {
+			this.$refs.newHostRef.focus()
+		})
 	}
 
 	// 数据库
@@ -101,6 +110,8 @@ Tea.context(function () {
 	}
 
 	this.finishSuccess = function () {
-		teaweb.success("html:恭喜你！安装完成！<br/>请记住你创建的管理员账号，现在跳转到登录界面。", "/")
+		teaweb.success("html:恭喜你！安装完成！<br/>请记住你创建的管理员账号，现在跳转到登录界面。", function () {
+			window.location = "/"
+		})
 	}
 })

@@ -1,14 +1,14 @@
 {$layout "layout_popup"}
 <h3>设置Header</h3>
 
-<form class="ui form" data-tea-action="$" data-tea-success="success">
-	<input type="hidden" name="serverId" :value="serverId"/>
+<form method="post" class="ui form" data-tea-action="$" data-tea-success="success">
 	<input type="hidden" name="headerPolicyId" :value="headerPolicyId"/>
 	<table class="ui table definition selectable">
 		<tr>
 			<td class="title">名称<em>（Name）</em></td>
 			<td>
 				<input type="text" name="name" value="" maxlength="200" placeholder="类似于Server、Content-Type之类" ref="focus"/>
+                <p class="comment">请注意名称的大小写，如无特殊需求，Header名称的格式通常为<code-label>Xxx</code-label>或者<code-label>Xxx-Yyy</code-label>。</p>
 			</td>
 		</tr>
 		<tr>

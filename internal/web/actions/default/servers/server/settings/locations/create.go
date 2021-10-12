@@ -3,15 +3,16 @@ package locations
 import (
 	"encoding/json"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/server/settings/webutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/shared"
 	"github.com/iwind/TeaGo/actions"
 	"regexp"
 	"strings"
 )
 
-// 创建路径规则
+// CreateAction 创建路由规则
 type CreateAction struct {
 	actionutils.ParentAction
 }
@@ -25,7 +26,7 @@ func (this *CreateAction) RunGet(params struct {
 	ServerId int64
 	ParentId int64 // 父节点
 }) {
-	webConfig, err := webutils.FindWebConfigWithServerId(this.Parent(), params.ServerId)
+	webConfig, err := dao.SharedHTTPWebDAO.FindWebConfigWithServerId(this.AdminContext(), params.ServerId)
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -48,6 +49,7 @@ func (this *CreateAction) RunPost(params struct {
 	IsBreak           bool
 	IsCaseInsensitive bool
 	IsReverse         bool
+	CondsJSON         []byte
 
 	Must *actions.Must
 }) {
@@ -60,6 +62,20 @@ func (this *CreateAction) RunPost(params struct {
 		_, err := regexp.Compile(params.Pattern)
 		if err != nil {
 			this.Fail("正则表达式校验失败：" + err.Error())
+		}
+	}
+
+	// 校验匹配条件
+	if len(params.CondsJSON) > 0 {
+		conds := &shared.HTTPRequestCondsConfig{}
+		err := json.Unmarshal(params.CondsJSON, conds)
+		if err != nil {
+			this.Fail("匹配条件校验失败：" + err.Error())
+		}
+
+		err = conds.Init()
+		if err != nil {
+			this.Fail("匹配条件校验失败：" + err.Error())
 		}
 	}
 
@@ -79,6 +95,7 @@ func (this *CreateAction) RunPost(params struct {
 		Description: params.Description,
 		Pattern:     resultPattern,
 		IsBreak:     params.IsBreak,
+		CondsJSON:   params.CondsJSON,
 	})
 	if err != nil {
 		this.ErrorPage(err)
@@ -88,7 +105,7 @@ func (this *CreateAction) RunPost(params struct {
 	locationId := locationResp.LocationId
 
 	// Web中Location
-	webConfig, err := webutils.FindWebConfigWithId(this.Parent(), params.WebId)
+	webConfig, err := dao.SharedHTTPWebDAO.FindWebConfigWithId(this.AdminContext(), params.WebId)
 	if err != nil {
 		this.ErrorPage(err)
 		return

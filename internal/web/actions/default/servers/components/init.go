@@ -1,7 +1,7 @@
 package components
 
 import (
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/components/componentutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/helpers"
 	"github.com/iwind/TeaGo"
 )
@@ -9,9 +9,9 @@ import (
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
-			Helper(helpers.NewUserMustAuth()).
+			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
+			Data("teaSubMenu", "global").
 			Helper(NewHelper()).
-			Helper(componentutils.NewComponentHelper()).
 			Prefix("/servers/components").
 			GetPost("", new(IndexAction)).
 			EndAll()

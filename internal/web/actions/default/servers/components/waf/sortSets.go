@@ -2,8 +2,9 @@ package waf
 
 import (
 	"encoding/json"
+	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/models"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/firewallconfigs"
 )
@@ -16,7 +17,10 @@ func (this *SortSetsAction) RunPost(params struct {
 	GroupId int64
 	SetIds  []int64
 }) {
-	groupConfig, err := models.SharedHTTPFirewallRuleGroupDAO.FindRuleGroupConfig(this.AdminContext(), params.GroupId)
+	// 日志
+	defer this.CreateLog(oplogs.LevelInfo, "修改WAF规则分组 %d 中的规则集排序", params.GroupId)
+
+	groupConfig, err := dao.SharedHTTPFirewallRuleGroupDAO.FindRuleGroupConfig(this.AdminContext(), params.GroupId)
 	if err != nil {
 		this.ErrorPage(err)
 		return

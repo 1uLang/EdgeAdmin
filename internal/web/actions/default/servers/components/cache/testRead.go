@@ -1,6 +1,7 @@
 package cache
 
 import (
+	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nodes/nodeutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/messageconfigs"
@@ -24,12 +25,12 @@ func (this *TestReadAction) RunPost(params struct {
 		Value: strconv.FormatInt(params.ClusterId, 10),
 	})
 
-	cachePolicyResp, err := this.RPC().HTTPCachePolicyRPC().FindEnabledHTTPCachePolicyConfig(this.AdminContext(), &pb.FindEnabledHTTPCachePolicyConfigRequest{CachePolicyId: params.CachePolicyId})
+	cachePolicyResp, err := this.RPC().HTTPCachePolicyRPC().FindEnabledHTTPCachePolicyConfig(this.AdminContext(), &pb.FindEnabledHTTPCachePolicyConfigRequest{HttpCachePolicyId: params.CachePolicyId})
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	cachePolicyJSON := cachePolicyResp.CachePolicyJSON
+	cachePolicyJSON := cachePolicyResp.HttpCachePolicyJSON
 	if len(cachePolicyJSON) == 0 {
 		this.Fail("找不到要操作的缓存策略")
 	}
@@ -55,6 +56,9 @@ func (this *TestReadAction) RunPost(params struct {
 
 	this.Data["isAllOk"] = isAllOk
 	this.Data["results"] = results
+
+	// 创建日志
+	defer this.CreateLog(oplogs.LevelInfo, "测试读取，缓存策略：%d", params.CachePolicyId)
 
 	this.Success()
 }

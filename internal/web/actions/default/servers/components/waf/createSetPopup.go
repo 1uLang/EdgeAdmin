@@ -3,13 +3,12 @@ package waf
 import (
 	"encoding/json"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/models"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/firewallconfigs"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
 	"strconv"
-	"strings"
 )
 
 type CreateSetPopupAction struct {
@@ -28,7 +27,7 @@ func (this *CreateSetPopupAction) RunGet(params struct {
 	this.Data["groupId"] = params.GroupId
 	this.Data["type"] = params.Type
 
-	firewallPolicy, err := models.SharedHTTPFirewallPolicyDAO.FindEnabledPolicyConfig(this.AdminContext(), params.FirewallPolicyId)
+	firewallPolicy, err := dao.SharedHTTPFirewallPolicyDAO.FindEnabledHTTPFirewallPolicyConfig(this.AdminContext(), params.FirewallPolicyId)
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -53,6 +52,7 @@ func (this *CreateSetPopupAction) RunGet(params struct {
 		},
 	}
 
+	// 所有可选的动作
 	actionMaps := []maps.Map{}
 	for _, action := range firewallconfigs.AllActions {
 		actionMaps = append(actionMaps, maps.Map{
@@ -69,14 +69,14 @@ func (this *CreateSetPopupAction) RunGet(params struct {
 func (this *CreateSetPopupAction) RunPost(params struct {
 	GroupId int64
 
-	Name      string
-	RulesJSON []byte
-	Connector string
-	Action    string
+	Name        string
+	RulesJSON   []byte
+	Connector   string
+	ActionsJSON []byte
 
 	Must *actions.Must
 }) {
-	groupConfig, err := models.SharedHTTPFirewallRuleGroupDAO.FindRuleGroupConfig(this.AdminContext(), params.GroupId)
+	groupConfig, err := dao.SharedHTTPFirewallRuleGroupDAO.FindRuleGroupConfig(this.AdminContext(), params.GroupId)
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -96,32 +96,34 @@ func (this *CreateSetPopupAction) RunPost(params struct {
 	err = json.Unmarshal(params.RulesJSON, &rules)
 	if err != nil {
 		this.ErrorPage(err)
+		return
 	}
 	if len(rules) == 0 {
 		this.Fail("请添加至少一个规则")
 	}
 
-	setConfig := &firewallconfigs.HTTPFirewallRuleSet{
-		Id:            0,
-		IsOn:          true,
-		Name:          params.Name,
-		Code:          "",
-		Description:   "",
-		Connector:     params.Connector,
-		RuleRefs:      nil,
-		Rules:         rules,
-		Action:        params.Action,
-		ActionOptions: maps.Map{},
+	var actionConfigs = []*firewallconfigs.HTTPFirewallActionConfig{}
+	if len(params.ActionsJSON) > 0 {
+		err = json.Unmarshal(params.ActionsJSON, &actionConfigs)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+	}
+	if len(actionConfigs) == 0 {
+		this.Fail("请添加至少一个动作")
 	}
 
-	for k, v := range this.ParamsMap {
-		if len(v) == 0 {
-			continue
-		}
-		index := strings.Index(k, "action_")
-		if index > -1 {
-			setConfig.ActionOptions[k[len("action_"):]] = v[0]
-		}
+	setConfig := &firewallconfigs.HTTPFirewallRuleSet{
+		Id:          0,
+		IsOn:        true,
+		Name:        params.Name,
+		Code:        "",
+		Description: "",
+		Connector:   params.Connector,
+		RuleRefs:    nil,
+		Rules:       rules,
+		Actions:     actionConfigs,
 	}
 
 	setConfigJSON, err := json.Marshal(setConfig)

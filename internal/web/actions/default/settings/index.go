@@ -13,5 +13,5 @@ func (this *IndexAction) Init() {
 }
 
 func (this *IndexAction) RunGet(params struct{}) {
-	this.RedirectURL("/settings/ui")
+	this.RedirectURL("/settings/server")
 }

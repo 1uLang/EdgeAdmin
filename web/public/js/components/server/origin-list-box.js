@@ -9,22 +9,31 @@ Vue.component("origin-list-box", {
 	methods: {
 		createPrimaryOrigin: function () {
 			teaweb.popup("/servers/server/settings/origins/addPopup?originType=primary&" + this.vParams, {
+				height: "27em",
 				callback: function (resp) {
-					window.location.reload()
+					teaweb.success("保存成功", function () {
+						window.location.reload()
+					})
 				}
 			})
 		},
 		createBackupOrigin: function () {
 			teaweb.popup("/servers/server/settings/origins/addPopup?originType=backup&" + this.vParams, {
+				height: "27em",
 				callback: function (resp) {
-					window.location.reload()
+					teaweb.success("保存成功", function () {
+						window.location.reload()
+					})
 				}
 			})
 		},
 		updateOrigin: function (originId, originType) {
 			teaweb.popup("/servers/server/settings/origins/updatePopup?originType=" + originType + "&" + this.vParams + "&originId=" + originId, {
+				height: "27em",
 				callback: function (resp) {
-					window.location.reload()
+					teaweb.success("保存成功", function () {
+						window.location.reload()
+					})
 				}
 			})
 		},
@@ -34,7 +43,9 @@ Vue.component("origin-list-box", {
 				Tea.action("/servers/server/settings/origins/delete?" + that.vParams + "&originId=" + originId + "&originType=" + originType)
 					.post()
 					.success(function () {
-						window.location.reload()
+						teaweb.success("保存成功", function () {
+							window.location.reload()
+						})
 					})
 			})
 		}
@@ -69,12 +80,23 @@ Vue.component("origin-list-table", {
 		<tr>
 			<th>源站地址</th>
 			<th>权重</th>
+			<th class="width10">状态</th>
 			<th class="two op">操作</th>
 		</tr>	
 	</thead>
 	<tr v-for="origin in vOrigins">
-		<td>{{origin.addr}}</td>
-		<td>{{origin.weight}}</td>
+		<td :class="{disabled:!origin.isOn}"><a href="" @click.prevent="updateOrigin(origin.id)">{{origin.addr}} &nbsp;<i class="icon clone outline small"></i></a>
+			<div v-if="origin.name.length > 0" style="margin-top: 0.5em">
+				<tiny-basic-label>{{origin.name}}</tiny-basic-label>
+			</div>
+			<div v-if="origin.domains != null && origin.domains.length > 0">
+				<grey-label v-for="domain in origin.domains">{{domain}}</grey-label>
+			</div>
+		</td>
+		<td :class="{disabled:!origin.isOn}">{{origin.weight}}</td>
+		<td>
+			<label-on :v-is-on="origin.isOn"></label-on>
+		</td>
 		<td>
 			<a href="" @click.prevent="updateOrigin(origin.id)">修改</a> &nbsp;
 			<a href="" @click.prevent="deleteOrigin(origin.id)">删除</a>

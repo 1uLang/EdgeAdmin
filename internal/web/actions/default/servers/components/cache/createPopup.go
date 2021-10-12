@@ -2,10 +2,13 @@ package cache
 
 import (
 	"encoding/json"
+	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/shared"
 	"github.com/iwind/TeaGo/actions"
+	"github.com/iwind/TeaGo/maps"
 )
 
 type CreatePopupAction struct {
@@ -26,7 +29,8 @@ func (this *CreatePopupAction) RunPost(params struct {
 	Type string
 
 	// file
-	FileDir string
+	FileDir                string
+	FileMemoryCapacityJSON []byte
 
 	CapacityJSON []byte
 	MaxSizeJSON  []byte
@@ -48,8 +52,21 @@ func (this *CreatePopupAction) RunPost(params struct {
 		params.Must.
 			Field("fileDir", params.FileDir).
 			Require("请输入缓存目录")
+
+		memoryCapacity := &shared.SizeCapacity{}
+		if len(params.FileMemoryCapacityJSON) > 0 {
+			err := json.Unmarshal(params.FileMemoryCapacityJSON, memoryCapacity)
+			if err != nil {
+				this.ErrorPage(err)
+				return
+			}
+		}
+
 		options = &serverconfigs.HTTPFileCacheStorage{
 			Dir: params.FileDir,
+			MemoryPolicy: &serverconfigs.HTTPCachePolicy{
+				Capacity: memoryCapacity,
+			},
 		}
 	case serverconfigs.CachePolicyStorageMemory:
 		options = &serverconfigs.HTTPMemoryCacheStorage{
@@ -63,7 +80,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	_, err = this.RPC().HTTPCachePolicyRPC().CreateHTTPCachePolicy(this.AdminContext(), &pb.CreateHTTPCachePolicyRequest{
+	createResp, err := this.RPC().HTTPCachePolicyRPC().CreateHTTPCachePolicy(this.AdminContext(), &pb.CreateHTTPCachePolicyRequest{
 		IsOn:         params.IsOn,
 		Name:         params.Name,
 		Description:  params.Description,
@@ -77,6 +94,15 @@ func (this *CreatePopupAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
+
+	// 返回数据
+	this.Data["cachePolicy"] = maps.Map{
+		"id":   createResp.HttpCachePolicyId,
+		"name": params.Name,
+	}
+
+	// 创建日志
+	defer this.CreateLog(oplogs.LevelInfo, "创建缓存策略：%d", createResp.HttpCachePolicyId)
 
 	this.Success()
 }

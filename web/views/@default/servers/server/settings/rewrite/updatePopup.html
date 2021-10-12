@@ -1,7 +1,7 @@
 {$layout "layout_popup"}
 
 <h3>修改重写规则</h3>
-<form class="ui form" data-tea-action="$" data-tea-success="success">
+<form method="post" class="ui form" data-tea-action="$" data-tea-success="success">
 	<input type="hidden" name="webId" :value="webId"/>
 	<input type="hidden" name="rewriteRuleId" :value="rewriteRule.id"/>
 	<table class="ui table definition selectable">
@@ -29,6 +29,10 @@
 				<p class="comment">隐式表示不在客户端显示重写后的URL；显式表示在客户端跳转URL，将会显示重写后的URL。</p>
 			</td>
 		</tr>
+        <tr>
+            <td>匹配条件</td>
+            <td><http-request-conds-box :v-conds="rewriteRule.conds"></http-request-conds-box></td>
+        </tr>
 		<tr>
 			<td colspan="2"><more-options-indicator></more-options-indicator></td>
 		</tr>
@@ -66,7 +70,7 @@
 						<input type="checkbox" name="isBreak" value="1" v-model="rewriteRule.isBreak"/>
 						<label></label>
 					</div>
-					<p class="comment">如果选中了此选项，一旦匹配成功，不会继续匹配其他的重写规则或路径规则。</p>
+					<p class="comment">如果选中了此选项，一旦匹配成功，不会继续匹配其他的重写规则或路由规则。</p>
 				</td>
 			</tr>
 			<tr>

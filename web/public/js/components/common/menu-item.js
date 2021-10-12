@@ -4,20 +4,42 @@
 Vue.component("menu-item", {
 	props: ["href", "active", "code"],
 	data: function () {
-		var active = this.active;
-		if (typeof(active) =="undefined") {
-			var itemCode = "";
+		let active = this.active
+		if (typeof (active) == "undefined") {
+			var itemCode = ""
 			if (typeof (window.TEA.ACTION.data.firstMenuItem) != "undefined") {
-				itemCode = window.TEA.ACTION.data.firstMenuItem;
+				itemCode = window.TEA.ACTION.data.firstMenuItem
 			}
-			active = (itemCode == this.code);
+			if (itemCode != null && itemCode.length > 0 && this.code != null && this.code.length > 0) {
+				if (itemCode.indexOf(",") > 0) {
+					active = itemCode.split(",").$contains(this.code)
+				} else {
+					active = (itemCode == this.code)
+				}
+			}
 		}
+
+		let href = (this.href == null) ? "" : this.href
+		if (typeof (href) == "string" && href.length > 0 && href.startsWith(".")) {
+			let qIndex = href.indexOf("?")
+			if (qIndex >= 0) {
+				href = Tea.url(href.substring(0, qIndex)) + href.substring(qIndex)
+			} else {
+				href = Tea.url(href)
+			}
+		}
+
 		return {
-			vHref: (this.href == null) ? "" : this.href,
+			vHref: href,
 			vActive: active
-		};
+		}
+	},
+	methods: {
+		click: function (e) {
+			this.$emit("click", e)
+		}
 	},
 	template: '\
-		<a :href="vHref" class="item" :class="{active:vActive}"><slot></slot></a> \
+		<a :href="vHref" class="item" :class="{active:vActive}" @click="click"><slot></slot></a> \
 		'
 });

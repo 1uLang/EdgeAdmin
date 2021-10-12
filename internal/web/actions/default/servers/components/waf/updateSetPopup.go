@@ -2,13 +2,13 @@ package waf
 
 import (
 	"encoding/json"
+	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/models"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/firewallconfigs"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
-	"strings"
 )
 
 type UpdateSetPopupAction struct {
@@ -25,10 +25,13 @@ func (this *UpdateSetPopupAction) RunGet(params struct {
 	Type             string
 	SetId            int64
 }) {
+	// 日志
+	defer this.CreateLog(oplogs.LevelInfo, "修改WAF规则集 %d 基本信息", params.SetId)
+
 	this.Data["groupId"] = params.GroupId
 	this.Data["type"] = params.Type
 
-	firewallPolicy, err := models.SharedHTTPFirewallPolicyDAO.FindEnabledPolicyConfig(this.AdminContext(), params.FirewallPolicyId)
+	firewallPolicy, err := dao.SharedHTTPFirewallPolicyDAO.FindEnabledHTTPFirewallPolicyConfig(this.AdminContext(), params.FirewallPolicyId)
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -64,7 +67,7 @@ func (this *UpdateSetPopupAction) RunGet(params struct {
 	this.Data["actions"] = actionMaps
 
 	// 规则集信息
-	setConfig, err := models.SharedHTTPFirewallRuleSetDAO.FindRuleSetConfig(this.AdminContext(), params.SetId)
+	setConfig, err := dao.SharedHTTPFirewallRuleSetDAO.FindRuleSetConfig(this.AdminContext(), params.SetId)
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -75,6 +78,14 @@ func (this *UpdateSetPopupAction) RunGet(params struct {
 	}
 	this.Data["setConfig"] = setConfig
 
+	// action configs
+	actionConfigs, err := dao.SharedHTTPFirewallPolicyDAO.FindHTTPFirewallActionConfigs(this.AdminContext(), setConfig.Actions)
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	this.Data["actionConfigs"] = actionConfigs
+
 	this.Show()
 }
 
@@ -82,15 +93,15 @@ func (this *UpdateSetPopupAction) RunPost(params struct {
 	GroupId int64
 	SetId   int64
 
-	Name      string
-	RulesJSON []byte
-	Connector string
-	Action    string
+	Name        string
+	RulesJSON   []byte
+	Connector   string
+	ActionsJSON []byte
 
 	Must *actions.Must
 }) {
 	// 规则集信息
-	setConfig, err := models.SharedHTTPFirewallRuleSetDAO.FindRuleSetConfig(this.AdminContext(), params.SetId)
+	setConfig, err := dao.SharedHTTPFirewallRuleSetDAO.FindRuleSetConfig(this.AdminContext(), params.SetId)
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -111,26 +122,28 @@ func (this *UpdateSetPopupAction) RunPost(params struct {
 	err = json.Unmarshal(params.RulesJSON, &rules)
 	if err != nil {
 		this.ErrorPage(err)
+		return
 	}
 	if len(rules) == 0 {
 		this.Fail("请添加至少一个规则")
 	}
 
+	var actionConfigs = []*firewallconfigs.HTTPFirewallActionConfig{}
+	if len(params.ActionsJSON) > 0 {
+		err = json.Unmarshal(params.ActionsJSON, &actionConfigs)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+	}
+	if len(actionConfigs) == 0 {
+		this.Fail("请添加至少一个动作")
+	}
+
 	setConfig.Name = params.Name
 	setConfig.Connector = params.Connector
 	setConfig.Rules = rules
-	setConfig.Action = params.Action
-	setConfig.ActionOptions = maps.Map{}
-
-	for k, v := range this.ParamsMap {
-		if len(v) == 0 {
-			continue
-		}
-		index := strings.Index(k, "action_")
-		if index > -1 {
-			setConfig.ActionOptions[k[len("action_"):]] = v[0]
-		}
-	}
+	setConfig.Actions = actionConfigs
 
 	setConfigJSON, err := json.Marshal(setConfig)
 	if err != nil {

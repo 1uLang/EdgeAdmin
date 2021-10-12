@@ -1,17 +1,16 @@
 Vue.component("http-access-log-config-box", {
-	props: ["v-access-log-config", "v-fields", "v-default-field-codes", "v-access-log-policies", "v-is-location"],
+	props: ["v-access-log-config", "v-fields", "v-default-field-codes", "v-is-location", "v-is-group"],
 	data: function () {
 		let that = this
 
 		// 初始化
 		setTimeout(function () {
 			that.changeFields()
-			that.changePolicy()
 		}, 100)
 
 		let accessLog = {
 			isPrior: false,
-			isOn: true,
+			isOn: false,
 			fields: [],
 			status1: true,
 			status2: true,
@@ -19,8 +18,7 @@ Vue.component("http-access-log-config-box", {
 			status4: true,
 			status5: true,
 
-			storageOnly: false,
-			storagePolicies: []
+            firewallOnly: false
 		}
 		if (this.vAccessLogConfig != null) {
 			accessLog = this.vAccessLogConfig
@@ -32,9 +30,6 @@ Vue.component("http-access-log-config-box", {
 			} else {
 				v.isChecked = accessLog.fields.$contains(v.code)
 			}
-		})
-		this.vAccessLogPolicies.forEach(function (v) {
-			v.isChecked = accessLog.storagePolicies.$contains(v.id)
 		})
 
 		return {
@@ -48,20 +43,13 @@ Vue.component("http-access-log-config-box", {
 			}).map(function (v) {
 				return v.code
 			})
-		},
-		changePolicy: function () {
-			this.accessLog.storagePolicies = this.vAccessLogPolicies.filter(function (v) {
-				return v.isChecked
-			}).map(function (v) {
-				return v.id
-			})
 		}
 	},
 	template: `<div>
 	<input type="hidden" name="accessLogJSON" :value="JSON.stringify(accessLog)"/>
-	<table class="ui table definition selectable">
-		<prior-checkbox :v-config="accessLog" v-if="vIsLocation"></prior-checkbox>
-		<tbody v-show="!vIsLocation || accessLog.isPrior">
+	<table class="ui table definition selectable" :class="{'opacity-mask': this.accessLog.firewallOnly}">
+		<prior-checkbox :v-config="accessLog" v-if="vIsLocation || vIsGroup"></prior-checkbox>
+		<tbody v-show="(!vIsLocation && !vIsGroup) || accessLog.isPrior">
 			<tr>
 				<td class="title">是否开启访问日志存储</td>
 				<td>
@@ -73,7 +61,7 @@ Vue.component("http-access-log-config-box", {
 				</td>
 			</tr>
 		</tbody>
-		<tbody  v-show="(!vIsLocation || accessLog.isPrior) && accessLog.isOn">
+		<tbody  v-show="((!vIsLocation && !vIsGroup) || accessLog.isPrior) && accessLog.isOn">
 			<tr>
 				<td>要存储的访问日志字段</td>
 				<td>
@@ -108,30 +96,21 @@ Vue.component("http-access-log-config-box", {
 					</div>
 				</td>
 			</tr>
-			<tr v-show="vAccessLogPolicies.length > 0">
-				<td>选择输出的日志策略</td>
-				<td>
-					<span class="disabled" v-if="vAccessLogPolicies.length == 0">暂时还没有缓存策略。</span>
-					<div v-if="vAccessLogPolicies.length > 0">
-						<div class="ui checkbox" v-for="policy in vAccessLogPolicies" style="width:10em;margin-bottom:0.8em">
-							<input type="checkbox" v-model="policy.isChecked" @change="changePolicy" />
-							<label>{{policy.name}}</label>
-						</div>
-					</div>
-				</td>
-			</tr>
-			<tr v-show="vAccessLogPolicies.length > 0">
-				<td>是否只输出到日志策略</td>
-				<td>
-					<div class="ui checkbox">
-						<input type="checkbox" v-model="accessLog.storageOnly"/>
-						<label></label>
-					</div>
-					<p class="comment">选中表示只输出日志到日志策略，而停止默认的日志存储。</p>
-				</td>
-			</tr>
 		</tbody>
 	</table>
+	
+	<div v-show="((!vIsLocation && !vIsGroup) || accessLog.isPrior) && accessLog.isOn">
+        <h4>WAF相关</h4>
+        <table class="ui table definition selectable">
+            <tr>
+                <td class="title">是否只记录WAF相关日志</td>
+                <td>
+                    <checkbox v-model="accessLog.firewallOnly"></checkbox>
+                    <p class="comment">选中后只记录WAF相关的日志。通过此选项可有效减少访问日志数量，降低网络带宽和存储压力。</p>
+                </td>
+            </tr>
+        </table>
+    </div>
 	<div class="margin"></div>
 </div>`
 })

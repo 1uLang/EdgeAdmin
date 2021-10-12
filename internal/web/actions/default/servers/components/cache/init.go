@@ -1,7 +1,7 @@
 package cache
 
 import (
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/components/componentutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/helpers"
 	"github.com/iwind/TeaGo"
 )
@@ -9,9 +9,10 @@ import (
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
-			Helper(helpers.NewUserMustAuth()).
+			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
 			Helper(NewHelper()).
-			Helper(componentutils.NewComponentHelper()).
+			Data("teaMenu", "servers").
+			Data("teaSubMenu", "cache").
 			Prefix("/servers/components/cache").
 			Get("", new(IndexAction)).
 			GetPost("/createPopup", new(CreatePopupAction)).
@@ -25,6 +26,9 @@ func init() {
 			Post("/delete", new(DeleteAction)).
 			Post("/testRead", new(TestReadAction)).
 			Post("/testWrite", new(TestWriteAction)).
+			Get("/selectPopup", new(SelectPopupAction)).
+			Post("/count", new(CountAction)).
+			Post("/updateRefs", new(UpdateRefsAction)).
 			EndAll()
 	})
 }

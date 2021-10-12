@@ -1,8 +1,8 @@
 package nodes
 
 import (
-	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 )
 
 type DeleteAction struct {
@@ -10,9 +10,16 @@ type DeleteAction struct {
 }
 
 func (this *DeleteAction) RunPost(params struct {
-	NodeId int64
+	ClusterId int64
+	NodeId    int64
 }) {
-	_, err := this.RPC().NodeRPC().DisableNode(this.AdminContext(), &pb.DisableNodeRequest{NodeId: params.NodeId})
+	// 创建日志
+	defer this.CreateLogInfo("从集群 %d 中删除节点 %d", params.ClusterId, params.NodeId)
+
+	_, err := this.RPC().NodeRPC().DeleteNodeFromNodeCluster(this.AdminContext(), &pb.DeleteNodeFromNodeClusterRequest{
+		NodeId:        params.NodeId,
+		NodeClusterId: params.ClusterId,
+	})
 	if err != nil {
 		this.ErrorPage(err)
 		return

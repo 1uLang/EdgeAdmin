@@ -1,6 +1,7 @@
 package cache
 
 import (
+	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nodes/nodeutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/messageconfigs"
@@ -11,7 +12,7 @@ import (
 	"github.com/iwind/TeaGo/types"
 	"net/http"
 	"strconv"
-	strings "strings"
+	"strings"
 )
 
 type PurgeAction struct {
@@ -22,7 +23,9 @@ func (this *PurgeAction) Init() {
 	this.Nav("", "", "purge")
 }
 
-func (this *PurgeAction) RunGet(params struct{}) {
+func (this *PurgeAction) RunGet(params struct {
+	CachePolicyId int64
+}) {
 	// 默认的集群ID
 	cookie, err := this.Request.Cookie("cache_cluster_id")
 	if cookie != nil && err == nil {
@@ -30,13 +33,13 @@ func (this *PurgeAction) RunGet(params struct{}) {
 	}
 
 	// 集群列表
-	clustersResp, err := this.RPC().NodeClusterRPC().FindAllEnabledNodeClusters(this.AdminContext(), &pb.FindAllEnabledNodeClustersRequest{})
+	clustersResp, err := this.RPC().NodeClusterRPC().FindAllEnabledNodeClustersWithHTTPCachePolicyId(this.AdminContext(), &pb.FindAllEnabledNodeClustersWithHTTPCachePolicyIdRequest{HttpCachePolicyId: params.CachePolicyId})
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
 	clusterMaps := []maps.Map{}
-	for _, cluster := range clustersResp.Clusters {
+	for _, cluster := range clustersResp.NodeClusters {
 		clusterMaps = append(clusterMaps, maps.Map{
 			"id":   cluster.Id,
 			"name": cluster.Name,
@@ -50,21 +53,25 @@ func (this *PurgeAction) RunGet(params struct{}) {
 func (this *PurgeAction) RunPost(params struct {
 	CachePolicyId int64
 	ClusterId     int64
+	Type          string
 	Keys          string
 	Must          *actions.Must
 }) {
+	// 创建日志
+	defer this.CreateLog(oplogs.LevelInfo, "删除缓存，缓存策略：%d", params.CachePolicyId)
+
 	// 记录clusterId
 	this.AddCookie(&http.Cookie{
 		Name:  "cache_cluster_id",
 		Value: strconv.FormatInt(params.ClusterId, 10),
 	})
 
-	cachePolicyResp, err := this.RPC().HTTPCachePolicyRPC().FindEnabledHTTPCachePolicyConfig(this.AdminContext(), &pb.FindEnabledHTTPCachePolicyConfigRequest{CachePolicyId: params.CachePolicyId})
+	cachePolicyResp, err := this.RPC().HTTPCachePolicyRPC().FindEnabledHTTPCachePolicyConfig(this.AdminContext(), &pb.FindEnabledHTTPCachePolicyConfigRequest{HttpCachePolicyId: params.CachePolicyId})
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	cachePolicyJSON := cachePolicyResp.CachePolicyJSON
+	cachePolicyJSON := cachePolicyResp.HttpCachePolicyJSON
 	if len(cachePolicyJSON) == 0 {
 		this.Fail("找不到要操作的缓存策略")
 	}
@@ -89,6 +96,11 @@ func (this *PurgeAction) RunPost(params struct {
 	msg := &messageconfigs.PurgeCacheMessage{
 		CachePolicyJSON: cachePolicyJSON,
 		Keys:            realKeys,
+	}
+	if params.Type == "prefix" {
+		msg.Type = messageconfigs.PurgeCacheMessageTypeDir
+	} else {
+		msg.Type = messageconfigs.PurgeCacheMessageTypeFile
 	}
 	results, err := nodeutils.SendMessageToCluster(this.AdminContext(), params.ClusterId, messageconfigs.MessageCodePurgeCache, msg, 10)
 	if err != nil {

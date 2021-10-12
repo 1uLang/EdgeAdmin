@@ -6,8 +6,7 @@ import (
 
 var isConfigured bool
 
-// 判断系统是否已经配置过
-// TODO 检查节点版本和数据库版本是否一致，如果不一致则跳转到升级页面
+// IsConfigured 判断系统是否已经配置过
 func IsConfigured() bool {
 	if isConfigured {
 		return true

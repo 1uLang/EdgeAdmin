@@ -4,9 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configs"
+	"github.com/TeaOSLab/EdgeAdmin/internal/nodes"
 	"github.com/TeaOSLab/EdgeAdmin/internal/rpc"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/configutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeCommon/pkg/systemconfigs"
 	"github.com/go-yaml/yaml"
 	"github.com/iwind/TeaGo/Tea"
 	"github.com/iwind/TeaGo/actions"
@@ -66,14 +69,14 @@ func (this *InstallAction) RunPost(params struct {
 			_, err = os.Stat(apiNodeDir)
 			if err != nil {
 				if os.IsNotExist(err) {
-					this.Fail("在当前目录下找不到" + dir + "目录，请将" + dir + "目录上传或者重新下载解压")
+					this.Fail("在当前目录（" + Tea.Root + "）下找不到" + dir + "目录，请将" + dir + "目录上传或者重新下载解压")
 				}
 				this.Fail("无法检查" + dir + "目录，发生错误：" + err.Error())
 			}
 		}
 
 		// 保存数据库配置
-		dsn := dbMap.GetString("username") + ":" + dbMap.GetString("password") + "@tcp(" + dbMap.GetString("host") + ":" + dbMap.GetString("port") + ")/" + dbMap.GetString("database") + "?charset=utf8mb4&timeout=30s"
+		dsn := dbMap.GetString("username") + ":" + dbMap.GetString("password") + "@tcp(" + configutils.QuoteIP(dbMap.GetString("host")) + ":" + dbMap.GetString("port") + ")/" + dbMap.GetString("database") + "?charset=utf8mb4&timeout=30s"
 		dbConfig := &dbs.Config{
 			DBs: map[string]*dbs.DBConfig{
 				"prod": {
@@ -82,6 +85,7 @@ func (this *InstallAction) RunPost(params struct {
 					Prefix: "edge",
 				}},
 		}
+		dbConfig.Default.DB = "prod"
 		dbConfigData, err := yaml.Marshal(dbConfig)
 		if err != nil {
 			this.Fail("生成数据库配置失败：" + err.Error())
@@ -91,9 +95,44 @@ func (this *InstallAction) RunPost(params struct {
 			this.Fail("保存数据库配置失败：" + err.Error())
 		}
 
+		// 生成备份文件
+		homeDir, _ := os.UserHomeDir()
+		backupDirs := []string{"/etc/edge-api"}
+		if len(homeDir) > 0 {
+			backupDirs = append(backupDirs, homeDir+"/.edge-api")
+		}
+		for _, backupDir := range backupDirs {
+			stat, err := os.Stat(backupDir)
+			if err == nil && stat.IsDir() {
+				_ = ioutil.WriteFile(backupDir+"/db.yaml", dbConfigData, 0666)
+			} else if err != nil && os.IsNotExist(err) {
+				err = os.Mkdir(backupDir, 0777)
+				if err == nil {
+					_ = ioutil.WriteFile(backupDir+"/db.yaml", dbConfigData, 0666)
+				}
+			}
+		}
+
 		err = ioutil.WriteFile(Tea.ConfigFile("/api_db.yaml"), dbConfigData, 0666)
 		if err != nil {
 			this.Fail("保存数据库配置失败：" + err.Error())
+		}
+
+		// 生成备份文件
+		backupDirs = []string{"/etc/edge-admin"}
+		if len(homeDir) > 0 {
+			backupDirs = append(backupDirs, homeDir+"/.edge-admin")
+		}
+		for _, backupDir := range backupDirs {
+			stat, err := os.Stat(backupDir)
+			if err == nil && stat.IsDir() {
+				_ = ioutil.WriteFile(backupDir+"/api_db.yaml", dbConfigData, 0666)
+			} else if err != nil && os.IsNotExist(err) {
+				err = os.Mkdir(backupDir, 0777)
+				if err == nil {
+					_ = ioutil.WriteFile(backupDir+"/api_db.yaml", dbConfigData, 0666)
+				}
+			}
 		}
 
 		// 开始安装
@@ -124,6 +163,12 @@ func (this *InstallAction) RunPost(params struct {
 			if err != nil {
 				this.Fail("API节点启动失败：" + err.Error())
 			}
+
+			// 记录子PID方便退出的时候一起退出
+			nodes.SharedAdminNode.AddSubPID(cmd.Process.Pid)
+
+			// 等待API节点初始化完成
+			time.Sleep(5 * time.Second)
 		}
 
 		// 写入API节点配置，完成安装
@@ -131,7 +176,7 @@ func (this *InstallAction) RunPost(params struct {
 			RPC: struct {
 				Endpoints []string `yaml:"endpoints"`
 			}{
-				Endpoints: []string{"http://" + apiNodeMap.GetString("newHost") + ":" + apiNodeMap.GetString("newPort")},
+				Endpoints: []string{"http://" + configutils.QuoteIP(apiNodeMap.GetString("newHost")) + ":" + apiNodeMap.GetString("newPort")},
 			},
 			NodeId: resultMap.GetString("adminNodeId"),
 			Secret: resultMap.GetString("adminNodeSecret"),
@@ -148,13 +193,33 @@ func (this *InstallAction) RunPost(params struct {
 				Username: adminMap.GetString("username"),
 				Password: adminMap.GetString("password"),
 			})
-			// 这里我们尝试多次是为了当代API节点启动完毕
+			// 这里我们尝试多次是为了等待API节点启动完毕
 			if err != nil {
 				time.Sleep(1 * time.Second)
 			}
 		}
 		if err != nil {
 			this.Fail("设置管理员账号出错：" + err.Error())
+		}
+
+		// 设置访问日志保留天数
+		var accessLogKeepDays = dbMap.GetInt("accessLogKeepDays")
+		if accessLogKeepDays > 0 {
+			var config = &systemconfigs.DatabaseConfig{}
+			config.ServerAccessLog.Clean.Days = accessLogKeepDays
+			configJSON, err := json.Marshal(config)
+			if err != nil {
+				this.Fail("配置设置访问日志保留天数出错：" + err.Error())
+				return
+			}
+			_, err = client.SysSettingRPC().UpdateSysSetting(ctx, &pb.UpdateSysSettingRequest{
+				Code:      systemconfigs.SettingCodeDatabaseConfigSetting,
+				ValueJSON: configJSON,
+			})
+			if err != nil {
+				this.Fail("配置设置访问日志保留天数出错：" + err.Error())
+				return
+			}
 		}
 
 		err = apiConfig.WriteFile(Tea.ConfigFile("api.yaml"))
@@ -169,7 +234,7 @@ func (this *InstallAction) RunPost(params struct {
 			RPC: struct {
 				Endpoints []string `yaml:"endpoints"`
 			}{
-				Endpoints: []string{apiNodeMap.GetString("oldProtocol") + "://" + apiNodeMap.GetString("oldHost") + ":" + apiNodeMap.GetString("oldPort")},
+				Endpoints: []string{apiNodeMap.GetString("oldProtocol") + "://" + configutils.QuoteIP(apiNodeMap.GetString("oldHost")) + ":" + apiNodeMap.GetString("oldPort")},
 			},
 			NodeId: apiNodeMap.GetString("oldNodeId"),
 			Secret: apiNodeMap.GetString("oldNodeSecret"),
@@ -187,6 +252,26 @@ func (this *InstallAction) RunPost(params struct {
 		})
 		if err != nil {
 			this.Fail("设置管理员账号出错：" + err.Error())
+		}
+
+		// 设置访问日志保留天数
+		var accessLogKeepDays = dbMap.GetInt("accessLogKeepDays")
+		if accessLogKeepDays > 0 {
+			var config = &systemconfigs.DatabaseConfig{}
+			config.ServerAccessLog.Clean.Days = accessLogKeepDays
+			configJSON, err := json.Marshal(config)
+			if err != nil {
+				this.Fail("配置设置访问日志保留天数出错：" + err.Error())
+				return
+			}
+			_, err = client.SysSettingRPC().UpdateSysSetting(ctx, &pb.UpdateSysSettingRequest{
+				Code:      systemconfigs.SettingCodeDatabaseConfigSetting,
+				ValueJSON: configJSON,
+			})
+			if err != nil {
+				this.Fail("配置设置访问日志保留天数出错：" + err.Error())
+				return
+			}
 		}
 
 		// 写入API节点配置，完成安装

@@ -1,11 +1,13 @@
 package charset
 
 import (
+	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/server/settings/webutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/configutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
+	"github.com/iwind/TeaGo/types"
 )
 
 type IndexAction struct {
@@ -20,7 +22,18 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	ServerId int64
 }) {
-	webConfig, err := webutils.FindWebConfigWithServerId(this.Parent(), params.ServerId)
+	// 服务分组设置
+	groupResp, err := this.RPC().ServerGroupRPC().FindEnabledServerGroupConfigInfo(this.AdminContext(), &pb.FindEnabledServerGroupConfigInfoRequest{
+		ServerId: params.ServerId,
+	})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	this.Data["hasGroupConfig"] = groupResp.HasCharsetConfig
+	this.Data["groupSettingURL"] = "/servers/groups/group/settings/charset?groupId=" + types.String(groupResp.ServerGroupId)
+
+	webConfig, err := dao.SharedHTTPWebDAO.FindWebConfigWithServerId(this.AdminContext(), params.ServerId)
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -41,6 +54,8 @@ func (this *IndexAction) RunPost(params struct {
 
 	Must *actions.Must
 }) {
+	defer this.CreateLog(oplogs.LevelInfo, "修改Web %d 的字符集设置", params.WebId)
+
 	_, err := this.RPC().HTTPWebRPC().UpdateHTTPWebCharset(this.AdminContext(), &pb.UpdateHTTPWebCharsetRequest{
 		WebId:       params.WebId,
 		CharsetJSON: params.CharsetJSON,

@@ -2,19 +2,19 @@
 {$template "/left_menu"}
 
 {$var "header"}
-<script src="/servers/components/ssl/datajs" type="text/javascript"></script>
+<script src="/servers/certs/datajs" type="text/javascript"></script>
 <script src="/js/sortable.min.js" type="text/javascript"></script>
 {$end}
 
 <div class="right-box">
-	<form class="ui form" data-tea-action="$" data-tea-success="success">
+	<form method="post" class="ui form" data-tea-action="$" data-tea-success="success">
 		<input type="hidden" name="serverId" :value="serverId"/>
 		<input type="hidden" name="serverType" :value="serverType"/>
 		<table class="ui table selectable definition">
 			<tr>
 				<td class="title">绑定端口 *</td>
 				<td>
-					<network-addresses-box :v-server-type="serverType" :v-addresses="tlsConfig.listen" :v-protocol="'tls'"></network-addresses-box>
+					<network-addresses-box :v-server-type="serverType" :v-addresses="tlsConfig.listen" :v-protocol="'tls'" :v-support-range="true"></network-addresses-box>
 				</td>
 			</tr>
 		</table>

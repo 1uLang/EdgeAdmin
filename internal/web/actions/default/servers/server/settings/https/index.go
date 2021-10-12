@@ -3,6 +3,7 @@ package https
 import (
 	"encoding/json"
 	"errors"
+	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/serverutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
@@ -11,6 +12,7 @@ import (
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
 	"github.com/iwind/TeaGo/types"
+	"regexp"
 )
 
 type IndexAction struct {
@@ -77,13 +79,32 @@ func (this *IndexAction) RunPost(params struct {
 
 	Must *actions.Must
 }) {
+	// 记录日志
+	defer this.CreateLog(oplogs.LevelInfo, "修改服务 %d 的HTTPS设置", params.ServerId)
+
 	addresses := []*serverconfigs.NetworkAddressConfig{}
 	err := json.Unmarshal([]byte(params.Addresses), &addresses)
 	if err != nil {
 		this.Fail("端口地址解析失败：" + err.Error())
 	}
 
-	// TODO 校验addresses
+	// 检查端口地址是否正确
+	for _, addr := range addresses {
+		err = addr.Init()
+		if err != nil {
+			this.Fail("绑定端口校验失败：" + err.Error())
+		}
+
+		if regexp.MustCompile(`^\d+$`).MatchString(addr.PortRange) {
+			port := types.Int(addr.PortRange)
+			if port > 65535 {
+				this.Fail("绑定的端口地址不能大于65535")
+			}
+			if port == 80 {
+				this.Fail("端口80通常是HTTP的端口，不能用在HTTPS上")
+			}
+		}
+	}
 
 	// 校验SSL
 	var sslPolicyId = int64(0)
@@ -120,7 +141,7 @@ func (this *IndexAction) RunPost(params struct {
 				SslPolicyId:       sslPolicyId,
 				Http2Enabled:      sslPolicy.HTTP2Enabled,
 				MinVersion:        sslPolicy.MinVersion,
-				CertsJSON:         certsJSON,
+				SslCertsJSON:      certsJSON,
 				HstsJSON:          hstsJSON,
 				ClientAuthType:    types.Int32(sslPolicy.ClientAuthType),
 				ClientCACertsJSON: clientCACertsJSON,
@@ -135,7 +156,7 @@ func (this *IndexAction) RunPost(params struct {
 			resp, err := this.RPC().SSLPolicyRPC().CreateSSLPolicy(this.AdminContext(), &pb.CreateSSLPolicyRequest{
 				Http2Enabled:      sslPolicy.HTTP2Enabled,
 				MinVersion:        sslPolicy.MinVersion,
-				CertsJSON:         certsJSON,
+				SslCertsJSON:      certsJSON,
 				HstsJSON:          hstsJSON,
 				ClientAuthType:    types.Int32(sslPolicy.ClientAuthType),
 				ClientCACertsJSON: clientCACertsJSON,
@@ -176,8 +197,8 @@ func (this *IndexAction) RunPost(params struct {
 	}
 
 	_, err = this.RPC().ServerRPC().UpdateServerHTTPS(this.AdminContext(), &pb.UpdateServerHTTPSRequest{
-		ServerId: params.ServerId,
-		Config:   configData,
+		ServerId:  params.ServerId,
+		HttpsJSON: configData,
 	})
 	if err != nil {
 		this.ErrorPage(err)

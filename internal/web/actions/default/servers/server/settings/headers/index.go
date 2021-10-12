@@ -3,9 +3,10 @@ package headers
 import (
 	"encoding/json"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/server/settings/webutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/shared"
+	"github.com/iwind/TeaGo/types"
 )
 
 type IndexAction struct {
@@ -20,7 +21,19 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	ServerId int64
 }) {
-	webConfig, err := webutils.FindWebConfigWithServerId(this.Parent(), params.ServerId)
+	// 服务分组设置
+	groupResp, err := this.RPC().ServerGroupRPC().FindEnabledServerGroupConfigInfo(this.AdminContext(), &pb.FindEnabledServerGroupConfigInfoRequest{
+		ServerId: params.ServerId,
+	})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	this.Data["hasGroupRequestConfig"] = groupResp.HasRequestHeadersConfig
+	this.Data["hasGroupResponseConfig"] = groupResp.HasResponseHeadersConfig
+	this.Data["groupSettingURL"] = "/servers/groups/group/settings/headers?groupId=" + types.String(groupResp.ServerGroupId)
+
+	webConfig, err := dao.SharedHTTPWebDAO.FindWebConfigWithServerId(this.AdminContext(), params.ServerId)
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -49,6 +62,10 @@ func (this *IndexAction) RunGet(params struct {
 			WebId:      webId,
 			HeaderJSON: refJSON,
 		})
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
 		isChanged = true
 	}
 	if webConfig.ResponseHeaderPolicy == nil {
@@ -72,12 +89,16 @@ func (this *IndexAction) RunGet(params struct {
 			WebId:      webId,
 			HeaderJSON: refJSON,
 		})
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
 		isChanged = true
 	}
 
 	// 重新获取配置
 	if isChanged {
-		webConfig, err = webutils.FindWebConfigWithServerId(this.Parent(), params.ServerId)
+		webConfig, err = dao.SharedHTTPWebDAO.FindWebConfigWithServerId(this.AdminContext(), params.ServerId)
 		if err != nil {
 			this.ErrorPage(err)
 			return

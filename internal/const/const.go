@@ -1,7 +1,9 @@
 package teaconst
 
 const (
-	Version = "0.0.1"
+	Version = "0.3.2"
+
+	APINodeVersion = "0.3.2"
 
 	ProductName   = "Edge Admin"
 	ProcessName   = "edge-admin"
@@ -13,4 +15,7 @@ const (
 	EncryptMethod = "aes-256-cfb"
 
 	ErrServer = "服务器出了点小问题，请联系技术人员处理。"
+	CookieSID = "edgesid"
+
+	SystemdServiceName = "edge-admin"
 )

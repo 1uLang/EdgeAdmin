@@ -1,6 +1,7 @@
-package profile
+package database
 
 import (
+	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
@@ -39,14 +40,23 @@ func (this *IndexAction) RunPost(params struct {
 
 	Must *actions.Must
 }) {
+	defer this.CreateLogInfo("修改个人资料")
+
 	params.Must.
 		Field("fullname", params.Fullname).
 		Require("请输入你的姓名")
 
-	_, err := this.RPC().AdminRPC().UpdateAdmin(this.AdminContext(), &pb.UpdateAdminRequest{
+	_, err := this.RPC().AdminRPC().UpdateAdminInfo(this.AdminContext(), &pb.UpdateAdminInfoRequest{
 		AdminId:  this.AdminId(),
 		Fullname: params.Fullname,
 	})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+
+	// 通知更新
+	err = configloaders.NotifyAdminModuleMappingChange()
 	if err != nil {
 		this.ErrorPage(err)
 		return

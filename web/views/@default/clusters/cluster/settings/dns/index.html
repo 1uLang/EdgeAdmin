@@ -1,0 +1,73 @@
+{$layout}
+{$template "/left_menu"}
+
+<div class="right-box">
+	<p class="comment"><a :href="'/dns/clusters/cluster?clusterId=' + clusterId">查看DNS解析记录 &raquo;</a></p>
+	<form method="post" class="ui form" data-tea-action="$" data-tea-success="success">
+		<input type="hidden" name="clusterId" :value="clusterId"/>
+		<csrf-token></csrf-token>
+
+		<table class="ui table selectable definition">
+			<tr v-if="hasDomains">
+				<td>选择主域名 *</td>
+				<td>
+					<dns-domain-selector :v-domain-id="domainId" :v-domain-name="domainName" @change="changeDomain"></dns-domain-selector>
+					<p class="comment">用于生成集群节点和网站服务的DNS解析记录。</p>
+				</td>
+			</tr>
+			<tr>
+				<td class="title">DNS子域名 *</td>
+				<td>
+					<div class="ui input right labeled">
+						<input type="text" name="dnsName" maxlength="64" style="width:10em" v-model="dnsName"/>
+                        <span class="ui label" v-if="domain != null && domain.name != null && domain.name.length > 0">.{{domain.name}}</span>
+                        <span class="ui label" v-else>.主域名</span>
+					</div>
+					<p class="comment">当前集群的子域名，和主域名一起组成集群节点的子域名。</p>
+				</td>
+			</tr>
+            <tr>
+                <td>自动设置CNAME记录</td>
+                <td>
+                    <values-box :values="cnameRecords" name="cnameRecords" placeholder="记录名" ref="cnameRecords"></values-box>
+                    <p class="comment">除集群已创建的网站服务之外，自动解析到集群的CNAME记录，比如<code-label @click.prevent="addCnameRecord('@')">@</code-label>、<code-label @click.prevent="addCnameRecord('www')">www</code-label>。</p>
+                </td>
+            </tr>
+			<tr>
+				<td colspan="2"><more-options-indicator></more-options-indicator></td>
+			</tr>
+			<tbody v-show="moreOptionsVisible">
+                <tr>
+                    <td>记录TTL</td>
+                    <td>
+                        <div class="ui input right labeled">
+                            <input type="text" name="ttl" maxlength="6" style="width: 6em" v-model="ttl"/>
+                            <span class="ui label">秒</span>
+                        </div>
+                        <p class="comment">每个DNS服务商或者账号的TTL限制各有不同，请注意取值范围。0表示使用默认。</p>
+                    </td>
+                </tr>
+				<tr>
+					<td>是否同步节点DNS状态</td>
+					<td>
+						<div class="ui checkbox">
+							<input type="checkbox" name="nodesAutoSync" value="1" v-model="nodesAutoSync"/>
+							<label></label>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>是否同步网站服务DNS状态</td>
+					<td>
+						<div class="ui checkbox">
+							<input type="checkbox" name="serversAutoSync" value="1" v-model="serversAutoSync"/>
+							<label></label>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<submit-btn></submit-btn>
+	</form>
+</div>

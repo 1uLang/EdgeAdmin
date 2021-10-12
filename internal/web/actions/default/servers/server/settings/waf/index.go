@@ -2,10 +2,12 @@ package waf
 
 import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/server/settings/webutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/firewallconfigs"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
+	"github.com/iwind/TeaGo/types"
 )
 
 type IndexAction struct {
@@ -20,7 +22,18 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	ServerId int64
 }) {
-	webConfig, err := webutils.FindWebConfigWithServerId(this.Parent(), params.ServerId)
+	// 服务分组设置
+	groupResp, err := this.RPC().ServerGroupRPC().FindEnabledServerGroupConfigInfo(this.AdminContext(), &pb.FindEnabledServerGroupConfigInfoRequest{
+		ServerId: params.ServerId,
+	})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	this.Data["hasGroupConfig"] = groupResp.HasWAFConfig
+	this.Data["groupSettingURL"] = "/servers/groups/group/settings/waf?groupId=" + types.String(groupResp.ServerGroupId)
+
+	webConfig, err := dao.SharedHTTPWebDAO.FindWebConfigWithServerId(this.AdminContext(), params.ServerId)
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -29,22 +42,35 @@ func (this *IndexAction) RunGet(params struct {
 	this.Data["webId"] = webConfig.Id
 	this.Data["firewallConfig"] = webConfig.FirewallRef
 
-	// 当前已有策略
-	policiesResp, err := this.RPC().HTTPFirewallPolicyRPC().FindAllEnabledHTTPFirewallPolicies(this.AdminContext(), &pb.FindAllEnabledHTTPFirewallPoliciesRequest{})
+	// 获取当前服务所在集群的WAF设置
+	firewallPolicy, err := dao.SharedHTTPFirewallPolicyDAO.FindEnabledHTTPFirewallPolicyWithServerId(this.AdminContext(), params.ServerId)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	policyMaps := []maps.Map{}
-	for _, p := range policiesResp.FirewallPolicies {
-		policyMaps = append(policyMaps, maps.Map{
-			"id":          p.Id,
-			"name":        p.Name,
-			"isOn":        p.IsOn,
-			"description": p.Description,
-		})
+	if firewallPolicy != nil {
+		this.Data["firewallPolicy"] = maps.Map{
+			"id":       firewallPolicy.Id,
+			"name":     firewallPolicy.Name,
+			"isOn":     firewallPolicy.IsOn,
+			"mode":     firewallPolicy.Mode,
+			"modeInfo": firewallconfigs.FindFirewallMode(firewallPolicy.Mode),
+		}
+	} else {
+		this.Data["firewallPolicy"] = nil
 	}
-	this.Data["firewallPolicies"] = policyMaps
+
+	// 当前的Server独立设置
+	if webConfig.FirewallRef == nil || webConfig.FirewallRef.FirewallPolicyId == 0 {
+		firewallPolicyId, err := dao.SharedHTTPWebDAO.InitEmptyHTTPFirewallPolicy(this.AdminContext(), 0, params.ServerId, webConfig.Id, webConfig.FirewallRef != nil && webConfig.FirewallRef.IsOn)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+		this.Data["firewallPolicyId"] = firewallPolicyId
+	} else {
+		this.Data["firewallPolicyId"] = webConfig.FirewallRef.FirewallPolicyId
+	}
 
 	this.Show()
 }
@@ -55,6 +81,8 @@ func (this *IndexAction) RunPost(params struct {
 
 	Must *actions.Must
 }) {
+	defer this.CreateLogInfo("修改Web %d 的WAF设置", params.WebId)
+
 	// TODO 检查配置
 
 	_, err := this.RPC().HTTPWebRPC().UpdateHTTPWebFirewall(this.AdminContext(), &pb.UpdateHTTPWebFirewallRequest{

@@ -2,13 +2,16 @@ package http
 
 import (
 	"encoding/json"
+	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/server/settings/webutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/serverutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
+	"github.com/iwind/TeaGo/types"
+	"regexp"
 )
 
 type IndexAction struct {
@@ -45,7 +48,7 @@ func (this *IndexAction) RunGet(params struct {
 	}
 
 	// 跳转相关设置
-	webConfig, err := webutils.FindWebConfigWithServerId(this.Parent(), params.ServerId)
+	webConfig, err := dao.SharedHTTPWebDAO.FindWebConfigWithServerId(this.AdminContext(), params.ServerId)
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -66,10 +69,31 @@ func (this *IndexAction) RunPost(params struct {
 
 	Must *actions.Must
 }) {
+	// 记录日志
+	defer this.CreateLog(oplogs.LevelInfo, "修改服务 %d 的HTTP设置", params.ServerId)
+
 	addresses := []*serverconfigs.NetworkAddressConfig{}
 	err := json.Unmarshal([]byte(params.Addresses), &addresses)
 	if err != nil {
 		this.Fail("端口地址解析失败：" + err.Error())
+	}
+
+	// 检查端口地址是否正确
+	for _, addr := range addresses {
+		err = addr.Init()
+		if err != nil {
+			this.Fail("绑定端口校验失败：" + err.Error())
+		}
+
+		if regexp.MustCompile(`^\d+$`).MatchString(addr.PortRange) {
+			port := types.Int(addr.PortRange)
+			if port > 65535 {
+				this.Fail("绑定的端口地址不能大于65535")
+			}
+			if port == 443 {
+				this.Fail("端口443通常是HTTPS的端口，不能用在HTTP上")
+			}
+		}
 	}
 
 	server, _, isOk := serverutils.FindServer(this.Parent(), params.ServerId)
@@ -95,7 +119,7 @@ func (this *IndexAction) RunPost(params struct {
 
 	_, err = this.RPC().ServerRPC().UpdateServerHTTP(this.AdminContext(), &pb.UpdateServerHTTPRequest{
 		ServerId: params.ServerId,
-		Config:   configData,
+		HttpJSON: configData,
 	})
 	if err != nil {
 		this.ErrorPage(err)

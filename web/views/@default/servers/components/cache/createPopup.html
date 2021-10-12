@@ -2,7 +2,7 @@
 
 <h3>创建缓存策略</h3>
 
-<form class="ui form" data-tea-action="$" data-tea-success="success">
+<form method="post" class="ui form" data-tea-action="$" data-tea-success="success">
 	<table class="ui table definition selectable">
 		<tr>
 			<td class="title">策略名称 *</td>
@@ -21,20 +21,36 @@
 			<tr>
 				<td class="color-border">缓存目录 *</td>
 				<td>
-					<input type="text" name="fileDir" maxlength="500"/>
+					<input type="text" name="fileDir" maxlength="500" value="/opt/cache"/>
 					<p class="comment">存放文件缓存的目录，通常填写绝对路径。</p>
 				</td>
 			</tr>
+            <tr>
+                <td class="color-border">文件目录最大容量</td>
+                <td>
+                    <size-capacity-box :v-name="'capacityJSON'" :v-count="128" :v-unit="'gb'" :key="'capacityJSON1'"></size-capacity-box>
+                    <p class="comment">作为二级缓存的文件目录允许缓存的最大容量，如果为0表示没有限制。</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="color-border">内存最大容量</td>
+                <td>
+                   <size-capacity-box :v-name="'fileMemoryCapacityJSON'" :v-count="0" :v-unit="'gb'" :key="'fileMemoryCapacityJSON'"></size-capacity-box>
+                    <p class="comment">作为一级缓存的内存最大容量，如果为0表示不使用内存作为一级缓存。</p>
+                </td>
+            </tr>
 		</tbody>
 
+        <tbody v-if="policyType == 'memory'">
+            <tr>
+                <td>内存最大容量</td>
+                <td>
+                    <size-capacity-box :key="'a'" :v-name="'capacityJSON'" :v-count="2" :v-unit="'gb'" :key="'capacityJSON2'"></size-capacity-box>
+                    <p class="comment">允许缓存的最大容量，如果为0表示没有限制。</p>
+                </td>
+            </tr>
+        </tbody>
 
-		<tr>
-			<td>缓存最大容量</td>
-			<td>
-				<size-capacity-box :v-name="'capacityJSON'" :v-count="0" :v-unit="'gb'"></size-capacity-box>
-				<p class="comment">允许缓存的最大内容长度，如果为0表示没有限制。</p>
-			</td>
-		</tr>
 		<tr>
 			<td colspan="2"><more-options-indicator></more-options-indicator></td>
 		</tr>
@@ -42,7 +58,7 @@
 			<tr>
 				<td>最大内容长度</td>
 				<td>
-					<size-capacity-box :v-name="'maxSizeJSON'" :v-count="32" :v-unit="'mb'"></size-capacity-box>
+					<size-capacity-box :v-name="'maxSizeJSON'" :v-count="256" :v-unit="'mb'" :key="'maxSizeJSON'"></size-capacity-box>
 					<p class="comment">允许缓存的最大内容长度，如果为0表示没有限制。</p>
 				</td>
 			</tr>

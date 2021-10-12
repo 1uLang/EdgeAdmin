@@ -2,7 +2,9 @@ package waf
 
 import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/models"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/firewallconfigs"
 	"github.com/iwind/TeaGo/maps"
 )
 
@@ -17,7 +19,7 @@ func (this *PolicyAction) Init() {
 func (this *PolicyAction) RunGet(params struct {
 	FirewallPolicyId int64
 }) {
-	firewallPolicy, err := models.SharedHTTPFirewallPolicyDAO.FindEnabledPolicyConfig(this.AdminContext(), params.FirewallPolicyId)
+	firewallPolicy, err := dao.SharedHTTPFirewallPolicyDAO.FindEnabledHTTPFirewallPolicyConfig(this.AdminContext(), params.FirewallPolicyId)
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -45,13 +47,35 @@ func (this *PolicyAction) RunGet(params struct {
 		}
 	}
 
-	this.Data["firewallPolicy"] = maps.Map{
-		"id":          firewallPolicy.Id,
-		"name":        firewallPolicy.Name,
-		"isOn":        firewallPolicy.IsOn,
-		"description": firewallPolicy.Description,
-		"groups":      internalGroups,
+	// 模式
+	if len(firewallPolicy.Mode) == 0 {
+		firewallPolicy.Mode = firewallconfigs.FirewallModeDefend
 	}
+	this.Data["firewallPolicy"] = maps.Map{
+		"id":           firewallPolicy.Id,
+		"name":         firewallPolicy.Name,
+		"isOn":         firewallPolicy.IsOn,
+		"description":  firewallPolicy.Description,
+		"mode":         firewallPolicy.Mode,
+		"modeInfo":     firewallconfigs.FindFirewallMode(firewallPolicy.Mode),
+		"groups":       internalGroups,
+		"blockOptions": firewallPolicy.BlockOptions,
+	}
+
+	// 正在使用此策略的集群
+	clustersResp, err := this.RPC().NodeClusterRPC().FindAllEnabledNodeClustersWithHTTPFirewallPolicyId(this.AdminContext(), &pb.FindAllEnabledNodeClustersWithHTTPFirewallPolicyIdRequest{HttpFirewallPolicyId: params.FirewallPolicyId})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	clusterMaps := []maps.Map{}
+	for _, cluster := range clustersResp.NodeClusters {
+		clusterMaps = append(clusterMaps, maps.Map{
+			"id":   cluster.Id,
+			"name": cluster.Name,
+		})
+	}
+	this.Data["clusters"] = clusterMaps
 
 	this.Show()
 }

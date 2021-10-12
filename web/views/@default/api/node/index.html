@@ -15,7 +15,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td>进程监听端口</td>
+		<td>GRPC监听端口</td>
 		<td>
 			<network-addresses-view :v-addresses="node.listens"></network-addresses-view>
 			<p class="comment">API节点进程监听的网络端口。</p>
@@ -24,16 +24,26 @@
 	<tr v-if="node.hasHTTPS">
 		<td>HTTPS证书</td>
 		<td>
-			<ssl-certs-view :v-certs="node.certs"></ssl-certs-view>
+            <div v-if="node.certs != null && node.certs.length > 0">
+                <ssl-certs-view :v-certs="node.certs"></ssl-certs-view>
+            </div>
+            <span v-else class="red">还没有设置证书，可能会导致HTTPS相关服务不可用。</span>
 		</td>
 	</tr>
 	<tr>
-		<td>外部访问地址</td>
+		<td>GRPC外部访问地址</td>
 		<td>
 			<network-addresses-view :v-addresses="node.accessAddrs"></network-addresses-view>
-			<p class="comment">外部访问API节点的网络地址。</p>
+			<p class="comment">通过GRPC访问API节点的网络地址。</p>
 		</td>
 	</tr>
+    <tr v-if="node.restIsOn">
+        <td>HTTP外部访问地址</td>
+        <td>
+            <network-addresses-view :v-addresses="node.restAccessAddrs"></network-addresses-view>
+            <p class="comment">通过HTTP访问API节点的网络地址。</p>
+        </td>
+    </tr>
 	<tr>
 		<td>描述</td>
 		<td>

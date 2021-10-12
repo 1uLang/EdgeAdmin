@@ -1,7 +1,5 @@
 {$layout}
-{$template "/left_menu"}
 
-<div class="right-box">
 	{$template "policy_menu"}
 
 	<h3>选择集群</h3>
@@ -13,7 +11,7 @@
 
 	<h3>清理</h3>
 	<p class=""><span class="red">严重注意：该操作将清理集群所有节点上的所有对应缓存。</span></p>
-	<form data-tea-action="$" data-tea-before="before" data-tea-success="success" data-tea-fail="fail" data-tea-done="done">
+	<form method="post" data-tea-action="$" data-tea-before="before" data-tea-success="success" data-tea-fail="fail" data-tea-done="done" data-tea-timeout="300">
 		<input type="hidden" name="cachePolicyId" :value="cachePolicyId"/>
 		<input type="hidden" name="clusterId" :value="clusterId"/>
 		<table class="ui table definition selectable">
@@ -31,4 +29,3 @@
 		</table>
 		<submit-btn v-if="!isRequesting">提交</submit-btn>
 	</form>
-</div>

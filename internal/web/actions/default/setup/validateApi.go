@@ -4,6 +4,7 @@ import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/configs"
 	"github.com/TeaOSLab/EdgeAdmin/internal/rpc"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/configutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
@@ -59,10 +60,8 @@ func (this *ValidateApiAction) RunPost(params struct {
 			this.FailField("newPort", "端口号不能大于65534")
 		}
 
-		conn, err := net.Dial("tcp", "127.0.0.1:"+params.NewPort)
-		if err == nil {
-			_ = conn.Close()
-			this.FailField("newPort", "此端口已经被别的服务占用，请换一个")
+		if net.ParseIP(params.NewHost) == nil {
+			this.FailField("newHost", "请输入正确的节点主机地址")
 		}
 
 		params.Must.
@@ -88,7 +87,7 @@ func (this *ValidateApiAction) RunPost(params struct {
 		RPC: struct {
 			Endpoints []string `yaml:"endpoints"`
 		}{
-			Endpoints: []string{params.OldProtocol + "://" + params.OldHost + ":" + params.OldPort},
+			Endpoints: []string{params.OldProtocol + "://" + configutils.QuoteIP(params.OldHost) + ":" + params.OldPort},
 		},
 		NodeId: params.OldNodeId,
 		Secret: params.OldNodeSecret,

@@ -2,17 +2,20 @@ Tea.context(function () {
 	this.success = NotifyPopup
 
 	this.group = {
-		connector: "or",
+		connector: "and", // 默认为and，更符合用户的直觉
 		description: "",
 		isReverse: false,
 		conds: [],
 		isOn: true
 	}
 
+	this.isUpdating = false
+
 	// 是否在修改
 	this.$delay(function () {
 		if (window.parent.UPDATING_COND_GROUP != null) {
 			this.group = window.parent.UPDATING_COND_GROUP
+			this.isUpdating = true
 		} else if (this.group.conds.length == 0) {
 			// 如果尚未有条件，则自动弹出添加界面
 			this.addCond()
@@ -62,7 +65,7 @@ Tea.context(function () {
 			width: "32em",
 			height: "22em",
 			callback: function (resp) {
-				that.group.conds[condIndex] = resp.data.cond
+				Vue.set(that.group.conds, condIndex, resp.data.cond)
 			}
 		})
 	}

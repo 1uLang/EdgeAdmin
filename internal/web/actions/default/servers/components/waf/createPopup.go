@@ -1,6 +1,7 @@
 package waf
 
 import (
+	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/firewallconfigs"
@@ -44,16 +45,26 @@ func (this *CreatePopupAction) RunPost(params struct {
 		Field("name", params.Name).
 		Require("请输入策略名称")
 
-	_, err := this.RPC().HTTPFirewallPolicyRPC().CreateHTTPFirewallPolicy(this.AdminContext(), &pb.CreateHTTPFirewallPolicyRequest{
-		IsOn:               params.IsOn,
-		Name:               params.Name,
-		Description:        params.Description,
-		FirewallGroupCodes: params.GroupCodes,
+	createResp, err := this.RPC().HTTPFirewallPolicyRPC().CreateHTTPFirewallPolicy(this.AdminContext(), &pb.CreateHTTPFirewallPolicyRequest{
+		IsOn:                   params.IsOn,
+		Name:                   params.Name,
+		Description:            params.Description,
+		HttpFirewallGroupCodes: params.GroupCodes,
 	})
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
+
+	// 返回数据
+	this.Data["firewallPolicy"] = maps.Map{
+		"id":          createResp.HttpFirewallPolicyId,
+		"name":        params.Name,
+		"description": params.Description,
+	}
+
+	// 日志
+	defer this.CreateLog(oplogs.LevelInfo, "创建WAF策略 %d", createResp.HttpFirewallPolicyId)
 
 	this.Success()
 }

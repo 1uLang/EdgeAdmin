@@ -3,7 +3,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<link rel="shortcut icon" href="/images/favicon.png"/>
-	<title>安装Edge管理系统</title>
+	<title>安装GoEdge管理系统</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
 	{$TEA.VUE}
 	{$TEA.SEMANTIC}
@@ -47,15 +47,17 @@
 
 	<!-- 介绍 -->
 	<div v-show="step == STEP_INTRO">
-		<div>感谢你选择使用<strong>Edge</strong>集群服务系统，下面让我们一起开始配置系统。</div>
+		<div>感谢你选择使用<strong>GoEdge</strong>集群服务系统，下面让我们一起开始配置系统。</div>
 		<div class="margin">在这之前如果你还没有可用的MySQL数据库，请先安装数据库再进行。</div>
+        <div class="margin" style="color: grey">免责声明：GoEdge软件开发者并不对您的软件使用方法、服务对象、服务内容负道德或法律上的约束责任，在使用本软件时产生的一切法律风险自负。</div>
+        <div class="margin" style="color: grey">用户协议：请在遵守中华人民共和国政策、法律、法规的前提下使用本软件；自愿承担因不当使用本软件产生的一切法律后果；承认GoEdge开发者拥有本软件的著作权；点击"开始"安装表示你同意此用户协议。</div>
 		<button class="ui button primary" style="margin-top: 10em" type="button" @click.prevent="goIntroNext()">开始<i class="icon long arrow right"></i></button>
 	</div>
 
 	<!-- 设置API节点 -->
 	<div v-show="step == STEP_API">
 		<div class="ui message"><strong>API节点</strong>是管理系统和数据库之间通讯的桥梁，新安装时可以先使用自动启动的API节点，等系统变得庞大时再扩展新的API节点。</div>
-		<form class="ui form" data-tea-action=".validateApi" data-tea-success="apiSuccess" data-tea-before="apiSubmit" data-tea-done="apiDone">
+		<form method="post" class="ui form" data-tea-action=".validateApi" data-tea-success="apiSuccess" data-tea-before="apiSubmit" data-tea-done="apiDone">
 			<table class="ui table definition selectable">
 				<tr>
 					<td class="title">API节点类型</td>
@@ -76,21 +78,18 @@
 						<td>节点端口 *</td>
 						<td>
 							<input type="text" name="newPort" style="width:6em" maxlength="5" v-model="newAPINodePort"/>
-							<p class="comment">选一个在1024-65535之间并且没有正在使用的端口作为要启动的节点端口。</p>
+							<p class="comment">选一个在1024-65535之间并且没有正在使用的端口作为要启动的节点端口。如果你的服务器上有防火墙或者其他安全策略，请记得设置这个端口为通过。</p>
 						</td>
 					</tr>
 					<tr>
-						<td>节点主机地址</td>
+						<td>节点主机地址 *</td>
 						<td>
-							<div v-if="serverIPs.length > 0">
-								<select name="newHost" class="ui dropdown auto-width">
-									<option v-for="ip in serverIPs" :value="ip">{{ip}}</option>
-								</select>
+							<div class="ui fields inline">
+								<div class="ui field">
+                                    <input type="text" name="newHost" value="" ref="newHostRef" placeholder="x.x.x.x" v-model="currentHost"/>
+								</div>
 							</div>
-							<div v-else="">
-								<input type="text" name="newHost" value=""/>
-							</div>
-							<p class="comment">其他节点访问此API节点的主机地址，可以是IP或者域名，第一次安装时通常是<strong>当前服务器</strong>的IP地址。后期可以修改这个地址。</p>
+							<p class="comment">其他节点访问此API节点的主机地址，可以是IP或者域名，第一次安装时通常是<strong>当前服务器</strong>的公网IP地址。后期可以修改这个地址。</p>
 						</td>
 					</tr>
 				</tbody>
@@ -145,7 +144,7 @@
 	<!-- 设置数据库 -->
 	<div v-show="step == STEP_DB">
 		<div v-show="apiNodeMode == 'new'">
-			<form class="ui form" data-tea-action=".validateDb" data-tea-success="dbSuccess" data-tea-before="dbSubmit" data-tea-done="dbDone">
+			<form method="post" class="ui form" data-tea-action=".validateDb" data-tea-success="dbSuccess" data-tea-before="dbSubmit" data-tea-done="dbDone">
 				<table class="ui table definition selectable">
 					<tr>
 						<td class="title">MySQL主机地址 *</td>
@@ -180,6 +179,16 @@
 							<p class="comment">连接数据库所需密码，没有密码的话就不需要填写。</p>
 						</td>
 					</tr>
+                    <tr>
+                        <td>访问日志保留天数</td>
+                        <td>
+                            <div class="ui input right labeled">
+                                <input type="number" name="accessLogKeepDays" style="width: 5em" maxlength="4" value="14"/>
+                                <span class="ui label">天</span>
+                            </div>
+                            <p class="comment">网站等服务记录的访问日志保留天数，防止无限制地占用数据库空间，如果你的数据库空间比较小，请适当调小此值。</p>
+                        </td>
+                    </tr>
 				</table>
 
 				<button class="ui button" type="button" @click.prevent="goBackAPI"><i class="icon long arrow left"></i>上一步</button> &nbsp;
@@ -197,19 +206,19 @@
 
 	<!-- 设置管理员账号 -->
 	<div v-show="step == STEP_ADMIN">
-		<form class="ui form" data-tea-action=".validateAdmin" data-tea-success="adminSuccess">
+		<form method="post" class="ui form" data-tea-action=".validateAdmin" data-tea-success="adminSuccess">
 			<table class="ui table definition selectable">
 				<tr>
 					<td class="title">登录用户名 *</td>
 					<td>
-						<input type="text" name="adminUsername" style="width:16em" maxlength="100" value="admin"/>
+						<input type="text" name="adminUsername" style="width:16em" maxlength="100" value="admin" tabindex="1"/>
 						<p class="comment">只能是英文、数字和下划线的组合。</p>
 					</td>
 				</tr>
 				<tr>
 					<td>登录密码 *</td>
 					<td>
-						<input type="password" name="adminPassword" maxlength="100" style="width:16em" v-model="adminPassword" v-show="!adminPasswordVisible"/>
+						<input type="password" name="adminPassword" maxlength="100" style="width:16em" v-model="adminPassword" v-show="!adminPasswordVisible" tabindex="2"/>
 						<input type="text" value="" v-model="adminPassword" style="width:16em" v-show="adminPasswordVisible"/>
 						<p class="comment">只能是英文、数字和下划线的组合 <a href="" title="显示明文密码" @click.prevent="showAdminPassword"><i class="icon eye grey"></i></a>。</p>
 					</td>
@@ -217,7 +226,7 @@
 				<tr>
 					<td>确认密码 *</td>
 					<td>
-						<input type="password" name="adminPassword2" maxlength="100" style="width:16em" v-model="adminPassword2" v-show="!adminPasswordVisible"/>
+						<input type="password" name="adminPassword2" maxlength="100" style="width:16em" v-model="adminPassword2" v-show="!adminPasswordVisible" tabindex="3"/>
 						<input type="text" value="" v-model="adminPassword2" style="width:16em" v-show="adminPasswordVisible"/>
 						<p class="comment">再次输入密码以便于确认  <a href="" title="显示明文密码" @click.prevent="showAdminPassword"><i class="icon eye grey"></i></a>。</p>
 					</td>
@@ -231,7 +240,7 @@
 
 	<!-- 完成安装 -->
 	<div v-show="step == STEP_FINISH">
-		<form class="ui form" data-tea-action=".install" data-tea-success="finishSuccess" data-tea-before="finishSubmit" data-tea-done="finishDone">
+		<form method="post" class="ui form" data-tea-action=".install" data-tea-success="finishSuccess" data-tea-before="finishSubmit" data-tea-done="finishDone" data-tea-timeout="300">
 			<input type="hidden" name="apiNodeJSON" :value="JSON.stringify(apiNodeInfo)"/>
 			<input type="hidden" name="dbJSON" :value="JSON.stringify(dbInfo)"/>
 			<input type="hidden" name="adminJSON" :value="JSON.stringify(adminInfo)"/>
@@ -255,7 +264,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td>节点主机地址</td>
+						<td>节点主机地址 *</td>
 						<td>
 							{{apiNodeInfo.newHost}}
 						</td>
@@ -317,6 +326,12 @@
 							<span v-else class="disabled">未填入密码</span>
 						</td>
 					</tr>
+                    <tr>
+                        <td>访问日志保留天数</td>
+                        <td>
+                            {{dbInfo.accessLogKeepDays}}天
+                        </td>
+                    </tr>
 				</table>
 
 				<h3>管理员信息</h3>
@@ -336,7 +351,7 @@
 				<div class="ui divider"></div>
 				<button class="ui button" type="button" @click.prevent="goBackAdmin"><i class="icon long arrow left"></i>上一步</button>
 				<button class="ui button primary" type="submit" v-if="!isInstalling">确认并开始安装</button>
-				<button class="ui button primary" type="button" v-if="isInstalling">安装中...</button>
+				<button class="ui button disabled" type="button" v-if="isInstalling">安装中请耐心等待...</button>
 			</div>
 		</form>
 	</div>

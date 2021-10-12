@@ -2,6 +2,7 @@ package node
 
 import (
 	"encoding/json"
+	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
@@ -27,7 +28,11 @@ func (this *CreatePopupAction) RunPost(params struct {
 	ListensJSON     []byte
 	CertIdsJSON     []byte
 	AccessAddrsJSON []byte
-	IsOn            bool
+
+	RestIsOn        bool
+	RestListensJSON []byte
+
+	IsOn bool
 
 	Must *actions.Must
 }) {
@@ -58,6 +63,27 @@ func (this *CreatePopupAction) RunPost(params struct {
 		}
 	}
 
+	// Rest监听地址
+	restHTTPConfig := &serverconfigs.HTTPProtocolConfig{}
+	restHTTPSConfig := &serverconfigs.HTTPSProtocolConfig{}
+	if params.RestIsOn {
+		restListens := []*serverconfigs.NetworkAddressConfig{}
+		err = json.Unmarshal(params.RestListensJSON, &restListens)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+		for _, addr := range restListens {
+			if addr.Protocol.IsHTTPFamily() {
+				restHTTPConfig.IsOn = true
+				restHTTPConfig.Listen = append(restHTTPConfig.Listen, addr)
+			} else if addr.Protocol.IsHTTPSFamily() {
+				restHTTPSConfig.IsOn = true
+				restHTTPSConfig.Listen = append(restHTTPSConfig.Listen, addr)
+			}
+		}
+	}
+
 	// 证书
 	certIds := []int64{}
 	if len(params.CertIdsJSON) > 0 {
@@ -67,7 +93,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 			return
 		}
 	}
-	if httpsConfig.IsOn && len(httpsConfig.Listen) > 0 && len(certIds) == 0 {
+	if ((httpsConfig.IsOn && len(httpsConfig.Listen) > 0) || (restHTTPSConfig.IsOn && len(httpsConfig.Listen) > 0)) && len(certIds) == 0 {
 		this.Fail("请添加至少一个证书")
 	}
 
@@ -87,7 +113,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 	// 创建策略
 	if len(certIds) > 0 {
 		sslPolicyCreateResp, err := this.RPC().SSLPolicyRPC().CreateSSLPolicy(this.AdminContext(), &pb.CreateSSLPolicyRequest{
-			CertsJSON: certRefsJSON,
+			SslCertsJSON: certRefsJSON,
 		})
 		if err != nil {
 			this.ErrorPage(err)
@@ -95,6 +121,10 @@ func (this *CreatePopupAction) RunPost(params struct {
 		}
 		sslPolicyId := sslPolicyCreateResp.SslPolicyId
 		httpsConfig.SSLPolicyRef = &sslconfigs.SSLPolicyRef{
+			IsOn:        true,
+			SSLPolicyId: sslPolicyId,
+		}
+		restHTTPSConfig.SSLPolicyRef = &sslconfigs.SSLPolicyRef{
 			IsOn:        true,
 			SSLPolicyId: sslPolicyId,
 		}
@@ -122,11 +152,25 @@ func (this *CreatePopupAction) RunPost(params struct {
 		return
 	}
 
-	_, err = this.RPC().APINodeRPC().CreateAPINode(this.AdminContext(), &pb.CreateAPINodeRequest{
+	restHTTPJSON, err := json.Marshal(restHTTPConfig)
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	restHTTPSJSON, err := json.Marshal(restHTTPSConfig)
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+
+	createResp, err := this.RPC().APINodeRPC().CreateAPINode(this.AdminContext(), &pb.CreateAPINodeRequest{
 		Name:            params.Name,
 		Description:     params.Description,
 		HttpJSON:        httpJSON,
 		HttpsJSON:       httpsJSON,
+		RestIsOn:        params.RestIsOn,
+		RestHTTPJSON:    restHTTPJSON,
+		RestHTTPSJSON:   restHTTPSJSON,
 		AccessAddrsJSON: params.AccessAddrsJSON,
 		IsOn:            params.IsOn,
 	})
@@ -134,6 +178,9 @@ func (this *CreatePopupAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
+
+	// 创建日志
+	defer this.CreateLog(oplogs.LevelInfo, "创建API节点 %d", createResp.NodeId)
 
 	this.Success()
 }

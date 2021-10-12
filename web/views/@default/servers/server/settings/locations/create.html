@@ -4,7 +4,7 @@
 <div class="right-box">
 	{$template "menu"}
 	<div class="margin"></div>
-	<form class="ui form" data-tea-action="$" data-tea-success="success">
+	<form method="post" class="ui form" data-tea-action="$" data-tea-success="success">
 		<input type="hidden" name="webId" :value="webId"/>
 		<table class="ui table selectable definition">
 			<tr>
@@ -30,7 +30,7 @@
 						<input type="checkbox" name="isBreak" value="1"/>
 						<label></label>
 					</div>
-					<p class="comment">如果选中了此选项，一旦匹配成功，不会继续匹配其他的路径规则。</p>
+					<p class="comment">如果选中了此选项，一旦匹配成功，不会继续匹配其他的路由规则。</p>
 				</td>
 			</tr>
 			<tr>
@@ -40,6 +40,12 @@
 					<p class="comment">可以用来说明此规则用途。。</p>
 				</td>
 			</tr>
+            <tr>
+                <td>匹配条件</td>
+                <td>
+                    <http-request-conds-box></http-request-conds-box>
+                </td>
+            </tr>
 			<tr>
 				<td colspan="2"><more-options-indicator></more-options-indicator></td>
 			</tr>

@@ -16,8 +16,14 @@ func (this *IndexAction) Init() {
 	this.FirstMenu("index")
 }
 
-func (this *IndexAction) RunGet(params struct{}) {
-	countResp, err := this.RPC().HTTPFirewallPolicyRPC().CountAllEnabledFirewallPolicies(this.AdminContext(), &pb.CountAllEnabledFirewallPoliciesRequest{})
+func (this *IndexAction) RunGet(params struct {
+	Keyword string
+}) {
+	this.Data["keyword"] = params.Keyword
+
+	countResp, err := this.RPC().HTTPFirewallPolicyRPC().CountAllEnabledHTTPFirewallPolicies(this.AdminContext(), &pb.CountAllEnabledHTTPFirewallPoliciesRequest{
+		Keyword: params.Keyword,
+	})
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -25,16 +31,17 @@ func (this *IndexAction) RunGet(params struct{}) {
 	count := countResp.Count
 	page := this.NewPage(count)
 
-	listResp, err := this.RPC().HTTPFirewallPolicyRPC().ListEnabledFirewallPolicies(this.AdminContext(), &pb.ListEnabledFirewallPoliciesRequest{
-		Offset: page.Offset,
-		Size:   page.Size,
+	listResp, err := this.RPC().HTTPFirewallPolicyRPC().ListEnabledHTTPFirewallPolicies(this.AdminContext(), &pb.ListEnabledHTTPFirewallPoliciesRequest{
+		Keyword: params.Keyword,
+		Offset:  page.Offset,
+		Size:    page.Size,
 	})
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
 	policyMaps := []maps.Map{}
-	for _, policy := range listResp.FirewallPolicies {
+	for _, policy := range listResp.HttpFirewallPolicies {
 		countInbound := 0
 		countOutbound := 0
 		if len(policy.InboundJSON) > 0 {
@@ -56,20 +63,27 @@ func (this *IndexAction) RunGet(params struct{}) {
 			countOutbound = len(outboundConfig.GroupRefs)
 		}
 
-		countServersResp, err := this.RPC().ServerRPC().CountAllEnabledServersWithHTTPFirewallPolicyId(this.AdminContext(), &pb.CountAllEnabledServersWithHTTPFirewallPolicyIdRequest{FirewallPolicyId: policy.Id})
+		countClustersResp, err := this.RPC().NodeClusterRPC().CountAllEnabledNodeClustersWithHTTPFirewallPolicyId(this.AdminContext(), &pb.CountAllEnabledNodeClustersWithHTTPFirewallPolicyIdRequest{HttpFirewallPolicyId: policy.Id})
 		if err != nil {
 			this.ErrorPage(err)
 			return
 		}
-		countServers := countServersResp.Count
+		countClusters := countClustersResp.Count
+
+		// mode
+		if len(policy.Mode) == 0 {
+			policy.Mode = firewallconfigs.FirewallModeDefend
+		}
 
 		policyMaps = append(policyMaps, maps.Map{
 			"id":            policy.Id,
 			"isOn":          policy.IsOn,
 			"name":          policy.Name,
+			"mode":          policy.Mode,
+			"modeInfo":      firewallconfigs.FindFirewallMode(policy.Mode),
 			"countInbound":  countInbound,
 			"countOutbound": countOutbound,
-			"countServers":  countServers,
+			"countClusters": countClusters,
 		})
 	}
 

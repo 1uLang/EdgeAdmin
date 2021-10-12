@@ -78,6 +78,8 @@ func (this *IndexAction) RunPost(params struct {
 
 	Must *actions.Must
 }) {
+	defer this.CreateLogInfo("修改代理服务 %d TLS设置", params.ServerId)
+
 	server, _, isOk := serverutils.FindServer(this.Parent(), params.ServerId)
 	if !isOk {
 		return
@@ -124,7 +126,7 @@ func (this *IndexAction) RunPost(params struct {
 				SslPolicyId:       sslPolicyId,
 				Http2Enabled:      sslPolicy.HTTP2Enabled,
 				MinVersion:        sslPolicy.MinVersion,
-				CertsJSON:         certsJSON,
+				SslCertsJSON:      certsJSON,
 				HstsJSON:          hstsJSON,
 				ClientAuthType:    types.Int32(sslPolicy.ClientAuthType),
 				ClientCACertsJSON: clientCACertsJSON,
@@ -139,7 +141,7 @@ func (this *IndexAction) RunPost(params struct {
 			resp, err := this.RPC().SSLPolicyRPC().CreateSSLPolicy(this.AdminContext(), &pb.CreateSSLPolicyRequest{
 				Http2Enabled:      sslPolicy.HTTP2Enabled,
 				MinVersion:        sslPolicy.MinVersion,
-				CertsJSON:         certsJSON,
+				SslCertsJSON:      certsJSON,
 				HstsJSON:          hstsJSON,
 				ClientAuthType:    types.Int32(sslPolicy.ClientAuthType),
 				ClientCACertsJSON: clientCACertsJSON,
@@ -178,7 +180,7 @@ func (this *IndexAction) RunPost(params struct {
 
 	_, err = this.RPC().ServerRPC().UpdateServerTLS(this.AdminContext(), &pb.UpdateServerTLSRequest{
 		ServerId: params.ServerId,
-		Config:   configData,
+		TlsJSON:  configData,
 	})
 	if err != nil {
 		this.ErrorPage(err)

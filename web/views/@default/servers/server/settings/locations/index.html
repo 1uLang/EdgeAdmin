@@ -8,13 +8,14 @@
 <div class="right-box">
 	{$template "menu"}
 
-	<p class="comment" v-if="locations.length == 0">暂时还没有路径规则。</p>
+	<p class="comment" v-if="locations.length == 0">暂时还没有路由规则。</p>
 
-	<table class="ui table selectable" v-if="locations.length > 0" id="sortable-table">
+	<table class="ui table selectable celled" v-if="locations.length > 0" id="sortable-table">
 		<thead>
 			<tr>
 				<th style="width:1em"></th>
 				<th>匹配规则</th>
+                <th class="two wide">匹配类型</th>
 				<th class="two wide">状态</th>
 				<th class="two op">操作</th>
 			</tr>
@@ -23,9 +24,10 @@
 			<tr>
 				<td><i class="icon bars grey handle"></i></td>
 				<td>
-					{{location.pattern}}
+                    <a :href="'/servers/server/settings/locations/location?serverId=' + serverId + '&locationId=' + location.id">{{location.pattern}}</a>
 					<http-location-labels :v-location-config="location" :v-server-id="serverId"></http-location-labels>
 				</td>
+                <td>{{location.patternTypeName}}</td>
 				<td>
 					<label-on :v-is-on="location.isOn"></label-on>
 				</td>
@@ -37,5 +39,5 @@
 			</tr>
 		</tbody>
 	</table>
-	<p class="comment" v-if="locations.length > 0">拖动左侧的<i class="icon bars grey"></i>图标可以对路径规则进行排序。</p>
+	<p class="comment" v-if="locations.length > 0">拖动左侧的<i class="icon bars grey"></i>图标可以对路由规则进行排序。</p>
 </div>

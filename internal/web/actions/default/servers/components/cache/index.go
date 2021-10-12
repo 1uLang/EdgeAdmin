@@ -16,8 +16,14 @@ func (this *IndexAction) Init() {
 	this.FirstMenu("index")
 }
 
-func (this *IndexAction) RunGet(params struct{}) {
-	countResp, err := this.RPC().HTTPCachePolicyRPC().CountAllEnabledHTTPCachePolicies(this.AdminContext(), &pb.CountAllEnabledHTTPCachePoliciesRequest{})
+func (this *IndexAction) RunGet(params struct {
+	Keyword string
+}) {
+	this.Data["keyword"] = params.Keyword
+
+	countResp, err := this.RPC().HTTPCachePolicyRPC().CountAllEnabledHTTPCachePolicies(this.AdminContext(), &pb.CountAllEnabledHTTPCachePoliciesRequest{
+		Keyword: params.Keyword,
+	})
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -27,14 +33,15 @@ func (this *IndexAction) RunGet(params struct{}) {
 	this.Data["page"] = page.AsHTML()
 
 	listResp, err := this.RPC().HTTPCachePolicyRPC().ListEnabledHTTPCachePolicies(this.AdminContext(), &pb.ListEnabledHTTPCachePoliciesRequest{
-		Offset: page.Offset,
-		Size:   page.Size,
+		Keyword: params.Keyword,
+		Offset:  page.Offset,
+		Size:    page.Size,
 	})
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	cachePoliciesJSON := listResp.CachePoliciesJSON
+	cachePoliciesJSON := listResp.HttpCachePoliciesJSON
 	cachePolicies := []*serverconfigs.HTTPCachePolicy{}
 	err = json.Unmarshal(cachePoliciesJSON, &cachePolicies)
 	if err != nil {
@@ -45,16 +52,16 @@ func (this *IndexAction) RunGet(params struct{}) {
 
 	infos := []maps.Map{}
 	for _, cachePolicy := range cachePolicies {
-		countServersResp, err := this.RPC().ServerRPC().CountAllEnabledServersWithCachePolicyId(this.AdminContext(), &pb.CountAllEnabledServersWithCachePolicyIdRequest{CachePolicyId: cachePolicy.Id})
+		countClustersResp, err := this.RPC().NodeClusterRPC().CountAllEnabledNodeClustersWithHTTPCachePolicyId(this.AdminContext(), &pb.CountAllEnabledNodeClustersWithHTTPCachePolicyIdRequest{HttpCachePolicyId: cachePolicy.Id})
 		if err != nil {
 			this.ErrorPage(err)
 			return
 		}
-		countServers := countServersResp.Count
+		countClusters := countClustersResp.Count
 
 		infos = append(infos, maps.Map{
-			"typeName":     serverconfigs.FindCachePolicyStorageName(cachePolicy.Type),
-			"countServers": countServers,
+			"typeName":      serverconfigs.FindCachePolicyStorageName(cachePolicy.Type),
+			"countClusters": countClusters,
 		})
 	}
 	this.Data["infos"] = infos

@@ -7,9 +7,10 @@ import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
 	"github.com/TeaOSLab/EdgeAdmin/internal/rpc"
 	"github.com/TeaOSLab/EdgeAdmin/internal/utils"
-	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/logs"
+	"github.com/iwind/TeaGo/maps"
 	"net/http"
 	"strconv"
 )
@@ -20,7 +21,7 @@ type ParentAction struct {
 	rpcClient *rpc.RPCClient
 }
 
-// 可以调用自身的一个简便方法
+// Parent 可以调用自身的一个简便方法
 func (this *ParentAction) Parent() *ParentAction {
 	return this
 }
@@ -78,23 +79,26 @@ func (this *ParentAction) AdminId() int64 {
 }
 
 func (this *ParentAction) CreateLog(level string, description string, args ...interface{}) {
-	rpcClient, err := rpc.SharedRPC()
-	if err != nil {
-		utils.PrintError(err)
-		return
+	desc := fmt.Sprintf(description, args...)
+	if level == oplogs.LevelInfo {
+		if this.Code != 200 {
+			level = oplogs.LevelWarn
+			if len(this.Message) > 0 {
+				desc += " 失败：" + this.Message
+			}
+		}
 	}
-	_, err = rpcClient.AdminRPC().CreateAdminLog(rpcClient.Context(this.AdminId()), &pb.CreateAdminLogRequest{
-		Level:       level,
-		Description: fmt.Sprintf(description, args...),
-		Action:      this.Request.URL.Path,
-		Ip:          this.RequestRemoteIP(),
-	})
+	err := dao.SharedLogDAO.CreateAdminLog(this.AdminContext(), level, this.Request.URL.Path, desc, this.RequestRemoteIP())
 	if err != nil {
 		utils.PrintError(err)
 	}
 }
 
-// 获取RPC
+func (this *ParentAction) CreateLogInfo(description string, args ...interface{}) {
+	this.CreateLog(oplogs.LevelInfo, description, args...)
+}
+
+// RPC 获取RPC
 func (this *ParentAction) RPC() *rpc.RPCClient {
 	if this.rpcClient != nil {
 		return this.rpcClient
@@ -111,7 +115,7 @@ func (this *ParentAction) RPC() *rpc.RPCClient {
 	return rpcClient
 }
 
-// 获取Context
+// AdminContext 获取Context
 func (this *ParentAction) AdminContext() context.Context {
 	if this.rpcClient == nil {
 		rpcClient, err := rpc.SharedRPC()
@@ -122,4 +126,9 @@ func (this *ParentAction) AdminContext() context.Context {
 		this.rpcClient = rpcClient
 	}
 	return this.rpcClient.Context(this.AdminId())
+}
+
+// ViewData 视图里可以使用的数据
+func (this *ParentAction) ViewData() maps.Map {
+	return this.Data
 }

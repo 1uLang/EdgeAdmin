@@ -3,7 +3,7 @@ package websocket
 import (
 	"encoding/json"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/servers/server/settings/webutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
 	"github.com/iwind/TeaGo/actions"
@@ -20,7 +20,7 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	LocationId int64
 }) {
-	webConfig, err := webutils.FindWebConfigWithLocationId(this.Parent(), params.LocationId)
+	webConfig, err := dao.SharedHTTPWebDAO.FindWebConfigWithLocationId(this.AdminContext(), params.LocationId)
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -40,6 +40,8 @@ func (this *IndexAction) RunPost(params struct {
 
 	Must *actions.Must
 }) {
+	defer this.CreateLogInfo("修改Web %d 的Websocket设置", params.WebId)
+
 	// TODO 检查配置
 
 	websocketRef := &serverconfigs.HTTPWebsocketRef{}

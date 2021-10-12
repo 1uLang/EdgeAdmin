@@ -11,18 +11,6 @@ Tea.context(function () {
 		})
 	}
 
-	// 修改节点
-	this.updateNode = function (nodeId) {
-		teaweb.popup("/db/updatePopup?nodeId=" + nodeId, {
-			height: "30em",
-			callback: function () {
-				teaweb.success("保存成功", function () {
-					window.location.reload()
-				})
-			}
-		})
-	}
-
 	// 删除节点
 	this.deleteNode = function (nodeId) {
 		let that = this
@@ -34,4 +22,9 @@ Tea.context(function () {
 				.refresh()
 		})
 	}
+	
+	// 显示错误信息
+    this.showError = function (err) {
+	    teaweb.popupTip("<span style=\"color:#db2828\">错误信息：" + err + "</span>")
+    }
 })

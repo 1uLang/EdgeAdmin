@@ -1,10 +1,16 @@
 Vue.component("ssl-certs-box", {
-	props: ["v-certs", "v-protocol", "v-view-size", "v-single-mode"],
+	props: [
+		"v-certs", // 证书列表
+		"v-protocol", // 协议：https|tls
+		"v-view-size", // 弹窗尺寸
+		"v-single-mode" // 单证书模式
+	],
 	data: function () {
 		let certs = this.vCerts
 		if (certs == null) {
 			certs = []
 		}
+
 		return {
 			certs: certs
 		}
@@ -36,7 +42,7 @@ Vue.component("ssl-certs-box", {
 				width = "35em"
 				height = "20em"
 			}
-			teaweb.popup("/servers/components/ssl/selectPopup?viewSize=" + viewSize, {
+			teaweb.popup("/servers/certs/selectPopup?viewSize=" + viewSize, {
 				width: width,
 				height: height,
 				callback: function (resp) {
@@ -48,7 +54,7 @@ Vue.component("ssl-certs-box", {
 		// 上传证书
 		uploadCert: function () {
 			let that = this
-			teaweb.popup("/servers/components/ssl/uploadPopup", {
+			teaweb.popup("/servers/certs/uploadPopup", {
 				height: "28em",
 				callback: function (resp) {
 					teaweb.success("上传成功", function () {
@@ -72,7 +78,7 @@ Vue.component("ssl-certs-box", {
 	<input type="hidden" name="certIdsJSON" :value="JSON.stringify(certIds())"/>
 	<div v-if="certs != null && certs.length > 0">
 		<div class="ui label small" v-for="(cert, index) in certs">
-			{{cert.name}} / {{cert.dnsNames}} / 有效至{{formatTime(cert.timeEndAt)}} &nbsp; <a href="" title="删除" @click.prevent="removeCert()"><i class="icon remove"></i></a>
+			{{cert.name}} / {{cert.dnsNames}} / 有效至{{formatTime(cert.timeEndAt)}} &nbsp; <a href="" title="删除" @click.prevent="removeCert(index)"><i class="icon remove"></i></a>
 		</div>
 		<div class="ui divider" v-if="buttonsVisible()"></div>
 	</div>
@@ -82,7 +88,7 @@ Vue.component("ssl-certs-box", {
 	</div>
 	<div v-if="buttonsVisible()">
 		<button class="ui button tiny" type="button" @click.prevent="selectCert()">选择已有证书</button> &nbsp;
-		<button class="ui button tiny" type="button" @click.prevent="uploadCert()">上传新证书</button>
+		<button class="ui button tiny" type="button" @click.prevent="uploadCert()">上传新证书</button> &nbsp;
 	</div>
 </div>`
 })

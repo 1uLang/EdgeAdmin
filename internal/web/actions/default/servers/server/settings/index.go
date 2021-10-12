@@ -2,6 +2,7 @@ package settings
 
 import (
 	"errors"
+	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
@@ -9,7 +10,7 @@ import (
 	"github.com/iwind/TeaGo/maps"
 )
 
-// 服务基本信息设置
+// IndexAction 服务基本信息设置
 type IndexAction struct {
 	actionutils.ParentAction
 }
@@ -32,7 +33,7 @@ func (this *IndexAction) RunGet(params struct {
 		return
 	}
 	clusterMaps := []maps.Map{}
-	for _, cluster := range resp.Clusters {
+	for _, cluster := range resp.NodeClusters {
 		clusterMaps = append(clusterMaps, maps.Map{
 			"id":   cluster.Id,
 			"name": cluster.Name,
@@ -48,13 +49,38 @@ func (this *IndexAction) RunGet(params struct {
 	}
 	server := serverResp.Server
 	if server == nil {
-		this.NotFound("Server", params.ServerId)
+		this.NotFound("server", params.ServerId)
 		return
 	}
 
+	// 用户
+	if server.User != nil {
+		this.Data["user"] = maps.Map{
+			"id":       server.User.Id,
+			"fullname": server.User.Fullname,
+			"username": server.User.Username,
+		}
+	} else {
+		this.Data["user"] = nil
+	}
+
+	// 集群
 	clusterId := int64(0)
-	if server.Cluster != nil {
-		clusterId = server.Cluster.Id
+	this.Data["clusterName"] = ""
+	if server.NodeCluster != nil {
+		clusterId = server.NodeCluster.Id
+		this.Data["clusterName"] = server.NodeCluster.Name
+	}
+
+	// 分组
+	groupMaps := []maps.Map{}
+	if len(server.ServerGroups) > 0 {
+		for _, group := range server.ServerGroups {
+			groupMaps = append(groupMaps, maps.Map{
+				"id":   group.Id,
+				"name": group.Name,
+			})
+		}
 	}
 
 	this.Data["server"] = maps.Map{
@@ -64,6 +90,7 @@ func (this *IndexAction) RunGet(params struct {
 		"name":        server.Name,
 		"description": server.Description,
 		"isOn":        server.IsOn,
+		"groups":      groupMaps,
 	}
 
 	serverType := serverconfigs.FindServerType(server.Type)
@@ -75,19 +102,33 @@ func (this *IndexAction) RunGet(params struct {
 	typeName := serverType.GetString("name")
 	this.Data["typeName"] = typeName
 
+	// 记录最近使用
+	_, err = this.RPC().LatestItemRPC().IncreaseLatestItem(this.AdminContext(), &pb.IncreaseLatestItemRequest{
+		ItemType: "server",
+		ItemId:   params.ServerId,
+	})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+
 	this.Show()
 }
 
-// 保存
+// RunPost 保存
 func (this *IndexAction) RunPost(params struct {
 	ServerId    int64
 	Name        string
 	Description string
 	ClusterId   int64
+	GroupIds    []int64
 	IsOn        bool
 
 	Must *actions.Must
 }) {
+	// 记录日志
+	defer this.CreateLog(oplogs.LevelInfo, "修改代理服务 %d 基本信息", params.ServerId)
+
 	params.Must.
 		Field("name", params.Name).
 		Require("请输入服务名称")
@@ -97,11 +138,12 @@ func (this *IndexAction) RunPost(params struct {
 	}
 
 	_, err := this.RPC().ServerRPC().UpdateServerBasic(this.AdminContext(), &pb.UpdateServerBasicRequest{
-		ServerId:    params.ServerId,
-		Name:        params.Name,
-		Description: params.Description,
-		ClusterId:   params.ClusterId,
-		IsOn:        params.IsOn,
+		ServerId:       params.ServerId,
+		Name:           params.Name,
+		Description:    params.Description,
+		NodeClusterId:  params.ClusterId,
+		IsOn:           params.IsOn,
+		ServerGroupIds: params.GroupIds,
 	})
 	if err != nil {
 		this.ErrorPage(err)
