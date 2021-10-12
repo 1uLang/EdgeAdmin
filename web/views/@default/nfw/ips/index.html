@@ -70,7 +70,7 @@
                         <div v-show="item.enabled==1" class="edit_btn" @click="onCloseCig(item.sid)">禁用</div>
                         <div v-show="item.enabled==0" class="edit_btn" @click="onOpenCig(item.sid)">启用</div>
                         <div class="edit_btn"
-                             @click="onChangeCig(item.id,item.action)">{{getEditName(item.action)}}</div>
+                             @click="onChangeCig(item.sid,item.action)">{{getEditName(item.action)}}</div>
                     </div>
                 </td>
             </tr>

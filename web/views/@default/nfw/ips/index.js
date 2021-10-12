@@ -4,18 +4,18 @@ Tea.context(function () {
 
     this.$delay(function () {
         let curSelectNode = localStorage.getItem("nfwSelectNodeId");
-        if(curSelectNode){
+        if (curSelectNode) {
             this.selectNode = curSelectNode
         }
     })
 
 
-    this.getStatus= function (status) { 
-        switch(status){
+    this.getStatus = function (status) {
+        switch (status) {
             case 1:
                 return "已开启"
             case 0:
-                return "已停用"  
+                return "已停用"
             default:
                 return "已停用"
         }
@@ -26,16 +26,16 @@ Tea.context(function () {
         else
             return "丢弃"
     }
-    this.getEditName= function (act) {
-        if(act == "drop"){
+    this.getEditName = function (act) {
+        if (act == "drop") {
             return "警报"
         }
         return "丢弃";
     }
 
-    this.getItemInfo = function (id) { 
-        for (var i=0;i<this.tableData.length;i++){
-            if(this.tableData[i].id ==id){
+    this.getItemInfo = function (id) {
+        for (var i = 0; i < this.tableData.length; i++) {
+            if (this.tableData[i].id == id) {
                 return this.tableData[i]
             }
         }
@@ -67,19 +67,24 @@ Tea.context(function () {
         })
     }
     //更换alert/drop
-    this.onChangeCig = function (id,act) {
+    this.onChangeCig = function (id, act) {
         // var itemData = this.getItemInfo(id)
         teaweb.confirm("确定修改规则？", function () {
             let that = this
+            let action = "alert"
+            if (act == "alert") {
+                action = "drop"
+            }
+            console.log(act,action)
             that.$post(".editAction")
                 .params({
                     id: id,
                     nodeId: this.selectNode,
-                    act:this.getEditName(act),
+                    act: action,
                 })
                 .refresh()
         })
-     }
+    }
 
     // this.hostData = [
     //     {id:1,hostAddress:"成都-ddos-192.168.1.1",},
