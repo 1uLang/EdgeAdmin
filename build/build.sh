@@ -50,6 +50,7 @@ function build() {
 	cp -R $ROOT/../web $DIST/
 	rm -f $DIST/web/tmp/*
 	cp $ROOT/configs/server.template.yaml $DIST/configs/
+	cp $ROOT/configs/expire.yaml $DIST/configs/
 
 	EDGE_API_ZIP_FILE=$ROOT"/../../EdgeAPI/dist/edge-api-${OS}-${ARCH}-${TAG}-v${APINodeVersion}.zip"
 	cp $EDGE_API_ZIP_FILE $DIST/
