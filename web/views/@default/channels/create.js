@@ -17,6 +17,7 @@ Tea.context(function () {
         var fileType = imageInput.files[0].type
         if (fileType != "image/png" && fileType != "image/jpeg" && fileType != "image/jpg") {
             teaweb.warn("请选择正确的图片文件")
+            document.getElementById("imageInput").value=''
             return
         }
         this.onReadImage(imageInput.files[0])
