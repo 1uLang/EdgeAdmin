@@ -14,8 +14,8 @@ Tea.context(function () {
         if(imageInput && imageInput.value==""){
             return
         }
-        var fileName = imageInput.value.substring(imageInput.value.lastIndexOf(".") + 1).toLowerCase();
-        if (fileName != "image/png" && fileName != "image/jpeg" && fileName != "image/jpg") {
+        var fileType = imageInput.files[0].type
+        if (fileType != "image/png" && fileType != "image/jpeg" && fileType != "image/jpg") {
             teaweb.warn("请选择正确的图片文件")
             return
         }
