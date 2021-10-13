@@ -7,7 +7,7 @@ Tea.context(function () {
     // this.user = ""
     // this.mobile = ""
     // this.remake = ""
-    console.log(this.name)
+    // console.log(this.name)
     
     this.onImageChangeHandle = function(){
         var imageInput = document.getElementById("imageInput")
@@ -29,6 +29,13 @@ Tea.context(function () {
         reader.onload = function(result){
             that.logo = reader.result
         }
+    }
+    
+    this.delImage = function () {
+        this.logo = ''
+        //imageInput
+        var imageInput = document.getElementById("imageInput")
+        imageInput.value = ""
     }
     
 })

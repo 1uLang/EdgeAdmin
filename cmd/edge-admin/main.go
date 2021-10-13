@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/1uLang/zhiannet-api/common/cron"
 	"github.com/1uLang/zhiannet-api/common/server"
 
 	ag_ser "github.com/1uLang/zhiannet-api/agent/server"
@@ -85,7 +86,7 @@ func main() {
 	nc_model.InitialAdminUser()
 	cache.ApiDbPath = Tea.ConfigFile("api_db.yaml")
 	cache.InitClient()
-	//cron.InitCron()
+	cron.InitCron()
 	app.Run(func() {
 		adminNode := nodes.NewAdminNode()
 		adminNode.Run()

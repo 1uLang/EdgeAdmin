@@ -177,9 +177,9 @@ func (this *UpdateAction) RunPost(params struct {
 		edge_users_server.UpdatePwdAt(uint64(params.UserId))
 	}
 
-	if params.ChannelId > 0 { //修改渠道ID
-		edge_users_server.UpdateChannel(uint64(params.UserId), params.ChannelId)
-	}
+	//if params.ChannelId > 0 { //修改渠道ID
+	edge_users_server.UpdateChannel(uint64(params.UserId), params.ChannelId)
+	//}
 
 	otpLogin, err := edge_logins_server.GetInfoByUid(uint64(params.UserId))
 	if err != nil {
