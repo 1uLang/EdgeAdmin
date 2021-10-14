@@ -35,10 +35,10 @@ func (this *AdvancedHelper) BeforeAction(actionPtr actions.ActionWrapper) (goNex
 		tabbar.Add("用户节点", "", "/settings/userNodes", "", this.tab == "userNodes")
 		tabbar.Add("日志数据库", "", "/db", "", this.tab == "dbNodes")
 		//if teaconst.IsPlus {
-			tabbar.Add("监控节点", "", "/settings/monitorNodes", "", this.tab == "monitorNodes")
+		tabbar.Add("监控节点", "", "/settings/monitorNodes", "", this.tab == "monitorNodes")
 		//}
 		//if teaconst.BuildPlus {
-			tabbar.Add("企业版认证", "", "/settings/authority", "", this.tab == "authority")
+		tabbar.Add("企业版认证", "", "/settings/authority/expire", "", this.tab == "authority")
 		//}
 		//tabbar.Add("备份", "", "/settings/backup", "", this.tab == "backup")
 	}
