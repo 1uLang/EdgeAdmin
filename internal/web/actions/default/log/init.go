@@ -17,7 +17,7 @@ func init() {
 			Post("/delete", new(DeleteAction)).
 			GetPost("/clean", new(CleanAction)).
 			GetPost("/settings", new(SettingsAction)).
-
+			Get("/backup", new(BackupAction)).
 			EndAll()
 	})
 }
