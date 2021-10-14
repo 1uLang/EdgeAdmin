@@ -214,6 +214,11 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"code": "resmon",
 				},
 				{
+					"name": "特征库管理",
+					"url":  "/feature_library/virus",
+					"code": "virus",
+				},
+				{
 					"name": "渠道管理",
 					"url":  "/channels",
 					"code": "channels",
@@ -237,11 +242,6 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"name": "通知媒介",
 					"url":  "/admins/recipients",
 					"code": "recipients",
-				},
-				{
-					"name": "特征库",
-					"url":  "/feature_library/virus",
-					"code": "virus",
 				},
 			},
 		},

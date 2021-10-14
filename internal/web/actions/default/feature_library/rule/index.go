@@ -1,10 +1,10 @@
 package feature
 
 import (
-	"github.com/1uLang/zhiannet-api/common/model/subassemblynode"
-	opnsense_server "github.com/1uLang/zhiannet-api/opnsense/server"
-	"github.com/1uLang/zhiannet-api/opnsense/server/ips"
+	"fmt"
+	"github.com/1uLang/zhiannet-api/wazuh/server"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/wazuh"
 	"github.com/iwind/TeaGo/maps"
 	"time"
 )
@@ -20,19 +20,9 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	NodeId uint64
 }) {
-	node, _, err := opnsense_server.GetOpnsenseNodeList()
-	if err != nil || node == nil {
-		node = make([]*subassemblynode.Subassemblynode, 0)
-		//this.ErrorPage(err)
-		//return
-	}
-	//nat 规则列表
-	if params.NodeId == 0 && len(node) > 0 {
-		params.NodeId = node[0].Id
-	}
-	version, err := ips.GetRuleInfo(&ips.IpsReq{
-		NodeId: params.NodeId,
-	})
+	wazuh.InitAPIServer()
+	version, err := server.RulesInfo()
+	fmt.Println("version", version, "err", err)
 	if err != nil || version == nil {
 		//this.Show()
 		//this.ErrorPage(err)
@@ -42,20 +32,17 @@ func (this *IndexAction) RunGet(params struct {
 			"version":      "版本",
 			"all_total":    "总特征数",
 			"update_total": "更新特征数",
-			"name":         "ET open/emerging-scan",
+			"name":         "",
 		}
 	} else {
 
 		this.Data["version"] = maps.Map{
-			"update_time":  version.UTime,
+			"update_time":  version.UpdateTime,
 			"version":      version.Version,
-			"all_total":    version.Total,
-			"update_total": version.UTotal,
-			"name":         version.Name,
+			"all_total":    version.Num,
+			"update_total": version.UpdateNum,
 		}
 	}
-	this.Data["nodes"] = node
-	this.Data["selectNode"] = params.NodeId
 
 	this.Show()
 

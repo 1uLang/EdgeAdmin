@@ -25,8 +25,10 @@ func (this *Helper) BeforeAction(actionPtr actions.ActionWrapper) (goNext bool) 
 	// 标签栏
 	tabbar := actionutils.NewTabbar()
 	tabbar.Add("病毒库", "", "/feature_library/virus", "", this.tab == "virus")
-	tabbar.Add("特征库", "", "/feature_library/feature", "", this.tab == "feature")
-	tabbar.Add("规则库", "", "/feature_library/rule", "", this.tab == "rule")
+	tabbar.Add("漏洞库", "", "/feature_library/loopholes", "", this.tab == "loopholes")
+	tabbar.Add("NIPS规则库", "", "/feature_library/feature", "", this.tab == "feature")
+	tabbar.Add("HIPS规则库", "", "/feature_library/rule", "", this.tab == "rule")
+	tabbar.Add("更新设置", "", "/feature_library/update", "", this.tab == "update")
 	actionutils.SetTabbar(actionPtr, tabbar)
 
 	return
