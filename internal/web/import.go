@@ -234,4 +234,9 @@ import (
 
 	//渠道管理
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/channels"
+
+	//平台-特征库
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/feature_library"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/feature_library/feature"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/feature_library/rule"
 )

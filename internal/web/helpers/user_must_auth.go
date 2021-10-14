@@ -238,6 +238,11 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"url":  "/admins/recipients",
 					"code": "recipients",
 				},
+				{
+					"name": "特征库",
+					"url":  "/feature_library/virus",
+					"code": "virus",
+				},
 			},
 		},
 		//{
