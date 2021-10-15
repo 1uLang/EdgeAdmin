@@ -7,15 +7,24 @@ import (
 	"github.com/iwind/TeaGo/actions"
 )
 
-type MoveAction struct {
+type RenameAction struct {
 	actionutils.ParentAction
 }
 
-func (this *MoveAction) Init() {
+func (this *RenameAction) Init() {
 	this.Nav("", "", "")
 }
 
-func (this *MoveAction) RunPost(params struct {
+func (this *RenameAction) RunGet(params struct {
+	Name string
+	Url  string
+}) {
+	this.Data["name"] = params.Name
+	this.Data["url"] = params.Url
+	this.Show()
+}
+
+func (this *RenameAction) RunPost(params struct {
 	SrcURL  string
 	NewName string
 
