@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/1uLang/zhiannet-api/wazuh/server"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/wazuh"
 	"github.com/iwind/TeaGo/maps"
 	"time"
 )
@@ -20,7 +19,6 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	NodeId uint64
 }) {
-	wazuh.InitAPIServer()
 	version, err := server.RulesInfo()
 	fmt.Println("version", version, "err", err)
 	if err != nil || version == nil {
