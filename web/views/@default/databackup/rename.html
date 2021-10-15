@@ -4,13 +4,13 @@
 
 <form class="ui form" method="post" data-tea-action="$" data-tea-success="success">
     <csrf-token></csrf-token>
-    <input type="hidden" name="Id" :value="node.id"/>
     <table class="ui table definition selectable">
         <tr>
             <td class="title">名称 *</td>
             <td>
                 <input type="text" name="newName" maxlength="100" ref="focus" v-model="name"/>
                 <input type="hidden" name="srcURL" v-model="url">
+                <input type="hidden" name="name" v-model="oldname">
             </td>
         </tr>
 
