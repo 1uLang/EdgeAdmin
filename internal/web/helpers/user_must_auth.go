@@ -298,11 +298,11 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"url":  "/nfw/ips",
 					"code": "ips",
 				},
-				{
-					"name": "病毒库",
-					"url":  "/nfw/virus",
-					"code": "virus",
-				},
+				//{
+				//	"name": "病毒库",
+				//	"url":  "/nfw/virus",
+				//	"code": "virus",
+				//},
 				{
 					"name": "会话列表",
 					"url":  "/nfw/conversation",

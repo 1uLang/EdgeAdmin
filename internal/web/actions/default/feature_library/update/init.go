@@ -15,6 +15,10 @@ func init() {
 			Data("teaMenu", "virus").
 			Prefix("/feature_library/update").
 			Get("", new(IndexAction)).
+			Prefix("/feature_library/auth_update").
+			Get("", new(UpdateAction)).
+			Prefix("/feature_library/status_update").
+			Get("", new(UpdateStatusAction)).
 			EndAll()
 	})
 }

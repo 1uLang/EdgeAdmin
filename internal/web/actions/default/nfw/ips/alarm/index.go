@@ -23,6 +23,11 @@ func (this *IndexAction) RunGet(params struct {
 	PageSize int
 	Page     int
 }) {
+	defer this.Show()
+	this.Data["nodes"] = ""
+	this.Data["selectNode"] = params.NodeId
+	this.Data["page"] = ""
+	this.Data["tableData"] = ""
 	node, _, err := opnsense_server.GetOpnsenseNodeList()
 	if err != nil || node == nil {
 		//this.ErrorPage(err)
@@ -50,7 +55,7 @@ func (this *IndexAction) RunGet(params struct {
 		FileId: params.FileId,
 	})
 	if err != nil {
-		this.ErrorPage(err)
+		//this.ErrorPage(err)
 		return
 	}
 	count := list.Total
@@ -66,6 +71,6 @@ func (this *IndexAction) RunGet(params struct {
 	}
 	this.Data["nodes"] = node
 	this.Data["selectNode"] = params.NodeId
-	this.Show()
+
 	//this.Success()
 }

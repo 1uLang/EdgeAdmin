@@ -1,6 +1,6 @@
 {$layout}
-
-<div style="display: flex;justify-content: space-between;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
+<p class="comment" v-if="ddos.length == 0">请先添加DDoS防火墙节点。</p>
+<div style="display: flex;justify-content: space-between;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;" v-if="ddos.length > 0">
     <div style="display: inline-flex;margin-top: 10px;">
         <span style="margin-right: 15px;" :class="{'mouse-style':nShowState===2}" @click="changeState(1)">高防IP列表</span>
         <div v-show="nShowState===1" class="mouse-style" @click="onAddNodeIP">[添加高防IP]</div>
@@ -17,7 +17,7 @@
         </div>
     </div>
 </div>
-<div v-if="nShowState===1">
+<div v-if="nShowState===1 && ddos.length > 0">
 <!--    <form method="get" class="ui form" action="host">-->
 <!--        <div class="ui margin"></div>-->
 <!--        <div class="ui menu basic text">-->

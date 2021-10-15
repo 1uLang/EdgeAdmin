@@ -20,20 +20,20 @@ func (this *IndexAction) RunGet(params struct {
 
 	defer this.Show()
 
-	this.Data["list"] = "[]"
+	this.Data["list"] = ""
 	this.Data["total"] = 0
-	this.Data["ddos"] = "[]"
+	this.Data["ddos"] = ""
 	this.Data["nodeId"] = ""
 	this.Data["address"] = ""
 
 	//ddos节点
 	ddos, _, err := host_status_server.GetDdosNodeList()
 	if err != nil {
-		this.Data["errorMessage"] = err.Error()
+		//this.Data["errorMessage"] = err.Error()
 		return
 	}
 	if len(ddos) == 0 {
-		this.Data["errorMessage"] = "未配置DDoS防火墙节点"
+		//this.Data["errorMessage"] = "未配置DDoS防火墙节点"
 		return
 	}
 	if params.NodeId == 0 {

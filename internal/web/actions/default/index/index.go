@@ -84,7 +84,6 @@ func (this *IndexAction) RunGet(params struct {
 	} else {
 		this.Data["rememberLogin"] = securityConfig.AllowRememberLogin
 	}
-
 	this.Show()
 }
 
@@ -100,6 +99,7 @@ func (this *IndexAction) RunPost(params struct {
 	//CSRF     *actionutils.CSRF
 }) {
 	this.Data["from"] = ""
+	edge_admins_server.InitField()
 
 	//params.Must.
 	//	Field("username", params.Username).
