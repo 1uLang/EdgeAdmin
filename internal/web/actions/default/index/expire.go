@@ -24,22 +24,43 @@ func fileExist(path string) bool {
 	_, err := os.Lstat(path)
 	return !os.IsNotExist(err)
 }
+func initWriteConfigFile() (*ExpireConfig, error) {
+	conf := &ExpireConfig{}
+	conf.Expire.On = true
+
+	data, err := yaml.Marshal(conf)
+	if err != nil {
+		return conf, err
+	}
+	err = ioutil.WriteFile(Tea.ConfigFile("expire.yaml"), data, 0666)
+	if err != nil {
+		return conf, err
+	}
+	return conf, nil
+}
 
 // 读取当前服务到期配置
 func LoadServerExpireConfig() (*ExpireConfig, error) {
-	configFile := Tea.ConfigFile("expire.yaml")
-	if !fileExist(configFile) {
-		return &ExpireConfig{}, nil
-	}
-	data, err := ioutil.ReadFile(configFile)
-	if err != nil {
-		return nil, err
-	}
+
 	expireConfig := &ExpireConfig{}
-	err = yaml.Unmarshal(data, expireConfig)
-	if err != nil {
-		return nil, err
+	var err error
+	configFile := Tea.ConfigFile("expire.yaml")
+	if !fileExist(configFile) { //不存在 则copy,init
+		expireConfig, err = initWriteConfigFile()
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		data, err := ioutil.ReadFile(configFile)
+		if err != nil {
+			return nil, err
+		}
+		err = yaml.Unmarshal(data, expireConfig)
+		if err != nil {
+			return nil, err
+		}
 	}
+
 	if expireConfig.Expire.Time != "" {
 		expireConfig.Expire.Time = string(encrypt.MagicKeyDecode([]byte(expireConfig.Expire.Time)))
 	}
