@@ -38,7 +38,7 @@ func (this *Helper) BeforeAction(actionPtr actions.ActionWrapper) (goNext bool) 
 	tabbar.Add("个人资料", "", "/settings/profile", "", this.tab == "profile")
 	tabbar.Add("登录设置", "", "/settings/login", "", this.tab == "login")
 	tabbar.Add("安全策略", "", "/settings/strategy", "", this.tab == "strategy")
-	tabbar.Add("备份", "", "/settings/platform-backup", "", this.tab == "platform-backup")
+	//tabbar.Add("备份", "", "/settings/platform-backup", "", this.tab == "platform-backup")
 	actionutils.SetTabbar(actionPtr, tabbar)
 
 	return
