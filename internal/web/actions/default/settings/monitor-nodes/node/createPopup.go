@@ -28,7 +28,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 }) {
 	params.Must.
 		Field("name", params.Name).
-		Require("请输入监控节点名称")
+		Require("请输入告警节点名称")
 
 	createResp, err := this.RPC().MonitorNodeRPC().CreateMonitorNode(this.AdminContext(), &pb.CreateMonitorNodeRequest{
 		Name:        params.Name,
@@ -41,7 +41,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 	}
 
 	// 创建日志
-	defer this.CreateLog(oplogs.LevelInfo, "创建监控节点 %d", createResp.NodeId)
+	defer this.CreateLog(oplogs.LevelInfo, "创建告警节点 %d", createResp.NodeId)
 
 	this.Success()
 }
