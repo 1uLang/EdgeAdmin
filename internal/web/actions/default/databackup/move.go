@@ -7,17 +7,28 @@ import (
 	"github.com/iwind/TeaGo/actions"
 )
 
-type MoveAction struct {
+type RenameAction struct {
 	actionutils.ParentAction
 }
 
-func (this *MoveAction) Init() {
+func (this *RenameAction) Init() {
 	this.Nav("", "", "")
 }
 
-func (this *MoveAction) RunPost(params struct {
+func (this *RenameAction) RunGet(params struct {
+	Name string
+	Url  string
+}) {
+	this.Data["name"] = params.Name
+	this.Data["oldname"] = params.Name
+	this.Data["url"] = params.Url
+	this.Show()
+}
+
+func (this *RenameAction) RunPost(params struct {
 	SrcURL  string
 	NewName string
+	Name    string
 
 	Must *actions.Must
 }) {
@@ -28,6 +39,10 @@ func (this *MoveAction) RunPost(params struct {
 		Require("请输入新的的名字")
 	if params.SrcURL == "" || params.NewName == "" {
 		this.Fail("url路径，新名字不能为空")
+	}
+
+	if params.Name == params.NewName {
+		this.Success()
 	}
 	// 获取token
 	token, err := model.QueryTokenByUID(this.AdminId(), 1)

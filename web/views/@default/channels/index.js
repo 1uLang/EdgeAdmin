@@ -3,7 +3,7 @@ Tea.context(function () {
     this.getStatus = function(status){
         switch(status){
             case 1:
-                return "已启动"
+                return "已启用"
             default:
                 return "已停用"
         }
