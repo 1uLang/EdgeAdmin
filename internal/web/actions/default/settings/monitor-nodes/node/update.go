@@ -53,7 +53,7 @@ func (this *UpdateAction) RunPost(params struct {
 }) {
 	params.Must.
 		Field("name", params.Name).
-		Require("请输入监控节点名称")
+		Require("请输入告警节点名称")
 
 	_, err := this.RPC().MonitorNodeRPC().UpdateMonitorNode(this.AdminContext(), &pb.UpdateMonitorNodeRequest{
 		NodeId:      params.NodeId,
@@ -67,7 +67,7 @@ func (this *UpdateAction) RunPost(params struct {
 	}
 
 	// 创建日志
-	defer this.CreateLog(oplogs.LevelInfo, "修改监控节点 %d", params.NodeId)
+	defer this.CreateLog(oplogs.LevelInfo, "修改告警节点 %d", params.NodeId)
 
 	this.Success()
 }

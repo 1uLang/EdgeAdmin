@@ -22,7 +22,7 @@ func (this *DeleteAction) RunPost(params struct {
 	}
 
 	// 创建日志
-	defer this.CreateLog(oplogs.LevelInfo, "删除监控节点 %d", params.NodeId)
+	defer this.CreateLog(oplogs.LevelInfo, "删除告警节点 %d", params.NodeId)
 
 	this.Success()
 }

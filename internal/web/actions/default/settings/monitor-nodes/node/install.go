@@ -18,7 +18,7 @@ func (this *InstallAction) Init() {
 func (this *InstallAction) RunGet(params struct {
 	NodeId int64
 }) {
-	// 监控节点信息
+	// 告警节点信息
 	nodeResp, err := this.RPC().MonitorNodeRPC().FindEnabledMonitorNode(this.AdminContext(), &pb.FindEnabledMonitorNodeRequest{NodeId: params.NodeId})
 	if err != nil {
 		this.ErrorPage(err)

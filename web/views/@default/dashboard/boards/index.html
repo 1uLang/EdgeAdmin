@@ -9,7 +9,7 @@
 </div>
 <div class="ui icon message error" v-if="monitorNodeUpgradeInfo.count > 0 && teaIsPlus">
     <i class="icon warning circle"></i>
-    <a href="/settings/monitorNodes">升级提醒：有 {{monitorNodeUpgradeInfo.count}} 个监控节点需要升级到 v{{monitorNodeUpgradeInfo.version}} 版本</a><a href="" title="关闭" @click.prevent="closeMessage"><i class="ui icon remove small"></i></a></div>
+    <a href="/settings/monitorNodes">升级提醒：有 {{monitorNodeUpgradeInfo.count}} 个告警节点需要升级到 v{{monitorNodeUpgradeInfo.version}} 版本</a><a href="" title="关闭" @click.prevent="closeMessage"><i class="ui icon remove small"></i></a></div>
 <div class="ui icon message error" v-if="userNodeUpgradeInfo.count > 0 && teaIsPlus">
     <i class="icon warning circle"></i>
     <a href="/settings/userNodes">升级提醒：有 {{userNodeUpgradeInfo.count}} 个用户节点需要升级到 v{{userNodeUpgradeInfo.version}} 版本</a><a href="" title="关闭" @click.prevent="closeMessage"><i class="ui icon remove small"></i></a></div>
