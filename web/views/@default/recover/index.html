@@ -44,7 +44,7 @@
     <div v-if="step == STEP_INTRO">
         可以通过恢复模式重新设置系统的API节点。
 
-        <button class="ui button primary" style="margin-top: 10em" type="button" @click.prevent="goIntroNext()">开始<i class="icon long arrow right"></i></button>
+        <button class="ui button primary" style="background-color: #1b6aff;" style="margin-top: 10em" type="button" @click.prevent="goIntroNext()">开始<i class="icon long arrow right"></i></button>
     </div>
 
     <!-- 新API地址 -->
@@ -92,9 +92,9 @@
                 </tr>
             </table>
 
-            <button class="ui button" type="button" @click.prevent="goBackIntro"><i class="icon long arrow left"></i>上一步</button> &nbsp;
-            <button class="ui button primary" type="submit" v-if="!apiRequesting">下一步<i class="icon long arrow right"></i></button>
-            <button class="ui button primary" type="button" v-if="apiRequesting">提交中</button>
+            <button style="background-color: #1b6aff;" class="ui button"  type="button" @click.prevent="goBackIntro"><i class="icon long arrow left"></i>上一步</button> &nbsp;
+            <button style="background-color: #1b6aff;" class="ui button primary" type="submit" v-if="!apiRequesting">下一步<i class="icon long arrow right"></i></button>
+            <button style="background-color: #1b6aff;" class="ui button primary" type="button" v-if="apiRequesting">提交中</button>
         </form>
     </div>
 
@@ -123,8 +123,8 @@
                 </tr>
             </table>
 
-            <button class="ui button" type="button" @click.prevent="goBackAPI"><i class="icon long arrow left"></i>上一步</button> &nbsp;
-            <button class="ui button primary" type="submit">保存<i class="icon long arrow right"></i></button>
+            <button style="background-color: #1b6aff;color: #ffffff" class="ui button" type="button" @click.prevent="goBackAPI"><i class="icon long arrow left"></i>上一步</button> &nbsp;
+            <button style="background-color: #1b6aff;color: #ffffff" class="ui button primary" type="submit">保存<i class="icon long arrow right"></i></button>
         </form>
     </div>
 

@@ -58,7 +58,7 @@ Vue.component("dns-route-selector", {
 		</tiny-basic-label>
 		<div class="ui divider"></div>
 	</div>
-	<button type="button" class="ui button small" @click.prevent="add" v-if="!isAdding">+</button>
+	<button style="background-color: #1b6aff;" type="button" class="ui button small" @click.prevent="add" v-if="!isAdding">+</button>
 	<div v-if="isAdding">
 		<div class="ui fields inline">
 			<div class="ui field">
@@ -68,7 +68,7 @@ Vue.component("dns-route-selector", {
 				</select>
 			</div>
 			<div class="ui field">
-				<button class="ui button tiny" type="button" @click.prevent="confirm">确定</button>
+				<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="confirm">确定</button>
 			</div>
 			<div class="ui field">
 				<a href="" @click.prevent="cancel()"><i class="icon remove"></i></a>
