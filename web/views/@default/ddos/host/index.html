@@ -4,7 +4,7 @@
     <div style="display: inline-flex;margin-top: 10px;">
         <span style="margin-right: 15px;" :class="{'mouse-style':nShowState===2}" @click="changeState(1)">高防IP列表</span>
         <div v-show="nShowState===1" class="mouse-style" @click="onAddNodeIP">[添加高防IP]</div>
-        <div v-show="nShowState===2" style="color: #0090cb;">策略配置 ({{searchAddress}})</div>
+        <div v-show="nShowState===2" style="color: #1b6aff;">策略配置 ({{searchAddress}})</div>
     </div>
     <div align="right" style="display: inline-flex;" v-show="nShowState===1">
         <div style="line-height: 40px;text-align: center;">DDoS防护节点：</div>
@@ -81,8 +81,8 @@
                 <td>{{item.tcp_conn_in}}</td>
                 <td>{{item.tcp_conn_out}}</td>
                 <td>{{item.udp_conn}}</td>
-                <td style="cursor: pointer;color: #0090cb;" @click="onOpenConfig(item.addr)">配置</td>
-                <td style="cursor: pointer;color: #0090cb;" >
+                <td style="cursor: pointer;color: #1b6aff;" @click="onOpenConfig(item.addr)">配置</td>
+                <td style="cursor: pointer;color: #1b6aff;" >
                     <div style="display: flex;flex-direction: row;justify-content: space-around;">
                         <div class="edit_btn" @click="onUpdateConfig(item)">修改</div>
                         <div class="del-btn" style="color: #db2828" @click="onDeleteConfig(item.host_id)">删除</div>
