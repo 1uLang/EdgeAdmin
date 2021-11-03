@@ -80,9 +80,9 @@ Tea.context(function () {
         this.install = this.install.replaceAll("ADDR", this.server)
         this.install = this.install.replaceAll("'GROUP'", "'" + this.group + "'")
         let url = window.location
-        this.install = this.install.replaceAll("URL", url.origin)
+        this.install = this.install.replaceAll("URL", "http://download.zhiannet.com/hids/")
 
-        this.install = this.install.replaceAll("UFILE", "file/" + file)
+        this.install = this.install.replaceAll("UFILE",  file)
         this.install = this.install.replaceAll("FILE", file)
 
         //生成安装命令
