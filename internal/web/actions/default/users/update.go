@@ -220,29 +220,30 @@ func (this *UpdateAction) RunPost(params struct {
 		}
 
 	}
-
-	// 修改nc密码
-	pt, err := model.GetUsername(params.UserId, 0)
-	if err != nil {
-		this.ErrorPage(err)
-	}
-	ncName, pp, err := nc_req.ParseToken(pt)
-	if err != nil {
-		this.ErrorPage(err)
-	}
-	if pp != params.Pass2 && params.Pass2 != "" {
-		err = nc_req.UpdateUserPassword(params.Pass2, ncName)
+	if params.Pass1 != "" {
+		// 修改nc密码
+		pt, err := model.GetUsername(params.UserId, 0)
 		if err != nil {
 			this.ErrorPage(err)
 		}
-		token := &model.LoginReq{
-			User:     ncName,
-			Password: params.Pass2,
-		}
-		ncToken := nc_req.GenerateToken(token)
-		err = model.StoreNCToken(ncName, ncToken)
+		ncName, pp, err := nc_req.ParseToken(pt)
 		if err != nil {
 			this.ErrorPage(err)
+		}
+		if pp != params.Pass2 && params.Pass2 != "" {
+			err = nc_req.UpdateUserPassword(params.Pass2, ncName)
+			if err != nil {
+				this.ErrorPage(err)
+			}
+			token := &model.LoginReq{
+				User:     ncName,
+				Password: params.Pass2,
+			}
+			ncToken := nc_req.GenerateToken(token)
+			err = model.StoreNCToken(ncName, ncToken)
+			if err != nil {
+				this.ErrorPage(err)
+			}
 		}
 	}
 
