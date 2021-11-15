@@ -352,7 +352,7 @@ body.expanded .main {
   left: 9em;
 }
 .main.without-secondary-menu {
-  top: 2.9em;
+  top: 3.4em;
 }
 @media screen and (max-width: 512px) {
   .main.without-menu {
@@ -415,7 +415,7 @@ body.expanded .main {
 .main-menu {
   position: fixed;
   /**top: 1.05em;**/
-  top: 2em;
+  top: 1.7em;
   bottom: 0;
   overflow-y: auto;
   z-index: 10;

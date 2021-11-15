@@ -106,7 +106,7 @@ Vue.component("http-auth-config-box", {
 			</tr>
 		</tbody>
 	</table>
-	<button class="ui button small" type="button" @click.prevent="add">+添加认证方式</button>
+	<button style="background-color: #1b6aff;" class="ui button small" type="button" @click.prevent="add">+添加认证方式</button>
 </div>
 <div class="margin"></div>
 </div>`

@@ -699,6 +699,11 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 					"url":  "/audit/agent",
 					"code": "agent",
 				},
+				{
+					"name": "STMP设置",
+					"url":  "/audit/stmp",
+					"code": "stmp",
+				},
 			},
 		},
 		{

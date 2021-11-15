@@ -88,11 +88,11 @@ Vue.component("ns-routes-selector", {
 			</div>
 			
 			<div class="ui field">
-				<button type="button" class="ui button tiny" @click.prevent="confirm">确定</button>
+				<button style="background-color: #1b6aff;" type="button" class="ui button tiny" @click.prevent="confirm">确定</button>
 				&nbsp; <a href="" title="取消" @click.prevent="cancel"><i class="icon remove small"></i></a>
 			</div>
 		</div>
 	</div>
-	<button class="ui button tiny" type="button" @click.prevent="add">+</button>
+	<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="add">+</button>
 </div>`
 })

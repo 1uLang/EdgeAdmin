@@ -63,7 +63,7 @@
     <div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
         <div style="display: inline-flex;margin-top: 10px;">
             <span style="cursor: pointer;" @click="onChangeState(1)">资产列表</span>
-            <div style="margin-left: 20px;color: #0090cb;cursor: pointer;">[添加资产]</div>
+            <div style="margin-left: 20px;color: #1b6aff;cursor: pointer;">[添加资产]</div>
         </div>
     </div>
     <div style="padding: 10px 30px;">
@@ -156,8 +156,8 @@
             </div>
         </div>
         <div style="width: 100%;display: flex;justify-content: center;margin-top: 10px;">
-            <div class="sure-btn" @click="onSave" v-if="pageState == 2">保存</div>
-            <div class="sure-btn" @click="onUpdate" v-else>保存</div>
+            <div class="sure-btn" style="background-color: #1b6aff;color: #ffffff" @click="onSave" v-if="pageState == 2">保存</div>
+            <div class="sure-btn" style="background-color: #1b6aff;color: #ffffff" @click="onUpdate" v-else>保存</div>
         </div>
     </div>
 </div>
@@ -167,9 +167,9 @@
     <div style="display: flex;flex-direction: column;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
         <div style="display: inline-flex;margin-top: 10px;">
             <span style="cursor: pointer;" @click="onChangeState(1)">资产列表</span>
-            <span v-show="pageState===3" style="margin-left: 20px;color:#0090cb">资产详情</span>
+            <span v-show="pageState===3" style="margin-left: 20px;color:#1b6aff">资产详情</span>
             <span v-show="pageState===4" style="margin-left: 20px;cursor: pointer;color:#000" @click="onChangeState(3)">资产详情</span>
-            <span v-show="pageState===4" style="margin-left: 20px;color:#0090cb">已授权用户</span>
+            <span v-show="pageState===4" style="margin-left: 20px;color:#1b6aff">已授权用户</span>
             <span v-show="pageState===3" style="margin-left: 20px;cursor: pointer;color:#000" @click="onChangeState(4)">已授权用户</span>
         </div>
     </div>

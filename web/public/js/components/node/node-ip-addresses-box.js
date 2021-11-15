@@ -55,7 +55,7 @@ Vue.component("node-ip-addresses-box", {
 		<div class="ui divider"></div>
 	</div>
 	<div>
-		<button class="ui button small" type="button" @click.prevent="addIPAddress()">+</button>
+		<button style="background-color: #1b6aff;" class="ui button small" type="button" @click.prevent="addIPAddress()">+</button>
 	</div>
 </div>`
 })

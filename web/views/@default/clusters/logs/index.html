@@ -24,7 +24,7 @@
             <input type="text" name="keyword" style="width:10em" v-model="keyword" placeholder="关键词"/>
         </div>
         <div class="ui field">
-            <button type="submit" class="ui button">查询</button>
+            <button style="background-color: #1b6aff;" type="submit" class="ui button">查询</button>
         </div>
         <div class="ui field" v-if="dayFrom.length > 0 || dayTo.length > 0 || keyword.length > 0 || level.length > 0">
             <a href="/clusters/logs">[清除条件]</a>
