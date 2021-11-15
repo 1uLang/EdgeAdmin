@@ -490,7 +490,7 @@ window.Tea.Action = function (action, params) {
     var _errorFn;
     var _doneFn;
     var _method = "POST";
-    var _timeout = 30;
+    var _timeout = 60;
     var _delay = 0;
     var _progressFn;
     var _refresh = false;
