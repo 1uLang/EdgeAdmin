@@ -724,3 +724,8 @@ input.error {
   justify-content: center;
   align-items: center;
 }
+
+.main-menu .ui.menu .item-hover:hover{
+  background-color:#f5f6f926 !important;
+}
+/*#1b1c1d*/
