@@ -26,8 +26,8 @@ func (this *IndexAction) RunGet(params struct {
 	page := this.NewPage(0)
 
 	list, total, err := edge_users_server.GetList(&edge_users.ListReq{
-		PageNum:   page.Current,
-		PageSize:  page.Size,
+		PageNum:   int(page.Current),
+		PageSize:  int(page.Size),
 		Username:  params.Keyword,
 		ChannelId: params.SelectChan,
 	})
