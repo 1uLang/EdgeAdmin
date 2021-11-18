@@ -20,19 +20,14 @@ func (this *IndexAction) Init() {
 
 func (this *IndexAction) RunGet(params struct {
 	Keyword    string
-	PageNum    int
-	PageSize   int
 	SelectChan uint64
 }) {
-	if params.PageSize == 0 {
-		params.PageSize = 20
-	}
-	if params.PageNum == 0 {
-		params.PageNum = 1
-	}
+
+	page := this.NewPage(0)
+
 	list, total, err := edge_users_server.GetList(&edge_users.ListReq{
-		PageNum:   params.PageNum,
-		PageSize:  params.PageSize,
+		PageNum:   page.Current,
+		PageSize:  page.Size,
 		Username:  params.Keyword,
 		ChannelId: params.SelectChan,
 	})
@@ -40,7 +35,7 @@ func (this *IndexAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	page := this.NewPage(total)
+	page = this.NewPage(total)
 	this.Data["page"] = page.AsHTML()
 
 	userMaps := []maps.Map{}
