@@ -64,7 +64,7 @@ func (this *AuthorizeAction) RunGet(params struct {
 	allUsers := make([]map[string]interface{}, 0)
 	authUsers := make([]map[string]interface{}, 0)
 	for _, v := range adminsResp.Admins {
-		if _, isExist := contain[fmt.Sprintf("%v", v.Id)]; isExist {
+		if _, isExist := contain[v.Id]; isExist {
 			authUsers = append(authUsers, map[string]interface{}{
 				"name": v.Username,
 				"id":   v.Id,
