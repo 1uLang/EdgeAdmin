@@ -99,7 +99,7 @@ func (this *IndexAction) RunPost(params struct {
 	//CSRF     *actionutils.CSRF
 }) {
 	this.Data["from"] = ""
-	//edge_admins_server.InitField()
+	edge_admins_server.InitField()
 
 	//params.Must.
 	//	Field("username", params.Username).
@@ -131,9 +131,9 @@ func (this *IndexAction) RunPost(params struct {
 		this.Fail("服务器出了点小问题：" + err.Error())
 	}
 	//登录限制检查
-	//if res, _ := edge_admins_server.LoginCheck(fmt.Sprintf("admin_%v", params.Username)); res {
-	//	this.FailField("refresh", "账号已被锁定（请 30分钟后重试）")
-	//}
+	if res, _ := edge_admins_server.LoginCheck(fmt.Sprintf("admin_%v", params.Username)); res {
+		this.FailField("refresh", "账号已被锁定（请 30分钟后重试）")
+	}
 
 	resp, err := rpcClient.AdminRPC().LoginAdmin(rpcClient.Context(0), &pb.LoginAdminRequest{
 		Username: params.Username,
@@ -193,11 +193,11 @@ func (this *IndexAction) RunPost(params struct {
 	}
 
 	//密码过期检查
-	//if res, _ := edge_admins_server.CheckPwdInvalid(uint64(resp.AdminId)); res {
-	//	params.Auth.SetUpdatePwdToken(resp.AdminId)
-	//	this.Data["from"] = "/updatePwd"
-	//	this.Fail("密码已过期，请立即修改")
-	//}
+	if res, _ := edge_admins_server.CheckPwdInvalid(uint64(resp.AdminId)); res {
+		params.Auth.SetUpdatePwdToken(resp.AdminId)
+		this.Data["from"] = "/updatePwd"
+		this.Fail("密码已过期，请立即修改")
+	}
 	//检测系统是否到期
 	code, expire, err := CheckExpire()
 	if err != nil {
