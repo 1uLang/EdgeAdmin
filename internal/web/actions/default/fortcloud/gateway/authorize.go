@@ -6,6 +6,7 @@ import (
 	next_terminal_server "github.com/1uLang/zhiannet-api/next-terminal/server"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fortcloud"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
 )
 
@@ -42,7 +43,7 @@ func (this *AuthorizeAction) RunGet(params struct {
 		this.ErrorPage(fmt.Errorf("堡垒机组件错误:" + err.Error()))
 		return
 	}
-	contain := map[string]bool{}
+	contain := map[uint64]bool{}
 	for _, v := range list[1:] { //从一开始 去掉创建者
 		contain[v] = true
 	}
