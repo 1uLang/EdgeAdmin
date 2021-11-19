@@ -215,6 +215,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fortcloud/assets"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fortcloud/audit"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fortcloud/cert"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fortcloud/gateway"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/fortcloud/sessions"
 	//审计系统
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/audit/agent"

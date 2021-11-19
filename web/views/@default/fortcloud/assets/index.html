@@ -149,6 +149,13 @@
             <h2>其他</h2>
             <div style="display: flex;flex-direction: column;">
                 <div class="base_title_content">
+                    <span class="base_title_f">接入网关</span>
+                    <select name="gateway" v-model="gateway"
+                            style="width: 790px;height: 30px;border: 1px solid #d7d7d7;">
+                        <option v-for="item in gateways" :value="item.id">{{item.name}}</option>
+                    </select>
+                </div>
+                <div class="base_title_content">
                     <span class="base_title_f">备注</span>
                     <input type="text" v-model="maskStr"
                            style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>

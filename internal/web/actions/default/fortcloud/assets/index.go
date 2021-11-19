@@ -52,6 +52,11 @@ func (this *IndexAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
+	gateways, err := req.GateWay.GetAll(&gateway_model.GetAllReq{AdminUserId: this.AdminId()})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
 	for k, v := range list {
 		item := v.(map[string]interface{})
 		item["auth"] = strings.HasPrefix(item["tags"].(string), fmt.Sprintf("admin_%v", this.AdminId()))
@@ -59,6 +64,7 @@ func (this *IndexAction) RunGet(params struct {
 	}
 	this.Data["assets"] = list
 	this.Data["certs"] = certs
+	this.Data["gateways"] = gateways
 	this.Show()
 }
 
@@ -72,6 +78,7 @@ func (this *IndexAction) RunPost(params struct {
 	Protocol    string
 	Username    string
 	CertId      string
+	Gateway     string
 	Must        *actions.Must
 }) {
 
@@ -116,6 +123,7 @@ func (this *IndexAction) RunPost(params struct {
 	args.Protocol = params.Protocol
 	args.Username = params.Username
 	args.CredentialId = params.CertId
+	args.Gateway = params.Gateway
 	args.AdminUserId = uint64(this.AdminId())
 	err = req.Assets.Create(args)
 	if err != nil {
