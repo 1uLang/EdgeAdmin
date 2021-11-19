@@ -2,8 +2,6 @@ package gateway
 
 import (
 	"fmt"
-	"github.com/1uLang/zhiannet-api/edgeUsers/model"
-	"github.com/1uLang/zhiannet-api/edgeUsers/server"
 	gateway_model "github.com/1uLang/zhiannet-api/next-terminal/model/access_gateway"
 	next_terminal_server "github.com/1uLang/zhiannet-api/next-terminal/server"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"

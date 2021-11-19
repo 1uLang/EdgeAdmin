@@ -2,6 +2,7 @@ package assets
 
 import (
 	"fmt"
+	gateway_model "github.com/1uLang/zhiannet-api/next-terminal/model/access_gateway"
 	asset_model "github.com/1uLang/zhiannet-api/next-terminal/model/asset"
 	cert_model "github.com/1uLang/zhiannet-api/next-terminal/model/cert"
 	next_terminal_server "github.com/1uLang/zhiannet-api/next-terminal/server"
@@ -123,7 +124,7 @@ func (this *IndexAction) RunPost(params struct {
 	args.Protocol = params.Protocol
 	args.Username = params.Username
 	args.CredentialId = params.CertId
-	args.Gateway = params.Gateway
+	args.AccessGatewayId = params.Gateway
 	args.AdminUserId = uint64(this.AdminId())
 	err = req.Assets.Create(args)
 	if err != nil {

@@ -40,7 +40,7 @@ func (this *IndexAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	list, _, err := req.GateWay.List(&gateway_model.ListReq{AdminUserId: this.AdminId())})
+	list, _, err := req.GateWay.List(&gateway_model.ListReq{AdminUserId: this.AdminId()})
 	if err != nil {
 		this.ErrorPage(err)
 		return
