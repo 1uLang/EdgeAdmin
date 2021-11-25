@@ -1,0 +1,32 @@
+{$layout}
+{$template "menu"}
+
+<p class="comment" v-if="bills.length == 0">暂时还没有账单。</p>
+
+<table class="ui table selectable" v-if="bills.length > 0">
+    <thead>
+        <tr>
+            <th class="four wide">编号</th>
+            <th class="width10">用户</th>
+            <th class="width6">月份</th>
+            <th class="width6">项目</th>
+            <th class="wide10">金额</th>
+            <th>描述</th>
+            <th class="width10">已支付</th>
+        </tr>
+    </thead>
+    <tr v-for="bill in bills">
+        <td>{{bill.code}}</td>
+        <td><user-link :v-user="bill.user"></user-link></td>
+        <td>{{bill.month}}</td>
+        <td>{{bill.typeName}}</td>
+        <td>¥{{bill.amount}}元</td>
+        <td>{{bill.description}}</td>
+        <td>
+            <span class="green" v-if="bill.isPaid">Y</span>
+            <span v-else class="disabled">N</span>
+        </td>
+    </tr>
+</table>
+
+<div class="page" v-html="page"></div>

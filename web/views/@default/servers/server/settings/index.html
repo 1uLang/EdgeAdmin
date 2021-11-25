@@ -1,0 +1,78 @@
+{$layout}
+
+{$template "/left_menu"}
+<div class="right-box">
+
+	<form method="post" class="ui form" data-tea-action="$" data-tea-success="success">
+		<input type="hidden" name="serverId" :value="server.id"/>
+		<table class="ui table selectable definition">
+            <tr>
+                <td>所属用户</td>
+                <td>
+                    <span v-if="user != null">{{user.fullname}} <span class="small">（{{user.username}}）</span><link-icon :href="'/users/user?userId=' + user.id"></link-icon></span>
+                    <span v-else class="disabled">-</span>
+                </td>
+            </tr>
+			<tr>
+				<td class="title">服务名称 *</td>
+				<td>
+					<input type="text" name="name" maxlength="60" ref="focus" v-model="server.name"/>
+				</td>
+			</tr>
+            <tr v-if="plans.length > 0">
+                <td>选择套餐</td>
+                <td>
+                    <select class="ui dropdown auto-width" name="userPlanId" v-model="userPlanId">
+                        <option value="0">[选择套餐]</option>
+                        <option v-for="plan in plans" :value="plan.id">{{plan.name}}（{{plan.dayTo}}）</option>
+                    </select>
+                </td>
+            </tr>
+			<tr>
+				<td>部署的集群 *</td>
+				<td>
+                    <div v-if="user != null">{{clusterName}}
+                        <p class="comment">此选项跟随用户设置，不能单独修改。</p>
+                    </div>
+					<select class="ui dropdown auto-width" name="clusterId" v-model="server.clusterId" v-show="user == null">
+						<option v-for="cluster in clusters" :value="cluster.id">{{cluster.name}}</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>服务类型 *</td>
+				<td>
+					{{typeName}}
+				</td>
+			</tr>
+			<tr>
+				<td>选择分组</td>
+				<td>
+					<server-group-selector :v-groups="server.groups"></server-group-selector>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><more-options-indicator></more-options-indicator></td>
+			</tr>
+			<tbody v-show="moreOptionsVisible">
+				<tr>
+					<td>描述</td>
+					<td>
+						<textarea name="description" rows="3" v-model="server.description"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td>是否启用</td>
+					<td>
+						<div class="ui checkbox">
+							<input type="checkbox" name="isOn" value="1" v-model="server.isOn"/>
+							<label></label>
+						</div>
+						<p class="comment">可以使用此选项整体关闭当前服务。</p>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<submit-btn></submit-btn>
+	</form>
+</div>

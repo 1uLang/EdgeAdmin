@@ -1,0 +1,38 @@
+{$layout}
+{$template "menu"}
+
+
+<table class="ui table selectable definition">
+    <tr>
+        <td class="title">套餐名称</td>
+        <td>
+           {{plan.name}}
+        </td>
+    </tr>
+    <tr>
+        <td>状态</td>
+        <td><label-on :v-is-on="plan.isOn"></label-on></td>
+    </tr>
+    <tr>
+        <td>关联集群</td>
+        <td>
+               <span v-if="plan.cluster.id > 0">
+                <link-icon :href="'/clusters/cluster?clusterId=' + plan.cluster.id">{{plan.cluster.name}}</link-icon>
+            </span>
+            <span v-else class="red">[已删除]</span>
+            <p class="comment">使用当前套餐的服务都将会部署在此集群上。</p>
+        </td>
+    </tr>
+    <tr>
+        <td>流量限制</td>
+        <td>
+            <traffic-limit-view :v-traffic-limit="plan.trafficLimit"></traffic-limit-view>
+        </td>
+    </tr>
+    <tr>
+        <td>价格设置</td>
+        <td>
+             <plan-price-view :v-plan="plan"></plan-price-view>
+        </td>
+    </tr>
+</table>
