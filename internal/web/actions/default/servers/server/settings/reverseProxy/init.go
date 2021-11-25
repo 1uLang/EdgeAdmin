@@ -11,7 +11,7 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
-			Helper(serverutils.NewServerHelper()).Data("teaMenu", "waf").
+			Helper(serverutils.NewServerHelper()).
 			Data("mainTab", "setting").
 			Data("secondMenuItem", "reverseProxy").
 			Prefix("/servers/server/settings/reverseProxy").

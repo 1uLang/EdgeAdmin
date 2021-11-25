@@ -13,7 +13,7 @@ func init() {
 			Helper(new(Helper)).
 			Prefix("/messages").
 			GetPost("", new(IndexAction)).
-			GetPost("/badge", new(BadgeAction)).
+			Post("/badge", new(BadgeAction)).
 			Post("/readAll", new(ReadAllAction)).
 			Post("/readPage", new(ReadPageAction)).
 			EndAll()

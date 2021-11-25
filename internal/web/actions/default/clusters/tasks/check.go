@@ -21,16 +21,3 @@ func (this *CheckAction) RunPost(params struct{}) {
 
 	this.Success()
 }
-
-func (this *CheckAction) RunGet(params struct{}) {
-	resp, err := this.RPC().NodeTaskRPC().ExistsNodeTasks(this.AdminContext(), &pb.ExistsNodeTasksRequest{})
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-
-	this.Data["isDoing"] = resp.ExistTasks
-	this.Data["hasError"] = resp.ExistError
-
-	this.Success()
-}

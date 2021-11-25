@@ -94,7 +94,7 @@ func loadAdminUIConfig() (*systemconfigs.AdminUIConfig, error) {
 func defaultAdminUIConfig() *systemconfigs.AdminUIConfig {
 	return &systemconfigs.AdminUIConfig{
 		ProductName:        "GoEdge",
-		AdminSystemName:    "智安云综合防御平台",
+		AdminSystemName:    "GoEdge管理员系统",
 		ShowOpenSourceInfo: true,
 		ShowVersion:        true,
 		ShowFinance:        true,

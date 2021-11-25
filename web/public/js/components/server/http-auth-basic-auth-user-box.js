@@ -89,13 +89,13 @@ Vue.component("http-auth-basic-auth-user-box", {
 				<input type="password" placeholder="密码" v-model="password" size="15" ref="password"/>
 			</div>
 			<div class="ui field">
-				<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="confirm">确定</button>&nbsp;
+				<button class="ui button tiny" type="button" @click.prevent="confirm">确定</button>&nbsp;
 				<a href="" title="取消" @click.prevent="cancel"><i class="icon remove small"></i></a>
 			</div>
 		</div>
 	</div>
 	<div v-if="!isAdding" style="margin-top: 1em">
-		<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="add">+</button>
+		<button class="ui button tiny" type="button" @click.prevent="add">+</button>
 	</div>
 </div>`
 })

@@ -11,7 +11,6 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
 			Prefix("/servers/server/settings/conds").
-			Data("teaMenu", "waf").
 			GetPost("/addGroupPopup", new(AddGroupPopupAction)).
 			GetPost("/addCondPopup", new(AddCondPopupAction)).
 			EndAll()

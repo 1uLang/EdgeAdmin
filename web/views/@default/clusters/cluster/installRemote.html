@@ -7,7 +7,7 @@
 
 	<div v-if="nodes.length > 0">
 		<h3>所有未安装节点
-            <button style="background-color: #1b6aff;" class="ui button primary tiny" v-if="countCheckedNodes() > 0" @click.prevent="installBatch()">批量安装({{countCheckedNodes()}})</button>
+            <button class="ui button primary tiny" v-if="countCheckedNodes() > 0" @click.prevent="installBatch()">批量安装({{countCheckedNodes()}})</button>
         </h3>
 		<table class="ui table selectable celled">
 			<thead>

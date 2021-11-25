@@ -1,4 +1,4 @@
-// ½ÚµãIPãĞÖµ
+// èŠ‚ç‚¹IPé˜ˆå€¼
 Vue.component("node-ip-address-thresholds-box", {
 	props: ["v-thresholds"],
 	data: function () {
@@ -35,23 +35,23 @@ Vue.component("node-ip-address-thresholds-box", {
 			allItems: window.IP_ADDR_THRESHOLD_ITEMS,
 			allOperators: [
 				{
-					"name": "Ğ¡ÓÚµÈÓÚ",
+					"name": "å°äºç­‰äº",
 					"code": "lte"
 				},
 				{
-					"name": "´óÓÚ",
+					"name": "å¤§äº",
 					"code": "gt"
 				},
 				{
-					"name": "²»µÈÓÚ",
+					"name": "ä¸ç­‰äº",
 					"code": "neq"
 				},
 				{
-					"name": "Ğ¡ÓÚ",
+					"name": "å°äº",
 					"code": "lt"
 				},
 				{
-					"name": "´óÓÚµÈÓÚ",
+					"name": "å¤§äºç­‰äº",
 					"code": "gte"
 				}
 			],
@@ -76,11 +76,11 @@ Vue.component("node-ip-address-thresholds-box", {
 		},
 		confirm: function () {
 			if (this.addingThreshold.items.length == 0) {
-				teaweb.warn("ĞèÒªÖÁÉÙÌí¼ÓÒ»¸öãĞÖµ")
+				teaweb.warn("éœ€è¦è‡³å°‘æ·»åŠ ä¸€ä¸ªé˜ˆå€¼")
 				return
 			}
 			if (this.addingThreshold.actions.length == 0) {
-				teaweb.warn("ĞèÒªÖÁÉÙÌí¼ÓÒ»¸ö¶¯×÷")
+				teaweb.warn("éœ€è¦è‡³å°‘æ·»åŠ ä¸€ä¸ªåŠ¨ä½œ")
 				return
 			}
 
@@ -94,7 +94,7 @@ Vue.component("node-ip-address-thresholds-box", {
 				})
 			}
 
-			// »¹Ô­
+			// è¿˜åŸ
 			this.cancel()
 		},
 		remove: function (index) {
@@ -127,10 +127,10 @@ Vue.component("node-ip-address-thresholds-box", {
 			this.itemReportGroups = []
 		},
 		confirmItem: function () {
-			// ÌØÊâãĞÖµ¿ìËÙÌí¼Ó
+			// ç‰¹æ®Šé˜ˆå€¼å¿«é€Ÿæ·»åŠ 
 			if (["nodeHealthCheck"].$contains(this.itemCode)) {
 				if (this.itemValue.toString().length == 0) {
-					teaweb.warn("ÇëÑ¡Ôñ¼ì²é½á¹û")
+					teaweb.warn("è¯·é€‰æ‹©æ£€æŸ¥ç»“æœ")
 					return
 				}
 
@@ -143,7 +143,7 @@ Vue.component("node-ip-address-thresholds-box", {
 					value = 1
 				}
 
-				// Ìí¼Ó
+				// æ·»åŠ 
 				this.addingThreshold.items.push({
 					item: this.itemCode,
 					operator: this.itemOperator,
@@ -158,14 +158,14 @@ Vue.component("node-ip-address-thresholds-box", {
 
 			if (this.itemDuration.length == 0) {
 				let that = this
-				teaweb.warn("ÇëÊäÈëÍ³¼ÆÖÜÆÚ", function () {
+				teaweb.warn("è¯·è¾“å…¥ç»Ÿè®¡å‘¨æœŸ", function () {
 					that.$refs.itemDuration.focus()
 				})
 				return
 			}
 			let itemDuration = parseInt(this.itemDuration)
 			if (isNaN(itemDuration) || itemDuration <= 0) {
-				teaweb.warn("ÇëÊäÈëÕıÈ·µÄÍ³¼ÆÖÜÆÚ", function () {
+				teaweb.warn("è¯·è¾“å…¥æ­£ç¡®çš„ç»Ÿè®¡å‘¨æœŸ", function () {
 					that.$refs.itemDuration.focus()
 				})
 				return
@@ -173,14 +173,14 @@ Vue.component("node-ip-address-thresholds-box", {
 
 			if (this.itemValue.length == 0) {
 				let that = this
-				teaweb.warn("ÇëÊäÈë¶Ô±ÈÖµ", function () {
+				teaweb.warn("è¯·è¾“å…¥å¯¹æ¯”å€¼", function () {
 					that.$refs.itemValue.focus()
 				})
 				return
 			}
 			let itemValue = parseFloat(this.itemValue)
 			if (isNaN(itemValue)) {
-				teaweb.warn("ÇëÊäÈëÕıÈ·µÄ¶Ô±ÈÖµ", function () {
+				teaweb.warn("è¯·è¾“å…¥æ­£ç¡®çš„å¯¹æ¯”å€¼", function () {
 					that.$refs.itemValue.focus()
 				})
 				return
@@ -190,10 +190,10 @@ Vue.component("node-ip-address-thresholds-box", {
 			let options = {}
 
 			switch (this.itemCode) {
-				case "connectivity": // Á¬Í¨ĞÔĞ£Ñé
+				case "connectivity": // è¿é€šæ€§æ ¡éªŒ
 					if (itemValue > 100) {
 						let that = this
-						teaweb.warn("Á¬Í¨ĞÔ¶Ô±ÈÖµ²»ÄÜ³¬¹ı100", function () {
+						teaweb.warn("è¿é€šæ€§å¯¹æ¯”å€¼ä¸èƒ½è¶…è¿‡100", function () {
 							that.$refs.itemValue.focus()
 						})
 						return
@@ -203,7 +203,7 @@ Vue.component("node-ip-address-thresholds-box", {
 					break
 			}
 
-			// Ìí¼Ó
+			// æ·»åŠ 
 			this.addingThreshold.items.push({
 				item: this.itemCode,
 				operator: this.itemOperator,
@@ -213,7 +213,7 @@ Vue.component("node-ip-address-thresholds-box", {
 				options: options
 			})
 
-			// »¹Ô­
+			// è¿˜åŸ
 			this.cancelItem()
 		},
 		removeItem: function (index) {
@@ -244,13 +244,13 @@ Vue.component("node-ip-address-thresholds-box", {
 		itemDurationUnitName: function (unit) {
 			switch (unit) {
 				case "minute":
-					return "·ÖÖÓ"
+					return "åˆ†é’Ÿ"
 				case "second":
-					return "Ãë"
+					return "ç§’"
 				case "hour":
-					return "Ğ¡Ê±"
+					return "å°æ—¶"
 				case "day":
-					return "Ìì"
+					return "å¤©"
 			}
 			return unit
 		},
@@ -277,7 +277,7 @@ Vue.component("node-ip-address-thresholds-box", {
 			this.doConfirmAction(false)
 		},
 		doConfirmAction: function (validated, options) {
-			// ÊÇ·ñÒÑ´æÔÚ
+			// æ˜¯å¦å·²å­˜åœ¨
 			let exists = false
 			let that = this
 			this.addingThreshold.actions.forEach(function (v) {
@@ -286,7 +286,7 @@ Vue.component("node-ip-address-thresholds-box", {
 				}
 			})
 			if (exists) {
-				teaweb.warn("´Ë¶¯×÷ÒÑ¾­Ìí¼Ó¹ıÁË£¬ÎŞĞèÖØ¸´Ìí¼Ó")
+				teaweb.warn("æ­¤åŠ¨ä½œå·²ç»æ·»åŠ è¿‡äº†ï¼Œæ— éœ€é‡å¤æ·»åŠ ")
 				return
 			}
 
@@ -303,7 +303,7 @@ Vue.component("node-ip-address-thresholds-box", {
 							})
 							.success(function (resp) {
 								if (resp.data.ips.length == 0) {
-									teaweb.warn("ÇëÊäÈë±¸ÓÃIP", function () {
+									teaweb.warn("è¯·è¾“å…¥å¤‡ç”¨IP", function () {
 										that.$refs.actionBackupIPs.focus()
 									})
 									return
@@ -312,7 +312,7 @@ Vue.component("node-ip-address-thresholds-box", {
 								that.doConfirmAction(true, options)
 							})
 							.fail(function (resp) {
-								teaweb.warn("ÊäÈëµÄIP '" + resp.data.failIP + "' ¸ñÊ½²»ÕıÈ·£¬Çë¸ÄÕıºóÌá½»", function () {
+								teaweb.warn("è¾“å…¥çš„IP '" + resp.data.failIP + "' æ ¼å¼ä¸æ­£ç¡®ï¼Œè¯·æ”¹æ­£åæäº¤", function () {
 									that.$refs.actionBackupIPs.focus()
 								})
 							})
@@ -322,13 +322,13 @@ Vue.component("node-ip-address-thresholds-box", {
 					break
 				case "webHook":
 					if (this.actionWebHookURL.length == 0) {
-						teaweb.warn("ÇëÊäÈëWebHook URL", function () {
+						teaweb.warn("è¯·è¾“å…¥WebHook URL", function () {
 							that.$refs.webHookURL.focus()
 						})
 						return
 					}
 					if (!this.actionWebHookURL.match(/^(http|https):\/\//i)) {
-						teaweb.warn("URL¿ªÍ·±ØĞëÊÇhttp://»òÕßhttps://", function () {
+						teaweb.warn("URLå¼€å¤´å¿…é¡»æ˜¯http://æˆ–è€…https://", function () {
 							that.$refs.webHookURL.focus()
 						})
 						return
@@ -341,7 +341,7 @@ Vue.component("node-ip-address-thresholds-box", {
 				options: options
 			})
 
-			// »¹Ô­
+			// è¿˜åŸ
 			this.cancelAction()
 		},
 		removeAction: function (index) {
@@ -361,7 +361,7 @@ Vue.component("node-ip-address-thresholds-box", {
 	template: `<div>
 	<input type="hidden" name="thresholdsJSON" :value="JSON.stringify(thresholds)"/>
 		
-	<!-- ÒÑÓĞÌõ¼ş -->
+	<!-- å·²æœ‰æ¡ä»¶ -->
 	<div v-if="thresholds.length > 0">
 		<div class="ui label basic small" v-for="(threshold, index) in thresholds">
 			<span v-for="(item, itemIndex) in threshold.items">
@@ -371,12 +371,12 @@ Vue.component("node-ip-address-thresholds-box", {
 				{{itemName(item.item)}}
 				
 				<span v-if="item.item == 'nodeHealthCheck'">
-					<!-- ½¡¿µ¼ì²é -->
-					<span v-if="item.value == 1">³É¹¦</span>
-					<span v-if="item.value == 0">Ê§°Ü</span>
+					<!-- å¥åº·æ£€æŸ¥ -->
+					<span v-if="item.value == 1">æˆåŠŸ</span>
+					<span v-if="item.value == 0">å¤±è´¥</span>
 				</span>
 				<span v-else>
-					<!-- Á¬Í¨ĞÔ -->
+					<!-- è¿é€šæ€§ -->
 					<span v-if="item.item == 'connectivity' && item.options != null && item.options.groups != null && item.options.groups.length > 0">[<span v-for="(group, groupIndex) in item.options.groups">{{group.name}} <span v-if="groupIndex != item.options.groups.length - 1">&nbsp; </span></span>]</span>
 				
 					<span  class="grey">[{{itemOperatorName(item.operator)}}]</span> &nbsp;{{item.value}}{{itemUnitName(item.item)}} 
@@ -385,27 +385,27 @@ Vue.component("node-ip-address-thresholds-box", {
 			</span>
 			-&gt;
 			<span v-for="(action, actionIndex) in threshold.actions">{{actionName(action.action)}}
-			<span v-if="action.action == 'switch'">µ½{{action.options.ips.join(", ")}}</span>
+			<span v-if="action.action == 'switch'">åˆ°{{action.options.ips.join(", ")}}</span>
 			<span v-if="action.action == 'webHook'" class="small grey">({{action.options.url}})</span>
 			 &nbsp;<span v-if="actionIndex != threshold.actions.length - 1" style="font-style: italic">AND &nbsp;</span></span>
 			&nbsp;
-			<a href="" title="ĞŞ¸Ä" @click.prevent="update(index)"><i class="icon pencil small"></i></a> 
-			<a href="" title="É¾³ı" @click.prevent="remove(index)"><i class="icon small remove"></i></a>
+			<a href="" title="ä¿®æ”¹" @click.prevent="update(index)"><i class="icon pencil small"></i></a> 
+			<a href="" title="åˆ é™¤" @click.prevent="remove(index)"><i class="icon small remove"></i></a>
 		</div>
 	</div>
 	
-	<!-- ĞÂãĞÖµ -->
+	<!-- æ–°é˜ˆå€¼ -->
 	<div v-if="isAdding" style="margin-top: 0.5em">
 		<table class="ui table celled">
 			<thead>
 				<tr>
-					<td style="width: 50%; background: #f9fafb; border-bottom: 1px solid rgba(34,36,38,.1)">ãĞÖµ</td>
-					<th>¶¯×÷</th>
+					<td style="width: 50%; background: #f9fafb; border-bottom: 1px solid rgba(34,36,38,.1)">é˜ˆå€¼</td>
+					<th>åŠ¨ä½œ</th>
 				</tr>
 			</thead>
 			<tr>
 				<td style="background: white">
-					<!-- ÒÑ¾­Ìí¼ÓµÄÏîÄ¿ -->
+					<!-- å·²ç»æ·»åŠ çš„é¡¹ç›® -->
 					<div>
 						<div v-for="(item, index) in addingThreshold.items" class="ui label basic small" style="margin-bottom: 0.5em;">
 							<span v-if="item.item != 'nodeHealthCheck'">
@@ -414,25 +414,25 @@ Vue.component("node-ip-address-thresholds-box", {
 							{{itemName(item.item)}}
 							
 							<span v-if="item.item == 'nodeHealthCheck'">
-								<!-- ½¡¿µ¼ì²é -->
-								<span v-if="item.value == 1">³É¹¦</span>
-								<span v-if="item.value == 0">Ê§°Ü</span>
+								<!-- å¥åº·æ£€æŸ¥ -->
+								<span v-if="item.value == 1">æˆåŠŸ</span>
+								<span v-if="item.value == 0">å¤±è´¥</span>
 							</span>
 							<span v-else>
-								<!-- Á¬Í¨ĞÔ -->
+								<!-- è¿é€šæ€§ -->
 								<span v-if="item.item == 'connectivity' && item.options != null && item.options.groups != null && item.options.groups.length > 0">[<span v-for="(group, groupIndex) in item.options.groups">{{group.name}} <span v-if="groupIndex != item.options.groups.length - 1">&nbsp; </span></span>]</span>
 								 <span class="grey">[{{itemOperatorName(item.operator)}}]</span> {{item.value}}{{itemUnitName(item.item)}}
 							 </span> 
 							 &nbsp;
-							<a href="" title="É¾³ı" @click.prevent="removeItem(index)"><i class="icon remove small"></i></a>
+							<a href="" title="åˆ é™¤" @click.prevent="removeItem(index)"><i class="icon remove small"></i></a>
 						</div>
 					</div>
 					
-					<!-- ÕıÔÚÌí¼ÓµÄÏîÄ¿ -->
+					<!-- æ­£åœ¨æ·»åŠ çš„é¡¹ç›® -->
 					<div v-if="isAddingItem" style="margin-top: 0.8em">
 						<table class="ui table">
 							<tr>
-								<td style="width: 6em">Í³¼ÆÏîÄ¿</td>
+								<td style="width: 6em">ç»Ÿè®¡é¡¹ç›®</td>
 								<td>
 									<select class="ui dropdown auto-width" v-model="itemCode">
 									<option v-for="item in allItems" :value="item.code">{{item.name}}</option>
@@ -441,16 +441,16 @@ Vue.component("node-ip-address-thresholds-box", {
 								</td>
 							</tr>
 							<tr v-show="itemCode != 'nodeHealthCheck'">
-								<td>Í³¼ÆÖÜÆÚ</td>
+								<td>ç»Ÿè®¡å‘¨æœŸ</td>
 								<td>
 									<div class="ui input right labeled">
 										<input type="text" v-model="itemDuration" style="width: 4em" maxlength="4" ref="itemDuration" @keyup.enter="confirmItem()" @keypress.enter.prevent="1"/>
-										<span class="ui label">·ÖÖÓ</span>
+										<span class="ui label">åˆ†é’Ÿ</span>
 									</div>
 								</td>
 							</tr>
 							<tr v-show="itemCode != 'nodeHealthCheck'">
-								<td>²Ù×÷·û</td>
+								<td>æ“ä½œç¬¦</td>
 								<td>
 									<select class="ui dropdown auto-width" v-model="itemOperator">
 										<option v-for="operator in allOperators" :value="operator.code">{{operator.name}}</option>
@@ -458,7 +458,7 @@ Vue.component("node-ip-address-thresholds-box", {
 								</td>
 							</tr>
 							<tr v-show="itemCode != 'nodeHealthCheck'">
-								<td>¶Ô±ÈÖµ</td>
+								<td>å¯¹æ¯”å€¼</td>
 								<td>
 									<div class="ui input right labeled">
 										<input type="text" maxlength="20" style="width: 5em" v-model="itemValue" ref="itemValue" @keyup.enter="confirmItem()" @keypress.enter.prevent="1"/>
@@ -467,27 +467,27 @@ Vue.component("node-ip-address-thresholds-box", {
 								</td>
 							</tr>
 							<tr v-show="itemCode == 'nodeHealthCheck'">
-								<td>¼ì²é½á¹û</td>
+								<td>æ£€æŸ¥ç»“æœ</td>
 								<td>
 									<select class="ui dropdown auto-width" v-model="itemValue">
-										<option value="1">³É¹¦</option>
-										<option value="0">Ê§°Ü</option>
+										<option value="1">æˆåŠŸ</option>
+										<option value="0">å¤±è´¥</option>
 									</select>
-									<p class="comment" style="font-weight: normal">Ö»ÓĞ×´Ì¬·¢Éú¸Ä±äµÄÊ±ºò²Å»á´¥·¢¡£</p>
+									<p class="comment" style="font-weight: normal">åªæœ‰çŠ¶æ€å‘ç”Ÿæ”¹å˜çš„æ—¶å€™æ‰ä¼šè§¦å‘ã€‚</p>
 								</td>
 							</tr>
 							
-							<!-- Á¬Í¨ĞÔ -->
+							<!-- è¿é€šæ€§ -->
 							<tr v-if="itemCode == 'connectivity'">
-								<td>ÖÕ¶Ë·Ö×é</td>
+								<td>ç»ˆç«¯åˆ†ç»„</td>
 								<td style="font-weight: normal">
 									<div style="zoom: 0.8"><report-node-groups-selector @change="changeReportGroups"></report-node-groups-selector></div>
 								</td>
 							</tr>
 						</table>
 						<div style="margin-top: 0.8em">
-							<button class="ui button tiny" type="button" @click.prevent="confirmItem">È·¶¨</button>							 &nbsp;
-							<a href="" title="È¡Ïû" @click.prevent="cancelItem"><i class="icon remove small"></i></a>
+							<button class="ui button tiny" type="button" @click.prevent="confirmItem">ç¡®å®š</button>							 &nbsp;
+							<a href="" title="å–æ¶ˆ" @click.prevent="cancelItem"><i class="icon remove small"></i></a>
 						</div>
 					</div>
 					<div style="margin-top: 0.8em" v-if="!isAddingItem">
@@ -495,21 +495,21 @@ Vue.component("node-ip-address-thresholds-box", {
 					</div>
 				</td>
 				<td style="background: white">
-					<!-- ÒÑ¾­Ìí¼ÓµÄ¶¯×÷ -->
+					<!-- å·²ç»æ·»åŠ çš„åŠ¨ä½œ -->
 					<div>
 						<div v-for="(action, index) in addingThreshold.actions" class="ui label basic small" style="margin-bottom: 0.5em">
 							{{actionName(action.action)}} &nbsp;
-							<span v-if="action.action == 'switch'">µ½{{action.options.ips.join(", ")}}</span>
+							<span v-if="action.action == 'switch'">åˆ°{{action.options.ips.join(", ")}}</span>
 							<span v-if="action.action == 'webHook'" class="small grey">({{action.options.url}})</span>
-							<a href="" title="É¾³ı" @click.prevent="removeAction(index)"><i class="icon remove small"></i></a>
+							<a href="" title="åˆ é™¤" @click.prevent="removeAction(index)"><i class="icon remove small"></i></a>
 						</div>
 					</div>
 					
-					<!-- ÕıÔÚÌí¼ÓµÄ¶¯×÷ -->
+					<!-- æ­£åœ¨æ·»åŠ çš„åŠ¨ä½œ -->
 					<div v-if="isAddingAction" style="margin-top: 0.8em">
 						<table class="ui table">
 							<tr>
-								<td style="width: 6em">¶¯×÷ÀàĞÍ</td>
+								<td style="width: 6em">åŠ¨ä½œç±»å‹</td>
 								<td>
 									<select class="ui dropdown auto-width" v-model="actionCode">
 										<option v-for="action in allActions" :value="action.code">{{action.name}}</option>
@@ -518,12 +518,12 @@ Vue.component("node-ip-address-thresholds-box", {
 								</td>
 							</tr>
 							
-							<!-- ÇĞ»» -->
+							<!-- åˆ‡æ¢ -->
 							<tr v-if="actionCode == 'switch'">
-								<td>±¸ÓÃIP *</td>
+								<td>å¤‡ç”¨IP *</td>
 								<td>
 									<textarea rows="2" v-model="actionBackupIPs" ref="actionBackupIPs"></textarea>
-									<p class="comment">Ã¿ĞĞÒ»¸ö±¸ÓÃIP¡£</p>
+									<p class="comment">æ¯è¡Œä¸€ä¸ªå¤‡ç”¨IPã€‚</p>
 								</td>
 							</tr>
 							
@@ -532,13 +532,13 @@ Vue.component("node-ip-address-thresholds-box", {
 								<td>URL *</td>
 								<td>
 									<input type="text" maxlength="1000" placeholder="https://..." v-model="actionWebHookURL" ref="webHookURL" @keyup.enter="confirmAction()" @keypress.enter.prevent="1"/>
-									<p class="comment">ÍêÕûµÄURL£¬±ÈÈç<code-label>https://example.com/webhook/api</code-label>£¬ÏµÍ³»áÔÚ´¥·¢ãĞÖµµÄÊ±ºòÍ¨¹ıGETµ÷ÓÃ´ËURL¡£</p>
+									<p class="comment">å®Œæ•´çš„URLï¼Œæ¯”å¦‚<code-label>https://example.com/webhook/api</code-label>ï¼Œç³»ç»Ÿä¼šåœ¨è§¦å‘é˜ˆå€¼çš„æ—¶å€™é€šè¿‡GETè°ƒç”¨æ­¤URLã€‚</p>
 								</td>
 							</tr>
 						</table>
 						<div style="margin-top: 0.8em">
-							<button class="ui button tiny" type="button" @click.prevent="confirmAction">È·¶¨</button>	 &nbsp;
-							<a href="" title="È¡Ïû" @click.prevent="cancelAction"><i class="icon remove small"></i></a>
+							<button class="ui button tiny" type="button" @click.prevent="confirmAction">ç¡®å®š</button>	 &nbsp;
+							<a href="" title="å–æ¶ˆ" @click.prevent="cancelAction"><i class="icon remove small"></i></a>
 						</div>
 					</div>
 					
@@ -549,10 +549,10 @@ Vue.component("node-ip-address-thresholds-box", {
 			</tr>
 		</table>
 		
-		<!-- Ìí¼ÓãĞÖµ -->
+		<!-- æ·»åŠ é˜ˆå€¼ -->
 		<div>
-			<button class="ui button tiny" :class="{disabled: (isAddingItem || isAddingAction)}" type="button" @click.prevent="confirm">È·¶¨</button> &nbsp;
-			<a href="" title="È¡Ïû" @click.prevent="cancel"><i class="icon remove small"></i></a>
+			<button class="ui button tiny" :class="{disabled: (isAddingItem || isAddingAction)}" type="button" @click.prevent="confirm">ç¡®å®š</button> &nbsp;
+			<a href="" title="å–æ¶ˆ" @click.prevent="cancel"><i class="icon remove small"></i></a>
 		</div>
 	</div>
 	

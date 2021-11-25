@@ -21,7 +21,7 @@ Vue.component("cluster-selector", {
 		}
 	},
 	template: `<div>
-	<select class="ui dropdown auto-width" name="clusterId" v-model="clusterId">
+	<select class="ui dropdown" style="max-width: 10em" name="clusterId" v-model="clusterId">
 		<option value="0">[选择集群]</option>
 		<option v-for="cluster in clusters" :value="cluster.id">{{cluster.name}}</option>
 	</select>

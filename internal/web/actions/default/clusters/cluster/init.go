@@ -17,9 +17,9 @@ import (
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
-			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
+			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeNode)).
 			Helper(clusters.NewClusterHelper()).
-			Data("teaMenu", "waf").
+			Data("teaMenu", "clusters").
 			Prefix("/clusters/cluster").
 			Get("", new(IndexAction)).
 			Get("/nodes", new(NodesAction)).

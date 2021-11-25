@@ -1,5 +1,5 @@
 Tea.context(function () {
-    this.userDescription = ""
+	this.userDescription = ""
 
 	this.changeInstance = function (instance) {
 		if (instance != null) {
@@ -10,7 +10,7 @@ Tea.context(function () {
 	}
 
 	/**
-	 * ·¢ËÍÊ±¼ä
+	 * å‘é€æ—¶é—´
 	 */
 	this.timeFromHour = ""
 	this.timeFromMinute = ""

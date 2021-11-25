@@ -45,7 +45,7 @@ Vue.component("provinces-selector", {
 		<div class="ui divider"></div>
 	</div>
 	<div>
-		<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="add">+</button>
+		<button class="ui button tiny" type="button" @click.prevent="add">+</button>
 	</div>
 </div>`
 })

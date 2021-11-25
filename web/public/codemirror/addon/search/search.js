@@ -194,7 +194,7 @@
     return '<span class="CodeMirror-search-label">' + cm.phrase("With:") + '</span> <input type="text" style="width: 10em" class="CodeMirror-search-field"/>';
   }
   function getDoReplaceConfirm(cm) {
-    return '<span class="CodeMirror-search-label">' + cm.phrase("Replace?") + '</span> <button style="background-color: #1b6aff;">' + cm.phrase("Yes") + '</button> <button style="background-color: #1b6aff;">' + cm.phrase("No") + '</button> <button>' + cm.phrase("All") + '</button> <button>' + cm.phrase("Stop") + '</button> ';
+    return '<span class="CodeMirror-search-label">' + cm.phrase("Replace?") + '</span> <button>' + cm.phrase("Yes") + '</button> <button>' + cm.phrase("No") + '</button> <button>' + cm.phrase("All") + '</button> <button>' + cm.phrase("Stop") + '</button> ';
   }
 
   function replaceAll(cm, query, text) {

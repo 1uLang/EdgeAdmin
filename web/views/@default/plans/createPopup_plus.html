@@ -1,0 +1,34 @@
+{$layout "layout_popup"}
+
+<h3>添加套餐</h3>
+<form class="ui form" data-tea-action="$" data-tea-success="success">
+    <csrf-token></csrf-token>
+    <table class="ui table selectable definition">
+        <tr>
+            <td class="title">套餐名称 *</td>
+            <td>
+                <input type="text" name="name" ref="focus" maxlength="100"/>
+            </td>
+        </tr>
+        <tr>
+            <td>关联集群 *</td>
+            <td>
+                <cluster-selector></cluster-selector>
+                <p class="comment">使用当前套餐的服务都将会部署在此集群上。</p>
+            </td>
+        </tr>
+        <tr>
+            <td>流量限制</td>
+            <td>
+                <traffic-limit-config-box></traffic-limit-config-box>
+            </td>
+        </tr>
+        <tr>
+            <td>价格设置 *</td>
+            <td>
+                <plan-price-config-box></plan-price-config-box>
+            </td>
+        </tr>
+    </table>
+    <submit-btn></submit-btn>
+</form>

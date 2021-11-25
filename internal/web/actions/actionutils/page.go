@@ -124,8 +124,7 @@ func (this *Page) AsHTML() string {
 		this.renderSizeOption(100)+`
 </select>`)
 
-	//return `<div class="page">` + strings.Join(result, "") + `</div>`
-	return fmt.Sprintf(`<div class="page" style="width: 100%%;display: flex;flex-direction: row;justify-content: space-between;align-items: center;padding: 0 10px;"> <div>%s</div><div><span>总条数：%v</span></div></div>`, strings.Join(result, ""), this.Total)
+	return `<div class="page">` + strings.Join(result, "") + `</div>`
 }
 
 // 判断是否为最后一页

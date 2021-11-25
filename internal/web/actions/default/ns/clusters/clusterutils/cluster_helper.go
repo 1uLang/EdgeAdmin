@@ -26,7 +26,7 @@ func (this *ClusterHelper) BeforeAction(actionPtr actions.ActionWrapper) (goNext
 		return true
 	}
 
-	action.Data["teaMenu"] = "waf"
+	action.Data["teaMenu"] = "ns"
 
 	selectedTabbar := action.Data.GetString("mainTab")
 	clusterId := action.ParamInt64("clusterId")

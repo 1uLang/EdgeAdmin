@@ -9,8 +9,8 @@ import (
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
-			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
-			Data("teaMenu", "regions").
+			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeNode)).
+			Data("teaMenu", "clusters").
 			Data("teaSubMenu", "region").
 			Prefix("/clusters/regions").
 			Get("", new(IndexAction)).

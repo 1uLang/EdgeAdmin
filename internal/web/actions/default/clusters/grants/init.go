@@ -10,9 +10,9 @@ import (
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
-			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
+			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeNode)).
 			Helper(clusterutils.NewClustersHelper()).
-			Data("teaMenu", "grants").
+			Data("teaMenu", "clusters").
 			Data("teaSubMenu", "grant").
 			Prefix("/clusters/grants").
 

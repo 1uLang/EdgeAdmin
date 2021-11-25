@@ -10,7 +10,7 @@
             <input type="text" name="keyword" placeholder="名称、用户名等..." v-model="keyword"/>
         </div>
         <div class="ui field">
-            <button style="background-color: #1b6aff;" class="ui button" type="submit">搜索</button>
+            <button class="ui button" type="submit">搜索</button>
             &nbsp;
             <a :href="Tea.url('.')" v-if="keyword.length > 0">[清除条件]</a>
         </div>
@@ -49,7 +49,7 @@
 			<span v-else class="disabled">0</span>
 		</td>
 		<td>
-			<a :href="'/clusters/grants/grant?grantId=' + grant.id">详情</a> &nbsp; <a style="color: #db2828" href="" @click.prevent="deleteGrant(grant.id)">删除</a>
+			<a :href="'/clusters/grants/grant?grantId=' + grant.id">详情</a> &nbsp; <a href="" @click.prevent="deleteGrant(grant.id)">删除</a>
 		</td>
 	</tr>
 </table>

@@ -1,16 +1,8 @@
 package index
 
 import (
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"github.com/TeaOSLab/EdgeAdmin/internal/encrypt"
-	"github.com/TeaOSLab/EdgeAdmin/internal/ttlcache"
-	"github.com/iwind/TeaGo/rands"
-	"time"
-
-	"github.com/1uLang/zhiannet-api/common/cache"
-	"github.com/1uLang/zhiannet-api/common/server/edge_admins_server"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
 	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
@@ -26,6 +18,7 @@ import (
 	"github.com/iwind/TeaGo/types"
 	stringutil "github.com/iwind/TeaGo/utils/string"
 	"github.com/xlzd/gotp"
+	"time"
 )
 
 type IndexAction struct {
@@ -37,8 +30,7 @@ type IndexAction struct {
 var TokenSalt = stringutil.Rand(32)
 
 func (this *IndexAction) RunGet(params struct {
-	From  string
-	Token string
+	From string
 
 	Auth *helpers.UserShouldAuth
 }) {
@@ -83,10 +75,6 @@ func (this *IndexAction) RunGet(params struct {
 		this.Data["version"] = teaconst.Version
 	}
 	this.Data["faviconFileId"] = uiConfig.FaviconFileId
-	if params.Token != "" {
-		this.Success()
-	}
-	this.Data["faviconFileId"] = uiConfig.FaviconFileId
 
 	securityConfig, err := configloaders.LoadSecurityConfig()
 	if err != nil {
@@ -94,6 +82,7 @@ func (this *IndexAction) RunGet(params struct {
 	} else {
 		this.Data["rememberLogin"] = securityConfig.AllowRememberLogin
 	}
+
 	this.Show()
 }
 
@@ -106,19 +95,14 @@ func (this *IndexAction) RunPost(params struct {
 	Remember bool
 	Must     *actions.Must
 	Auth     *helpers.UserShouldAuth
-	//CSRF     *actionutils.CSRF
+	CSRF     *actionutils.CSRF
 }) {
-	this.Data["from"] = ""
-	edge_admins_server.InitField()
+	params.Must.
+		Field("username", params.Username).
+		Require("请输入用户名").
+		Field("password", params.Password).
+		Require("请输入密码")
 
-	//params.Must.
-	//	Field("username", params.Username).
-	//	Require("请输入用户名").
-	//	Field("password", params.Password).
-	//	Require("请输入密码")
-	if params.Username == "" {
-		this.FailField("username", "请输入用户名")
-	}
 	if params.Password == stringutil.Md5("") {
 		this.FailField("password", "请输入密码")
 	}
@@ -140,11 +124,6 @@ func (this *IndexAction) RunPost(params struct {
 	if err != nil {
 		this.Fail("服务器出了点小问题：" + err.Error())
 	}
-	//登录限制检查
-	if res, _ := edge_admins_server.LoginCheck(fmt.Sprintf("admin_%v", params.Username)); res {
-		this.FailField("refresh", "账号已被锁定（请 30分钟后重试）")
-	}
-
 	resp, err := rpcClient.AdminRPC().LoginAdmin(rpcClient.Context(0), &pb.LoginAdminRequest{
 		Username: params.Username,
 		Password: params.Password,
@@ -164,23 +143,11 @@ func (this *IndexAction) RunPost(params struct {
 		if err != nil {
 			utils.PrintError(err)
 		}
-		info, err := edge_admins_server.GetUserInfoByName(params.Username)
-		if err != nil {
-			this.ErrorPage(err)
-		}
-		if (info != nil && info.Id > 0) && (info.State == 0 || info.Ison == 0) {
-			this.Fail("当前账号被禁用")
-		} else {
-			//登录次数+1
-			edge_admins_server.LoginErrIncr(fmt.Sprintf("admin_%v", params.Username))
-			//num, _ := cache.GetInt(fmt.Sprintf("admin_%v", params.Username))
-			this.Fail("登录失败，请重新登录")
-			//this.Fail(fmt.Sprintf("请输入正确的用户名密码，您还可以尝试%v次，（账号将被临时锁定30分钟）", 5-num))
-		}
 
+		this.Fail("请输入正确的用户名密码")
 	}
 
-	// 检查OTP-*/
+	// 检查OTP
 	otpLoginResp, err := this.RPC().LoginRPC().FindEnabledLogin(this.AdminContext(), &pb.FindEnabledLoginRequest{
 		AdminId: resp.AdminId,
 		Type:    "otp",
@@ -202,24 +169,6 @@ func (this *IndexAction) RunPost(params struct {
 		}
 	}
 
-	//密码过期检查
-	if res, _ := edge_admins_server.CheckPwdInvalid(uint64(resp.AdminId)); res {
-		this.Data["from"] = "/updatePwd"
-		this.Data["Code"] = encode(resp.AdminId)
-		this.Fail("密码已过期，请立即修改")
-	}
-	//检测系统是否到期
-	code, expire, err := CheckExpire()
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-	if expire {
-		this.Data["from"] = "/renewal"
-		this.Data["systemCode"] = code
-		this.Fail("系统已到期，请立即续订")
-	}
-
 	adminId := resp.AdminId
 	params.Auth.StoreAdmin(adminId, params.Remember)
 
@@ -228,35 +177,6 @@ func (this *IndexAction) RunPost(params struct {
 	if err != nil {
 		utils.PrintError(err)
 	}
-	//记录登录成功30分钟
-	cache.SetNx(fmt.Sprintf("login_success_adminid_%v", adminId), time.Minute*30)
-	cache.DelKey(fmt.Sprintf("admin_%v", params.Username))
 
-	//跳转首页
-	this.Data["from"] = helpers.NewUserMustAuth("").FirstMenuUrl(adminId)
 	this.Success()
-}
-
-func encode(adminId int64) string {
-
-	enstr := fmt.Sprintf("%s%d", rands.String(32), time.Now().Add(3*time.Minute).Unix())
-	ttlcache.DefaultCache.Write(enstr, adminId, time.Now().Unix()+180)
-	enstr = base64.URLEncoding.EncodeToString(encrypt.MagicKeyEncode([]byte(enstr)))
-
-	return enstr
-}
-
-func decode(enStr string) (adminId int64, err error) {
-
-	bytes, err := base64.URLEncoding.DecodeString(enStr)
-	if err != nil {
-		return 0, err
-	}
-	enStr = string(encrypt.MagicKeyDecode(bytes))
-
-	value := ttlcache.DefaultCache.Read(enStr)
-	if value == nil {
-		return 0, fmt.Errorf("页面信息已过期，请刷新后重试")
-	}
-	return value.Value.(int64), nil
 }

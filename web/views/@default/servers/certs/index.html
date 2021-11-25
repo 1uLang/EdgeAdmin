@@ -20,7 +20,7 @@
                 <input type="text" name="keyword" placeholder="关键词" style="width:10em" v-model="keyword"/>
             </div>
             <div class="ui field">
-                <button style="background-color: #1b6aff;" type="submit" class="ui button">搜索</button>
+                <button type="submit" class="ui button">搜索</button>
                 &nbsp;
                 <a :href="Tea.url('.', { 'type':type })" v-if="keyword.length > 0">[清除条件]</a>
             </div>
@@ -69,7 +69,7 @@
 			<td>
 				<a href="" @click.prevent="viewCert(cert.id)">详情</a> &nbsp;
 				<a href="" @click.prevent="updateCert(cert.id)">修改</a> &nbsp;
-				<a href="" style="color: #db2828" @click.prevent="deleteCert(cert.id)">删除</a>
+				<a href="" @click.prevent="deleteCert(cert.id)">删除</a>
 			</td>
 		</tr>
 	</table>

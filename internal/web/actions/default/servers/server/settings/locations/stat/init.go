@@ -14,7 +14,7 @@ func init() {
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
 			Helper(locationutils.NewLocationHelper()).
 			Helper(serverutils.NewServerHelper()).
-			Data("tinyMenuItem", "stat").Data("teaMenu", "waf").
+			Data("tinyMenuItem", "stat").
 			Prefix("/servers/server/settings/locations/stat").
 			GetPost("", new(IndexAction)).
 			EndAll()

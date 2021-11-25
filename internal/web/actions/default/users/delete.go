@@ -3,7 +3,6 @@ package users
 import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
-	nc_req "github.com/1uLang/zhiannet-api/nextcloud/request"
 )
 
 type DeleteAction struct {
@@ -23,11 +22,5 @@ func (this *DeleteAction) RunPost(params struct {
 		return
 	}
 
-	err = nc_req.DeleteUser(params.UserId,0)
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-	
 	this.Success()
 }

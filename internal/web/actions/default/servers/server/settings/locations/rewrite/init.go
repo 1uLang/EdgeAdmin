@@ -13,7 +13,7 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
 			Helper(locationutils.NewLocationHelper()).
-			Helper(serverutils.NewServerHelper()).Data("teaMenu", "waf").
+			Helper(serverutils.NewServerHelper()).
 			Data("tinyMenuItem", "rewrite").
 			Prefix("/servers/server/settings/locations/rewrite").
 			Get("", new(IndexAction)).

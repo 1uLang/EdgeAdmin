@@ -1,32 +1,32 @@
-// ½Úµã½ÇÉ«Ãû³Æ
+// èŠ‚ç‚¹è§’è‰²åç§°
 Vue.component("node-role-name", {
 	props: ["v-role"],
 	data: function () {
 		let roleName = ""
 		switch (this.vRole) {
 			case "node":
-				roleName = "±ßÔµ½Úµã"
+				roleName = "è¾¹ç¼˜èŠ‚ç‚¹"
 				break
 			case "monitor":
-				roleName = "¼à¿Ø½Úµã"
+				roleName = "ç›‘æ§èŠ‚ç‚¹"
 				break
 			case "api":
-				roleName = "API½Úµã"
+				roleName = "APIèŠ‚ç‚¹"
 				break
 			case "user":
-				roleName = "ÓÃ»§Æ½Ì¨"
+				roleName = "ç”¨æˆ·å¹³å°"
 				break
 			case "admin":
-				roleName = "¹ÜÀíÆ½Ì¨"
+				roleName = "ç®¡ç†å¹³å°"
 				break
 			case "database":
-				roleName = "Êı¾İ¿â½Úµã"
+				roleName = "æ•°æ®åº“èŠ‚ç‚¹"
 				break
 			case "dns":
-				roleName = "DNS½Úµã"
+				roleName = "DNSèŠ‚ç‚¹"
 				break
 			case "report":
-				roleName = "ÇøÓò¼à¿ØÖÕ¶Ë"
+				roleName = "åŒºåŸŸç›‘æ§ç»ˆç«¯"
 				break
 		}
 		return {

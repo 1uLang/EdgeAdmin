@@ -15,7 +15,6 @@ func init() {
 			Helper(locationutils.NewLocationHelper()).
 			Helper(serverutils.NewServerHelper()).
 			Data("tinyMenuItem", "header").
-			Data("teaMenu", "waf").
 			Prefix("/servers/server/settings/locations/headers").
 			GetPost("", new(IndexAction)).
 			EndAll()

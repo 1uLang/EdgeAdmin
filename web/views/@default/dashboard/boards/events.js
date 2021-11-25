@@ -13,7 +13,7 @@ Tea.context(function () {
 		let logIds = this.logs.map(function (v) {
 			return v.id
 		})
-		teaweb.confirm("确定要设置本页日志为已读吗？", function () {
+		teaweb.confirm("纭畾瑕佽缃湰椤垫棩蹇椾负宸茶鍚楋紵", function () {
 			this.$post(".readLogs")
 				.params({
 					logIds: logIds
@@ -25,7 +25,7 @@ Tea.context(function () {
 	}
 
 	this.updateAllRead = function () {
-		teaweb.confirm("确定要设置所有日志为已读吗？", function () {
+		teaweb.confirm("纭畾瑕佽缃墍鏈夋棩蹇椾负宸茶鍚楋紵", function () {
 			this.$post(".readAllLogs")
 				.params({})
 				.success(function () {

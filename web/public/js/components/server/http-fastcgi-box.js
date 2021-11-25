@@ -80,7 +80,7 @@ Vue.component("http-fastcgi-box", {
 						</div>
 						<div class="ui divided"></div>
 					</div>
-					<button style="background-color: #1b6aff;" type="button" class="ui button tiny" @click.prevent="createFastcgi()">+</button>
+					<button type="button" class="ui button tiny" @click.prevent="createFastcgi()">+</button>
 				</td>
 			</tr>
 		</tbody>

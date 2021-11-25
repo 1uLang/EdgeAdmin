@@ -12,7 +12,7 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
 			Helper(serverutils.NewServerHelper()).
-			Prefix("/servers/server/settings/tls").Data("teaMenu", "waf").
+			Prefix("/servers/server/settings/tls").
 			GetPost("", new(IndexAction)).
 			EndAll()
 	})

@@ -43,7 +43,7 @@ select.dropdown {
   height: auto !important;
 }
 .message .icon.warning {
-  font-size: 2em!important;
+  font-size: 2em !important;
 }
 body.swal2-shown {
   overflow: auto !important;

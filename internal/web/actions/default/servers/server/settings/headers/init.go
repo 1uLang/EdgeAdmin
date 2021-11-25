@@ -12,7 +12,6 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
 			Helper(serverutils.NewServerHelper()).
-			Data("teaMenu", "waf").
 			Prefix("/servers/server/settings/headers").
 			Get("", new(IndexAction)).
 			GetPost("/createSetPopup", new(CreateSetPopupAction)).

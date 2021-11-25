@@ -3,6 +3,7 @@
 <first-menu>
 	<a href="" class="item" @click.prevent="createProvider()">[添加DNS账号信息]</a>
 </first-menu>
+
 <div class="margin"></div>
 
 <form class="ui form" method="get" action="/dns/providers">
@@ -37,7 +38,7 @@
 			<span v-else>{{provider.countDomains}}</span>
 		</td>
 		<td>
-			<a :href="'/dns/providers/provider?providerId=' + provider.id">详情</a> &nbsp; &nbsp; <a href="" style="color: #db2828" @click.prevent="deleteProvider(provider.id)">删除</a>
+			<a :href="'/dns/providers/provider?providerId=' + provider.id">详情</a> &nbsp; &nbsp; <a href="" @click.prevent="deleteProvider(provider.id)">删除</a>
 		</td>
 	</tr>
 </table>

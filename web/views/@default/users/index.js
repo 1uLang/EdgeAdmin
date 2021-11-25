@@ -20,16 +20,4 @@ Tea.context(function () {
 				.refresh()
 		})
 	}
-
-	this.onLookDetail = function(id){
-		window.location = "/users/sub?parentId=" + id
-	}
-
-	this.GetSelectChan = function (event) {
-		this.selectChan = event.target.value; //获取option对应的value值
-		// localStorage.setItem("nfwSelectNodeId", this.selectNode);
-		let chan = this.selectChan
-		window.location.href = '/users?selectChan=' + chan
-
-	}
 })

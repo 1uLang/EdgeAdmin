@@ -1,4 +1,4 @@
-// µÝ¹éDNSÉèÖÃ
+// é€’å½’DNSè®¾ç½®
 Vue.component("ns-recursion-config-box", {
 	props: ["v-recursion-config"],
 	data: function () {
@@ -72,13 +72,13 @@ Vue.component("ns-recursion-config-box", {
 		},
 		confirmHost: function () {
 			if (this.host.length == 0) {
-				teaweb.warn("ÇëÊäÈëDNSµØÖ·")
+				teaweb.warn("è¯·è¾“å…¥DNSåœ°å€")
 				return
 			}
 
-			// TODO Ð£ÑéHost
-			// TODO ¿ÉÒÔÊäÈë¶Ë¿ÚºÅ
-			// TODO ¿ÉÒÔÑ¡ÔñÐ­Òé
+			// TODO æ ¡éªŒHost
+			// TODO å¯ä»¥è¾“å…¥ç«¯å£å·
+			// TODO å¯ä»¥é€‰æ‹©åè®®
 
 			this.hostIsAdding = false
 			if (this.updatingHost == null) {
@@ -98,45 +98,45 @@ Vue.component("ns-recursion-config-box", {
 	<table class="ui table definition selectable">
 		<tbody>
 			<tr>
-				<td class="title">ÊÇ·ñÆôÓÃ</td>
+				<td class="title">æ˜¯å¦å¯ç”¨</td>
 				<td>
 					<div class="ui checkbox">
 						<input type="checkbox" name="isOn" value="1" v-model="config.isOn"/>
 						<label></label>
 					</div>
-					<p class="comment">ÆôÓÃºó£¬Èç¹ûÕÒ²»µ½Ä³¸öÓòÃûµÄ½âÎö¼ÇÂ¼£¬ÔòÏòÉÏÒ»¼¶DNS²éÕÒ¡£</p>
+					<p class="comment">å¯ç”¨åŽï¼Œå¦‚æžœæ‰¾ä¸åˆ°æŸä¸ªåŸŸåçš„è§£æžè®°å½•ï¼Œåˆ™å‘ä¸Šä¸€çº§DNSæŸ¥æ‰¾ã€‚</p>
 				</td>
 			</tr>
 		</tbody>
 		<tbody v-show="config.isOn">
 			<tr>
-				<td>´Ó½Úµã±¾»ú¶ÁÈ¡<br/>ÉÏ¼¶DNSÖ÷»ú</td>
+				<td>ä»ŽèŠ‚ç‚¹æœ¬æœºè¯»å–<br/>ä¸Šçº§DNSä¸»æœº</td>
 				<td>
 					<div class="ui checkbox">
 						<input type="checkbox" name="useLocalHosts" value="1" v-model="config.useLocalHosts"/>
 						<label></label>
 					</div>
-					<p class="comment">Ñ¡ÖÐºó£¬½Úµã»áÊÔÍ¼´Ó<code-label>/etc/resolv.conf</code-label>ÎÄ¼þÖÐ¶ÁÈ¡DNSÅäÖÃ¡£ </p>
+					<p class="comment">é€‰ä¸­åŽï¼ŒèŠ‚ç‚¹ä¼šè¯•å›¾ä»Ž<code-label>/etc/resolv.conf</code-label>æ–‡ä»¶ä¸­è¯»å–DNSé…ç½®ã€‚ </p>
 				</td>
 			</tr>
 			<tr v-show="!config.useLocalHosts">
-				<td>ÉÏ¼¶DNSÖ÷»úµØÖ· *</td>
+				<td>ä¸Šçº§DNSä¸»æœºåœ°å€ *</td>
 				<td>
 					<div v-if="config.hosts.length > 0">
 						<div v-for="(host, index) in config.hosts" class="ui label tiny basic">
 							{{host.host}} &nbsp;
-							<a href="" title="ÐÞ¸Ä" @click.prevent="updateHost(host)"><i class="icon pencil tiny"></i></a>
-							<a href="" title="É¾³ý" @click.prevent="removeHost(index)"><i class="icon remove small"></i></a>
+							<a href="" title="ä¿®æ”¹" @click.prevent="updateHost(host)"><i class="icon pencil tiny"></i></a>
+							<a href="" title="åˆ é™¤" @click.prevent="removeHost(index)"><i class="icon remove small"></i></a>
 						</div>
 						<div class="ui divider"></div>
 					</div>
 					<div v-if="hostIsAdding">
 						<div class="ui fields inline">
 							<div class="ui field">
-								<input type="text" placeholder="DNSÖ÷»úµØÖ·" v-model="host" ref="hostRef" @keyup.enter="confirmHost" @keypress.enter.prevent="1"/>
+								<input type="text" placeholder="DNSä¸»æœºåœ°å€" v-model="host" ref="hostRef" @keyup.enter="confirmHost" @keypress.enter.prevent="1"/>
 							</div>
 							<div class="ui field">
-								<button class="ui button tiny" type="button" @click.prevent="confirmHost">È·ÈÏ</button> &nbsp; <a href="" title="È¡Ïû" @click.prevent="cancelHost"><i class="icon remove small"></i></a>
+								<button class="ui button tiny" type="button" @click.prevent="confirmHost">ç¡®è®¤</button> &nbsp; <a href="" title="å–æ¶ˆ" @click.prevent="cancelHost"><i class="icon remove small"></i></a>
 							</div>
 						</div>
 					</div>
@@ -146,16 +146,16 @@ Vue.component("ns-recursion-config-box", {
 				</td>
 			</tr>
 			<tr>
-				<td>ÔÊÐíµÄÓòÃû</td>
+				<td>å…è®¸çš„åŸŸå</td>
 				<td><values-box name="allowDomains" :values="config.allowDomains" @change="changeAllowDomains"></values-box>
-					<p class="comment">Ö§³ÖÐÇºÅÍ¨Åä·û£¬±ÈÈç<code-label>*.example.org</code-label>¡£</p>
+					<p class="comment">æ”¯æŒæ˜Ÿå·é€šé…ç¬¦ï¼Œæ¯”å¦‚<code-label>*.example.org</code-label>ã€‚</p>
 				</td>
 			</tr>
 			<tr>
-				<td>²»ÔÊÐíµÄÓòÃû</td>
+				<td>ä¸å…è®¸çš„åŸŸå</td>
 				<td>
 					<values-box name="denyDomains" :values="config.denyDomains" @change="changeDenyDomains"></values-box>
-					<p class="comment">Ö§³ÖÐÇºÅÍ¨Åä·û£¬±ÈÈç<code-label>*.example.org</code-label>¡£ÓÅÏÈ¼¶±ÈÔÊÐíµÄÓòÃû¸ß¡£</p>
+					<p class="comment">æ”¯æŒæ˜Ÿå·é€šé…ç¬¦ï¼Œæ¯”å¦‚<code-label>*.example.org</code-label>ã€‚ä¼˜å…ˆçº§æ¯”å…è®¸çš„åŸŸåé«˜ã€‚</p>
 				</td>
 			</tr>
 		</tbody>

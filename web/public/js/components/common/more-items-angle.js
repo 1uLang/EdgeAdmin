@@ -1,4 +1,4 @@
-// 可以展示更多条目的角图表
+// 鍙互灞曠ず鏇村鏉＄洰鐨勮鍥捐〃
 Vue.component("more-items-angle", {
 	props: ["v-data-url", "v-url"],
 	data: function () {

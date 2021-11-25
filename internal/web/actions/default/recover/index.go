@@ -1,4 +1,3 @@
-
 // Copyright 2021 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
 
 package recover
@@ -14,6 +13,5 @@ func (this *IndexAction) Init() {
 }
 
 func (this *IndexAction) RunGet(params struct{}) {
-
 	this.Show()
 }

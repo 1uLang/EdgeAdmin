@@ -61,38 +61,38 @@ The site traffic has exceeded the limit. Please contact with the site administra
 	<table class="ui table selectable definition">
 		<tbody>
 			<tr>
-				<td class="title">ÊÇ·ñÆôÓÃ</td>
+				<td class="title">æ˜¯å¦å¯ç”¨</td>
 				<td>
 					<checkbox v-model="config.isOn"></checkbox>
-					<p class="comment">×¢Òâ£ºÓÉÓÚÁ÷Á¿Í³¼ÆÊÇÃ¿5·ÖÖÓÍ³¼ÆÒ»´Î£¬ËùÒÔ³¬³öÁ÷Á¿ÏÞÖÆºó£¬¶ÔÓÃ»§µÄÌáÐÑÒ²»áÓÐËùÑÓ³Ù¡£</p>
+					<p class="comment">æ³¨æ„ï¼šç”±äºŽæµé‡ç»Ÿè®¡æ˜¯æ¯5åˆ†é’Ÿç»Ÿè®¡ä¸€æ¬¡ï¼Œæ‰€ä»¥è¶…å‡ºæµé‡é™åˆ¶åŽï¼Œå¯¹ç”¨æˆ·çš„æé†’ä¹Ÿä¼šæœ‰æ‰€å»¶è¿Ÿã€‚</p>
 				</td>
 			</tr>
 		</tbody>
 		<tbody v-show="config.isOn">
 			<tr>
-				<td>ÈÕÁ÷Á¿ÏÞÖÆ</td>
+				<td>æ—¥æµé‡é™åˆ¶</td>
 				<td>
 					<size-capacity-box :v-value="config.dailySize"></size-capacity-box>
 				</td>
 			</tr>
 			<tr>
-				<td>ÔÂÁ÷Á¿ÏÞÖÆ</td>
+				<td>æœˆæµé‡é™åˆ¶</td>
 				<td>
 					<size-capacity-box :v-value="config.monthlySize"></size-capacity-box>
 				</td>
 			</tr>
 			<!--<tr>
-				<td>×ÜÌåÏÞÖÆ</td>
+				<td>æ€»ä½“é™åˆ¶</td>
 				<td>
 					<size-capacity-box :v-value="config.totalSize"></size-capacity-box>
 					<p class="comment"></p>
 				</td>
 			</tr>-->
 			<tr>
-				<td>ÍøÒ³ÌáÊ¾ÄÚÈÝ</td>
+				<td>ç½‘é¡µæç¤ºå†…å®¹</td>
 				<td>
 					<textarea v-model="config.noticePageBody"></textarea>
-					<p class="comment"><a href="" @click.prevent="showBodyTemplate">[Ê¹ÓÃÄ£°å]</a>¡£µ±´ïµ½Á÷Á¿ÏÞÖÆÊ±ÍøÒ³ÏÔÊ¾µÄHTMLÄÚÈÝ£¬²»ÌîÐ´ÔòÏÔÊ¾Ä¬ÈÏµÄÌáÊ¾ÄÚÈÝ¡£</p>
+					<p class="comment"><a href="" @click.prevent="showBodyTemplate">[ä½¿ç”¨æ¨¡æ¿]</a>ã€‚å½“è¾¾åˆ°æµé‡é™åˆ¶æ—¶ç½‘é¡µæ˜¾ç¤ºçš„HTMLå†…å®¹ï¼Œä¸å¡«å†™åˆ™æ˜¾ç¤ºé»˜è®¤çš„æç¤ºå†…å®¹ã€‚</p>
 				</td>
 			</tr>
 		</tbody>

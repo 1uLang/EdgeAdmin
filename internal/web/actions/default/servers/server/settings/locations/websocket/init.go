@@ -14,7 +14,7 @@ func init() {
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
 			Helper(locationutils.NewLocationHelper()).
 			Helper(serverutils.NewServerHelper()).
-			Data("tinyMenuItem", "websocket").Data("teaMenu", "waf").
+			Data("tinyMenuItem", "websocket").
 			Prefix("/servers/server/settings/locations/websocket").
 			GetPost("", new(IndexAction)).
 			EndAll()

@@ -35,7 +35,7 @@ Tea.context(function () {
 		teaweb.popup("/servers/certs/acme/accounts/createPopup?providerCode=" + this.providerCode, {
 			height: "24em",
 			callback: function () {
-				teaweb.successToast("创建成功，已自动选中", 1500, function () {
+				teaweb.successToast("鍒涘缓鎴愬姛锛屽凡鑷姩閫変腑", 1500, function () {
 					that.$post(".accountsWithCode")
 						.params({
 							code: that.providerCode

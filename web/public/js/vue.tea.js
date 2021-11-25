@@ -1690,91 +1690,91 @@ if (!Array.from) {
 			throw new Error("Tea.scope(fn) should accept a function argument");
 		}
 
-        // 合并context
-        contextFunctions.push(fn);
-    };
+		// 合并context
+		contextFunctions.push(fn);
+	};
 
-    Vue.config.errorHandler = function (error, vue) {
-        var match = error.toString().match(/(\w+) is not defined/);
-        if (match != null && match.length === 2) {
-            vue[match[1]] = "";
-            vue.$set(vue, match[1], "");
-            vue.$forceUpdate();
+	Vue.config.errorHandler = function (error, vue) {
+		var match = error.toString().match(/(\w+) is not defined/);
+		if (match != null && match.length === 2) {
+			vue[match[1]] = "";
+			vue.$set(vue, match[1], "");
+			vue.$forceUpdate();
 
-            console.error(error);
-            return;
-        }
+			console.error(error);
+			return;
+		}
 
-        throw new Error(error.toString());
-    };
+		throw new Error(error.toString());
+	};
 
-    this.load = function () {
-        if (typeof(window.TEA.ACTION.data) !== "undefined") {
-            data = window.TEA.ACTION.data;
-        }
+	this.load = function () {
+		if (typeof (window.TEA.ACTION.data) !== "undefined") {
+			data = window.TEA.ACTION.data;
+		}
 
-        var innerMethods = {
-            $delay: Tea.delay,
-            $get: function (action) {
-                return Tea.action(action).get();
-            },
-            $post: function (action) {
-                return Tea.action(action).post();
-            },
-            $go: Tea.go,
-            $url: Tea.url,
-            $find: Tea.element
-        };
+		var innerMethods = {
+			$delay: Tea.delay,
+			$get: function (action) {
+				return Tea.action(action).get();
+			},
+			$post: function (action) {
+				return Tea.action(action).post();
+			},
+			$go: Tea.go,
+			$url: Tea.url,
+			$find: Tea.element
+		};
 
-        var vueElement = document.getElementById("tea-app");
-        if (vueElement == null && document.body) {
-            var rootNodes = document.body.childNodes;
-            for (var i = 0; i < rootNodes.length; i ++) {
-                var rootNode = rootNodes[i];
-                if (rootNode.nodeType == 1) {
-                    vueElement = rootNode;
-                    vueElement.setAttribute("tea-root", "generated");
-                    break;
-                }
-            }
-        }
+		var vueElement = document.getElementById("tea-app");
+		if (vueElement == null && document.body) {
+			var rootNodes = document.body.childNodes;
+			for (var i = 0; i < rootNodes.length; i++) {
+				var rootNode = rootNodes[i];
+				if (rootNode.nodeType == 1) {
+					vueElement = rootNode;
+					vueElement.setAttribute("tea-root", "generated");
+					break;
+				}
+			}
+		}
 
-        if (contextFunctions.length > 0) {
-            var context = {};
-            context.Tea = window.Tea;
+		if (contextFunctions.length > 0) {
+			var context = {};
+			context.Tea = window.Tea;
 
-            // 内置方法
-            for (var methodName in innerMethods) {
-                if (innerMethods.hasOwnProperty(methodName)) {
-                    context[methodName] = innerMethods[methodName];
-                }
-            }
+			// 内置方法
+			for (var methodName in innerMethods) {
+				if (innerMethods.hasOwnProperty(methodName)) {
+					context[methodName] = innerMethods[methodName];
+				}
+			}
 
-            for (key in data) {
-                if (!data.hasOwnProperty(key)) {
-                    continue;
-                }
-                context[key] = data[key];
-            }
+			for (key in data) {
+				if (!data.hasOwnProperty(key)) {
+					continue;
+				}
+				context[key] = data[key];
+			}
 
-            for (var i = 0; i < contextFunctions.length; i ++) {
-                var contextFn = contextFunctions[i];
-                if (typeof(contextFn) != "function") {
-                    continue;
-                }
-                contextFn.call(context);
-                for (var key in context) {
-                    if (!context.hasOwnProperty(key)) {
-                        continue;
-                    }
-                    if (typeof(key) != "string") {
-                        continue;
-                    }
+			for (var i = 0; i < contextFunctions.length; i++) {
+				var contextFn = contextFunctions[i];
+				if (typeof (contextFn) != "function") {
+					continue;
+				}
+				contextFn.call(context);
+				for (var key in context) {
+					if (!context.hasOwnProperty(key)) {
+						continue;
+					}
+					if (typeof (key) != "string") {
+						continue;
+					}
 
-                    // 跳过自定义方法
-                    if (key.length > 0 && key[0] == "$") {
-                        continue;
-                    }
+					// 跳过自定义方法
+					if (key.length > 0 && key[0] == "$") {
+						continue;
+					}
 
 					var value = context[key];
 					if (typeof (value) === "function") {
@@ -1798,9 +1798,9 @@ if (!Array.from) {
 				}
 			}
 
-            window.Tea.Vue = new Vue({
-                el: vueElement,
-                data: context,
+			window.Tea.Vue = new Vue({
+				el: vueElement,
+				data: context,
 
 				// 内置方法
 				methods: innerMethods
@@ -1816,34 +1816,34 @@ if (!Array.from) {
 				context[key] = data[key];
 			}
 
-            window.Tea.Vue = new Vue({
-                el: vueElement,
-                data: context,
+			window.Tea.Vue = new Vue({
+				el: vueElement,
+				data: context,
 
-                // 内置方法
-                methods: {
-                    $delay: Tea.delay,
-                    $get: function (action) {
-                        return Tea.action(action).get();
-                    },
-                    $post: function (action) {
-                        return Tea.action(action).post();
-                    },
-                    $go: Tea.go,
-                    $url: Tea.url,
-                    $find: Tea.element
-                }
-            });
-        }
-    };
+				// 内置方法
+				methods: {
+					$delay: Tea.delay,
+					$get: function (action) {
+						return Tea.action(action).get();
+					},
+					$post: function (action) {
+						return Tea.action(action).post();
+					},
+					$go: Tea.go,
+					$url: Tea.url,
+					$find: Tea.element
+				}
+			});
+		}
+	};
 
-    document.addEventListener("DOMContentLoaded", function () {
-        that.load();
+	document.addEventListener("DOMContentLoaded", function () {
+		that.load();
 
-        if (document.body) {
-            Tea.activate(document.body);
-        }
-    });
+		if (document.body) {
+			Tea.activate(document.body);
+		}
+	});
 })();
 
 /**
@@ -1856,86 +1856,86 @@ if (!Array.from) {
  * @returns {*}
  */
 window.Tea.serialize = function (a, traditional) {
-    var prefix,
-        s = [],
-        add = function (key, valueOrFunction) {
+	var prefix,
+		s = [],
+		add = function (key, valueOrFunction) {
 
-            // If value is a function, invoke it and use its return value
-            var value = (typeof(valueOrFunction) === "function") ?
-                valueOrFunction() :
-                valueOrFunction;
+			// If value is a function, invoke it and use its return value
+			var value = (typeof (valueOrFunction) === "function") ?
+				valueOrFunction() :
+				valueOrFunction;
 
-            s[s.length] = encodeURIComponent(key) + "=" +
-                encodeURIComponent(value == null ? "" : value);
-        };
+			s[s.length] = encodeURIComponent(key) + "=" +
+				encodeURIComponent(value == null ? "" : value);
+		};
 
-    var
-        rbracket = /\[]$/;
+	var
+		rbracket = /\[]$/;
 
-    var buildParams = function (prefix, obj, traditional, add) {
-        var name;
-        if (Array.isArray(obj)) {
-            // Serialize array item.
-            for (var i in obj) {
-                if (!obj.hasOwnProperty(i)) {
-                    continue;
-                }
-                var v = obj[i];
-                if (traditional || rbracket.test(prefix)) {
+	var buildParams = function (prefix, obj, traditional, add) {
+		var name;
+		if (Array.isArray(obj)) {
+			// Serialize array item.
+			for (var i in obj) {
+				if (!obj.hasOwnProperty(i)) {
+					continue;
+				}
+				var v = obj[i];
+				if (traditional || rbracket.test(prefix)) {
 
-                    // Treat each array item as a scalar.
-                    add(prefix, v);
+					// Treat each array item as a scalar.
+					add(prefix, v);
 
-                } else {
+				} else {
 
-                    // Item is non-scalar (array or object), encode its numeric index.
-                    buildParams(
-                        prefix + "[" + (typeof v === "object" && v != null ? i : "") + "]",
-                        v,
-                        traditional,
-                        add
-                    );
-                }
-            }
+					// Item is non-scalar (array or object), encode its numeric index.
+					buildParams(
+						prefix + "[" + (typeof v === "object" && v != null ? i : "") + "]",
+						v,
+						traditional,
+						add
+					);
+				}
+			}
 
-        } else if (!traditional && typeof(obj) === "object") {
+		} else if (!traditional && typeof (obj) === "object") {
 
-            // Serialize object item.
-            for (name in obj) {
-                buildParams(prefix + "[" + name + "]", obj[name], traditional, add);
-            }
+			// Serialize object item.
+			for (name in obj) {
+				buildParams(prefix + "[" + name + "]", obj[name], traditional, add);
+			}
 
-        } else {
+		} else {
 
-            // Serialize scalar item.
-            add(prefix, obj);
-        }
-    };
+			// Serialize scalar item.
+			add(prefix, obj);
+		}
+	};
 
-    // If an array was passed in, assume that it is an array of form elements.
-    if (Array.isArray(a)) {
-        // Serialize the form elements
-        for (key in a) {
-            if (!a.hasOwnProperty(key)) {
-                continue;
-            }
-            add(key, a[key]);
-        }
+	// If an array was passed in, assume that it is an array of form elements.
+	if (Array.isArray(a)) {
+		// Serialize the form elements
+		for (key in a) {
+			if (!a.hasOwnProperty(key)) {
+				continue;
+			}
+			add(key, a[key]);
+		}
 
-    } else {
+	} else {
 
-        // If traditional, encode the "old" way (the way 1.3.2 or older
-        // did it), otherwise encode params recursively.
-        for (prefix in a) {
-            if (!a.hasOwnProperty(prefix)) {
-                continue;
-            }
-            buildParams(prefix, a[prefix], traditional, add);
-        }
-    }
+		// If traditional, encode the "old" way (the way 1.3.2 or older
+		// did it), otherwise encode params recursively.
+		for (prefix in a) {
+			if (!a.hasOwnProperty(prefix)) {
+				continue;
+			}
+			buildParams(prefix, a[prefix], traditional, add);
+		}
+	}
 
-    // Return the resulting serialization
-    return s.join("&");
+	// Return the resulting serialization
+	return s.join("&");
 };
 
 /**
@@ -1952,15 +1952,15 @@ window.Tea.url = function (action, params, hashParams) {
 		action = window.location.pathname;
 	}
 
-    var config = window.TEA.ACTION;
-    var controller = config.parent;
-    var module = config.module;
-    var base = config.base;
-    var actionParam = config.actionParam;
+	var config = window.TEA.ACTION;
+	var controller = config.parent;
+	var module = config.module;
+	var base = config.base;
+	var actionParam = config.actionParam;
 
-    var url;
-    if (action.match(/\//)) {//支持URL
-        url = action;
+	var url;
+	if (action.match(/\//)) {//支持URL
+		url = action;
 
 		if (typeof (params) === "object") {
 			var query = Tea.serialize(params);
@@ -2031,12 +2031,12 @@ window.Tea.url = function (action, params, hashParams) {
  * @param hash 附带的锚点参数
  */
 window.Tea.go = function (action, params, hash) {
-    var url = Tea.url(action, params);
-    if (hash && hash.length > 0) {
-        url += "#" + hash;
-    }
+	var url = Tea.url(action, params);
+	if (hash && hash.length > 0) {
+		url += "#" + hash;
+	}
 
-    window.location.href = url;
+	window.location.href = url;
 };
 
 /**
@@ -2066,49 +2066,41 @@ window.Tea.formatBytes = function (bytes) {
  * @returns {number}
  */
 window.Tea.versionCompare = function compare(a, b) {
-    if (a === b) {
-        return 0;
-    }
+	if (a === b) {
+		return 0;
+	}
 
-    var a_components = a.split(".");
-    var b_components = b.split(".");
+	var a_components = a.split(".");
+	var b_components = b.split(".");
 
-    var len = Math.min(a_components.length, b_components.length);
+	var len = Math.min(a_components.length, b_components.length);
 
-    // loop while the components are equal
-    for (var i = 0; i < len; i++) {
-        // A bigger than B
-        if (parseInt(a_components[i]) > parseInt(b_components[i])) {
-            return 1;
-        }
+	// loop while the components are equal
+	for (var i = 0; i < len; i++) {
+		// A bigger than B
+		if (parseInt(a_components[i]) > parseInt(b_components[i])) {
+			return 1;
+		}
 
-        // B bigger than A
-        if (parseInt(a_components[i]) < parseInt(b_components[i])) {
-            return -1;
-        }
-    }
+		// B bigger than A
+		if (parseInt(a_components[i]) < parseInt(b_components[i])) {
+			return -1;
+		}
+	}
 
-    // If one's a prefix of the other, the longer one is greater.
-    if (a_components.length > b_components.length) {
-        return 1;
-    }
+	// If one's a prefix of the other, the longer one is greater.
+	if (a_components.length > b_components.length) {
+		return 1;
+	}
 
-    if (a_components.length < b_components.length) {
-        return -1;
-    }
+	if (a_components.length < b_components.length) {
+		return -1;
+	}
 
-    // Otherwise they are the same.
-    return 0;
+	// Otherwise they are the same.
+	return 0;
 };
 
-
-//打开和关闭等待框 value close:none  open:block
-window.Tea.dialogBoxEnabled = function (enabled) {
-    let dialogBox = document.getElementById("waitting-dialog")
-    if(dialogBox){
-        dialogBox.style.display=enabled
-    }
-}
 
 /**
  * 延时执行
@@ -2117,14 +2109,12 @@ window.Tea.dialogBoxEnabled = function (enabled) {
  * @param ms 延时长度
  */
 window.Tea.delay = function (fn, ms) {
-    if (typeof(ms) === "undefined") {
-        ms = 10;
-    }
-    setTimeout(function () {
-        fn.call(Tea.Vue);
-        //关闭等待框
-        Tea.dialogBoxEnabled("none")
-    }, ms);
+	if (typeof (ms) === "undefined") {
+		ms = 10;
+	}
+	setTimeout(function () {
+		fn.call(Tea.Vue);
+	}, ms);
 };
 
 /**
@@ -2135,217 +2125,197 @@ window.Tea.delay = function (fn, ms) {
  * @constructor
  */
 window.Tea.Action = function (action, params) {
+	var _action = action;
+	var _params = params;
+	var _successFn;
+	var _failFn;
+	var _errorFn;
+	var _doneFn;
+	var _method = "POST";
+	var _timeout = 30;
+	var _delay = 0;
+	var _progressFn;
+	var _refresh = false;
 
-    var _action = action;
-    var _params = params;
-    var _successFn;
-    var _failFn;
-    var _errorFn;
-    var _doneFn;
-    var _method = "POST";
-    var _timeout = 60;
-    var _delay = 0;
-    var _progressFn;
-    var _refresh = false;
-    var _showDialog = false;
+	this.params = function (params) {
+		_params = params;
+		return this;
+	};
 
-    this.params = function (params) {
-        _params = params;
-        return this;
-    };
+	this.form = function (form) {
+		_params = new FormData(form);
+		return this;
+	};
 
-    this.form = function (form) {
-        _params = new FormData(form);
-        return this;
-    };
+	this.success = function (successFn) {
+		_successFn = successFn;
+		return this;
+	};
 
-    this.success = function (successFn) {
-        _successFn = successFn;
-        return this;
-    };
+	this.fail = function (failFn) {
+		_failFn = failFn;
+		return this;
+	};
 
-    this.fail = function (failFn) {
-        _failFn = failFn;
-        return this;
-    };
+	this.error = function (errorFn) {
+		_errorFn = errorFn;
+		return this;
+	};
 
-    this.error = function (errorFn) {
-        _errorFn = errorFn;
-        return this;
-    };
+	this.done = function (doneFn) {
+		_doneFn = doneFn;
+		return this;
+	};
 
-    this.done = function (doneFn) {
-        _doneFn = doneFn;
-        return this;
-    };
+	this.timeout = function (timeout) {
+		_timeout = timeout;
+		return this;
+	};
 
-    this.timeout = function (timeout) {
-        _timeout = timeout;
-        return this;
-    };
+	this.delay = function (delay) {
+		_delay = delay;
+		return this;
+	};
 
-    this.delay = function (delay) {
-        _delay = delay;
-        return this;
-    };
+	this.progress = function (progressFn) {
+		_progressFn = progressFn;
+		return this;
+	};
 
-    this.progress = function (progressFn) {
-        _progressFn = progressFn;
-        return this;
-    };
+	this.refresh = function () {
+		_refresh = true;
+		return this;
+	};
 
-    this.refresh = function () {
-        _refresh = true;
-        return this;
-    };
+	this.post = function () {
+		_method = "POST";
+		setTimeout(this._post);
 
-    this.post = function () {
-        _method = "POST";
-        setTimeout(this._post);
+		return this;
+	};
 
-        return this;
-    };
+	this.get = function () {
+		_method = "GET";
+		setTimeout(this._post);
 
-    this.get = function () {
-        _method = "GET";
-        setTimeout(this._post);
+		return this;
+	};
 
-        return this;
-    };
+	this._post = function () {
+		var params = _params;
 
-    this.showDialog = function (showDialog) {
-        _showDialog = showDialog;
-        return this;
-    }
-    
+		// 参数配置：https://github.com/axios/axios#request-config
+		var config = {
+			method: _method,
+			url: Tea.url(_action),
+			timeout: _timeout * 1000,
+			headers: {
+				"X-Requested-With": "XMLHttpRequest"
+			}
+		};
 
-    this._post = function () {
-        var params = _params;
+		if (_progressFn != null && typeof (_progressFn) == "function") {
+			config["onUploadProgress"] = function (event) {
+				_progressFn.call(Tea.Vue, event.loaded, event.total, event);
+			};
+		}
 
-        // 参数配置：https://github.com/axios/axios#request-config
-        var config = {
-            method: _method,
-            url: Tea.url(_action),
-            timeout: _timeout * 1000,
-            headers: {
-                "X-Requested-With": "XMLHttpRequest"
-            }
-        };
+		if (_method === "GET") {
+			config["params"] = params;
+		} else {
+			if (typeof (params) === "object" && params instanceof FormData) {
+				Array.from(params).$each(function (name, object) {
+					if (object != null && object instanceof File) {
+						if (object.size === 0 && object.name.length === 0) {
+							params.delete(name);
+						}
+					}
+				});
+				config["data"] = params;
+			} else {
+				var formData = new FormData();
+				for (var key in params) {
+					if (!params.hasOwnProperty(key)) {
+						continue;
+					}
 
-        if (_progressFn != null && typeof(_progressFn) == "function") {
-            config["onUploadProgress"] = function (event) {
-               _progressFn.call(Tea.Vue, event.loaded, event.total, event);
-            };
-        }
+					if (params[key] == null) {
+						formData.append(key, "");
+					} else {
+						if (typeof (params[key]) == "object" && (params[key] instanceof Array)) {
+							for (var i = 0; i < params[key].length; i++) {
+								formData.append(key, params[key][i]);
+							}
+						} else {
+							formData.append(key, params[key]);
+						}
+					}
+				}
 
-        if (_method === "GET") {
-            config["params"] = params;
-        }
-        else {
-            if (typeof(params) === "object" && params instanceof FormData) {
-                Array.from(params).$each(function (name, object) {
-                    if (object != null && object instanceof File) {
-                        if (object.size === 0 && object.name.length === 0) {
-                            params.delete(name);
-                        }
-                    }
-                });
-                config["data"] = params;
-            }
-            else {
-                var formData = new FormData();
-                for (var key in params) {
-                    if (!params.hasOwnProperty(key)) {
-                        continue;
-                    }
+				config["data"] = formData;
+			}
+		}
 
-                    if (params[key] == null) {
-                        formData.append(key, "");
-                    }
-                    else {
-                        if (typeof(params[key]) == "object" && (params[key] instanceof Array)) {
-                            for (var i = 0; i < params[key].length; i ++) {
-                                formData.append(key, params[key][i]);
-                            }
-                        } else {
-                            formData.append(key, params[key]);
-                        }
-                    }
-                }
+		axios(config)
+			.then(function (response) {
+				response = response.data;
 
-                config["data"] = formData;
-            }
-        }
-        if(_showDialog){
-            Tea.dialogBoxEnabled("block")
-        }
-        axios(config)
-            .then(function (response) {
-                response = response.data;
+				setTimeout(function () {
+					if (typeof (response) !== "object" || typeof (response.code) === "undefined") {
+						if (typeof (_errorFn) === "function") {
+							_errorFn.call(Tea.Vue, {});
+						}
+						return;
+					}
 
-                setTimeout(function () {
-                    if (typeof(response) !== "object" || typeof(response.code) === "undefined") {
-                        if (typeof(_errorFn) === "function") {
-                            _errorFn.call(Tea.Vue, {});
-                        }
-                        return;
-                    }
+					var code = parseInt(response.code, 10);
+					if (code === 200) {
+						if (typeof (_successFn) === "function") {
+							var result = _successFn.call(Tea.Vue, response);
+							if (typeof (result) === "boolean" && !result) {
+								return;
+							}
+						}
 
-                    var code = parseInt(response.code, 10);
-                    if (code === 200) {
-                        if (typeof(_successFn) === "function") {
-                            var result = _successFn.call(Tea.Vue, response);
-                            if (typeof(result) === "boolean" && !result) {
-                                return;
-                            }
-                        }
+						if (response.message != null && response.message.length > 0) {
+							alert(response.message);
+						}
 
-                        if (response.message != null && response.message.length > 0) {
-                            alert(response.message);
-                        }
+						if (response.next != null && typeof (response.next) === "object") {
+							if (response.next.action === "*refresh") {
+								window.location.reload();
+							} else {
+								Tea.go(response.next.action, response.next.params, response.next.hash);
+							}
+						}
 
-                        if (response.next != null && typeof(response.next) === "object") {
-                            if (response.next.action === "*refresh") {
-                                window.location.reload();
-                            }
-                            else {
-                                Tea.go(response.next.action, response.next.params, response.next.hash);
-                            }
-                        }
+						// 自动刷新
+						if (_refresh) {
+							window.location.reload();
+						}
+					} else {
+						if (typeof (_failFn) === "function") {
+							_failFn.call(Tea.Vue, response);
+						} else {
+							Tea.failResponse(response);
+						}
+					}
+				});
+			})
+			.catch(function (error) {
+				console.log(error);
 
-                        // 自动刷新
-                        if (_refresh) {
-                            window.location.reload();
-                        }
-                    }
-                    else {
-                        if (typeof(_failFn) === "function") {
-                            _failFn.call(Tea.Vue, response);
-                        }
-                        else {
-                            Tea.failResponse(response);
-                        }
-                    }
-                });
-            })
-            .catch(function (error) {
-                console.log(error);
-
-                if (typeof(_errorFn) === "function") {
-                    _errorFn.call(Tea.Vue, {});
-                }
-            })
-            .then(function () {
-                if(_showDialog){
-                    Tea.dialogBoxEnabled("none")
-                }
-                
-                // console.log("done");
-                if (typeof(_doneFn) == "function") {
-                    _doneFn.call(Tea.Vue, {});
-                }
-            });
-    };
+				if (typeof (_errorFn) === "function") {
+					_errorFn.call(Tea.Vue, { message: error.message });
+				}
+			})
+			.then(function () {
+				// console.log("done");
+				if (typeof (_doneFn) == "function") {
+					_doneFn.call(Tea.Vue, {});
+				}
+			});
+	};
 };
 
 /**
@@ -2355,7 +2325,7 @@ window.Tea.Action = function (action, params) {
  * @returns {Window.Tea.Action}
  */
 window.Tea.action = function (action) {
-    return new this.Action(action);
+	return new this.Action(action);
 };
 
 /**
@@ -2373,32 +2343,31 @@ window.Tea.action = function (action) {
  * - data-tea-progress
  */
 window.Tea.activate = function (element) {
-    var nodes = Tea.element("*[data-tea-action]", element);
-    if (nodes.length === 0) {
-        return;
-    }
-    for (var i = 0; i < nodes.length; i++) {
-        var node = nodes[i];
+	var nodes = Tea.element("*[data-tea-action]", element);
+	if (nodes.length === 0) {
+		return;
+	}
+	for (var i = 0; i < nodes.length; i++) {
+		var node = nodes[i];
 
-        if (node.tagName.toUpperCase() === "FORM") {
-            Tea.element(node).unbind("submit").bind("submit", function (e) {
-                Tea.runActionOn(this);
+		if (node.tagName.toUpperCase() === "FORM") {
+			Tea.element(node).unbind("submit").bind("submit", function (e) {
+				Tea.runActionOn(this);
 
-                e.preventDefault();
-                e.stopPropagation();
-            });
-        }
-        else {
-            Tea.element(node).unbind("click").bind("click", function (e) {
-                Tea.runActionOn(this);
+				e.preventDefault();
+				e.stopPropagation();
+			});
+		} else {
+			Tea.element(node).unbind("click").bind("click", function (e) {
+				Tea.runActionOn(this);
 
-                e.preventDefault();
-                e.stopPropagation();
+				e.preventDefault();
+				e.stopPropagation();
 
-                return false;
-            });
-        }
-    }
+				return false;
+			});
+		}
+	}
 };
 
 /**
@@ -2407,327 +2376,326 @@ window.Tea.activate = function (element) {
  * @param element 元素
  */
 window.Tea.runActionOn = function (element) {
-    var form = Tea.element(element);
-    var action = form.attr("data-tea-action");
-    var timeout = form.attr("data-tea-timeout");
-    var confirm = form.attr("data-tea-confirm");
-    var beforeFn = form.attr("data-tea-before");
-    var successFn = form.attr("data-tea-success");
-    var failFn = form.attr("data-tea-fail");
-    var errorFn = form.attr("data-tea-error");
-    var progressFn = form.attr("data-tea-progress");
-    var doneFn = form.attr("data-tea-done");
-    if (confirm != null && confirm.length > 0 && !window.confirm(confirm)) {
-        return;
-    }
+	var form = Tea.element(element);
+	var action = form.attr("data-tea-action");
+	var timeout = form.attr("data-tea-timeout");
+	var confirm = form.attr("data-tea-confirm");
+	var beforeFn = form.attr("data-tea-before");
+	var successFn = form.attr("data-tea-success");
+	var failFn = form.attr("data-tea-fail");
+	var errorFn = form.attr("data-tea-error");
+	var progressFn = form.attr("data-tea-progress");
+	var doneFn = form.attr("data-tea-done");
+	if (confirm != null && confirm.length > 0 && !window.confirm(confirm)) {
+		return;
+	}
 
-    //执行前调用beforeFn
-    if (beforeFn != null && beforeFn.length > 0) {
-        beforeFn = beforeFn.split("(")[0].trim();
-        if (typeof(Tea.Vue[beforeFn]) === "function") {
-            var result = Tea.Vue[beforeFn].call(Tea.Vue, form);
-            if (typeof(result) === "boolean" && !result) {
-                return;
-            }
-        }
-    }
+	//执行前调用beforeFn
+	if (beforeFn != null && beforeFn.length > 0) {
+		beforeFn = beforeFn.split("(")[0].trim();
+		if (typeof (Tea.Vue[beforeFn]) === "function") {
+			var result = Tea.Vue[beforeFn].call(Tea.Vue, form);
+			if (typeof (result) === "boolean" && !result) {
+				return;
+			}
+		}
+	}
 
-    //请求对象
-    var actionObject = Tea.action(action)
-        .post();
+	//请求对象
+	var actionObject = Tea.action(action)
+		.post();
 
-    if (successFn != null && successFn.length > 0) {
-        if (typeof(Tea.Vue[successFn]) === "function") {
-            actionObject.success(function (resp) {
-               Tea.Vue[successFn].call(Tea.Vue, resp);
-            });
-        }
-    }
+	if (successFn != null && successFn.length > 0) {
+		if (typeof (Tea.Vue[successFn]) === "function") {
+			actionObject.success(function (resp) {
+				Tea.Vue[successFn].call(Tea.Vue, resp);
+			});
+		}
+	}
 
-    if (failFn != null && failFn.length > 0) {
-        if (typeof(Tea.Vue[failFn]) === "function") {
-            actionObject.fail(function (resp) {
-                Tea.Vue[failFn].call(Tea.Vue, resp);
-            });
-        }
-    }
+	if (failFn != null && failFn.length > 0) {
+		if (typeof (Tea.Vue[failFn]) === "function") {
+			actionObject.fail(function (resp) {
+				Tea.Vue[failFn].call(Tea.Vue, resp);
+			});
+		}
+	}
 
-    if (errorFn != null && errorFn.length > 0) {
-        if (typeof(Tea.Vue[errorFn]) === "function") {
-            actionObject.error(function () {
-                Tea.Vue[errorFn].call(Tea.Vue);
-            });
-        }
-    }
+	if (errorFn != null && errorFn.length > 0) {
+		if (typeof (Tea.Vue[errorFn]) === "function") {
+			actionObject.error(function () {
+				Tea.Vue[errorFn].call(Tea.Vue);
+			});
+		}
+	}
 
-    if (progressFn != null && progressFn.length > 0) {
-        if (typeof(Tea.Vue[progressFn]) === "function") {
-            actionObject.progress(function () {
-                Tea.Vue[progressFn].apply(Tea.Vue, arguments);
-            });
-        }
-    }
+	if (progressFn != null && progressFn.length > 0) {
+		if (typeof (Tea.Vue[progressFn]) === "function") {
+			actionObject.progress(function () {
+				Tea.Vue[progressFn].apply(Tea.Vue, arguments);
+			});
+		}
+	}
 
-    if (doneFn != null && doneFn.length > 0) {
-        if (typeof(Tea.Vue[doneFn]) === "function") {
-            actionObject.done(function () {
-                Tea.Vue[doneFn].apply(Tea.Vue, arguments);
-            });
-        }
-    }
+	if (doneFn != null && doneFn.length > 0) {
+		if (typeof (Tea.Vue[doneFn]) === "function") {
+			actionObject.done(function () {
+				Tea.Vue[doneFn].apply(Tea.Vue, arguments);
+			});
+		}
+	}
 
-    //超时时间
-    if (timeout != null) {
-        timeout = parseFloat(timeout);
-        if (!isNaN(timeout)) {
-            actionObject.timeout(timeout);
-        }
-    }
+	//超时时间
+	if (timeout != null) {
+		timeout = parseFloat(timeout);
+		if (!isNaN(timeout)) {
+			actionObject.timeout(timeout);
+		}
+	}
 
-    //参数
-    if (element.tagName.toUpperCase() === "FORM") {
-        actionObject.form(element);
-    }
-    else {
-        var attributes = element.attributes;
-        var params = {};
-        for (var i = 0; i < attributes.length; i++) {
-            var attr = attributes[i];
-            var match = attr.name.toString().match(/^data-(.+)$/);
-            if (match && !match[1].match(/^tea-/)) {
-                var pieces = match[1].split("-");
-                for (var j = 1; j < pieces.length; j++) {
-                    pieces[j] = pieces[j][0].toUpperCase() + pieces[j].substr(1);
-                }
-                var name = pieces.join("");
-                params[name] = attr.value;
-            }
-        }
-        actionObject.params(params);
-    }
+	//参数
+	if (element.tagName.toUpperCase() === "FORM") {
+		actionObject.form(element);
+	} else {
+		var attributes = element.attributes;
+		var params = {};
+		for (var i = 0; i < attributes.length; i++) {
+			var attr = attributes[i];
+			var match = attr.name.toString().match(/^data-(.+)$/);
+			if (match && !match[1].match(/^tea-/)) {
+				var pieces = match[1].split("-");
+				for (var j = 1; j < pieces.length; j++) {
+					pieces[j] = pieces[j][0].toUpperCase() + pieces[j].substr(1);
+				}
+				var name = pieces.join("");
+				params[name] = attr.value;
+			}
+		}
+		actionObject.params(params);
+	}
 };
 
 var teaEventListeners = {}; // element => { event => [ callback1, ... ] }
 function TeaElementObjects(elements) {
-    var that = this;
+	var that = this;
 
-    elements.$each(function (index, element) {
-        that[index] = element;
-    });
+	elements.$each(function (index, element) {
+		that[index] = element;
+	});
 
-    this.bind = function (event, listener) {
-        elements.$each(function (_, element) {
-            if (typeof(teaEventListeners[element]) == "undefined") {
-                teaEventListeners[element] = {};
-            }
-            if (typeof(teaEventListeners[element][event]) == "undefined") {
-                teaEventListeners[element][event] = [];
-            }
-            teaEventListeners[element][event].push(listener);
-            element.addEventListener(event, listener)
-        });
+	this.bind = function (event, listener) {
+		elements.$each(function (_, element) {
+			if (typeof (teaEventListeners[element]) == "undefined") {
+				teaEventListeners[element] = {};
+			}
+			if (typeof (teaEventListeners[element][event]) == "undefined") {
+				teaEventListeners[element][event] = [];
+			}
+			teaEventListeners[element][event].push(listener);
+			element.addEventListener(event, listener)
+		});
 
-        return this;
-    };
+		return this;
+	};
 
-    this.unbind = function (event) {
-        elements.$each(function (_, element) {
-            if (typeof(teaEventListeners[element]) == "undefined") {
-                return;
-            }
-            if (typeof(teaEventListeners[element][event]) == "undefined") {
-                return;
-            }
-            teaEventListeners[element][event].$each(function (_, listener) {
-                element.removeEventListener(event, listener);
-            });
-            teaEventListeners[element][event] = [];
-            var hasListeners = false;
-            for (var k in teaEventListeners[element]) {
-                if (!teaEventListeners[element].hasOwnProperty(k)) {
-                    continue;
-                }
+	this.unbind = function (event) {
+		elements.$each(function (_, element) {
+			if (typeof (teaEventListeners[element]) == "undefined") {
+				return;
+			}
+			if (typeof (teaEventListeners[element][event]) == "undefined") {
+				return;
+			}
+			teaEventListeners[element][event].$each(function (_, listener) {
+				element.removeEventListener(event, listener);
+			});
+			teaEventListeners[element][event] = [];
+			var hasListeners = false;
+			for (var k in teaEventListeners[element]) {
+				if (!teaEventListeners[element].hasOwnProperty(k)) {
+					continue;
+				}
 
-                if (teaEventListeners[element][k] instanceof Array && teaEventListeners[element][k].length > 0) {
-                    hasListeners = true;
-                }
-            }
+				if (teaEventListeners[element][k] instanceof Array && teaEventListeners[element][k].length > 0) {
+					hasListeners = true;
+				}
+			}
 
-            if (!hasListeners) {
-                delete(teaEventListeners[element]);
-            }
-        });
+			if (!hasListeners) {
+				delete (teaEventListeners[element]);
+			}
+		});
 
-        return this;
-    };
+		return this;
+	};
 
-    this.first = function () {
-        var first = elements.$first();
-        if (first != null) {
-            return Tea.element(first);
-        }
-        return new TeaElementObjects([]);
-    };
+	this.first = function () {
+		var first = elements.$first();
+		if (first != null) {
+			return Tea.element(first);
+		}
+		return new TeaElementObjects([]);
+	};
 
-    this.last = function () {
-        var last = elements.$last();
-        if (last != null) {
-            return Tea.element(last);
-        }
-        return new TeaElementObjects([]);
-    };
+	this.last = function () {
+		var last = elements.$last();
+		if (last != null) {
+			return Tea.element(last);
+		}
+		return new TeaElementObjects([]);
+	};
 
-    this.attrs = function () {
-        var first = this.first();
-        if (first.length === 0) {
-            return {};
-        }
+	this.attrs = function () {
+		var first = this.first();
+		if (first.length === 0) {
+			return {};
+		}
 
-        var attrs = {};
-        var node = first[0];
-        for (var i = 0; i < node.attributes.length; i ++) {
-            var attr = node.attributes[i];
-            attrs[attr.name] = attr.value;
-        }
-        return attrs;
-    };
+		var attrs = {};
+		var node = first[0];
+		for (var i = 0; i < node.attributes.length; i++) {
+			var attr = node.attributes[i];
+			attrs[attr.name] = attr.value;
+		}
+		return attrs;
+	};
 
-    this.attr = function (name, value) {
-        if (arguments.length === 0) {
-            return "";
-        }
+	this.attr = function (name, value) {
+		if (arguments.length === 0) {
+			return "";
+		}
 
-        if (arguments.length === 1) {
-            var attrs = this.attrs();
-            if (typeof(attrs[name]) !== "undefined") {
-                return attrs[name];
-            }
-            return "";
-        }
+		if (arguments.length === 1) {
+			var attrs = this.attrs();
+			if (typeof (attrs[name]) !== "undefined") {
+				return attrs[name];
+			}
+			return "";
+		}
 
-        var first = this.first();
-        if (first.length > 0) {
-            first[0].setAttribute(name, value);
-        }
+		var first = this.first();
+		if (first.length > 0) {
+			first[0].setAttribute(name, value);
+		}
 
-        return this;
-    };
+		return this;
+	};
 
-    this.tagName = function () {
-        var first = this.first();
-        if (first.length === 0) {
-            return "";
-        }
-        return first[0].tagName;
-    };
+	this.tagName = function () {
+		var first = this.first();
+		if (first.length === 0) {
+			return "";
+		}
+		return first[0].tagName;
+	};
 
-    this.focus = function () {
-        var first = this.first();
-        if (first.length === 0) {
-            return;
-        }
-        first[0].focus();
-    };
+	this.focus = function () {
+		var first = this.first();
+		if (first.length === 0) {
+			return;
+		}
+		first[0].focus();
+	};
 
-    this.blur = function () {
-        this.each(function (k, v) {
-            v.blur();
-        });
-    };
+	this.blur = function () {
+		this.each(function (k, v) {
+			v.blur();
+		});
+	};
 
-    this.each = function (iterator) {
-        elements.$each(function (index, element) {
-            iterator(index, element);
-        });
+	this.each = function (iterator) {
+		elements.$each(function (index, element) {
+			iterator(index, element);
+		});
 
-        return this;
-    };
+		return this;
+	};
 
-    this.find = function (selector) {
-        if (this.length == 0) {
-            return new TeaElementObjects([]);
-        }
-        return Tea.element(selector, this.first()[0]);
-    };
+	this.find = function (selector) {
+		if (this.length == 0) {
+			return new TeaElementObjects([]);
+		}
+		return Tea.element(selector, this.first()[0]);
+	};
 
-    this.hide = function () {
-        this.each(function (_, element) {
-            element.style.display = "none";
-        });
-        return this;
-    };
+	this.hide = function () {
+		this.each(function (_, element) {
+			element.style.display = "none";
+		});
+		return this;
+	};
 
-    this.show = function () {
-        this.each(function (_, element) {
-            element.style.display = "block";
-        });
-        return this;
-    };
+	this.show = function () {
+		this.each(function (_, element) {
+			element.style.display = "block";
+		});
+		return this;
+	};
 
-    this.text = function () {
-        if (arguments.length > 0) {
-            var text = arguments[0];
-            this.each(function (_, element) {
-                if (typeof(element.textContent) != "undefined") {
-                    element.textContent = text;
-                }
-                if (typeof(element.innerText) != "undefined") {
-                    element.innerText = text;
-                }
-            });
-            return this;
-        }
+	this.text = function () {
+		if (arguments.length > 0) {
+			var text = arguments[0];
+			this.each(function (_, element) {
+				if (typeof (element.textContent) != "undefined") {
+					element.textContent = text;
+				}
+				if (typeof (element.innerText) != "undefined") {
+					element.innerText = text;
+				}
+			});
+			return this;
+		}
 
-        if (this.length == 0) {
-            return "";
-        }
-        if (typeof(elements[0].textContent) == "string") {
-            return elements[0].textContent;
-        }
-        return elements[0].innerText;
-    };
+		if (this.length == 0) {
+			return "";
+		}
+		if (typeof (elements[0].textContent) == "string") {
+			return elements[0].textContent;
+		}
+		return elements[0].innerText;
+	};
 
-    this.html = function () {
-        if (arguments.length > 0) {
-            var html = arguments[0];
-            this.each(function (_, element) {
-                element.innerHTML = html;
-            });
-            return this;
-        }
+	this.html = function () {
+		if (arguments.length > 0) {
+			var html = arguments[0];
+			this.each(function (_, element) {
+				element.innerHTML = html;
+			});
+			return this;
+		}
 
-        if (this.length == 0) {
-            return "";
-        }
-        return elements[0].innerHTML;
-    };
+		if (this.length == 0) {
+			return "";
+		}
+		return elements[0].innerHTML;
+	};
 
-    this.val = function () {
-        if (arguments.length > 0) {
-            var value = arguments[0];
-            this.each(function (_, element) {
-                element.value = value;
-            });
-            return this;
-        }
+	this.val = function () {
+		if (arguments.length > 0) {
+			var value = arguments[0];
+			this.each(function (_, element) {
+				element.value = value;
+			});
+			return this;
+		}
 
-        if (this.length == 0) {
-            return "";
-        }
-        return elements[0].value;
-    };
+		if (this.length == 0) {
+			return "";
+		}
+		return elements[0].value;
+	};
 
-    this.remove = function () {
-        this.each(function (_, element) {
-            var parent = element.parentNode;
-            if (parent != null) {
-                parent.removeChild(element);
-            }
-        });
-        return this;
-    };
+	this.remove = function () {
+		this.each(function (_, element) {
+			var parent = element.parentNode;
+			if (parent != null) {
+				parent.removeChild(element);
+			}
+		});
+		return this;
+	};
 
-    this.length = elements.length;
+	this.length = elements.length;
 }
 
 /**
@@ -2738,22 +2706,20 @@ function TeaElementObjects(elements) {
  * @returns {*}
  */
 window.Tea.element = function (selector, parent) {
-    var elements = [];
-    if (typeof(selector) === "object" && /(function|object) \w+Element\b/.test(selector.constructor.toString())) {
-        elements = [selector];
-    }
-    else if (typeof(selector) === "object" && /function TeaElementObjects/.test(TeaElementObjects.constructor.toString())) {
-        return selector;
-    }
-    else if (typeof(selector) === "string") {
-        if (typeof(parent) === "object") {
-            elements = Array.from(parent.querySelectorAll(selector));
-        } else {
-            elements = Array.from(document.querySelectorAll(selector));
-        }
-    }
+	var elements = [];
+	if (typeof (selector) === "object" && /(function|object) \w+Element\b/.test(selector.constructor.toString())) {
+		elements = [selector];
+	} else if (typeof (selector) === "object" && /function TeaElementObjects/.test(TeaElementObjects.constructor.toString())) {
+		return selector;
+	} else if (typeof (selector) === "string") {
+		if (typeof (parent) === "object") {
+			elements = Array.from(parent.querySelectorAll(selector));
+		} else {
+			elements = Array.from(document.querySelectorAll(selector));
+		}
+	}
 
-    return new TeaElementObjects(elements);
+	return new TeaElementObjects(elements);
 };
 
 /**
@@ -2761,7 +2727,7 @@ window.Tea.element = function (selector, parent) {
  * @returns {number}
  */
 window.Tea.key = function () {
-    return Math.random()
+	return Math.random()
 };
 
 // 失败的响应处理
@@ -2782,22 +2748,21 @@ window.Tea.failResponse = function (response) {
 		return;
 	}
 
-    if (typeof(response.errors) === "object" && response.errors != null && response.errors.length > 0) {
-        /**
-         * errors: [
-         *  [field1, [ error1, error2, ....]
-         *  ...
-         * ]
-         * error: [ rule, message ]
-         */
-        var fieldName = response.errors[0].param;
-        var error = response.errors[0].messages[0];
-        var callback = function () {
+	if (typeof (response.errors) === "object" && response.errors != null && response.errors.length > 0) {
+		/**
+		 * errors: [
+		 *  [field1, [ error1, error2, ....]
+		 *  ...
+		 * ]
+		 * error: [ rule, message ]
+		 */
+		var fieldName = response.errors[0].param;
+		var error = response.errors[0].messages[0];
+		var callback = function () {
 			var element = Tea.element("*[name='" + fieldName + "']");
 			if (element) {
 				element.focus();
-			}
-			else {
+			} else {
 				var match = fieldName.match(/^(.+)\[(\d+)]$/);
 				if (match != null) {
 					var index = parseInt(match[2], 10);
@@ -2808,33 +2773,36 @@ window.Tea.failResponse = function (response) {
 				}
 			}
 		};
-        if (!hasMessage) {
-        	Tea.alert(error, callback);
-        } else {
-        	callback();
-		}
-    }
-};
-
-window.Tea.alert = function (message, callback) {
-	if (typeof(teaweb) != null) {
-		teaweb.warn(message, function () {
-			if (typeof(callback) == "function") {
-				callback();
-			}
-		});
-	} else {
-		alert(message);
-		if (typeof(callback) == "function") {
+		if (!hasMessage) {
+			Tea.alert(error, callback);
+		} else {
 			callback();
 		}
 	}
 };
 
-if (typeof(window.console) === "undefined") {
-    window.console = {
-        log: function () {},
-        error: function () {},
-        group: function () {}
-    };
+window.Tea.alert = function (message, callback) {
+	if (typeof (teaweb) != null) {
+		teaweb.warn(message, function () {
+			if (typeof (callback) == "function") {
+				callback();
+			}
+		});
+	} else {
+		alert(message);
+		if (typeof (callback) == "function") {
+			callback();
+		}
+	}
+};
+
+if (typeof (window.console) === "undefined") {
+	window.console = {
+		log: function () {
+		},
+		error: function () {
+		},
+		group: function () {
+		}
+	};
 }

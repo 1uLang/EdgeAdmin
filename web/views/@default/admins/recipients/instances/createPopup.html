@@ -79,7 +79,7 @@
                                 <a href="" title="删除" @click.prevent="removeWebHookHeader(index)"><i class="icon remove"></i></a>
                             </span>
                     </div>
-                    <button  style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="addWebHookHeader()" v-if="!webHookHeadersAdding">+</button>
+                    <button class="ui button tiny" type="button" @click.prevent="addWebHookHeader()" v-if="!webHookHeadersAdding">+</button>
                     <div v-if="webHookHeadersAdding">
                         <div class="ui fields inline">
                             <div class="ui field">
@@ -90,7 +90,7 @@
                                 <input type="text" placeholder="值" v-model="webHookHeadersAddingValue" size="50" maxlength="256" @keyup.enter="confirmWebHookHeadersAdding" @keypress.enter.prevent="1"/>
                             </div>
                         </div>
-                        <button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="confirmWebHookHeadersAdding()">确认添加</button>
+                        <button class="ui button tiny" type="button" @click.prevent="confirmWebHookHeadersAdding()">确认添加</button>
                         &nbsp;  <a href="" @click.prevent="cancelWebHookHeadersAdding()">取消</a>
                     </div>
                 </td>
@@ -111,7 +111,7 @@
                                     <a href="" title="删除" @click.prevent="removeWebHookParam(index)"><i class="icon remove"></i></a>
                                 </span>
                         </div>
-                        <button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="addWebHookParam()" v-if="!webHookParamsAdding">+</button>
+                        <button class="ui button tiny" type="button" @click.prevent="addWebHookParam()" v-if="!webHookParamsAdding">+</button>
                         <div v-if="webHookParamsAdding">
                             <input type="hidden" name="webHookContentType" value="params"/>
                             <div class="ui fields inline">
@@ -123,7 +123,7 @@
                                     <textarea type="text" placeholder="值" v-model="webHookParamsAddingValue" cols="50" maxlength="1024" rows="2"></textarea>
                                 </div>
                             </div>
-                            <button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="confirmWebHookParamsAdding()">确认添加</button>
+                            <button class="ui button tiny" type="button" @click.prevent="confirmWebHookParamsAdding()">确认添加</button>
                             &nbsp;  <a href="" @click.prevent="cancelWebHookParamsAdding()">取消</a>
                         </div>
                     </div>
@@ -191,14 +191,14 @@
                             <input type="text" name="envAddingValue" v-model="envAddingValue" placeholder="变量值" style="width:15em" @keyup.enter="confirmAddEnv" @keypress.enter.prevent="1"/>
                         </div>
                         <div class="ui field">
-                            <button style="background-color: #1b6aff;" class="ui button" type="button" @click="confirmAddEnv()">添加</button>
+                            <button class="ui button" type="button" @click="confirmAddEnv()">添加</button>
                         </div>
                         <div class="ui field">
                             <a href="" @click.prevent="cancelEnv()"><i class="icon remove"></i></a>
                         </div>
                     </div>
                     <div class="ui field">
-                        <button style="background-color: #1b6aff;" class="ui button small" type="button" @click="addEnv()">+</button>
+                        <button class="ui button small" type="button" @click="addEnv()">+</button>
                     </div>
                 </td>
             </tr>
@@ -303,14 +303,14 @@
                             <input type="text" name="aliyunSmsTemplateVarAddingValue" v-model="aliyunSmsTemplateVarAddingValue" placeholder="变量值" style="width:15em" @keyup.enter="confirmAddAliyunSmsTemplateVar" @keypress.enter.prevent="1"/>
                         </div>
                         <div class="ui field">
-                            <button style="background-color: #1b6aff;" class="ui button" type="button" @click="confirmAddAliyunSmsTemplateVar()">添加</button>
+                            <button class="ui button" type="button" @click="confirmAddAliyunSmsTemplateVar()">添加</button>
                         </div>
                         <div class="ui field">
                             <a href="" @click.prevent="cancelAliyunSmsTemplateVar()"><i class="icon remove"></i></a>
                         </div>
                     </div>
                     <div class="ui field">
-                        <button style="background-color: #1b6aff;" class="ui button small" type="button" @click="addAliyunSmsTemplateVar()">+</button>
+                        <button class="ui button small" type="button" @click="addAliyunSmsTemplateVar()">+</button>
                     </div>
                     <p class="comment">模板中使用的变量，在变量中可以使用<span class="ui label tiny">${MessageUser}</span>、<span class="ui label tiny">${MessageSubject}</span>和<span class="ui label tiny">${MessageBody}</span>来代表接收人标识、标题和内容。</p>
                 </td>

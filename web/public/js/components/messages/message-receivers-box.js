@@ -53,6 +53,6 @@ Vue.component("message-receivers-box", {
             </div>
              <div class="ui divider"></div>
         </div>
-      <button style="background-color: #1b6aff;" type="button" class="ui button tiny" @click.prevent="addReceiver">+</button>
+      <button type="button" class="ui button tiny" @click.prevent="addReceiver">+</button>
 </div>`
 })

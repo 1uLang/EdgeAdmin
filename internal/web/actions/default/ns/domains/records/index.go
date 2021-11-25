@@ -19,10 +19,10 @@ func (this *IndexAction) Init() {
 }
 
 func (this *IndexAction) RunGet(params struct {
-	DomainId  int64
-	Type      string
-	Keyword   string
-	RouteCode string
+	DomainId int64
+	Type     string
+	Keyword  string
+	RouteCode  string
 }) {
 	// 初始化域名信息
 	err := domainutils.InitDomain(this.Parent(), params.DomainId)

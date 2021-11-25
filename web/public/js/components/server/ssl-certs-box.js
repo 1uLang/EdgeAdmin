@@ -87,8 +87,8 @@ Vue.component("ssl-certs-box", {
 		<div class="ui divider" v-if="buttonsVisible()"></div>
 	</div>
 	<div v-if="buttonsVisible()">
-		<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="selectCert()">选择已有证书</button> &nbsp;
-		<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="uploadCert()">上传新证书</button> &nbsp;
+		<button class="ui button tiny" type="button" @click.prevent="selectCert()">选择已有证书</button> &nbsp;
+		<button class="ui button tiny" type="button" @click.prevent="uploadCert()">上传新证书</button> &nbsp;
 	</div>
 </div>`
 })

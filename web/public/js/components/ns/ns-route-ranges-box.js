@@ -94,12 +94,12 @@ Vue.component("ns-route-ranges-box", {
 				<input type="text" placeholder="结束IP" maxlength="15" size="15" v-model="ipRangeTo" ref="ipRangeTo" @keyup.enter="confirmIPRange" @keypress.enter.prevent="1"/>
 			</div>
 			<div class="ui field">
-				<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="confirmIPRange">确定</button> &nbsp;
+				<button class="ui button tiny" type="button" @click.prevent="confirmIPRange">确定</button> &nbsp;
 				<a href="" @click.prevent="cancelIPRange" title="取消"><i class="icon remove small"></i></a>
 			</div>
 		</div>
 	</div>
 	
-	<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="add">+</button>
+	<button class="ui button tiny" type="button" @click.prevent="add">+</button>
 </div>`
 })

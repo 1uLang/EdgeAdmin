@@ -1,11 +1,11 @@
 Vue.component("health-check-config-box", {
-    props: ["v-health-check-config"],
-    data: function () {
-        let healthCheckConfig = this.vHealthCheckConfig
-        let urlProtocol = "http"
-        let urlPort = ""
-        let urlRequestURI = "/"
-        let urlHost = ""
+	props: ["v-health-check-config"],
+	data: function () {
+		let healthCheckConfig = this.vHealthCheckConfig
+		let urlProtocol = "http"
+		let urlPort = ""
+		let urlRequestURI = "/"
+		let urlHost = ""
 
 		if (healthCheckConfig == null) {
 			healthCheckConfig = {
@@ -31,23 +31,23 @@ Vue.component("health-check-config-box", {
 				let url = new URL(healthCheckConfig.url)
 				urlProtocol = url.protocol.substring(0, url.protocol.length - 1)
 
-                // 域名
-                urlHost = url.host
-                if (urlHost == "%24%7Bhost%7D") {
-                    urlHost = "${host}"
-                }
-                let colonIndex = urlHost.indexOf(":")
-                if (colonIndex > 0) {
-                    urlHost = urlHost.substring(0, colonIndex)
-                }
+				// 域名
+				urlHost = url.host
+				if (urlHost == "%24%7Bhost%7D") {
+					urlHost = "${host}"
+				}
+				let colonIndex = urlHost.indexOf(":")
+				if (colonIndex > 0) {
+					urlHost = urlHost.substring(0, colonIndex)
+				}
 
-                urlPort = url.port
-                urlRequestURI = url.pathname
-                if (url.search.length > 0) {
-                    urlRequestURI += url.search
-                }
-            } catch (e) {
-            }
+				urlPort = url.port
+				urlRequestURI = url.pathname
+				if (url.search.length > 0) {
+					urlRequestURI += url.search
+				}
+			} catch (e) {
+			}
 
 			if (healthCheckConfig.statusCodes == null) {
 				healthCheckConfig.statusCodes = [200]
@@ -233,7 +233,7 @@ Vue.component("health-check-config-box", {
 				<p class="comment">连续N次检查失败后自动下线。</p>
 			</td>
 		</tr>
-	</tbody>	
+	</tbody>
 	<tbody v-show="healthCheck.isOn">
 		<tr>
 			<td colspan="2"><more-options-angle @change="showAdvanced"></more-options-angle></td>

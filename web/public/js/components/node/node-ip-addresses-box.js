@@ -1,3 +1,4 @@
+// 节点IP地址管理（标签形式）
 Vue.component("node-ip-addresses-box", {
 	props: ["v-ip-addresses", "role"],
 	data: function () {
@@ -64,7 +65,7 @@ Vue.component("node-ip-addresses-box", {
 		<div class="ui divider"></div>
 	</div>
 	<div>
-		<button style="background-color: #1b6aff;" class="ui button small" type="button" @click.prevent="addIPAddress()">+</button>
+		<button class="ui button small" type="button" @click.prevent="addIPAddress()">+</button>
 	</div>
 </div>`
 })

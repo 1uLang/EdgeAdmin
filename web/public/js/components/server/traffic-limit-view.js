@@ -1,4 +1,4 @@
-// ÏÔÊ¾Á÷Á¿ÏŞÖÆËµÃ÷
+// æ˜¾ç¤ºæµé‡é™åˆ¶è¯´æ˜
 Vue.component("traffic-limit-view", {
 	props: ["v-traffic-limit"],
 	data: function () {
@@ -8,9 +8,9 @@ Vue.component("traffic-limit-view", {
 	},
 	template: `<div>
 	<div v-if="config.isOn">
-		<span v-if="config.dailySize != null && config.dailySize.count > 0">ÈÕÁ÷Á¿ÏŞÖÆ£º{{config.dailySize.count}}{{config.dailySize.unit.toUpperCase()}}<br/></span>
-		<span v-if="config.monthlySize != null && config.monthlySize.count > 0">ÔÂÁ÷Á¿ÏŞÖÆ£º{{config.monthlySize.count}}{{config.monthlySize.unit.toUpperCase()}}<br/></span>
+		<span v-if="config.dailySize != null && config.dailySize.count > 0">æ—¥æµé‡é™åˆ¶ï¼š{{config.dailySize.count}}{{config.dailySize.unit.toUpperCase()}}<br/></span>
+		<span v-if="config.monthlySize != null && config.monthlySize.count > 0">æœˆæµé‡é™åˆ¶ï¼š{{config.monthlySize.count}}{{config.monthlySize.unit.toUpperCase()}}<br/></span>
 	</div>
-	<span v-else class="disabled">Ã»ÓĞÏŞÖÆ¡£</span>
+	<span v-else class="disabled">æ²¡æœ‰é™åˆ¶ã€‚</span>
 </div>`
 })

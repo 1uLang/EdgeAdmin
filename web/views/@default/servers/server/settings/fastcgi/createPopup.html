@@ -26,14 +26,14 @@
                             <input type="text" name="paramValues" placeholder="参数值" v-model="param.value" style="width:16em"/>
                         </div>
                         <div class="ui field" style="padding:0">
-                            <a href=""  title="删除" @click.prevent="removeParam(index)"><i class="ui icon remove"></i> </a>
+                            <a href="" title="删除" @click.prevent="removeParam(index)"><i class="ui icon remove"></i> </a>
                         </div>
                     </div>
                 </div>
 
                 <p class="comment" v-if="params.length > 0">可以在参数值中使用一些变量<a href="http://teaos.cn/doc/proxy/Fastcgi.md#%E5%8F%82%E6%95%B0%E5%8F%98%E9%87%8F" target="_blank">点这里查看</a> 。</p>
 
-                <button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="addParam()">+</button>
+                <button class="ui button tiny" type="button" @click.prevent="addParam()">+</button>
             </td>
         </tr>
         <tr>

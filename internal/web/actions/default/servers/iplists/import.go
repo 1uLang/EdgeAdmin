@@ -223,5 +223,6 @@ func (this *ImportAction) createItemFromValues(values []string, countIgnore *int
 		*countIgnore++
 		return nil
 	}
+
 	return item
 }

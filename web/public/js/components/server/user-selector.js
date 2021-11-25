@@ -26,7 +26,7 @@ Vue.component("user-selector", {
 	},
 	template: `<div>
 	<select class="ui dropdown auto-width" name="userId" v-model="userId">
-		<option value="0">[Ñ¡ÔñÓÃ»§]</option>
+		<option value="0">[é€‰æ‹©ç”¨æˆ·]</option>
 		<option v-for="user in users" :value="user.id">{{user.fullname}} ({{user.username}})</option>
 	</select>
 </div>`

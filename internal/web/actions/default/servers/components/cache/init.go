@@ -11,7 +11,7 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
 			Helper(NewHelper()).
-			Data("teaMenu", "cache").
+			Data("teaMenu", "servers").
 			Data("teaSubMenu", "cache").
 			Prefix("/servers/components/cache").
 			Get("", new(IndexAction)).

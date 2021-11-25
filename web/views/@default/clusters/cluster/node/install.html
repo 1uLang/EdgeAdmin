@@ -15,10 +15,10 @@
         </div>
     </div>
     <div v-if="installStatus != null && installStatus.isFinished">
-        <button style="background-color: #1b6aff;" class="ui button small" type="button" @click.prevent="install()">重新安装</button>
+        <button class="ui button small" type="button" @click.prevent="install()">重新安装</button>
     </div>
     <div v-if="installStatus == null || (!installStatus.isFinished && !installStatus.isRunning)">
-        <button style="background-color: #1b6aff;" class="ui button small" type="button" @click.prevent="install()">开始安装</button>
+        <button class="ui button small" type="button" @click.prevent="install()">开始安装</button>
     </div>
 
     <h4>方法2：手动安装</h4>

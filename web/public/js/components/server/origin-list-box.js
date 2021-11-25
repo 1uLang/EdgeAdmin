@@ -9,7 +9,7 @@ Vue.component("origin-list-box", {
 	methods: {
 		createPrimaryOrigin: function () {
 			teaweb.popup("/servers/server/settings/origins/addPopup?originType=primary&" + this.vParams, {
-				height: "24em",
+				height: "27em",
 				callback: function (resp) {
 					teaweb.success("保存成功", function () {
 						window.location.reload()
@@ -19,7 +19,7 @@ Vue.component("origin-list-box", {
 		},
 		createBackupOrigin: function () {
 			teaweb.popup("/servers/server/settings/origins/addPopup?originType=backup&" + this.vParams, {
-				height: "24em",
+				height: "27em",
 				callback: function (resp) {
 					teaweb.success("保存成功", function () {
 						window.location.reload()
@@ -29,7 +29,7 @@ Vue.component("origin-list-box", {
 		},
 		updateOrigin: function (originId, originType) {
 			teaweb.popup("/servers/server/settings/origins/updatePopup?originType=" + originType + "&" + this.vParams + "&originId=" + originId, {
-				height: "24em",
+				height: "27em",
 				callback: function (resp) {
 					teaweb.success("保存成功", function () {
 						window.location.reload()

@@ -8,7 +8,6 @@ import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/rpc"
 	"github.com/TeaOSLab/EdgeAdmin/internal/utils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
-	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/logs"
 	"github.com/iwind/TeaGo/maps"
@@ -18,7 +17,7 @@ import (
 
 type ParentAction struct {
 	actions.ActionObject
-	userName  string
+
 	rpcClient *rpc.RPCClient
 
 	ctx context.Context
@@ -56,7 +55,7 @@ func (this *ParentAction) NewPage(total int64, size ...int64) *Page {
 	if len(size) > 0 {
 		return NewActionPage(this, total, size[0])
 	}
-	return NewActionPage(this, total, 20)
+	return NewActionPage(this, total, 10)
 }
 
 func (this *ParentAction) Nav(mainMenu string, tab string, firstMenu string) {
@@ -78,26 +77,7 @@ func (this *ParentAction) TinyMenu(menuItem string) {
 }
 
 func (this *ParentAction) AdminId() int64 {
-	if this.Context == nil {
-		return 1
-	}
 	return this.Context.GetInt64("adminId")
-}
-func (this *ParentAction) UserName() (string, error) {
-
-	if this.userName != "" {
-		return this.userName, nil
-	}
-	adminResp, err := this.RPC().AdminRPC().FindEnabledAdmin(this.AdminContext(), &pb.FindEnabledAdminRequest{AdminId: this.AdminId()})
-	if err != nil {
-		return "", err
-	}
-	admin := adminResp.Admin
-	if admin == nil {
-		return "", fmt.Errorf("无效的用户id")
-	}
-	this.userName = admin.Username
-	return admin.Username, nil
 }
 
 func (this *ParentAction) CreateLog(level string, description string, args ...interface{}) {

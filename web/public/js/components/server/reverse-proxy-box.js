@@ -47,31 +47,31 @@ Vue.component("reverse-proxy-box", {
 			})
 		}
 
-        let forwardHeaders = [
-            {
-                name: "X-Real-IP",
-                isChecked: false
-            },
-            {
-                name: "X-Forwarded-For",
-                isChecked: false
-            },
-            {
-                name: "X-Forwarded-By",
-                isChecked: false
-            },
-            {
-                name: "X-Forwarded-Host",
-                isChecked: false
-            },
-            {
-                name: "X-Forwarded-Proto",
-                isChecked: false
-            }
-        ]
-        forwardHeaders.forEach(function (v) {
-            v.isChecked = reverseProxyConfig.addHeaders.$contains(v.name)
-        })
+		let forwardHeaders = [
+			{
+				name: "X-Real-IP",
+				isChecked: false
+			},
+			{
+				name: "X-Forwarded-For",
+				isChecked: false
+			},
+			{
+				name: "X-Forwarded-By",
+				isChecked: false
+			},
+			{
+				name: "X-Forwarded-Host",
+				isChecked: false
+			},
+			{
+				name: "X-Forwarded-Proto",
+				isChecked: false
+			}
+		]
+		forwardHeaders.forEach(function (v) {
+			v.isChecked = reverseProxyConfig.addHeaders.$contains(v.name)
+		})
 
 		return {
 			reverseProxyRef: reverseProxyRef,
@@ -234,7 +234,7 @@ Vue.component("reverse-proxy-box", {
                 </td>
             </tr>
             <tr v-if="family == null || family == 'http'">
-                <td class="color-border">源站默认读取超时时间</td>
+                <td class="color-border">源站读取超时时间</td>
                 <td>
                     <div class="ui fields inline">
                         <div class="ui field">

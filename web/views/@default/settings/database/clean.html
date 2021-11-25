@@ -17,7 +17,7 @@
         <td>{{table.size}}</td>
         <td>{{table.comment}}</td>
         <td>
-            <a href="" v-if="table.canDelete" style="color: #db2828" @click.prevent="deleteTable(table.name)">删除</a><span v-if="table.canDelete"> &nbsp;</span>
+            <a href="" v-if="table.canDelete" @click.prevent="deleteTable(table.name)">删除</a><span v-if="table.canDelete"> &nbsp;</span>
             <a href="" v-if="table.canClean" @click.prevent="truncateTable(table.name)">清空</a>
         </td>
     </tr>

@@ -12,13 +12,13 @@ Tea.context(function () {
 		this.$refs.htmlBody.value = `<!DOCTYPE html>
 <html>
 <head>
-\t<title>页面标题</title>
+\t<title>椤甸潰鏍囬</title>
 \t<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 </head>
 <body>
 
-<h3>内容标题</h3>
-<p>内容</p>
+<h3>鍐呭鏍囬</h3>
+<p>鍐呭</p>
 
 <footer>Powered by GoEdge.</footer>
 

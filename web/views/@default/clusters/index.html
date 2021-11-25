@@ -9,7 +9,7 @@
             <input type="text" name="keyword" v-model="keyword" placeholder="集群、节点关键词"/>
         </div>
         <div class="ui field">
-            <button style="background-color: #1b6aff; " class="ui button" type="submit">搜索</button>
+            <button class="ui button" type="submit">搜索</button>
         </div>
         <div class="ui field" v-if="latestClusters.length > 0">
             <a href="" @click.prevent="showLatest()">常用<i class="icon angle" :class="{down: !latestVisible, up: latestVisible}"></i> </a>

@@ -12,7 +12,6 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeSetting)).
 			Helper(settingutils.NewHelper("security")).
-			Data("teaMenu","server").
 			Prefix("/settings/security").
 			GetPost("", new(IndexAction)).
 			EndAll()

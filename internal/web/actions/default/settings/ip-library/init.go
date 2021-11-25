@@ -12,7 +12,6 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeSetting)).
 			Helper(NewHelper()).
-			Data("teaMenu","server").
 			Helper(settingutils.NewHelper("ipLibrary")).
 			Prefix("/settings/ip-library").
 			Get("", new(IndexAction)).

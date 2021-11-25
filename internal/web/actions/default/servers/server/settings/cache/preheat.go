@@ -88,7 +88,7 @@ func (this *PreheatAction) RunPost(params struct {
 	}
 	var cachePolicyId = cluster.HttpCachePolicyId
 	if cachePolicyId == 0 {
-		this.Fail("µ±Ç°¼¯ÈºÃ»ÓÐÉèÖÃ»º´æ²ßÂÔ")
+		this.Fail("当前集群没有设置缓存策略")
 	}
 
 	cachePolicyResp, err := this.RPC().HTTPCachePolicyRPC().FindEnabledHTTPCachePolicyConfig(this.AdminContext(), &pb.FindEnabledHTTPCachePolicyConfigRequest{HttpCachePolicyId: cachePolicyId})
@@ -98,11 +98,11 @@ func (this *PreheatAction) RunPost(params struct {
 	}
 	cachePolicyJSON := cachePolicyResp.HttpCachePolicyJSON
 	if len(cachePolicyJSON) == 0 {
-		this.Fail("ÕÒ²»µ½Òª²Ù×÷µÄ»º´æ²ßÂÔ")
+		this.Fail("找不到要操作的缓存策略")
 	}
 
 	if len(params.Keys) == 0 {
-		this.Fail("ÇëÊäÈëÒªÔ¤ÈÈµÄKeyÁÐ±í")
+		this.Fail("请输入要预热的Key列表")
 	}
 
 	realKeys := []string{}
@@ -117,7 +117,7 @@ func (this *PreheatAction) RunPost(params struct {
 		realKeys = append(realKeys, key)
 	}
 
-	// ·¢ËÍÃüÁî
+	// 发送命令
 	msg := &messageconfigs.PreheatCacheMessage{
 		CachePolicyJSON: cachePolicyJSON,
 		Keys:            realKeys,

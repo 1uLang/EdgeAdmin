@@ -1,6 +1,6 @@
 Tea.context(function () {
 	this.upgradeTemplate = function () {
-		teaweb.confirm("确定要加入这些新规则吗？", function () {
+		teaweb.confirm("纭畾瑕佸姞鍏ヨ繖浜涙柊瑙勫垯鍚楋紵", function () {
 			this.$post(".upgradeTemplate")
 				.params({
 					policyId: this.firewallPolicy.id

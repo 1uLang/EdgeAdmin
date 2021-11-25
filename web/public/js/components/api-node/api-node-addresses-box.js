@@ -50,7 +50,7 @@ Vue.component("api-node-addresses-box", {
 		<div class="ui divider"></div>
 	</div>
 	<div>
-		<button class="ui button small" style="background-color: #1b6aff;" type="button" @click.prevent="addAddr()">+</button>
+		<button class="ui button small" type="button" @click.prevent="addAddr()">+</button>
 	</div>
 </div>`
 })

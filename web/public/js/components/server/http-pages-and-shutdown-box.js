@@ -48,7 +48,7 @@ Vue.component("http-pages-and-shutdown-box", {
 		addPage: function () {
 			let that = this
 			teaweb.popup("/servers/server/settings/pages/createPopup", {
-				height: "22em",
+				height: "26em",
 				callback: function (resp) {
 					that.pages.push(resp.data.page)
 				}
@@ -57,7 +57,7 @@ Vue.component("http-pages-and-shutdown-box", {
 		updatePage: function (pageIndex, pageId) {
 			let that = this
 			teaweb.popup("/servers/server/settings/pages/updatePopup?pageId=" + pageId, {
-				height: "22em",
+				height: "26em",
 				callback: function (resp) {
 					Vue.set(that.pages, pageIndex, resp.data.page)
 				}
@@ -101,7 +101,7 @@ Vue.component("http-pages-and-shutdown-box", {
 				<div class="ui divider"></div>
 			</div>
 			<div>
-				<button style="background-color: #1b6aff;" class="ui button small" type="button" @click.prevent="addPage()">+</button>
+				<button class="ui button small" type="button" @click.prevent="addPage()">+</button>
 			</div>
 			<p class="comment">根据响应状态码返回一些特殊页面，比如404，500等错误页面。</p>
 		</td>

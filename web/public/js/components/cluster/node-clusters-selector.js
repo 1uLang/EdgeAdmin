@@ -24,7 +24,7 @@ Vue.component("node-clusters-selector", {
 			let that = this
 			let selectedClusterIds = [this.primaryClusterId].concat(this.secondaryClusterIds)
 			teaweb.popup("/clusters/selectPopup?selectedClusterIds=" + selectedClusterIds.join(",") + "&mode=single", {
-				height: "38em",
+				height: "30em",
 				width: "50em",
 				callback: function (resp) {
 					if (resp.data.cluster != null) {
@@ -44,7 +44,7 @@ Vue.component("node-clusters-selector", {
 			let that = this
 			let selectedClusterIds = [this.primaryClusterId].concat(this.secondaryClusterIds)
 			teaweb.popup("/clusters/selectPopup?selectedClusterIds=" + selectedClusterIds.join(",") + "&mode=multiple", {
-				height: "38em",
+				height: "30em",
 				width: "50em",
 				callback: function (resp) {
 					if (resp.data.cluster != null) {
@@ -77,7 +77,7 @@ Vue.component("node-clusters-selector", {
 					<div class="ui label basic small">{{primaryCluster.name}} &nbsp; <a href="" title="删除" @click.prevent="removePrimary"><i class="icon remove small"></i></a> </div>
 				</div>
 				<div style="margin-top: 0.6em" v-if="primaryClusterId == 0">
-					<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="addPrimary">+</button>
+					<button class="ui button tiny" type="button" @click.prevent="addPrimary">+</button>
 				</div>
 				<p class="comment">多个集群配置有冲突时，优先使用主集群配置。</p>
 			</td>
@@ -89,7 +89,7 @@ Vue.component("node-clusters-selector", {
 					<div class="ui label basic small" v-for="(cluster, index) in secondaryClusters"><span class="grey">{{cluster.name}}</span> &nbsp; <a href="" title="删除" @click.prevent="removeSecondary(index)"><i class="icon remove small"></i></a> </div>
 				</div>
 				<div style="margin-top: 0.6em">
-					<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="addSecondary">+</button>
+					<button class="ui button tiny" type="button" @click.prevent="addSecondary">+</button>
 				</div>
 			</td>
 		</tr>

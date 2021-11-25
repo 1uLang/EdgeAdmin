@@ -73,6 +73,7 @@ func init() {
 			Get("", new(metrics.IndexAction)).
 			GetPost("/createPopup", new(metrics.CreatePopupAction)).
 			Post("/delete", new(metrics.DeleteAction)).
+
 			EndAll()
 	})
 }

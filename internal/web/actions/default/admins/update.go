@@ -2,19 +2,10 @@ package admins
 
 import (
 	"encoding/json"
-	"fmt"
-
-	"github.com/1uLang/zhiannet-api/common/server/edge_admins_server"
-	hids_user_model "github.com/1uLang/zhiannet-api/hids/model/user"
-	hids_user_server "github.com/1uLang/zhiannet-api/hids/server/user"
-	"github.com/1uLang/zhiannet-api/nextcloud/model"
-	nc_req "github.com/1uLang/zhiannet-api/nextcloud/request"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/systemconfigs"
-	"github.com/dlclark/regexp2"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
 	"github.com/xlzd/gotp"
@@ -126,7 +117,6 @@ func (this *UpdateAction) RunPost(params struct {
 		this.FailField("username", "此用户名已经被别的系统用户使用，请换一个")
 	}
 
-	var editPwd bool
 	if len(params.Pass1) > 0 {
 		params.Must.
 			Field("pass1", params.Pass1).
@@ -135,42 +125,6 @@ func (this *UpdateAction) RunPost(params struct {
 			Require("请输入确认登录密码")
 		if params.Pass1 != params.Pass2 {
 			this.FailField("pass2", "两次输入的密码不一致")
-		}
-		reg, err := regexp2.Compile(
-			`^(?![A-z0-9]+$)(?=.[^%&',;=?$\x22])(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,30}$`, 0)
-		if err != nil {
-			this.FailField("pass1", "密码格式不正确")
-		}
-		if match, err := reg.FindStringMatch(params.Pass1); err != nil || match == nil {
-			this.FailField("pass1", "密码格式不正确")
-		}
-		editPwd = true
-	}
-
-	// 修改nc密码
-	if params.AdminId != 1 {
-		pt, err := model.GetUsername(params.AdminId, 1)
-		if err != nil {
-			this.ErrorPage(err)
-		}
-		ncName, pp, err := nc_req.ParseToken(pt)
-		if err != nil {
-			this.ErrorPage(err)
-		}
-		if pp != params.Pass2 && params.Pass2 != ""{
-			err = nc_req.UpdateUserPassword(params.Pass2, ncName)
-			if err != nil {
-				this.ErrorPage(err)
-			}
-			token := &model.LoginReq{
-				User:     ncName,
-				Password: params.Pass2,
-			}
-			ncToken := nc_req.GenerateToken(token)
-			err = model.StoreNCToken(ncName, ncToken)
-			if err != nil {
-				this.ErrorPage(err)
-			}
 		}
 	}
 
@@ -247,27 +201,6 @@ func (this *UpdateAction) RunPost(params struct {
 				return
 			}
 		}
-		//判断是否拥有了主机防护功能  有 则对应创建该用户
-		var hasHids bool
-		for _, code := range params.ModuleCodes {
-			if code == configloaders.AdminModuleCodeHids {
-				hasHids = true
-				break
-			}
-		}
-		if !configloaders.AllowModule(this.AdminId(), configloaders.AdminModuleCodeHids) && hasHids {
-
-			err = hids.InitAPIServer()
-			if err != nil {
-				this.ErrorPage(fmt.Errorf("主机防护组件初始化失败：%v", err))
-				return
-			}
-			_, err = hids_user_server.Add(&hids_user_model.AddReq{UserName: params.Username, Password: "dengbao-" + params.Username, Role: 3})
-			if err != nil {
-				this.ErrorPage(fmt.Errorf("主机防护组件同步信息失败：%v", err))
-				return
-			}
-		}
 
 		// 通知更改
 		err = configloaders.NotifyAdminModuleMappingChange()
@@ -275,10 +208,7 @@ func (this *UpdateAction) RunPost(params struct {
 			this.ErrorPage(err)
 			return
 		}
-		if editPwd {
-			//更新密码修改时间
-			edge_admins_server.UpdatePwdAt(uint64(params.AdminId))
-		}
+
 		this.Success()
 	}
 }
