@@ -26,6 +26,15 @@ Tea.context(function () {
     this.pageState = 1
     this.allUsers = []
     this.authUsers = []
+
+
+    this.$delay(function () {
+
+        if (this.errorMessage !== "" && this.errorMessage !== undefined) {
+            teaweb.warn(this.errorMessage, function () {
+            })
+        }
+    })
     this.getLinkStatus = function (status) {
         switch (status) {
             case 1:

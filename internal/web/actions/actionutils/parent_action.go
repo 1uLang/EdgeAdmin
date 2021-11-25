@@ -20,6 +20,8 @@ type ParentAction struct {
 	actions.ActionObject
 	userName  string
 	rpcClient *rpc.RPCClient
+
+	ctx context.Context
 }
 
 // Parent 可以调用自身的一个简便方法
@@ -137,6 +139,10 @@ func (this *ParentAction) RPC() *rpc.RPCClient {
 
 // AdminContext 获取Context
 func (this *ParentAction) AdminContext() context.Context {
+	if this.ctx != nil {
+		return this.ctx
+	}
+
 	if this.rpcClient == nil {
 		rpcClient, err := rpc.SharedRPC()
 		if err != nil {
@@ -145,7 +151,8 @@ func (this *ParentAction) AdminContext() context.Context {
 		}
 		this.rpcClient = rpcClient
 	}
-	return this.rpcClient.Context(this.AdminId())
+	this.ctx = this.rpcClient.Context(this.AdminId())
+	return this.ctx
 }
 
 // ViewData 视图里可以使用的数据

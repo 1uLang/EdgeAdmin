@@ -17,12 +17,12 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	NodeId int64
 }) {
-	nodeResp, err := this.RPC().MonitorNodeRPC().FindEnabledMonitorNode(this.AdminContext(), &pb.FindEnabledMonitorNodeRequest{NodeId: params.NodeId})
+	nodeResp, err := this.RPC().MonitorNodeRPC().FindEnabledMonitorNode(this.AdminContext(), &pb.FindEnabledMonitorNodeRequest{MonitorNodeId: params.NodeId})
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	node := nodeResp.Node
+	node := nodeResp.MonitorNode
 	if node == nil {
 		this.NotFound("monitorNode", params.NodeId)
 		return

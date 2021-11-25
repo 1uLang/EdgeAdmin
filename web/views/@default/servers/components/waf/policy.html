@@ -7,15 +7,23 @@
         <td>{{firewallPolicy.name}}</td>
     </tr>
     <tr>
-        <td>是否启用</td>
+        <td>状态</td>
         <td>
-            <label-on :v-is-on="firewallPolicy.isOn"></label-on>
+            <span v-if="!firewallPolicy.isOn" class="red">已停用</span>
+            <div v-else-if="firewallPolicy.modeInfo != null">
+                <span :class="{green: firewallPolicy.modeInfo.code == 'defend', blue: firewallPolicy.modeInfo.code == 'observe', grey: firewallPolicy.modeInfo.code == 'bypass'}">{{firewallPolicy.modeInfo.name}}</span>
+                <p class="comment">{{firewallPolicy.modeInfo.description}}</p>
+            </div>
         </td>
     </tr>
     <tr>
         <td>预置的规则分组</td>
         <td>
             <span class="ui label tiny basic" v-for="group in firewallPolicy.groups" style="margin-bottom:0.5em" :class="{disabled:!group.isOn}">{{group.name}}</span>
+           <div v-if="upgradeItems.length > 0">
+               <div class="ui divider"></div>
+               <a href=""><span class="red">升级提醒：官方提供了新的规则，是否要加入以下规则：<span class="ui label tiny basic" v-for="item in upgradeItems" style="margin-bottom: 0.2em">{{item}}</span></span></a> &nbsp; &nbsp; <a href="" @click.prevent="upgradeTemplate">[加入]</a>
+           </div>
         </td>
     </tr>
     <tr>
@@ -31,6 +39,13 @@
                     <tr>
                         <td>提示内容</td>
                         <td>{{firewallPolicy.blockOptions.body}}</td>
+                    </tr>
+                    <tr>
+                        <td>超时时间</td>
+                        <td>
+                            <span v-if="firewallPolicy.blockOptions.timeout <= 0" class="disabled">使用默认时间。</span>
+                            <span v-else>{{firewallPolicy.blockOptions.timeout}}秒</span>
+                        </td>
                     </tr>
                 </table>
             </div>

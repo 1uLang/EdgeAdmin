@@ -6,9 +6,10 @@ import (
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
 	"github.com/iwind/TeaGo/maps"
+	"github.com/iwind/TeaGo/types"
 )
 
-// 源站列表
+// IndexAction 源站列表
 type IndexAction struct {
 	actionutils.ParentAction
 }
@@ -27,6 +28,33 @@ func (this *IndexAction) RunGet(params struct {
 	}
 	serverType := serverTypeResp.Type
 
+	// 当前是否有分组设置
+	groupResp, err := this.RPC().ServerGroupRPC().FindEnabledServerGroupConfigInfo(this.AdminContext(), &pb.FindEnabledServerGroupConfigInfoRequest{ServerId: params.ServerId})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	this.Data["hasGroupConfig"] = false
+	this.Data["groupSettingURL"] = ""
+	switch serverType {
+	case serverconfigs.ServerTypeHTTPWeb, serverconfigs.ServerTypeHTTPProxy:
+		this.Data["hasGroupConfig"] = groupResp.HasHTTPReverseProxy
+		if groupResp.ServerGroupId > 0 {
+			this.Data["groupSettingURL"] = "/servers/groups/group/settings/httpReverseProxy?groupId=" + types.String(groupResp.ServerGroupId)
+		}
+	case serverconfigs.ServerTypeTCPProxy:
+		this.Data["hasGroupConfig"] = groupResp.HasTCPReverseProxy
+		if groupResp.ServerGroupId > 0 {
+			this.Data["groupSettingURL"] = "/servers/groups/group/settings/tcpReverseProxy?groupId=" + types.String(groupResp.ServerGroupId)
+		}
+	case serverconfigs.ServerTypeUDPProxy:
+		this.Data["hasGroupConfig"] = groupResp.HasUDPReverseProxy
+		if groupResp.ServerGroupId > 0 {
+			this.Data["groupSettingURL"] = "/servers/groups/group/settings/udpReverseProxy?groupId=" + types.String(groupResp.ServerGroupId)
+		}
+	}
+
+	// 当前服务的配置
 	reverseProxyResp, err := this.RPC().ServerRPC().FindAndInitServerReverseProxyConfig(this.AdminContext(), &pb.FindAndInitServerReverseProxyConfigRequest{ServerId: params.ServerId})
 	if err != nil {
 		this.ErrorPage(err)
@@ -53,22 +81,30 @@ func (this *IndexAction) RunGet(params struct {
 	primaryOriginMaps := []maps.Map{}
 	backupOriginMaps := []maps.Map{}
 	for _, originConfig := range reverseProxy.PrimaryOrigins {
+		if len(originConfig.Domains) == 0 {
+			originConfig.Domains = []string{}
+		}
 		m := maps.Map{
-			"id":     originConfig.Id,
-			"weight": originConfig.Weight,
-			"addr":   originConfig.Addr.Protocol.String() + "://" + originConfig.Addr.Host + ":" + originConfig.Addr.PortRange,
-			"name":   originConfig.Name,
-			"isOn":   originConfig.IsOn,
+			"id":      originConfig.Id,
+			"weight":  originConfig.Weight,
+			"addr":    originConfig.Addr.Protocol.String() + "://" + originConfig.Addr.Host + ":" + originConfig.Addr.PortRange,
+			"name":    originConfig.Name,
+			"isOn":    originConfig.IsOn,
+			"domains": originConfig.Domains,
 		}
 		primaryOriginMaps = append(primaryOriginMaps, m)
 	}
 	for _, originConfig := range reverseProxy.BackupOrigins {
+		if len(originConfig.Domains) == 0 {
+			originConfig.Domains = []string{}
+		}
 		m := maps.Map{
-			"id":     originConfig.Id,
-			"weight": originConfig.Weight,
-			"addr":   originConfig.Addr.Protocol.String() + "://" + originConfig.Addr.Host + ":" + originConfig.Addr.PortRange,
-			"name":   originConfig.Name,
-			"isOn":   originConfig.IsOn,
+			"id":      originConfig.Id,
+			"weight":  originConfig.Weight,
+			"addr":    originConfig.Addr.Protocol.String() + "://" + originConfig.Addr.Host + ":" + originConfig.Addr.PortRange,
+			"name":    originConfig.Name,
+			"isOn":    originConfig.IsOn,
+			"domains": originConfig.Domains,
 		}
 		backupOriginMaps = append(backupOriginMaps, m)
 	}

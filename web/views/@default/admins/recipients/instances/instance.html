@@ -228,10 +228,25 @@
         </tr>
     </tbody>
     <tr>
+        <td>发送频率<em>（次/分钟）</em></td>
+        <td>
+            <span v-if="instance.rate.minutes <= 0 || instance.rate.count <= 0" class="disabled">没有限制</span>
+            <span v-else>{{instance.rate.count}}次/{{instance.rate.minutes}}分钟</span>
+        </td>
+    </tr>
+    <tr>
+        <td>忽略相似消息周期</td>
+        <td>
+            <span v-if="instance.hashLife > 0">{{instance.hashLife}}秒</span>
+            <span v-else-if="instance.hashLife == 0" class="disabled">使用默认</span>
+            <span v-else class="disabled">没有设置</span>
+        </td>
+    </tr>
+    <tr>
         <td>备注</td>
         <td>
             <span v-if="instance.description.length > 0">{{instance.description}}</span>
-            <span v-else class="disabled">-</span>
+            <span v-else class="disabled">没有设置</span>
         </td>
     </tr>
 </table>

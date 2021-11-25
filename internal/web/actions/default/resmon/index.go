@@ -17,16 +17,16 @@ func (this *IndexAction) Init() {
 }
 
 func (this *IndexAction) RunGet(params struct{}) {
+
+	defer this.Show()
 	al, err := request.AgentList()
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = err.Error()
 		return
 	}
 
 	this.Data["list"] = al.List
 	this.Data["total"] = al.Total
-
-	this.Show()
 }
 
 func (this *IndexAction) RunPost(params struct {

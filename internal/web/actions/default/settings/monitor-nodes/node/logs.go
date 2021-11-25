@@ -31,12 +31,12 @@ func (this *LogsAction) RunGet(params struct {
 	this.Data["keyword"] = params.Keyword
 	this.Data["level"] = params.Level
 
-	monitorNodeResp, err := this.RPC().MonitorNodeRPC().FindEnabledMonitorNode(this.AdminContext(), &pb.FindEnabledMonitorNodeRequest{NodeId: params.NodeId})
+	monitorNodeResp, err := this.RPC().MonitorNodeRPC().FindEnabledMonitorNode(this.AdminContext(), &pb.FindEnabledMonitorNodeRequest{MonitorNodeId: params.NodeId})
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	monitorNode := monitorNodeResp.Node
+	monitorNode := monitorNodeResp.MonitorNode
 	if monitorNode == nil {
 		this.NotFound("monitorNode", params.NodeId)
 		return

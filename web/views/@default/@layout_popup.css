@@ -54,6 +54,7 @@ p.comment,
 div.comment {
   color: rgba(0, 0, 0, 0.4);
   padding-top: 0.4em;
+  font-weight: normal;
 }
 p.comment em,
 div.comment em {
@@ -104,7 +105,7 @@ p.margin {
   left: 9em;
 }
 .main.without-secondary-menu {
-  top: 3.4em;
+  top: 2.9em;
 }
 @media screen and (max-width: 512px) {
   .main.without-menu {
@@ -287,5 +288,9 @@ var.dash {
 }
 input.error {
   border: 1px #e0b4b4 solid !important;
+}
+textarea.wide-code {
+  font-family: Menlo, Monaco, "Courier New", monospace !important;
+  line-height: 1.6 !important;
 }
 /*# sourceMappingURL=@layout_popup.css.map */

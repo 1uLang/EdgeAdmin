@@ -1,5 +1,6 @@
 // 单个集群选择
 Vue.component("cluster-selector", {
+	props: ["v-cluster-id"],
 	mounted: function () {
 		let that = this
 
@@ -9,7 +10,6 @@ Vue.component("cluster-selector", {
 				that.clusters = resp.data.clusters
 			})
 	},
-	props: ["v-cluster-id"],
 	data: function () {
 		let clusterId = this.vClusterId
 		if (clusterId == null) {

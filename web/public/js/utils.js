@@ -69,13 +69,14 @@ window.teaweb = {
 		}
 		document.head.append(element)
 	},
-	datepicker: function (element, callback) {
+	datepicker: function (element, callback, bottomLeft) {
 		// 加载
 		if (typeof Pikaday == "undefined") {
 			let that = this
-			this.loadJS("/js/moment.min.js")
-			this.loadJS("/js/pikaday.js", function () {
-				that.datepicker(element, callback)
+			this.loadJS("/js/moment.min.js", function () {
+				that.loadJS("/js/pikaday.js", function () {
+					that.datepicker(element, callback, bottomLeft)
+				})
 			})
 			this.loadCSS("/js/pikaday.css")
 			this.loadCSS("/js/pikaday.theme.css")
@@ -88,8 +89,8 @@ window.teaweb = {
 		if (typeof (element) == "string") {
 			element = document.getElementById(element);
 		}
-		var year = new Date().getFullYear();
-		var picker = new Pikaday({
+		let year = new Date().getFullYear();
+		let picker = new Pikaday({
 			field: element,
 			firstDay: 1,
 			minDate: new Date(year - 1, 0, 1),
@@ -108,8 +109,9 @@ window.teaweb = {
 				if (typeof (callback) == "function") {
 					callback.call(Tea.Vue, picker.toString());
 				}
-			}
-		});
+			},
+			reposition: !bottomLeft
+		})
 	},
 
 	formatBytes: function (bytes) {
@@ -255,6 +257,21 @@ window.teaweb = {
 			}
 		});
 	},
+	popupSuccess: function (url, width, height) {
+		let options = {}
+		if (width != null) {
+			options["width"] = width
+		}
+		if (height != null) {
+			options["height"] = height
+		}
+		options["callback"] = function () {
+			teaweb.success("保存成功", function () {
+				teaweb.reload()
+			})
+		}
+		this.popup(url, options)
+	},
 	popupFinish: function () {
 		if (window.POPUP_CALLBACK != null) {
 			window.POPUP_CALLBACK.apply(window, arguments);
@@ -316,6 +333,27 @@ window.teaweb = {
 		}
 
 		Swal.fire(config);
+	},
+	toast: function (message, timeout, callback) {
+		if (timeout == null) {
+			timeout = 2000
+		}
+		var width = "20em";
+		if (message.length > 30) {
+			width = "30em";
+		}
+		Swal.fire({
+			text: message,
+			icon: "info",
+			width: width,
+			timer: timeout,
+			showConfirmButton: false,
+			onAfterClose: function () {
+				if (typeof callback == "function") {
+					callback()
+				}
+			}
+		});
 	},
 	successToast: function (message, timeout, callback) {
 		if (timeout == null) {
@@ -547,10 +585,12 @@ window.teaweb = {
 					itemStyle: {
 						color: "#9DD3E8"
 					},
-					areaStyle: {}
+					areaStyle: {},
+					smooth: true
 				}
 			],
-			animation: true
+			animation: true,
+			smooth: true
 		}
 		chart.setOption(option)
 		chart.resize()
@@ -573,6 +613,13 @@ window.teaweb = {
 			instance.resize()
 		})
 		return instance
+	},
+	encodeHTML: function (s) {
+		s = s.replace("&", "&amp;")
+		s = s.replace("<", "&lt;")
+		s = s.replace(">", "&gt;")
+		s = s.replace("\"", "&quot;")
+		return s
 	}
 }
 

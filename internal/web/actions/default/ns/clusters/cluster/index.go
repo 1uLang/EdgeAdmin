@@ -81,7 +81,7 @@ func (this *IndexAction) RunGet(params struct {
 		}
 
 		// IP
-		ipAddressesResp, err := this.RPC().NodeIPAddressRPC().FindAllEnabledIPAddressesWithNodeId(this.AdminContext(), &pb.FindAllEnabledIPAddressesWithNodeIdRequest{
+		ipAddressesResp, err := this.RPC().NodeIPAddressRPC().FindAllEnabledNodeIPAddressesWithNodeId(this.AdminContext(), &pb.FindAllEnabledNodeIPAddressesWithNodeIdRequest{
 			NodeId: node.Id,
 			Role:   nodeconfigs.NodeRoleDNS,
 		})
@@ -90,12 +90,14 @@ func (this *IndexAction) RunGet(params struct {
 			return
 		}
 		ipAddresses := []maps.Map{}
-		for _, addr := range ipAddressesResp.Addresses {
+		for _, addr := range ipAddressesResp.NodeIPAddresses {
 			ipAddresses = append(ipAddresses, maps.Map{
 				"id":        addr.Id,
 				"name":      addr.Name,
 				"ip":        addr.Ip,
 				"canAccess": addr.CanAccess,
+				"isOn":      addr.IsOn,
+				"isUp":      addr.IsUp,
 			})
 		}
 

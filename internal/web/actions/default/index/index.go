@@ -1,8 +1,12 @@
 package index
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"github.com/TeaOSLab/EdgeAdmin/internal/encrypt"
+	"github.com/TeaOSLab/EdgeAdmin/internal/ttlcache"
+	"github.com/iwind/TeaGo/rands"
 	"time"
 
 	"github.com/1uLang/zhiannet-api/common/cache"
@@ -47,6 +51,12 @@ func (this *IndexAction) RunGet(params struct {
 		return
 	}
 
+	//// 是否新安装
+	if setup.IsNewInstalled() {
+		this.RedirectURL("/setup/confirm")
+		return
+	}
+
 	// 已登录跳转到dashboard
 	if params.Auth.IsUser() {
 		this.RedirectURL("/dashboard")
@@ -72,7 +82,7 @@ func (this *IndexAction) RunGet(params struct {
 	} else {
 		this.Data["version"] = teaconst.Version
 	}
-	//this.Data["faviconFileId"] = config.FaviconFileId
+	this.Data["faviconFileId"] = uiConfig.FaviconFileId
 	if params.Token != "" {
 		this.Success()
 	}
@@ -194,8 +204,8 @@ func (this *IndexAction) RunPost(params struct {
 
 	//密码过期检查
 	if res, _ := edge_admins_server.CheckPwdInvalid(uint64(resp.AdminId)); res {
-		params.Auth.SetUpdatePwdToken(resp.AdminId)
 		this.Data["from"] = "/updatePwd"
+		this.Data["Code"] = encode(resp.AdminId)
 		this.Fail("密码已过期，请立即修改")
 	}
 	//检测系统是否到期
@@ -225,4 +235,28 @@ func (this *IndexAction) RunPost(params struct {
 	//跳转首页
 	this.Data["from"] = helpers.NewUserMustAuth("").FirstMenuUrl(adminId)
 	this.Success()
+}
+
+func encode(adminId int64) string {
+
+	enstr := fmt.Sprintf("%s%d", rands.String(32), time.Now().Add(3*time.Minute).Unix())
+	ttlcache.DefaultCache.Write(enstr, adminId, time.Now().Unix()+180)
+	enstr = base64.URLEncoding.EncodeToString(encrypt.MagicKeyEncode([]byte(enstr)))
+
+	return enstr
+}
+
+func decode(enStr string) (adminId int64, err error) {
+
+	bytes, err := base64.URLEncoding.DecodeString(enStr)
+	if err != nil {
+		return 0, err
+	}
+	enStr = string(encrypt.MagicKeyDecode(bytes))
+
+	value := ttlcache.DefaultCache.Read(enStr)
+	if value == nil {
+		return 0, fmt.Errorf("页面信息已过期，请刷新后重试")
+	}
+	return value.Value.(int64), nil
 }

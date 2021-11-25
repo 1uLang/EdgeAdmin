@@ -9,7 +9,7 @@
         <menu-item :href="'/servers/certs/acme?type=available&keyword=' + keyword" :active="type == 'available'">有效证书({{countAvailable}})</menu-item>
         <menu-item :href="'/servers/certs/acme?type=expired&keyword=' + keyword" :active="type == 'expired'">过期证书<span :class="{red: countExpired > 0}">({{countExpired}})</span></menu-item>
         <menu-item :href="'/servers/certs/acme?type=7days&keyword=' + keyword" :active="type == '7days'">7天内过期<span :class="{red: count7Days > 0}">({{count7Days}})</span></menu-item>
-        <menu-item :href="'/servers/certs/acme?type=30days&keyword=' + keyword" :active="type == '30days'">30天过期({{count30Days}})</menu-item>
+        <menu-item :href="'/servers/certs/acme?type=30days&keyword=' + keyword" :active="type == '30days'">30天内过期({{count30Days}})</menu-item>
         <div class="item right">
             <form class="ui form">
                 <div class="ui fields inline">
@@ -42,10 +42,12 @@
 		</thead>
 		<tr v-for="(task, index) in tasks" :class="{warning: runningIndex == index}">
 			<td>{{task.acmeUser.email}}
-				<div style="margin-top: 1em">
-					<tiny-basic-label class="olive" v-if="task.authType == 'dns'">DNS</tiny-basic-label>
-					<tiny-basic-label class="olive" v-if="task.authType == 'http'">HTTP</tiny-basic-label>
-				</div>
+                <div>
+                    <grey-label class="olive" v-if="task.authType == 'dns'">DNS</grey-label>
+                    <grey-label class="olive" v-if="task.authType == 'http'">HTTP</grey-label>
+                    <grey-label v-if="task.acmeUser.provider != null">{{task.acmeUser.provider.name}}</grey-label>
+                    <grey-label v-if="task.acmeUser.account != null">{{task.acmeUser.account.name}}</grey-label>
+                </div>
 			</td>
 			<td nowrap="">
 				<div v-for="domain in task.domains">

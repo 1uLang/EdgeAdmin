@@ -1,4 +1,4 @@
-package cluster
+package accessLog
 
 import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"

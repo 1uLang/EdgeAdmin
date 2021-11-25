@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/TeaOSLab/EdgeAdmin/internal/utils/numberutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/clusters/grants/grantutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/nodeconfigs"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/maps"
@@ -55,7 +56,7 @@ func (this *IndexAction) RunGet(params struct {
 	}
 
 	// IP地址
-	ipAddressesResp, err := this.RPC().NodeIPAddressRPC().FindAllEnabledIPAddressesWithNodeId(this.AdminContext(), &pb.FindAllEnabledIPAddressesWithNodeIdRequest{
+	ipAddressesResp, err := this.RPC().NodeIPAddressRPC().FindAllEnabledNodeIPAddressesWithNodeId(this.AdminContext(), &pb.FindAllEnabledNodeIPAddressesWithNodeIdRequest{
 		NodeId: params.NodeId,
 		Role:   nodeconfigs.NodeRoleDNS,
 	})
@@ -64,12 +65,14 @@ func (this *IndexAction) RunGet(params struct {
 		return
 	}
 	ipAddressMaps := []maps.Map{}
-	for _, addr := range ipAddressesResp.Addresses {
+	for _, addr := range ipAddressesResp.NodeIPAddresses {
 		ipAddressMaps = append(ipAddressMaps, maps.Map{
 			"id":        addr.Id,
 			"name":      addr.Name,
 			"ip":        addr.Ip,
 			"canAccess": addr.CanAccess,
+			"isOn":      addr.IsOn,
+			"isUp":      addr.IsUp,
 		})
 	}
 
@@ -102,6 +105,46 @@ func (this *IndexAction) RunGet(params struct {
 		this.Data["newVersion"] = ""
 	}
 
+	// 登录信息
+	var loginMap maps.Map = nil
+	if node.NodeLogin != nil {
+		loginParams := maps.Map{}
+		if len(node.NodeLogin.Params) > 0 {
+			err = json.Unmarshal(node.NodeLogin.Params, &loginParams)
+			if err != nil {
+				this.ErrorPage(err)
+				return
+			}
+		}
+
+		grantMap := maps.Map{}
+		grantId := loginParams.GetInt64("grantId")
+		if grantId > 0 {
+			grantResp, err := this.RPC().NodeGrantRPC().FindEnabledNodeGrant(this.AdminContext(), &pb.FindEnabledNodeGrantRequest{NodeGrantId: grantId})
+			if err != nil {
+				this.ErrorPage(err)
+				return
+			}
+			if grantResp.NodeGrant != nil {
+				grantMap = maps.Map{
+					"id":         grantResp.NodeGrant.Id,
+					"name":       grantResp.NodeGrant.Name,
+					"method":     grantResp.NodeGrant.Method,
+					"methodName": grantutils.FindGrantMethodName(grantResp.NodeGrant.Method),
+					"username":   grantResp.NodeGrant.Username,
+				}
+			}
+		}
+
+		loginMap = maps.Map{
+			"id":     node.NodeLogin.Id,
+			"name":   node.NodeLogin.Name,
+			"type":   node.NodeLogin.Type,
+			"params": loginParams,
+			"grant":  grantMap,
+		}
+	}
+
 	this.Data["node"] = maps.Map{
 		"id":          node.Id,
 		"name":        node.Name,
@@ -114,7 +157,7 @@ func (this *IndexAction) RunGet(params struct {
 		"isOn":        node.IsOn,
 
 		"status": maps.Map{
-			"isActive":             status.IsActive,
+			"isActive":             node.IsActive && status.IsActive,
 			"updatedAt":            status.UpdatedAt,
 			"hostname":             status.Hostname,
 			"cpuUsage":             status.CPUUsage,
@@ -131,6 +174,8 @@ func (this *IndexAction) RunGet(params struct {
 			"cacheTotalDiskSize":   numberutils.FormatBytes(status.CacheTotalDiskSize),
 			"cacheTotalMemorySize": numberutils.FormatBytes(status.CacheTotalMemorySize),
 		},
+
+		"login": loginMap,
 	}
 
 	this.Show()

@@ -5,7 +5,6 @@ package wazuh
 import (
 	"fmt"
 	"github.com/1uLang/zhiannet-api/wazuh/server"
-	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/helpers"
 	"github.com/iwind/TeaGo"
 )
@@ -13,7 +12,6 @@ import (
 //主机防护
 
 func init() {
-	configloaders.HIDSType = "wazuh"
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth("nhids")).
@@ -48,7 +46,7 @@ func InitAPIServer() error {
 
 	info, err := server.GetWazuhInfo()
 	if err != nil {
-		return fmt.Errorf("主机防护节点获取失败:%v", err)
+		return fmt.Errorf("端点防护节点获取失败:%v", err)
 	}
 	serverAddr = info.Addr
 	err = server.SetUrl(info.Addr)

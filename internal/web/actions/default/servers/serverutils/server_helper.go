@@ -272,7 +272,7 @@ func (this *ServerHelper) createSettingsMenu(secondMenuItem string, serverIdStri
 			"name":     "缓存",
 			"url":      "/servers/server/settings/cache?serverId=" + serverIdString,
 			"isActive": secondMenuItem == "cache",
-			"isOn":     serverConfig.Web != nil && serverConfig.Web.Cache != nil && serverConfig.Web.Cache.IsOn && len(serverConfig.Web.Cache.CacheRefs) > 0,
+			"isOn":     serverConfig.Web != nil && serverConfig.Web.Cache != nil && serverConfig.Web.Cache.IsOn,
 		})
 		menuItems = append(menuItems, maps.Map{
 			"name":     "访问控制",
@@ -299,10 +299,10 @@ func (this *ServerHelper) createSettingsMenu(secondMenuItem string, serverIdStri
 			"isOn":     serverConfig.Web != nil && serverConfig.Web.StatRef != nil && serverConfig.Web.StatRef.IsOn,
 		})
 		menuItems = append(menuItems, maps.Map{
-			"name":     "Gzip压缩",
-			"url":      "/servers/server/settings/gzip?serverId=" + serverIdString,
-			"isActive": secondMenuItem == "gzip",
-			"isOn":     serverConfig.Web != nil && serverConfig.Web.GzipRef != nil && serverConfig.Web.GzipRef.IsOn,
+			"name":     "内容压缩",
+			"url":      "/servers/server/settings/compression?serverId=" + serverIdString,
+			"isActive": secondMenuItem == "compression",
+			"isOn":     serverConfig.Web != nil && serverConfig.Web.Compression != nil && serverConfig.Web.Compression.IsOn,
 		})
 		menuItems = append(menuItems, maps.Map{
 			"name":     "特殊页面",
@@ -323,11 +323,40 @@ func (this *ServerHelper) createSettingsMenu(secondMenuItem string, serverIdStri
 			"isOn":     serverConfig.Web != nil && serverConfig.Web.WebsocketRef != nil && serverConfig.Web.WebsocketRef.IsOn,
 		})
 		menuItems = append(menuItems, maps.Map{
+			"name":     "WebP",
+			"url":      "/servers/server/settings/webp?serverId=" + serverIdString,
+			"isActive": secondMenuItem == "webp",
+			"isOn":     serverConfig.Web != nil && serverConfig.Web.WebP != nil && serverConfig.Web.WebP.IsOn,
+		})
+
+		menuItems = append(menuItems, maps.Map{
 			"name":     "Fastcgi",
 			"url":      "/servers/server/settings/fastcgi?serverId=" + serverIdString,
 			"isActive": secondMenuItem == "fastcgi",
 			"isOn":     serverConfig.Web != nil && serverConfig.Web.FastcgiRef != nil && serverConfig.Web.FastcgiRef.IsOn,
 		})
+
+		menuItems = append(menuItems, maps.Map{
+			"name":     "-",
+			"url":      "",
+			"isActive": false,
+		})
+
+		menuItems = append(menuItems, maps.Map{
+			"name":     "访客IP地址",
+			"url":      "/servers/server/settings/remoteAddr?serverId=" + serverIdString,
+			"isActive": secondMenuItem == "remoteAddr",
+			"isOn":     serverConfig.Web != nil && serverConfig.Web.RemoteAddr != nil && serverConfig.Web.RemoteAddr.IsOn,
+		})
+
+		if teaconst.IsPlus {
+			menuItems = append(menuItems, maps.Map{
+				"name":     "流量限制",
+				"url":      "/servers/server/settings/traffic?serverId=" + serverIdString,
+				"isActive": secondMenuItem == "traffic",
+				"isOn":     serverConfig.TrafficLimit != nil && serverConfig.TrafficLimit.IsOn,
+			})
+		}
 	} else if serverConfig.IsTCPFamily() {
 		menuItems = append(menuItems, maps.Map{
 			"name":     "TCP",

@@ -41,7 +41,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 	}
 
 	// 创建日志
-	defer this.CreateLog(oplogs.LevelInfo, "创建告警节点 %d", createResp.NodeId)
+	defer this.CreateLog(oplogs.LevelInfo, "创建告警节点 %d", createResp.MonitorNodeId)
 
 	this.Success()
 }

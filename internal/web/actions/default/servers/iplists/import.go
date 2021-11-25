@@ -7,6 +7,7 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/configutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/lists"
@@ -199,6 +200,19 @@ func (this *ImportAction) createItemFromValues(values []string, countIgnore *int
 		item.Type = values[3]
 		item.EventLevel = values[4]
 		item.Reason = values[5]
+	}
+
+	// CIDR
+	if strings.Contains(item.IpFrom, "/") {
+		ipFrom, ipTo, err := configutils.ParseCIDR(item.IpFrom)
+		if err == nil {
+			item.IpFrom = ipFrom
+			item.IpTo = ipTo
+		}
+	}
+
+	if len(item.EventLevel) == 0 {
+		item.EventLevel = "critical"
 	}
 
 	if net.ParseIP(item.IpFrom) == nil {

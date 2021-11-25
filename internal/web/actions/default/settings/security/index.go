@@ -79,7 +79,7 @@ func (this *IndexAction) RunPost(params struct {
 	Must *actions.Must
 	CSRF *actionutils.CSRF
 }) {
-	defer this.CreateLogInfo("修改管理界面访问设置")
+	defer this.CreateLogInfo("修改管理界面安全设置")
 
 	config, err := configloaders.LoadSecurityConfig()
 	if err != nil {

@@ -15,6 +15,7 @@ func init() {
 			Data("teaMenu", "waf").
 			Prefix("/servers/server/settings/dns").
 			GetPost("", new(IndexAction)).
+			Post("/regenerateCNAME", new(RegenerateCNAMEAction)).
 			EndAll()
 	})
 }

@@ -35,14 +35,16 @@ func (this *IndexAction) RunGet(params struct {
 	Must *actions.Must
 }) {
 
+	this.Data["gateways"] = []int{}
+	defer this.Show()
 	req, err := this.checkAndNewServerRequest()
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = err.Error()
 		return
 	}
 	list, _, err := req.GateWay.List(&gateway_model.ListReq{AdminUserId: this.AdminId()})
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = err.Error()
 		return
 	}
 	this.Data["gateways"] = list

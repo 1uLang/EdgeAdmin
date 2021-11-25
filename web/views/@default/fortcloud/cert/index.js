@@ -16,6 +16,15 @@ Tea.context(function () {
     this.authUsers = []
     this.selectNoAuthPeopleListData = []
     this.selectAuthPeopleListData = []
+
+
+    this.$delay(function () {
+
+        if (this.errorMessage !== "" && this.errorMessage !== undefined) {
+            teaweb.warn(this.errorMessage, function () {
+            })
+        }
+    })
     this.getLinkStatus = function (status) {
         if (status !== "failed") {
             return "可连接"

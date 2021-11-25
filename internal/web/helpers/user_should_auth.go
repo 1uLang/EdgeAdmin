@@ -92,11 +92,3 @@ func (this *UserShouldAuth) Logout() {
 	cache.DelKey(fmt.Sprintf("login_success_adminid_%v", this.AdminId()))
 	this.action.Session().Delete()
 }
-
-func (this *UserShouldAuth) SetUpdatePwdToken(value int64) {
-	this.action.Session().Write("update_pwd_admin_id", numberutils.FormatInt64(value))
-}
-
-func (this *UserShouldAuth) GetUpdatePwdToken() int64 {
-	return this.action.Session().GetInt64("update_pwd_admin_id")
-}

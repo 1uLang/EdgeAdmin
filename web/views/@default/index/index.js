@@ -3,7 +3,7 @@ Tea.context(function () {
     this.tempCsrfToke = "";
 	this.tempShowOTP = false;
 	this.showPageState = 1;
-
+	this.updatePwdCode = ""
 	this.bShowDialog = false
 	this.errorMsg = ""
 	this.tipImage = ""
@@ -100,6 +100,7 @@ Tea.context(function () {
           },
           (res) => {
             if (res.data.from == "/updatePwd") { //如果是密码过期
+				this.updatePwdCode = res.data.Code
 				that.callBackFunc = function () {
 					document.getElementById("password").value = "";
 					that.showPageState = 2
@@ -166,6 +167,7 @@ Tea.context(function () {
         tempFormData.append("confirmPassword", tempConfirmPassword);
         tempFormData.append("token", this.tempToken);
         tempFormData.append("csrfToken", this.tempCsrfToke);
+        tempFormData.append("code", this.updatePwdCode);
 		let that = this
         reqApi(
           "post",

@@ -37,25 +37,30 @@ func (this *IndexAction) RunGet(params struct {
 
 	Must *actions.Must
 }) {
+	defer this.Show()
+
+	this.Data["assets"] = []int64{}
+	this.Data["certs"] = []int64{}
+	this.Data["gateways"] = []int64{}
 
 	req, err := this.checkAndNewServerRequest()
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = err.Error()
 		return
 	}
 	list, _, err := req.Assets.List(&asset_model.ListReq{AdminUserId: this.AdminId()})
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = err.Error()
 		return
 	}
 	certs, _, err := req.Cert.List(&cert_model.ListReq{AdminUserId: uint64(this.AdminId())})
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = err.Error()
 		return
 	}
 	gateways, err := req.GateWay.GetAll(&gateway_model.GetAllReq{AdminUserId: this.AdminId()})
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = err.Error()
 		return
 	}
 	for k, v := range list {
@@ -66,7 +71,6 @@ func (this *IndexAction) RunGet(params struct {
 	this.Data["assets"] = list
 	this.Data["certs"] = certs
 	this.Data["gateways"] = gateways
-	this.Show()
 }
 
 func (this *IndexAction) RunPost(params struct {

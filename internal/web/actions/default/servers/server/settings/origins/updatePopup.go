@@ -26,6 +26,7 @@ func (this *UpdatePopupAction) Init() {
 
 func (this *UpdatePopupAction) RunGet(params struct {
 	ServerId       int64
+	ServerType     string
 	ReverseProxyId int64
 	OriginType     string
 	OriginId       int64
@@ -34,15 +35,20 @@ func (this *UpdatePopupAction) RunGet(params struct {
 	this.Data["reverseProxyId"] = params.ReverseProxyId
 	this.Data["originId"] = params.OriginId
 
-	serverTypeResp, err := this.RPC().ServerRPC().FindEnabledServerType(this.AdminContext(), &pb.FindEnabledServerTypeRequest{
-		ServerId: params.ServerId,
-	})
-	if err != nil {
-		this.ErrorPage(err)
-		return
+	var serverType = ""
+	if params.ServerId > 0 {
+		serverTypeResp, err := this.RPC().ServerRPC().FindEnabledServerType(this.AdminContext(), &pb.FindEnabledServerTypeRequest{
+			ServerId: params.ServerId,
+		})
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+		serverType = serverTypeResp.Type
+	} else {
+		serverType = params.ServerType
 	}
-	this.Data["serverType"] = serverTypeResp.Type
-	serverType := serverTypeResp.Type
+	this.Data["serverType"] = serverType
 
 	// 是否为HTTP
 	this.Data["isHTTP"] = serverType == "httpProxy" || serverType == "httpWeb"
@@ -76,6 +82,10 @@ func (this *UpdatePopupAction) RunGet(params struct {
 		idleTimeout = types.Int(config.IdleTimeout.Count)
 	}
 
+	if len(config.Domains) == 0 {
+		config.Domains = []string{}
+	}
+
 	this.Data["origin"] = maps.Map{
 		"id":           config.Id,
 		"protocol":     config.Addr.Protocol,
@@ -89,6 +99,7 @@ func (this *UpdatePopupAction) RunGet(params struct {
 		"idleTimeout":  idleTimeout,
 		"maxConns":     config.MaxConns,
 		"maxIdleConns": config.MaxIdleConns,
+		"domains":      config.Domains,
 	}
 
 	this.Show()
@@ -109,6 +120,8 @@ func (this *UpdatePopupAction) RunPost(params struct {
 	MaxConns     int32
 	MaxIdleConns int32
 	IdleTimeout  int
+
+	DomainsJSON []byte
 
 	Description string
 	IsOn        bool
@@ -175,6 +188,20 @@ func (this *UpdatePopupAction) RunPost(params struct {
 		return
 	}
 
+	var domains = []string{}
+	if len(params.DomainsJSON) > 0 {
+		err = json.Unmarshal(params.DomainsJSON, &domains)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+
+		// 去除可能误加的斜杠
+		for index, domain := range domains {
+			domains[index] = strings.TrimSuffix(domain, "/")
+		}
+	}
+
 	_, err = this.RPC().OriginRPC().UpdateOrigin(this.AdminContext(), &pb.UpdateOriginRequest{
 		OriginId: params.OriginId,
 		Name:     params.Name,
@@ -191,6 +218,7 @@ func (this *UpdatePopupAction) RunPost(params struct {
 		IdleTimeoutJSON: idleTimeoutJSON,
 		MaxConns:        params.MaxConns,
 		MaxIdleConns:    params.MaxIdleConns,
+		Domains:         domains,
 	})
 	if err != nil {
 		this.ErrorPage(err)

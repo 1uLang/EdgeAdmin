@@ -344,17 +344,20 @@ Vue.component("metric-chart", {
 					}
 				]
 			})
-			// IP相关操作
-			if (this.item.keys != null && this.item.keys.$contains("${remoteAddr}")) {
-				let that = this
-				chart.on("click", function (args) {
-					let index = that.item.keys.$indexesOf("${remoteAddr}")[0]
-					let value = that.stats[args.dataIndex].keys[index]
-					teaweb.popup("/servers/ipbox?ip=" + value, {
-						width: "50em",
-						height: "30em"
+
+			if (this.item.keys != null) {
+				// IP相关操作
+				if (this.item.keys.$contains("${remoteAddr}")) {
+					let that = this
+					chart.on("click", function (args) {
+						let index = that.item.keys.$indexesOf("${remoteAddr}")[0]
+						let value = that.stats[args.dataIndex].keys[index]
+						teaweb.popup("/servers/ipbox?ip=" + value, {
+							width: "50em",
+							height: "30em"
+						})
 					})
-				})
+				}
 			}
 		},
 		renderTable: function (chart) {
@@ -366,6 +369,7 @@ Vue.component("metric-chart", {
 			<th>占比</th>
 		</tr>
 	</thead>`
+			let that = this
 			this.stats.forEach(function (v) {
 				let value = v.value
 				switch (that.item.valueType) {

@@ -18,7 +18,7 @@
     <tr>
         <td>媒介</td>
         <td>
-            {{recipient.instance.name}}
+            {{recipient.instance.name}} <link-icon v-if="recipient.instance.id > 0" :href="'/admins/recipients/instances/instance?instanceId=' + recipient.instance.id"></link-icon>
             <p class="comment">{{recipient.instance.description}}</p>
         </td>
     </tr>
@@ -38,6 +38,13 @@
             <div v-else>
                 <span class="disabled">-</span>
             </div>
+        </td>
+    </tr>
+    <tr>
+        <td>发送时间</td>
+        <td>
+            <span v-if="recipient.timeFrom.length > 0 && recipient.timeTo.length > 0">{{recipient.timeFrom}} - {{recipient.timeTo}}</span>
+            <span v-else class="disabled">-</span>
         </td>
     </tr>
     <tr>

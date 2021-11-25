@@ -3,13 +3,14 @@ package node
 import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/clusters/cluster/node/nodeutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
 	"strings"
 )
 
-// 安装节点
+// InstallAction 安装节点
 type InstallAction struct {
 	actionutils.ParentAction
 }
@@ -25,14 +26,9 @@ func (this *InstallAction) RunGet(params struct {
 	this.Data["nodeId"] = params.NodeId
 
 	// 节点
-	nodeResp, err := this.RPC().NodeRPC().FindEnabledNode(this.AdminContext(), &pb.FindEnabledNodeRequest{NodeId: params.NodeId})
+	node, err := nodeutils.InitNodeInfo(this.Parent(), params.NodeId)
 	if err != nil {
 		this.ErrorPage(err)
-		return
-	}
-	node := nodeResp.Node
-	if node == nil {
-		this.WriteString("找不到要操作的节点")
 		return
 	}
 
@@ -74,7 +70,7 @@ func (this *InstallAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	apiNodes := apiNodesResp.Nodes
+	apiNodes := apiNodesResp.ApiNodes
 	apiEndpoints := []string{}
 	for _, apiNode := range apiNodes {
 		if !apiNode.IsOn {
@@ -84,20 +80,17 @@ func (this *InstallAction) RunGet(params struct {
 	}
 	this.Data["apiEndpoints"] = "\"" + strings.Join(apiEndpoints, "\", \"") + "\""
 
-	this.Data["node"] = maps.Map{
-		"id":          node.Id,
-		"name":        node.Name,
-		"installDir":  node.InstallDir,
-		"isInstalled": node.IsInstalled,
-		"uniqueId":    node.UniqueId,
-		"secret":      node.Secret,
-		"cluster":     clusterMap,
-	}
+	var nodeMap = this.Data["node"].(maps.Map)
+	nodeMap["installDir"] = node.InstallDir
+	nodeMap["isInstalled"] = node.IsInstalled
+	nodeMap["uniqueId"] = node.UniqueId
+	nodeMap["secret"] = node.Secret
+	nodeMap["cluster"] = clusterMap
 
 	this.Show()
 }
 
-// 开始安装
+// RunPost 开始安装
 func (this *InstallAction) RunPost(params struct {
 	NodeId int64
 

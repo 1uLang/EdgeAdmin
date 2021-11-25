@@ -20,25 +20,25 @@ func (this *VirusAction) RunGet(params struct {
 	Agent string
 }) {
 
+	this.Data["virus"] = []map[string]string{}
+	this.Data["agents"] = []map[string]string{}
+	this.Data["agent"] = params.Agent
+	defer this.Show()
 	err := InitAPIServer()
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMsg"] = err.Error()
 		return
 	}
 	agent, err := server.AgentList(&agents.ListReq{
 		AdminUserId: this.AdminId(),
 	})
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMsg"] = err.Error()
 		return
 	}
 
 	if len(agent.AffectedItems) == 0 {
 		this.Data["errorMsg"] = "请先添加资产"
-		this.Data["virus"] = []map[string]string{}
-		this.Data["agents"] = []map[string]string{}
-		this.Data["agent"] = params.Agent
-		this.Show()
 		return
 	}
 	if params.Agent == "" {
@@ -54,7 +54,7 @@ func (this *VirusAction) RunGet(params struct {
 		//Start: 1630982235, End: 1631068635,
 	})
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMsg"] = err.Error()
 		return
 	}
 
@@ -70,7 +70,7 @@ func (this *VirusAction) RunGet(params struct {
 		//Start: 1630982235, End: 1631068635,
 	})
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMsg"] = err.Error()
 		return
 	}
 	this.Data["virus"] = list.Hits
@@ -79,5 +79,4 @@ func (this *VirusAction) RunGet(params struct {
 
 	this.Data["agent"] = params.Agent
 
-	this.Show()
 }

@@ -2,7 +2,6 @@ package databackup
 
 import (
 	"bytes"
-
 	"github.com/1uLang/zhiannet-api/nextcloud/model"
 	"github.com/1uLang/zhiannet-api/nextcloud/request"
 	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
@@ -21,10 +20,18 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	Dirpath string // 为空时表示根目录
 }) {
+
+	this.Data["list"] = []int64{}
+	this.Data["quota"] = ""
+	this.Data["used"] = ""
+	this.Data["percent"] = ""
+	this.Data["title"] = []int64{}
+
+	defer this.Show()
 	// 获取token
 	token, err := model.QueryTokenByUID(this.AdminId(), 1)
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = err.Error()
 		return
 	}
 
@@ -32,7 +39,7 @@ func (this *IndexAction) RunGet(params struct {
 	// list, err := request.ListFolders(token)
 	list, err := request.ListFoldersWithPath(token, params.Dirpath)
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = err.Error()
 		return
 	}
 	this.Data["list"] = list.List
@@ -46,7 +53,7 @@ func (this *IndexAction) RunGet(params struct {
 
 func (this *IndexAction) RunPost(params struct {
 	UploadFile *actions.File `json:"uploadFile"`
-	Dirpath string
+	Dirpath    string
 }) {
 	// 获取token
 	token, err := model.QueryTokenByUID(this.AdminId(), 1)
@@ -65,7 +72,7 @@ func (this *IndexAction) RunPost(params struct {
 	}
 	name := params.UploadFile.Filename
 	// err = request.UploadFile(token, name, bytes.NewReader(upFile))
-	err= request.UploadFileWithPath(token,name,bytes.NewReader(upFile),params.Dirpath)
+	err = request.UploadFileWithPath(token, name, bytes.NewReader(upFile), params.Dirpath)
 	if err != nil {
 		this.ErrorPage(err)
 		return

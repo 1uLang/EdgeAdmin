@@ -42,7 +42,7 @@ func (this *UpdateHostsAction) RunPost(params struct {
 		},
 		NodeId: params.NodeId,
 		Secret: params.NodeSecret,
-	})
+	}, false)
 	if err != nil {
 		this.FailField("host", "测试API节点时出错，请检查配置，错误信息："+err.Error())
 	}
@@ -50,6 +50,10 @@ func (this *UpdateHostsAction) RunPost(params struct {
 	if err != nil {
 		this.FailField("host", "无法连接此API节点，错误信息："+err.Error())
 	}
+
+	defer func() {
+		_ = client.Close()
+	}()
 
 	// 获取管理员节点信息
 	apiTokensResp, err := client.APITokenRPC().FindAllEnabledAPITokens(client.APIContext(0), &pb.FindAllEnabledAPITokensRequest{Role: "admin"})
@@ -69,7 +73,7 @@ func (this *UpdateHostsAction) RunPost(params struct {
 		this.Fail("获取API节点列表失败，错误信息：" + err.Error())
 	}
 	var endpoints = []string{}
-	for _, node := range nodesResp.Nodes {
+	for _, node := range nodesResp.ApiNodes {
 		if !node.IsOn {
 			continue
 		}
@@ -144,7 +148,7 @@ func (this *UpdateHostsAction) RunPost(params struct {
 
 		// 保存
 		_, err = client.APINodeRPC().UpdateAPINode(client.Context(0), &pb.UpdateAPINodeRequest{
-			NodeId:          node.Id,
+			ApiNodeId:       node.Id,
 			Name:            node.Name,
 			Description:     node.Description,
 			HttpJSON:        node.HttpJSON,

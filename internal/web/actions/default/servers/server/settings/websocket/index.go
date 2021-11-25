@@ -7,6 +7,7 @@ import (
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
 	"github.com/iwind/TeaGo/actions"
+	"github.com/iwind/TeaGo/types"
 )
 
 type IndexAction struct {
@@ -21,6 +22,17 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	ServerId int64
 }) {
+	// 服务分组设置
+	groupResp, err := this.RPC().ServerGroupRPC().FindEnabledServerGroupConfigInfo(this.AdminContext(), &pb.FindEnabledServerGroupConfigInfoRequest{
+		ServerId: params.ServerId,
+	})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	this.Data["hasGroupConfig"] = groupResp.HasWebsocketConfig
+	this.Data["groupSettingURL"] = "/servers/groups/group/settings/websocket?groupId=" + types.String(groupResp.ServerGroupId)
+
 	webConfig, err := dao.SharedHTTPWebDAO.FindWebConfigWithServerId(this.AdminContext(), params.ServerId)
 	if err != nil {
 		this.ErrorPage(err)
@@ -103,7 +115,7 @@ func (this *IndexAction) RunPost(params struct {
 		return
 	}
 	_, err = this.RPC().HTTPWebRPC().UpdateHTTPWebWebsocket(this.AdminContext(), &pb.UpdateHTTPWebWebsocketRequest{
-		WebId:         params.WebId,
+		HttpWebId:     params.WebId,
 		WebsocketJSON: websocketRefJSON,
 	})
 	if err != nil {

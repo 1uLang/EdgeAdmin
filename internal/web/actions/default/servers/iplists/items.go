@@ -19,8 +19,11 @@ func (this *ItemsAction) Init() {
 }
 
 func (this *ItemsAction) RunGet(params struct {
-	ListId int64
+	ListId  int64
+	Keyword string
 }) {
+	this.Data["keyword"] = params.Keyword
+
 	err := InitIPList(this.Parent(), params.ListId)
 	if err != nil {
 		this.ErrorPage(err)
@@ -29,7 +32,10 @@ func (this *ItemsAction) RunGet(params struct {
 
 	// 数量
 	var listId = params.ListId
-	countResp, err := this.RPC().IPItemRPC().CountIPItemsWithListId(this.AdminContext(), &pb.CountIPItemsWithListIdRequest{IpListId: listId})
+	countResp, err := this.RPC().IPItemRPC().CountIPItemsWithListId(this.AdminContext(), &pb.CountIPItemsWithListIdRequest{
+		IpListId: listId,
+		Keyword:  params.Keyword,
+	})
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -41,6 +47,7 @@ func (this *ItemsAction) RunGet(params struct {
 	// 列表
 	itemsResp, err := this.RPC().IPItemRPC().ListIPItemsWithListId(this.AdminContext(), &pb.ListIPItemsWithListIdRequest{
 		IpListId: listId,
+		Keyword:  params.Keyword,
 		Offset:   page.Offset,
 		Size:     page.Size,
 	})
@@ -55,14 +62,56 @@ func (this *ItemsAction) RunGet(params struct {
 			expiredTime = timeutil.FormatTime("Y-m-d H:i:s", item.ExpiredAt)
 		}
 
+		// policy
+		var sourcePolicyMap = maps.Map{"id": 0}
+		if item.SourceHTTPFirewallPolicy != nil {
+			sourcePolicyMap = maps.Map{
+				"id":       item.SourceHTTPFirewallPolicy.Id,
+				"name":     item.SourceHTTPFirewallPolicy.Name,
+				"serverId": item.SourceHTTPFirewallPolicy.ServerId,
+			}
+		}
+
+		// group
+		var sourceGroupMap = maps.Map{"id": 0}
+		if item.SourceHTTPFirewallRuleGroup != nil {
+			sourceGroupMap = maps.Map{
+				"id":   item.SourceHTTPFirewallRuleGroup.Id,
+				"name": item.SourceHTTPFirewallRuleGroup.Name,
+			}
+		}
+
+		// set
+		var sourceSetMap = maps.Map{"id": 0}
+		if item.SourceHTTPFirewallRuleSet != nil {
+			sourceSetMap = maps.Map{
+				"id":   item.SourceHTTPFirewallRuleSet.Id,
+				"name": item.SourceHTTPFirewallRuleSet.Name,
+			}
+		}
+
+		// server
+		var sourceServerMap = maps.Map{"id": 0}
+		if item.SourceServer != nil {
+			sourceServerMap = maps.Map{
+				"id":   item.SourceServer.Id,
+				"name": item.SourceServer.Name,
+			}
+		}
+
 		itemMaps = append(itemMaps, maps.Map{
 			"id":             item.Id,
 			"ipFrom":         item.IpFrom,
 			"ipTo":           item.IpTo,
+			"createdTime":    timeutil.FormatTime("Y-m-d", item.CreatedAt),
 			"expiredTime":    expiredTime,
 			"reason":         item.Reason,
 			"type":           item.Type,
 			"eventLevelName": firewallconfigs.FindFirewallEventLevelName(item.EventLevel),
+			"sourcePolicy":   sourcePolicyMap,
+			"sourceGroup":    sourceGroupMap,
+			"sourceSet":      sourceSetMap,
+			"sourceServer":   sourceServerMap,
 		})
 	}
 	this.Data["items"] = itemMaps

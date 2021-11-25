@@ -103,6 +103,10 @@ div.margin, p.margin {
 	margin-top: 1em;
 }
 
+.opacity-mask {
+	opacity: 0.3;
+}
+
 /** 操作按钮容器 **/
 .op.one {
 	width: 4em;
@@ -123,7 +127,7 @@ div.margin, p.margin {
 /** 主菜单 **/
 .main-menu {
 	.ui.menu {
-		width: 10em !important;
+		width: 9.5em !important;
 		border-radius: 0 !important;
 	}
 }
@@ -149,6 +153,9 @@ div.margin, p.margin {
 
 .main-menu {
 	.ui.menu {
+		padding-bottom: 3em;
+
+
 		.item {
 			.subtitle {
 				display: none;
@@ -172,11 +179,20 @@ div.margin, p.margin {
 		.sub-items {
 			.item {
 				padding-left: 2.8em !important;
+				padding-right: 0.4em !important;
 
 				.icon {
 					position: absolute;
 					left: 1.1em;
 					top: 0.93em;
+				}
+
+				.label {
+					margin-left: 0;
+					margin-right: 0;
+					padding-left: 0.4em;
+					padding-right: 0.4em;
+					min-width: 2em;
 				}
 			}
 
@@ -290,6 +306,14 @@ body.expanded .main {
 	background: #007D9C !important;
 }
 
+.top-nav.theme4 {
+	background: #A12568 !important;
+}
+
+.top-nav.theme5 {
+	background: #1C7947 !important;
+}
+
 .top-nav::-webkit-scrollbar {
 	height: 2px;
 }
@@ -334,20 +358,29 @@ body.expanded .main {
 	padding-bottom: 5em;
 	padding-right: 1em;
 	right: 1em;
+
+
+	.main-box {
+
+	}
 }
 
 @media screen and (max-width: 512px) {
 	.main {
 		left: 4em;
+
+		.main-box {
+			display: block;
+		}
 	}
 }
 
 .main.without-menu {
-	left: 10em;
+	left: 9em;
 }
 
 .main.without-secondary-menu {
-	top: 3.4em;
+	top: 2.9em;
 }
 
 @media screen and (max-width: 512px) {
@@ -390,6 +423,11 @@ body.expanded .main {
 	font-size: 0.9em;
 }
 
+
+.main table td em.grey {
+	color: grey;
+}
+
 .main h3 {
 	font-weight: normal;
 	margin-top: 1em !important;
@@ -427,7 +465,7 @@ body.expanded .main {
 .main-menu {
 	position: fixed;
 	/**top: 1.05em;**/
-	top: 1em;
+	top: 2em;
 	bottom: 0;
 	overflow-y: auto;
 	z-index: 10;
@@ -459,6 +497,22 @@ body.expanded .main {
 
 	.menu {
 		background: #007D9C !important;
+	}
+}
+
+.main-menu.theme4 {
+	background: #A12568 !important;
+
+	.menu {
+		background: #A12568 !important;
+	}
+}
+
+.main-menu.theme5 {
+	background: #1C7947 !important;
+
+	.menu {
+		background: #1C7947 !important;
 	}
 }
 
@@ -791,4 +845,10 @@ td {
 // input
 input.error {
 	border: 1px #e0b4b4 solid !important;
+}
+
+// textarea
+textarea.wide-code {
+	font-family: Menlo, Monaco, "Courier New", monospace !important;
+	line-height: 1.6 !important;
 }

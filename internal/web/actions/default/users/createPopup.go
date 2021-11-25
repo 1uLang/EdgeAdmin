@@ -4,8 +4,6 @@ import (
 	"github.com/1uLang/zhiannet-api/common/model/edge_logins"
 	"github.com/1uLang/zhiannet-api/common/server/edge_logins_server"
 	"github.com/1uLang/zhiannet-api/common/server/edge_users_server"
-	"github.com/1uLang/zhiannet-api/nextcloud/model"
-	nc_req "github.com/1uLang/zhiannet-api/nextcloud/request"
 	"github.com/TeaOSLab/EdgeAdmin/internal/utils/numberutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
@@ -96,26 +94,26 @@ func (this *CreatePopupAction) RunPost(params struct {
 	}
 
 	// 创建nextcloud账号，并写入数据库
-	adminToken := nc_req.GetAdminToken()
-	// userPwd := `adminAd#@2021`
-	userPwd := params.Pass2
-	err = nc_req.CreateUserV2(adminToken, params.Username, userPwd)
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-	// 生成token
-	gtReq := &model.LoginReq{
-		User:     params.Username,
-		Password: userPwd,
-	}
-	ncToken := nc_req.GenerateToken(gtReq)
-	// 写入数据库
-	err = model.StoreNCToken(params.Username, ncToken)
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
+	//adminToken := nc_req.GetAdminToken()
+	//// userPwd := `adminAd#@2021`
+	//userPwd := params.Pass2
+	//err = nc_req.CreateUserV2(adminToken, params.Username, userPwd)
+	//if err != nil {
+	//	this.ErrorPage(err)
+	//	return
+	//}
+	//// 生成token
+	//gtReq := &model.LoginReq{
+	//	User:     params.Username,
+	//	Password: userPwd,
+	//}
+	//ncToken := nc_req.GenerateToken(gtReq)
+	//// 写入数据库
+	//err = model.StoreNCToken(params.Username, ncToken)
+	//if err != nil {
+	//	this.ErrorPage(err)
+	//	return
+	//}
 
 	//创建审计系统的账号
 	//{
@@ -175,11 +173,11 @@ func (this *CreatePopupAction) RunPost(params struct {
 	//}
 	// 用户账号和nextcloud账号进行关联
 	// 因为用户名是唯一的，所以加入用户名字段，减少脏数据的产生
-	err = model.BindNCTokenAndUID(params.Username, createResp.UserId)
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
+	//err = model.BindNCTokenAndUID(params.Username, createResp.UserId)
+	//if err != nil {
+	//	this.ErrorPage(err)
+	//	return
+	//}
 	//更新密码修改时间
 	edge_users_server.UpdatePwdAt(uint64(createResp.UserId))
 	//otp

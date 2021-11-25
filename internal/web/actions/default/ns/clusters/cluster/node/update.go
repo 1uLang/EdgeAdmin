@@ -46,7 +46,7 @@ func (this *UpdateAction) RunGet(params struct {
 	}
 
 	// IP地址
-	ipAddressesResp, err := this.RPC().NodeIPAddressRPC().FindAllEnabledIPAddressesWithNodeId(this.AdminContext(), &pb.FindAllEnabledIPAddressesWithNodeIdRequest{
+	ipAddressesResp, err := this.RPC().NodeIPAddressRPC().FindAllEnabledNodeIPAddressesWithNodeId(this.AdminContext(), &pb.FindAllEnabledNodeIPAddressesWithNodeIdRequest{
 		NodeId: params.NodeId,
 		Role:   nodeconfigs.NodeRoleDNS,
 	})
@@ -55,12 +55,14 @@ func (this *UpdateAction) RunGet(params struct {
 		return
 	}
 	ipAddressMaps := []maps.Map{}
-	for _, addr := range ipAddressesResp.Addresses {
+	for _, addr := range ipAddressesResp.NodeIPAddresses {
 		ipAddressMaps = append(ipAddressMaps, maps.Map{
 			"id":        addr.Id,
 			"name":      addr.Name,
 			"ip":        addr.Ip,
 			"canAccess": addr.CanAccess,
+			"isOn":      addr.IsOn,
+			"isUp":      addr.IsUp,
 		})
 	}
 
@@ -90,6 +92,7 @@ func (this *UpdateAction) RunGet(params struct {
 					"name":       grantResp.NodeGrant.Name,
 					"method":     grantResp.NodeGrant.Method,
 					"methodName": grantutils.FindGrantMethodName(grantResp.NodeGrant.Method),
+					"username":   grantResp.NodeGrant.Username,
 				}
 			}
 		}
@@ -210,7 +213,7 @@ func (this *UpdateAction) RunPost(params struct {
 	}
 
 	// 禁用老的IP地址
-	_, err = this.RPC().NodeIPAddressRPC().DisableAllIPAddressesWithNodeId(this.AdminContext(), &pb.DisableAllIPAddressesWithNodeIdRequest{
+	_, err = this.RPC().NodeIPAddressRPC().DisableAllNodeIPAddressesWithNodeId(this.AdminContext(), &pb.DisableAllNodeIPAddressesWithNodeIdRequest{
 		NodeId: params.NodeId,
 		Role:   nodeconfigs.NodeRoleDNS,
 	})

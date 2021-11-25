@@ -16,6 +16,8 @@ func init() {
 			Prefix("/servers/server/settings/cache").
 			GetPost("", new(IndexAction)).
 			GetPost("/createPopup", new(CreatePopupAction)).
+			GetPost("/purge", new(PurgeAction)).
+			GetPost("/preheat", new(PreheatAction)).
 			EndAll()
 	})
 }

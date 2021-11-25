@@ -3,8 +3,6 @@
 package dashboard
 
 import (
-	"github.com/1uLang/zhiannet-api/awvs/server/targets"
-	"github.com/1uLang/zhiannet-api/common/server/subassemblynode"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
 	"github.com/TeaOSLab/EdgeAdmin/internal/utils/numberutils"
@@ -42,23 +40,34 @@ func (this *IndexAction) RunGet(params struct{}) {
 		}
 	}
 
+	this.Show()
+}
+
+func (this *IndexAction) RunPost(params struct{}) {
 	// 读取看板数据
-	resp, err := this.RPC().AdminRPC().ComposeAdminDashboard(this.AdminContext(), &pb.ComposeAdminDashboardRequest{})
+	resp, err := this.RPC().AdminRPC().ComposeAdminDashboard(this.AdminContext(), &pb.ComposeAdminDashboardRequest{
+		ApiVersion: teaconst.APINodeVersion,
+	})
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
 	this.Data["dashboard"] = maps.Map{
-		"countServers":      resp.CountServers,
-		"countNodeClusters": resp.CountNodeClusters,
-		"countNodes":        resp.CountNodes,
-		"countUsers":        resp.CountUsers,
-		"countAPINodes":     resp.CountAPINodes,
-		"countDBNodes":      resp.CountDBNodes,
-		"countUserNodes":    resp.CountUserNodes,
+		"defaultClusterId": resp.DefaultNodeClusterId,
+
+		"countServers":          resp.CountServers,
+		"countNodeClusters":     resp.CountNodeClusters,
+		"countNodes":            resp.CountNodes,
+		"countOfflineNodes":     resp.CountOfflineNodes,
+		"countUsers":            resp.CountUsers,
+		"countAPINodes":         resp.CountAPINodes,
+		"countOfflineAPINodes":  resp.CountOfflineAPINodes,
+		"countDBNodes":          resp.CountDBNodes,
+		"countUserNodes":        resp.CountUserNodes,
+		"countOfflineUserNodes": resp.CountOfflineUserNodes,
 
 		"canGoServers":  configloaders.AllowModule(this.AdminId(), configloaders.AdminModuleCodeServer),
-		"canGoNodes":    configloaders.AllowModule(this.AdminId(), configloaders.AdminModuleCodeServer),
+		"canGoNodes":    configloaders.AllowModule(this.AdminId(), configloaders.AdminModuleCodeNode),
 		"canGoSettings": configloaders.AllowModule(this.AdminId(), configloaders.AdminModuleCodeSetting),
 		"canGoUsers":    configloaders.AllowModule(this.AdminId(), configloaders.AdminModuleCodeUser),
 	}
@@ -83,8 +92,14 @@ func (this *IndexAction) RunGet(params struct{}) {
 		statMaps := []maps.Map{}
 		for _, stat := range resp.HourlyTrafficStats {
 			statMaps = append(statMaps, maps.Map{
-				"bytes": stat.Bytes,
-				"hour":  stat.Hour[8:],
+				"bytes":               stat.Bytes,
+				"cachedBytes":         stat.CachedBytes,
+				"countRequests":       stat.CountRequests,
+				"countCachedRequests": stat.CountCachedRequests,
+				"countAttackRequests": stat.CountAttackRequests,
+				"attackBytes":         stat.AttackBytes,
+				"day":                 stat.Hour[4:6] + "月" + stat.Hour[6:8] + "日",
+				"hour":                stat.Hour[8:],
 			})
 		}
 		this.Data["hourlyTrafficStats"] = statMaps
@@ -95,8 +110,13 @@ func (this *IndexAction) RunGet(params struct{}) {
 		statMaps := []maps.Map{}
 		for _, stat := range resp.DailyTrafficStats {
 			statMaps = append(statMaps, maps.Map{
-				"bytes": stat.Bytes,
-				"day":   stat.Day[4:6] + "月" + stat.Day[6:] + "日",
+				"bytes":               stat.Bytes,
+				"cachedBytes":         stat.CachedBytes,
+				"countRequests":       stat.CountRequests,
+				"countCachedRequests": stat.CountCachedRequests,
+				"countAttackRequests": stat.CountAttackRequests,
+				"attackBytes":         stat.AttackBytes,
+				"day":                 stat.Day[4:6] + "月" + stat.Day[6:] + "日",
 			})
 		}
 		this.Data["dailyTrafficStats"] = statMaps
@@ -170,47 +190,20 @@ func (this *IndexAction) RunGet(params struct{}) {
 		}
 	}
 
-	//节点数据统计 1.ddos、2.下一代防火墙、3.主机漏扫 4.web漏扫 5主机防护 6安全审计 7堡垒机
-	ddos_total, _ := subassemblynode.GetNodeNum(&subassemblynode.NodeNumReq{
-		Type: 1, State: "1", //
-	})
-	allTotal := ddos_total
-
-	nfw_total, _ := subassemblynode.GetNodeNum(&subassemblynode.NodeNumReq{
-		Type: 2, State: "1", //
-	})
-	allTotal += nfw_total
-
-	//host_scan_total, _ := subassemblynode.GetNodeNum(&subassemblynode.NodeNumReq{
-	//	Type: 3,State: "1", //
-	//})
-	//allTotal += host_scan_total
-
-	web_scan_total, _ := subassemblynode.GetNodeNum(&subassemblynode.NodeNumReq{
-		Type: 4, State: "1", //
-	})
-	allTotal += web_scan_total
-
-	host_total, _ := subassemblynode.GetNodeNum(&subassemblynode.NodeNumReq{
-		Type: 5, State: "1", //
-	})
-	allTotal += host_total
-
-	this.Data["all_total"] = allTotal
-	this.Data["node"] = maps.Map{
-		"nodeCount": allTotal,
-		"ddosCount": ddos_total,
-		"nfwCount":  nfw_total,
-		"scanCount": web_scan_total,
-		"hidsCount": host_total,
+	// 域名排行
+	{
+		var statMaps = []maps.Map{}
+		for _, stat := range resp.TopDomainStats {
+			statMaps = append(statMaps, maps.Map{
+				"serverId":      stat.ServerId,
+				"domain":        stat.Domain,
+				"countRequests": stat.CountRequests,
+				"bytes":         stat.Bytes,
+			})
+		}
+		this.Data["topDomainStats"] = statMaps
 	}
-	//资产数据
-	var scan_goal int64
-	scan_goal, _ = targets.GetTargetsNum(nil)
-	this.Data["assets"] = maps.Map{
-		"host":      0,
-		"scan_goal": scan_goal,
-	}
+
 	// 指标
 	{
 		var chartMaps = []maps.Map{}
@@ -249,5 +242,5 @@ func (this *IndexAction) RunGet(params struct{}) {
 		this.Data["metricCharts"] = chartMaps
 	}
 
-	this.Show()
+	this.Success()
 }

@@ -11,6 +11,7 @@ Vue.component("http-cache-ref-box", {
 				life: {count: 2, unit: "hour"},
 				status: [200],
 				maxSize: {count: 32, unit: "mb"},
+				minSize: {count: 0, unit: "kb"},
 				skipCacheControlValues: ["private", "no-cache", "no-store"],
 				skipSetCookie: true,
 				enableRequestCachePragma: false,
@@ -24,6 +25,9 @@ Vue.component("http-cache-ref-box", {
 		}
 		if (ref.maxSize == null) {
 			ref.maxSize = {count: 32, unit: "mb"}
+		}
+		if (ref.minSize == null) {
+			ref.minSize = {count: 0, unit: "kb"}
 		}
 		return {
 			ref: ref,
@@ -40,8 +44,22 @@ Vue.component("http-cache-ref-box", {
 		changeMaxSize: function (v) {
 			this.ref.maxSize = v
 		},
+		changeMinSize: function (v) {
+			this.ref.minSize = v
+		},
 		changeConds: function (v) {
 			this.ref.conds = v
+		},
+		changeStatusList: function (list) {
+			let result = []
+			list.forEach(function (status) {
+				let statusNumber = parseInt(status)
+				if (isNaN(statusNumber) || statusNumber < 100 || statusNumber > 999) {
+					return
+				}
+				result.push(statusNumber)
+			})
+			this.ref.status = result
 		}
 	},
 	template: `<tbody>
@@ -70,9 +88,17 @@ Vue.component("http-cache-ref-box", {
 		<td colspan="2"><more-options-indicator @change="changeOptionsVisible"></more-options-indicator></td>
 	</tr>
 	<tr v-show="moreOptionsVisible && !vIsReverse">
-		<td>可缓存的最大文件</td>
+		<td>可缓存的最大内容尺寸</td>
 		<td>
 			<size-capacity-box :v-value="ref.maxSize" @change="changeMaxSize"></size-capacity-box>
+			<p class="comment">内容尺寸如果高于此值则不缓存。</p>
+		</td>
+	</tr>
+	<tr v-show="moreOptionsVisible && !vIsReverse">
+		<td>可缓存的最小内容尺寸</td>
+		<td>
+			<size-capacity-box :v-value="ref.minSize" @change="changeMinSize"></size-capacity-box>
+			<p class="comment">内容尺寸如果低于此值则不缓存。</p>
 		</td>
 	</tr>
 	<tr v-show="moreOptionsVisible && !vIsReverse">
@@ -85,7 +111,7 @@ Vue.component("http-cache-ref-box", {
 	<tr v-show="moreOptionsVisible && !vIsReverse">
 		<td>状态码列表</td>
 		<td>
-			<values-box name="statusList" size="3" maxlength="3" :values="ref.status"></values-box>
+			<values-box name="statusList" size="3" maxlength="3" :values="ref.status" @change="changeStatusList"></values-box>
 			<p class="comment">允许缓存的HTTP状态码列表。</p>
 		</td>
 	</tr>

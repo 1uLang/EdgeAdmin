@@ -27,6 +27,15 @@ Tea.context(function () {
     this.allUsers = []
     this.authUsers = []
 
+
+    this.$delay(function () {
+
+        if (this.errorMessage !== "" && this.errorMessage !== undefined) {
+            teaweb.warn(this.errorMessage, function () {
+            })
+        }
+    })
+
     this.getType = function (tp) {
         if (tp === 'password') {
             return "密码"

@@ -7,27 +7,29 @@ Vue.component("health-check-config-box", {
         let urlRequestURI = "/"
         let urlHost = ""
 
-        if (healthCheckConfig == null) {
-            healthCheckConfig = {
-                isOn: false,
-                url: "",
-                interval: {count: 60, unit: "second"},
-                statusCodes: [200],
-                timeout: {count: 10, unit: "second"},
-                countTries: 3,
-                tryDelay: {count: 100, unit: "ms"},
-                autoDown: true,
-                countUp: 1,
-                countDown: 1
-            }
-            let that = this
-            setTimeout(function () {
-                that.changeURL()
-            }, 500)
-        } else {
-            try {
-                let url = new URL(healthCheckConfig.url)
-                urlProtocol = url.protocol.substring(0, url.protocol.length - 1)
+		if (healthCheckConfig == null) {
+			healthCheckConfig = {
+				isOn: false,
+				url: "",
+				interval: {count: 60, unit: "second"},
+				statusCodes: [200],
+				timeout: {count: 10, unit: "second"},
+				countTries: 3,
+				tryDelay: {count: 100, unit: "ms"},
+				autoDown: true,
+				countUp: 1,
+				countDown: 3,
+				userAgent: "",
+				onlyBasicRequest: false
+			}
+			let that = this
+			setTimeout(function () {
+				that.changeURL()
+			}, 500)
+		} else {
+			try {
+				let url = new URL(healthCheckConfig.url)
+				urlProtocol = url.protocol.substring(0, url.protocol.length - 1)
 
                 // 域名
                 urlHost = url.host
@@ -47,104 +49,108 @@ Vue.component("health-check-config-box", {
             } catch (e) {
             }
 
-            if (healthCheckConfig.statusCodes == null) {
-                healthCheckConfig.statusCodes = [200]
-            }
-            if (healthCheckConfig.interval == null) {
-                healthCheckConfig.interval = {count: 60, unit: "second"}
-            }
-            if (healthCheckConfig.timeout == null) {
-                healthCheckConfig.timeout = {count: 10, unit: "second"}
-            }
-            if (healthCheckConfig.tryDelay == null) {
-                healthCheckConfig.tryDelay = {count: 100, unit: "ms"}
-            }
-            if (healthCheckConfig.countUp == null || healthCheckConfig.countUp < 1) {
-                healthCheckConfig.countUp = 1
-            }
-            if (healthCheckConfig.countDown == null || healthCheckConfig.countDown < 1) {
-                healthCheckConfig.countDown = 1
-            }
-        }
-        return {
-            healthCheck: healthCheckConfig,
-            advancedVisible: false,
-            urlProtocol: urlProtocol,
-            urlHost: urlHost,
-            urlPort: urlPort,
-            urlRequestURI: urlRequestURI
-        }
-    },
-    watch: {
-        urlRequestURI: function () {
-            if (this.urlRequestURI.length > 0 && this.urlRequestURI[0] != "/") {
-                this.urlRequestURI = "/" + this.urlRequestURI
-            }
-            this.changeURL()
-        },
-        urlPort: function (v) {
-            let port = parseInt(v)
-            if (!isNaN(port)) {
-                this.urlPort = port.toString()
-            } else {
-                this.urlPort = ""
-            }
-            this.changeURL()
-        },
-        urlProtocol: function () {
-            this.changeURL()
-        },
-        urlHost: function () {
-            this.changeURL()
-        },
-        "healthCheck.countTries": function (v) {
-            let count = parseInt(v)
-            if (!isNaN(count)) {
-                this.healthCheck.countTries = count
-            } else {
-                this.healthCheck.countTries = 0
-            }
-        },
-        "healthCheck.countUp": function (v) {
-            let count = parseInt(v)
-            if (!isNaN(count)) {
-                this.healthCheck.countUp = count
-            } else {
-                this.healthCheck.countUp = 0
-            }
-        },
-        "healthCheck.countDown": function (v) {
-            let count = parseInt(v)
-            if (!isNaN(count)) {
-                this.healthCheck.countDown = count
-            } else {
-                this.healthCheck.countDown = 0
-            }
-        }
-    },
-    methods: {
-        showAdvanced: function () {
-            this.advancedVisible = !this.advancedVisible
-        },
-        changeURL: function () {
-            let urlHost = this.urlHost
-            if (urlHost.length == 0) {
-                urlHost = "${host}"
-            }
-            this.healthCheck.url = this.urlProtocol + "://" + urlHost + ((this.urlPort.length > 0) ? ":" + this.urlPort : "") + this.urlRequestURI
-        },
-        changeStatus: function (values) {
-            this.healthCheck.statusCodes = values.$map(function (k, v) {
-                let status = parseInt(v)
-                if (isNaN(status)) {
-                    return 0
-                } else {
-                    return status
-                }
-            })
-        }
-    },
-    template: `<div>
+			if (healthCheckConfig.statusCodes == null) {
+				healthCheckConfig.statusCodes = [200]
+			}
+			if (healthCheckConfig.interval == null) {
+				healthCheckConfig.interval = {count: 60, unit: "second"}
+			}
+			if (healthCheckConfig.timeout == null) {
+				healthCheckConfig.timeout = {count: 10, unit: "second"}
+			}
+			if (healthCheckConfig.tryDelay == null) {
+				healthCheckConfig.tryDelay = {count: 100, unit: "ms"}
+			}
+			if (healthCheckConfig.countUp == null || healthCheckConfig.countUp < 1) {
+				healthCheckConfig.countUp = 1
+			}
+			if (healthCheckConfig.countDown == null || healthCheckConfig.countDown < 1) {
+				healthCheckConfig.countDown = 3
+			}
+		}
+		return {
+			healthCheck: healthCheckConfig,
+			advancedVisible: false,
+			urlProtocol: urlProtocol,
+			urlHost: urlHost,
+			urlPort: urlPort,
+			urlRequestURI: urlRequestURI,
+			urlIsEditing: healthCheckConfig.url.length == 0
+		}
+	},
+	watch: {
+		urlRequestURI: function () {
+			if (this.urlRequestURI.length > 0 && this.urlRequestURI[0] != "/") {
+				this.urlRequestURI = "/" + this.urlRequestURI
+			}
+			this.changeURL()
+		},
+		urlPort: function (v) {
+			let port = parseInt(v)
+			if (!isNaN(port)) {
+				this.urlPort = port.toString()
+			} else {
+				this.urlPort = ""
+			}
+			this.changeURL()
+		},
+		urlProtocol: function () {
+			this.changeURL()
+		},
+		urlHost: function () {
+			this.changeURL()
+		},
+		"healthCheck.countTries": function (v) {
+			let count = parseInt(v)
+			if (!isNaN(count)) {
+				this.healthCheck.countTries = count
+			} else {
+				this.healthCheck.countTries = 0
+			}
+		},
+		"healthCheck.countUp": function (v) {
+			let count = parseInt(v)
+			if (!isNaN(count)) {
+				this.healthCheck.countUp = count
+			} else {
+				this.healthCheck.countUp = 0
+			}
+		},
+		"healthCheck.countDown": function (v) {
+			let count = parseInt(v)
+			if (!isNaN(count)) {
+				this.healthCheck.countDown = count
+			} else {
+				this.healthCheck.countDown = 0
+			}
+		}
+	},
+	methods: {
+		showAdvanced: function () {
+			this.advancedVisible = !this.advancedVisible
+		},
+		changeURL: function () {
+			let urlHost = this.urlHost
+			if (urlHost.length == 0) {
+				urlHost = "${host}"
+			}
+			this.healthCheck.url = this.urlProtocol + "://" + urlHost + ((this.urlPort.length > 0) ? ":" + this.urlPort : "") + this.urlRequestURI
+		},
+		changeStatus: function (values) {
+			this.healthCheck.statusCodes = values.$map(function (k, v) {
+				let status = parseInt(v)
+				if (isNaN(status)) {
+					return 0
+				} else {
+					return status
+				}
+			})
+		},
+		editURL: function () {
+			this.urlIsEditing = !this.urlIsEditing
+		}
+	},
+	template: `<div>
 <input type="hidden" name="healthCheckJSON" :value="JSON.stringify(healthCheck)"/>
 <table class="ui table definition selectable">
 	<tbody>
@@ -162,41 +168,41 @@ Vue.component("health-check-config-box", {
 		<tr>
 			<td>URL *</td>
 			<td>
-			    <table class="ui table">
-			         <tr>
-			            <td class="title">协议</td> 
-			            <td>
-			            	<select class="ui dropdown auto-width" v-model="urlProtocol">
-							<option value="http">http://</option>
-							<option value="https">https://</option>
-						    </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>域名</td>
-                        <td>
-                            <input type="text" v-model="urlHost"/>
-							<p class="comment">在此集群上可以访问到的一个域名。</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>端口</td>
-                        <td>
-                            <input type="text" maxlength="5" style="width:5.4em" placeholder="端口" v-model="urlPort"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>RequestURI</td>
-                        <td><input type="text" v-model="urlRequestURI" placeholder="/" style="width:20em"/></td>
-                    </tr>
-                </table>
-				<div class="ui divider"></div>
-				<p class="comment" v-if="healthCheck.url.length > 0">拼接后的URL：<code-label>{{healthCheck.url}}</code-label>，其中\${host}指的是域名。</p>
+				<div v-if="healthCheck.url.length > 0" style="margin-bottom: 1em"><code-label>{{healthCheck.url}}</code-label> &nbsp; <a href="" @click.prevent="editURL"><span class="small">修改 <i class="icon angle" :class="{down: !urlIsEditing, up: urlIsEditing}"></i></span></a> </div>
+				<div v-show="urlIsEditing">
+					<table class="ui table">
+						 <tr>
+							<td class="title">协议</td> 
+							<td>
+								<select class="ui dropdown auto-width" v-model="urlProtocol">
+								<option value="http">http://</option>
+								<option value="https">https://</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>域名</td>
+							<td>
+								<input type="text" v-model="urlHost"/>
+								<p class="comment">在此集群上可以访问到的一个域名。</p>
+							</td>
+						</tr>
+						<tr>
+							<td>端口</td>
+							<td>
+								<input type="text" maxlength="5" style="width:5.4em" placeholder="端口" v-model="urlPort"/>
+							</td>
+						</tr>
+						<tr>
+							<td>RequestURI</td>
+							<td><input type="text" v-model="urlRequestURI" placeholder="/" style="width:20em"/></td>
+						</tr>
+					</table>
+					<div class="ui divider"></div>
+					<p class="comment" v-if="healthCheck.url.length > 0">拼接后的URL：<code-label>{{healthCheck.url}}</code-label>，其中\${host}指的是域名。</p>
+				</div>
 			</td>
 		</tr>
-		<tr>
-		    <td></td>
-        </tr>
 		<tr>
 			<td>检测时间间隔</td>
 			<td>
@@ -256,6 +262,20 @@ Vue.component("health-check-config-box", {
 			<td>每次尝试间隔</td>
 			<td>
 				<time-duration-box :v-value="healthCheck.tryDelay"></time-duration-box>
+			</td>
+		</tr>
+		<tr>
+			<td>终端信息<em>（User-Agent）</em></td>
+			<td>
+				<input type="text" v-model="healthCheck.userAgent" maxlength="200"/>
+				<p class="comment">发送到服务器的User-Agent值，不填写表示使用默认值。</p>
+			</td>
+		</tr>
+		<tr>
+			<td>只基础请求</td>
+			<td>
+				<checkbox v-model="healthCheck.onlyBasicRequest"></checkbox>
+				<p class="comment">只做基础的请求，不处理反向代理（不检查源站）、WAF等。</p>
 			</td>
 		</tr>
 	</tbody>

@@ -121,6 +121,10 @@ func (this *IndexAction) RunGet(params struct {
 				this.ErrorPage(err)
 			}
 
+			if cluster.TimeZone == nodeconfigs.DefaultTimeZoneLocation {
+				cluster.TimeZone = ""
+			}
+
 			clusterMaps = append(clusterMaps, maps.Map{
 				"id":                cluster.Id,
 				"name":              cluster.Name,
@@ -132,6 +136,7 @@ func (this *IndexAction) RunGet(params struct {
 				"dnsName":           cluster.DnsName,
 				"dnsDomainName":     dnsDomainName,
 				"countServers":      countServersResp.Count,
+				"timeZone":          cluster.TimeZone,
 			})
 		}
 	}
@@ -193,7 +198,7 @@ func (this *IndexAction) searchNodes(keyword string) {
 		}
 
 		// IP
-		ipAddressesResp, err := this.RPC().NodeIPAddressRPC().FindAllEnabledIPAddressesWithNodeId(this.AdminContext(), &pb.FindAllEnabledIPAddressesWithNodeIdRequest{
+		ipAddressesResp, err := this.RPC().NodeIPAddressRPC().FindAllEnabledNodeIPAddressesWithNodeId(this.AdminContext(), &pb.FindAllEnabledNodeIPAddressesWithNodeIdRequest{
 			NodeId: node.Id,
 			Role:   nodeconfigs.NodeRoleNode,
 		})
@@ -202,12 +207,14 @@ func (this *IndexAction) searchNodes(keyword string) {
 			return
 		}
 		ipAddresses := []maps.Map{}
-		for _, addr := range ipAddressesResp.Addresses {
+		for _, addr := range ipAddressesResp.NodeIPAddresses {
 			ipAddresses = append(ipAddresses, maps.Map{
 				"id":        addr.Id,
 				"name":      addr.Name,
 				"ip":        addr.Ip,
 				"canAccess": addr.CanAccess,
+				"isOn":      addr.IsOn,
+				"isUp":      addr.IsUp,
 			})
 		}
 

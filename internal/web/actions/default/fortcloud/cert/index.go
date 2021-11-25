@@ -24,10 +24,11 @@ func (this *IndexAction) checkAndNewServerRequest() (*next_terminal_server.Reque
 }
 func (this *IndexAction) RunGet() {
 
+	this.Data["certs"] = []int{}
+	defer this.Show()
 	req, err := this.checkAndNewServerRequest()
 	if err != nil {
-		this.Data["nodeErr"] = "堡垒机组件错误:" + err.Error()
-		this.Show()
+		this.Data["errorMessage"] = err.Error()
 		return
 	}
 

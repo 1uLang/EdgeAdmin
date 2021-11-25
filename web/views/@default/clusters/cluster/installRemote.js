@@ -146,7 +146,7 @@ Tea.context(function () {
                                         })
                                         return
                                     default:
-                                        teaweb.warn("安装失败2：" + errMsg)
+                                        teaweb.warn("安装失败：" + errMsg)
                                 }
                             }
                         }

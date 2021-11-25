@@ -27,13 +27,6 @@ func (this *CreatePopupAction) RunGet(params struct {
 }
 
 func (this *CreatePopupAction) RunPost(params struct {
-
-	//ItemId   int64
-	//Name     string
-	//Type     string
-	//WidthDiv int32
-	//MaxItems int32
-
 	ItemId          int64
 	Name            string
 	Type            string
@@ -57,13 +50,6 @@ func (this *CreatePopupAction) RunPost(params struct {
 		Require("请选择图表类型")
 
 	createResp, err := this.RPC().MetricChartRPC().CreateMetricChart(this.AdminContext(), &pb.CreateMetricChartRequest{
-
-		//MetricItemId: params.ItemId,
-		//Name:         params.Name,
-		//Type:         params.Type,
-		//WidthDiv:     params.WidthDiv,
-		//MaxItems:     params.MaxItems,
-		//ParamsJSON:   nil,
 		MetricItemId:    params.ItemId,
 		Name:            params.Name,
 		Type:            params.Type,

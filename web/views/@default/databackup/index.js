@@ -13,6 +13,10 @@ Tea.context(function () {
     this.nUploadPath = ""
 
     this.$delay(function () {
+        if (this.errorMessage !== "" && this.errorMessage !== undefined) {
+            teaweb.warn(this.errorMessage, function () {
+            })
+        }
         if(this.title && this.title.length > 0){
             this.onCreateTitle(this.title)
         }else{

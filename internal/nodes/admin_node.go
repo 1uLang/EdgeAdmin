@@ -85,7 +85,7 @@ func (this *AdminNode) Run() {
 		EndAll().
 		Session(sessions.NewFileSessionManager(86400, secret), teaconst.CookieSID).
 		ReadHeaderTimeout(3 * time.Second).
-		ReadTimeout(60 * time.Second).
+		ReadTimeout(600 * time.Second).
 		Start()
 }
 
@@ -326,6 +326,16 @@ func (this *AdminNode) listenSock() error {
 			case "demo":
 				teaconst.IsDemoMode = !teaconst.IsDemoMode
 				_ = cmd.ReplyOk()
+			case "info":
+				exePath, _ := os.Executable()
+				_ = cmd.Reply(&gosock.Command{
+					Code: "info",
+					Params: map[string]interface{}{
+						"pid":     os.Getpid(),
+						"version": teaconst.Version,
+						"path":    exePath,
+					},
+				})
 			}
 		})
 

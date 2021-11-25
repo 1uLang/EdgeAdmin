@@ -25,15 +25,6 @@ func InitChart(parent *actionutils.ParentAction, chartId int64) (*pb.MetricChart
 	if chart == nil {
 		return nil, errors.New("metric chart not found")
 	}
-	//parent.Data["chart"] = maps.Map{
-	//	"id":       chart.Id,
-	//	"name":     chart.Name,
-	//	"isOn":     chart.IsOn,
-	//	"widthDiv": chart.WidthDiv,
-	//	"maxItems": chart.MaxItems,
-	//	"type":     chart.Type,
-	//	"typeName": serverconfigs.FindMetricChartTypeName(chart.Type),
-
 	if len(chart.IgnoredKeys) == 0 {
 		chart.IgnoredKeys = []string{}
 	}

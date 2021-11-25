@@ -132,19 +132,19 @@ Vue.component("datetime-input", {
             this.hasSecondError = false
             date.setSeconds(second)
 
-            this.timestamp = parseInt(date.getTime() / 1000)
-        },
-        leadingZero: function (s, l) {
-            if (l <= s.length) {
-                return s
-            }
-            for (let i = 0; i < l - s.length; i++) {
-                s = "0" + s
-            }
-            return s
-        }
-    },
-    template: `<div>
+			this.timestamp = Math.floor(date.getTime() / 1000)
+		},
+		leadingZero: function (s, l) {
+			if (l <= s.length) {
+				return s
+			}
+			for (let i = 0; i < l - s.length; i++) {
+				s = "0" + s
+			}
+			return s
+		}
+	},
+	template: `<div>
 	<input type="hidden" :name="vName" :value="timestamp"/>
 	<div class="ui fields inline" style="padding: 0; margin:0">
 		<div class="ui field" :class="{error: hasDayError}">

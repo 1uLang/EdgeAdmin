@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/clusters/grants/grantutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/nodeconfigs"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
 	"strconv"
+	"strings"
 )
 
 // CreateNodeAction 创建节点
@@ -66,6 +68,22 @@ func (this *CreateNodeAction) RunGet(params struct {
 		}
 	}
 	this.Data["dnsRoutes"] = dnsRouteMaps
+
+	// API节点列表
+	apiNodesResp, err := this.RPC().APINodeRPC().FindAllEnabledAPINodes(this.AdminContext(), &pb.FindAllEnabledAPINodesRequest{})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	apiNodes := apiNodesResp.ApiNodes
+	apiEndpoints := []string{}
+	for _, apiNode := range apiNodes {
+		if !apiNode.IsOn {
+			continue
+		}
+		apiEndpoints = append(apiEndpoints, apiNode.AccessAddrs...)
+	}
+	this.Data["apiEndpoints"] = "\"" + strings.Join(apiEndpoints, "\", \"") + "\""
 
 	this.Show()
 }
@@ -149,30 +167,106 @@ func (this *CreateNodeAction) RunPost(params struct {
 	nodeId := createResp.NodeId
 
 	// IP地址
-	for _, address := range ipAddresses {
-		addressId := address.GetInt64("id")
-		if addressId > 0 {
+	for _, addr := range ipAddresses {
+		addrId := addr.GetInt64("id")
+		if addrId > 0 {
 			_, err = this.RPC().NodeIPAddressRPC().UpdateNodeIPAddressNodeId(this.AdminContext(), &pb.UpdateNodeIPAddressNodeIdRequest{
-				AddressId: addressId,
-				NodeId:    nodeId,
+				NodeIPAddressId: addrId,
+				NodeId:          nodeId,
 			})
+			if err != nil {
+				this.ErrorPage(err)
+				return
+			}
 		} else {
-			_, err = this.RPC().NodeIPAddressRPC().CreateNodeIPAddress(this.AdminContext(), &pb.CreateNodeIPAddressRequest{
+			createResp, err := this.RPC().NodeIPAddressRPC().CreateNodeIPAddress(this.AdminContext(), &pb.CreateNodeIPAddressRequest{
 				NodeId:    nodeId,
 				Role:      nodeconfigs.NodeRoleNode,
-				Name:      address.GetString("name"),
-				Ip:        address.GetString("ip"),
-				CanAccess: address.GetBool("canAccess"),
+				Name:      addr.GetString("name"),
+				Ip:        addr.GetString("ip"),
+				CanAccess: addr.GetBool("canAccess"),
+				IsUp:      addr.GetBool("isUp"),
 			})
+			if err != nil {
+				this.ErrorPage(err)
+				return
+			}
+			addrId = createResp.NodeIPAddressId
 		}
-		if err != nil {
-			this.ErrorPage(err)
-			return
+
+		// 阈值
+		var thresholds = addr.GetSlice("thresholds")
+		if len(thresholds) > 0 {
+			thresholdsJSON, err := json.Marshal(thresholds)
+			if err != nil {
+				this.ErrorPage(err)
+				return
+			}
+			_, err = this.RPC().NodeIPAddressThresholdRPC().UpdateAllNodeIPAddressThresholds(this.AdminContext(), &pb.UpdateAllNodeIPAddressThresholdsRequest{
+				NodeIPAddressId:             addrId,
+				NodeIPAddressThresholdsJSON: thresholdsJSON,
+			})
+			if err != nil {
+				this.ErrorPage(err)
+				return
+			}
 		}
 	}
 
 	// 创建日志
 	defer this.CreateLog(oplogs.LevelInfo, "创建节点 %d", nodeId)
+
+	// 响应数据
+	this.Data["nodeId"] = nodeId
+	nodeResp, err := this.RPC().NodeRPC().FindEnabledNode(this.AdminContext(), &pb.FindEnabledNodeRequest{NodeId: nodeId})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	if nodeResp.Node != nil {
+		var addresses = []string{}
+		for _, addrMap := range ipAddresses {
+			addresses = append(addresses, addrMap.GetString("ip"))
+		}
+
+		var grantMap maps.Map = nil
+		grantId := params.GrantId
+		if grantId > 0 {
+			grantResp, err := this.RPC().NodeGrantRPC().FindEnabledNodeGrant(this.AdminContext(), &pb.FindEnabledNodeGrantRequest{NodeGrantId: grantId})
+			if err != nil {
+				this.ErrorPage(err)
+				return
+			}
+			if grantResp.NodeGrant != nil && grantResp.NodeGrant.Id > 0 {
+				grantMap = maps.Map{
+					"id":         grantResp.NodeGrant.Id,
+					"name":       grantResp.NodeGrant.Name,
+					"method":     grantResp.NodeGrant.Method,
+					"methodName": grantutils.FindGrantMethodName(grantResp.NodeGrant.Method),
+					"username":   grantResp.NodeGrant.Username,
+				}
+			}
+		}
+
+		this.Data["node"] = maps.Map{
+			"id":        nodeResp.Node.Id,
+			"name":      nodeResp.Node.Name,
+			"uniqueId":  nodeResp.Node.UniqueId,
+			"secret":    nodeResp.Node.Secret,
+			"addresses": addresses,
+			"login": maps.Map{
+				"id":   0,
+				"name": "SSH",
+				"type": "ssh",
+				"params": maps.Map{
+					"grantId": params.GrantId,
+					"host":    params.SshHost,
+					"port":    params.SshPort,
+				},
+			},
+			"grant": grantMap,
+		}
+	}
 
 	this.Success()
 }

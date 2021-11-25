@@ -1,7 +1,6 @@
 package audit
 
 import (
-	"fmt"
 	session_model "github.com/1uLang/zhiannet-api/next-terminal/model/session"
 	next_terminal_server "github.com/1uLang/zhiannet-api/next-terminal/server"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
@@ -25,9 +24,11 @@ func (this *IndexAction) RunGet(params struct {
 	PageSize int
 	PageNo   int
 }) {
+	defer this.Show()
+	this.Data["offline"] = []int{}
 	req, err := this.checkAndNewServerRequest()
 	if err != nil {
-		this.ErrorPage(fmt.Errorf("堡垒机组件错误:" + err.Error()))
+		this.Data["errorMessage"] = err.Error()
 		return
 	}
 
@@ -38,9 +39,9 @@ func (this *IndexAction) RunGet(params struct {
 		PageSize:    999,
 	})
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = err.Error()
 		return
 	}
 	this.Data["offline"] = offline
-	this.Show()
+
 }

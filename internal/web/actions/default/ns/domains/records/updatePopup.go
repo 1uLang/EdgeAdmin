@@ -42,7 +42,6 @@ func (this *UpdatePopupAction) RunGet(params struct {
 		"weight":      record.Weight,
 		"description": record.Description,
 		"isOn":        record.IsOn,
-		//"routeIds":    routeIds,
 		"routes":      record.NsRoutes,
 	}
 
@@ -79,7 +78,6 @@ func (this *UpdatePopupAction) RunPost(params struct {
 	Ttl         int32
 	Description string
 	IsOn        bool
-	//RouteIds    []int64
 	RouteCodes  []string
 
 	Must *actions.Must
@@ -99,15 +97,6 @@ func (this *UpdatePopupAction) RunPost(params struct {
 	}
 
 	_, err := this.RPC().NSRecordRPC().UpdateNSRecord(this.AdminContext(), &pb.UpdateNSRecordRequest{
-
-		//NsRecordId:  params.RecordId,
-		//Description: params.Description,
-		//Name:        params.Name,
-		//Type:        params.Type,
-		//Value:       params.Value,
-		//Ttl:         params.Ttl,
-		//IsOn:        params.IsOn,
-		//NsRouteIds:  params.RouteIds,
 		NsRecordId:   params.RecordId,
 		Description:  params.Description,
 		Name:         params.Name,

@@ -6,7 +6,12 @@ Vue.component("label-on", {
 
 // 文字代码标签
 Vue.component("code-label", {
-	template: `<span class="ui label basic tiny" style="padding: 3px;margin-left:2px;margin-right:2px"><slot></slot></span>`
+	methods: {
+		click: function (args) {
+			this.$emit("click", args)
+		}
+	},
+	template: `<span class="ui label basic tiny" style="padding: 3px;margin-left:2px;margin-right:2px" @click.prevent="click"><slot></slot></span>`
 })
 
 // tiny标签
@@ -30,4 +35,9 @@ Vue.component("label-on-conn", {
 Vue.component("label-on-active", {
 	props: ["v-is-active"],
 	template: '<div><span v-if="vIsActive" class="ui label tiny green basic">已连接</span><span v-if="!vIsActive" class="ui label tiny  basic" style="color: #bebebe">未连接</span></div>'
+})
+
+// 灰色的Label
+Vue.component("grey-label", {
+	template: `<span class="ui label basic grey tiny" style="margin-top: 0.4em; font-size: 0.7em; border: 1px solid #ddd!important; font-weight: normal;"><slot></slot></span>`
 })

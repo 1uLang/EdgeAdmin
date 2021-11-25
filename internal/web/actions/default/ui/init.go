@@ -30,7 +30,8 @@ func init() {
 			Post("/showTip", new(ShowTipAction)).
 			Post("/hideTip", new(HideTipAction)).
 			Post("/theme", new(ThemeAction)).
-
+			Post("/validateIPs", new(ValidateIPsAction)).
 			EndAll()
+
 	})
 }

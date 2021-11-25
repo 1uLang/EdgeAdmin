@@ -7,6 +7,11 @@ Tea.context(function () {
         this.$delay(function () {
             //开启监听
             let that = this
+
+            if (this.nodeErr !== "" && this.nodeErr !== undefined) {
+                teaweb.warn(this.nodeErr, function () {
+                })
+            }
             that.onCreateLoopTimeOut()
             window.addEventListener('beforeunload', function () {
                 that.onReleaseTimeOut()

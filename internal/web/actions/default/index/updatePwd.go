@@ -19,12 +19,15 @@ var TokenSalt1 = stringutil.Rand(32)
 
 func (this *UpdatePwdAction) RunGet(params struct {
 	From string
-
+	Code string
 	Auth *helpers.UserShouldAuth
 }) {
-
-	//fmt.Println("username = ", params.Auth.GetUpdatePwdToken())
-	if params.Auth.GetUpdatePwdToken() <= 0 {
+	if params.Code == "" {
+		this.RedirectURL("/")
+		return
+	}
+	_, err := decode(params.Code)
+	if err != nil {
 		this.RedirectURL("/")
 		return
 	}
@@ -36,14 +39,16 @@ func (this *UpdatePwdAction) RunGet(params struct {
 func (this *UpdatePwdAction) RunPost(params struct {
 	Password        string
 	ConfirmPassword string
-
-	Must *actions.Must
-	Auth *helpers.UserShouldAuth
-	CSRF *actionutils.CSRF
+	Code            string
+	Must            *actions.Must
+	Auth            *helpers.UserShouldAuth
+	CSRF            *actionutils.CSRF
 }) {
-	//fmt.Println("username = ", params.Auth.GetUpdatePwdToken())
-	adminId := params.Auth.GetUpdatePwdToken()
-	if adminId <= 0 {
+	if params.Code == "" {
+		this.FailField("refresh", "页面信息已过期，请刷新后重试")
+	}
+	adminId, err := decode(params.Code)
+	if err != nil {
 		this.FailField("refresh", "页面信息已过期，请刷新后重试")
 	}
 

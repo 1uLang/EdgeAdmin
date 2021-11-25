@@ -13,7 +13,9 @@ func init() {
 			Data("teaMenu", "admins").
 			Data("teaSubMenu", "recipients").
 			Prefix("/admins/recipients/tasks").
+			Get("", new(IndexAction)).
 			Post("/taskInfo", new(TaskInfoAction)).
+			Post("/delete", new(DeleteAction)).
 			EndAll()
 	})
 }

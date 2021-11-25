@@ -8,6 +8,13 @@ Tea.context(function () {
         this.bShowDetail = false
     };
 
+    this.$delay(function () {
+
+        if (this.nodeErr !== "" && this.nodeErr !== undefined) {
+            teaweb.warn(this.nodeErr, function () {
+            })
+        }
+    })
     this.onChangeTimeFormat = function (time) {
         var resultTime = "";
         if (time) {

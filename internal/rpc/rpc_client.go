@@ -27,11 +27,11 @@ type RPCClient struct {
 	apiConfig *configs.APIConfig
 	conns     []*grpc.ClientConn
 
-	locker sync.Mutex
+	locker sync.RWMutex
 }
 
 // NewRPCClient 构造新的RPC客户端
-func NewRPCClient(apiConfig *configs.APIConfig) (*RPCClient, error) {
+func NewRPCClient(apiConfig *configs.APIConfig, isPrimary bool) (*RPCClient, error) {
 	if apiConfig == nil {
 		return nil, errors.New("api config should not be nil")
 	}
@@ -46,7 +46,9 @@ func NewRPCClient(apiConfig *configs.APIConfig) (*RPCClient, error) {
 	}
 
 	// 设置RPC
-	dao.SetRPC(client)
+	if isPrimary {
+		dao.SetRPC(client)
+	}
 
 	return client, nil
 }
@@ -71,6 +73,10 @@ func (this *RPCClient) NodeGrantRPC() pb.NodeGrantServiceClient {
 	return pb.NewNodeGrantServiceClient(this.pickConn())
 }
 
+func (this *RPCClient) NodeLoginRPC() pb.NodeLoginServiceClient {
+	return pb.NewNodeLoginServiceClient(this.pickConn())
+}
+
 func (this *RPCClient) NodeClusterRPC() pb.NodeClusterServiceClient {
 	return pb.NewNodeClusterServiceClient(this.pickConn())
 }
@@ -93,6 +99,14 @@ func (this *RPCClient) NodePriceItemRPC() pb.NodePriceItemServiceClient {
 
 func (this *RPCClient) NodeIPAddressRPC() pb.NodeIPAddressServiceClient {
 	return pb.NewNodeIPAddressServiceClient(this.pickConn())
+}
+
+func (this *RPCClient) NodeIPAddressLogRPC() pb.NodeIPAddressLogServiceClient {
+	return pb.NewNodeIPAddressLogServiceClient(this.pickConn())
+}
+
+func (this *RPCClient) NodeIPAddressThresholdRPC() pb.NodeIPAddressThresholdServiceClient {
+	return pb.NewNodeIPAddressThresholdServiceClient(this.pickConn())
 }
 
 func (this *RPCClient) NodeValueRPC() pb.NodeValueServiceClient {
@@ -292,6 +306,18 @@ func (this *RPCClient) IPListRPC() pb.IPListServiceClient {
 	return pb.NewIPListServiceClient(this.pickConn())
 }
 
+func (this *RPCClient) ReportNodeRPC() pb.ReportNodeServiceClient {
+	return pb.NewReportNodeServiceClient(this.pickConn())
+}
+
+func (this *RPCClient) ReportNodeGroupRPC() pb.ReportNodeGroupServiceClient {
+	return pb.NewReportNodeGroupServiceClient(this.pickConn())
+}
+
+func (this *RPCClient) ReportResultRPC() pb.ReportResultServiceClient {
+	return pb.NewReportResultServiceClient(this.pickConn())
+}
+
 func (this *RPCClient) IPItemRPC() pb.IPItemServiceClient {
 	return pb.NewIPItemServiceClient(this.pickConn())
 }
@@ -340,12 +366,32 @@ func (this *RPCClient) ACMETaskRPC() pb.ACMETaskServiceClient {
 	return pb.NewACMETaskServiceClient(this.pickConn())
 }
 
+func (this *RPCClient) ACMEProviderRPC() pb.ACMEProviderServiceClient {
+	return pb.NewACMEProviderServiceClient(this.pickConn())
+}
+
+func (this *RPCClient) ACMEProviderAccountRPC() pb.ACMEProviderAccountServiceClient {
+	return pb.NewACMEProviderAccountServiceClient(this.pickConn())
+}
+
 func (this *RPCClient) UserRPC() pb.UserServiceClient {
 	return pb.NewUserServiceClient(this.pickConn())
 }
 
 func (this *RPCClient) UserBillRPC() pb.UserBillServiceClient {
 	return pb.NewUserBillServiceClient(this.pickConn())
+}
+
+func (this *RPCClient) UserAccountRPC() pb.UserAccountServiceClient {
+	return pb.NewUserAccountServiceClient(this.pickConn())
+}
+
+func (this *RPCClient) UserAccountLogRPC() pb.UserAccountLogServiceClient {
+	return pb.NewUserAccountLogServiceClient(this.pickConn())
+}
+
+func (this *RPCClient) UserAccountDailyStatRPC() pb.UserAccountDailyStatServiceClient {
+	return pb.NewUserAccountDailyStatServiceClient(this.pickConn())
 }
 
 func (this *RPCClient) UserAccessKeyRPC() pb.UserAccessKeyServiceClient {
@@ -432,6 +478,14 @@ func (this *RPCClient) ServerStatBoardChartRPC() pb.ServerStatBoardChartServiceC
 	return pb.NewServerStatBoardChartServiceClient(this.pickConn())
 }
 
+func (this *RPCClient) PlanRPC() pb.PlanServiceClient {
+	return pb.NewPlanServiceClient(this.pickConn())
+}
+
+func (this *RPCClient) UserPlanRPC() pb.UserPlanServiceClient {
+	return pb.NewUserPlanServiceClient(this.pickConn())
+}
+
 // Context 构造Admin上下文
 func (this *RPCClient) Context(adminId int64) context.Context {
 	ctx := context.Background()
@@ -481,7 +535,11 @@ func (this *RPCClient) APIContext(apiNodeId int64) context.Context {
 // UpdateConfig 修改配置
 func (this *RPCClient) UpdateConfig(config *configs.APIConfig) error {
 	this.apiConfig = config
-	return this.init()
+
+	this.locker.Lock()
+	err := this.init()
+	this.locker.Unlock()
+	return err
 }
 
 // 初始化
@@ -558,4 +616,21 @@ func (this *RPCClient) pickConn() *grpc.ClientConn {
 	}
 
 	return this.conns[rands.Int(0, len(this.conns)-1)]
+}
+
+// Close 关闭
+func (this *RPCClient) Close() error {
+	this.locker.Lock()
+	defer this.locker.Unlock()
+
+	var lastErr error
+	for _, conn := range this.conns {
+		var err = conn.Close()
+		if err != nil {
+			lastErr = err
+			continue
+		}
+	}
+
+	return lastErr
 }

@@ -4,7 +4,6 @@ Tea.context(function () {
 	this.password = ""
 	this.passwordMd5 = ""
 
-
 	this.token = ""
 
 	this.isSubmitting = false

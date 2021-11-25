@@ -1,218 +1,196 @@
 Tea.context(function () {
-	this.dayFrom = ""
-	this.dayTo = ""
-
-	this.titleName = []
+	this.isLoading = true
+	this.trafficTab = "hourly"
+	this.metricCharts = []
+	this.dashboard = {}
 
 	this.$delay(function () {
-        teaweb.datepicker("day-from-picker")
-        teaweb.datepicker("day-to-picker")
+		this.$post("$")
+			.success(function (resp) {
+				for (let k in resp.data) {
+					this[k] = resp.data[k]
+				}
 
-		for(var index = 0;index<this.tableData.length;index++){
-			this.titleName.push(this.tableData[index].name)
+				this.isLoading = false
+
+				this.$delay(function () {
+					this.reloadHourlyTrafficChart()
+					this.reloadTopDomainsChart()
+				})
+			})
+	})
+
+	this.selectTrafficTab = function (tab) {
+		this.trafficTab = tab
+		if (tab == "hourly") {
+			this.$delay(function () {
+				this.reloadHourlyTrafficChart()
+			})
+		} else if (tab == "daily") {
+			this.$delay(function () {
+				this.reloadDailyTrafficChart()
+			})
 		}
-
-		this.reloadPieTableChart()
-		this.reloadLineTableChart()
-    })
-
-	this.onTimeChange = function () {
-        let startTime = document.getElementById("day-from-picker").value
-        let endTime = document.getElementById("day-to-picker").value
-        if(this.dayFrom != startTime || this.dayTo != endTime) {
-            this.dayFrom = startTime
-            this.dayTo = endTime
-        }
-    }
-
-	this.onDownloadReport = function(){
-
 	}
 
-	this.onOpenDetail = function(url){
-		window.location = url
+	this.reloadHourlyTrafficChart = function () {
+		let stats = this.hourlyTrafficStats
+		this.reloadTrafficChart("hourly-traffic-chart-box", stats, function (args) {
+			let index = args.dataIndex
+			let cachedRatio = 0
+			let attackRatio = 0
+			if (stats[index].bytes > 0) {
+				cachedRatio = Math.round(stats[index].cachedBytes * 10000 / stats[index].bytes) / 100
+				attackRatio = Math.round(stats[index].attackBytes * 10000 / stats[index].bytes) / 100
+			}
+
+			return stats[index].day + " " + stats[index].hour + "时<br/>总流量：" + teaweb.formatBytes(stats[index].bytes) + "<br/>缓存流量：" + teaweb.formatBytes(stats[index].cachedBytes) + "<br/>缓存命中率：" + cachedRatio + "%<br/>拦截攻击流量：" + teaweb.formatBytes(stats[index].attackBytes) + "<br/>拦截比例：" + attackRatio + "%"
+		})
 	}
 
-	this.reloadPieTableChart = function () {
-        let chartBox = document.getElementById("pie-chart-box")
-        let chart = echarts.init(chartBox)
-        let option = {
-            // title:{
-            //     text: '当前入侵威胁分布情况',
-            //     x:'left',
-            //     y: 'top',
-            //     textStyle: { 
-            //         fontSize: 16,
-            //         color: '#333',
-            //         fontWeight:"normal"
-            //     },
-            // },
-            //  图表距边框的距离,可选值：'百分比'¦ {number}（单位px）
-            // top: '16%',   // 等价于 y: '16%'
-            grid: {
-                top: 30,   // 等价于 y: '16%'
-                left: 15, 
-                right: 15,
-                bottom: 30,
-            },
-            legend: {
-                orient : 'horizontal',
-                x : 'center',
-                y : 'bottom',
-                data:this.titleName,
-            },
-			tooltip : {
-                trigger: 'item',
-                formatter: "{a} <br/>{b} : {c} ({d}%)"
-            },
-            color:['#2698fb','#26c4c3','#26c46f','#ffce51','#f95c74','#8f59dd','#474fc5','#3d4c7d'],
-			series: [
-                {
-                    name:"占比情况",
-                    type: 'pie',
-                    radius: "55%",
-                    center: ['50%', '50%'],
-                    data: this.tableData,
-                    itemStyle:{ 
-                        normal:{ 
-                            label:{ 
-                                show: true, 
-                                formatter: '{b} : {c} ({d}%)' 
-                            }, 
-                            labelLine :{show:true} 
-                        } 
-                    } 
-                }
-            ],
-			animation: false
-		}
-        chart.setOption(option)
-        chart.resize()
-    }
+	this.reloadDailyTrafficChart = function () {
+		let stats = this.dailyTrafficStats
+		this.reloadTrafficChart("daily-traffic-chart-box", stats, function (args) {
+			let index = args.dataIndex
+			let cachedRatio = 0
+			let attackRatio = 0
+			if (stats[index].bytes > 0) {
+				cachedRatio = Math.round(stats[index].cachedBytes * 10000 / stats[index].bytes) / 100
+				attackRatio = Math.round(stats[index].attackBytes * 10000 / stats[index].bytes) / 100
+			}
 
-	this.reloadLineTableChart = function () {
-		let chartBox = document.getElementById("line-chart-box")
-		let chart = echarts.init(chartBox)
+			return stats[index].day + "<br/>总流量：" + teaweb.formatBytes(stats[index].bytes) + "<br/>缓存流量：" + teaweb.formatBytes(stats[index].cachedBytes) + "<br/>缓存命中率：" + cachedRatio + "%<br/>拦截攻击流量：" + teaweb.formatBytes(stats[index].attackBytes) + "<br/>拦截比例：" + attackRatio + "%"
+		})
+	}
+
+	this.reloadTrafficChart = function (chartId, stats, tooltipFunc) {
+		let axis = teaweb.bytesAxis(stats, function (v) {
+			return v.bytes
+		})
+		let chartBox = document.getElementById(chartId)
+		let chart = teaweb.initChart(chartBox)
 		let option = {
-			 title:{
-                text: '当日安全事件趋势情况',
-                x:'left',
-                y: 'top',
-                textStyle: { 
-                    fontSize: 16,
-                    color: '#333',
-                    fontWeight:"normal"
-                },
-            },
-            //  图表距边框的距离,可选值：'百分比'¦ {number}（单位px）
-            // top: '16%',   // 等价于 y: '16%'
-            grid: {
-                top: 30,   // 等价于 y: '16%'
-                left: 15, 
-                right: 15,
-                bottom: 30,
-                containLabel: true
-            },
 			xAxis: {
-                // name: 'Hour',
-                // boundaryGap值为false的时候，折线第一个点在y轴上
-                // boundaryGap: false,
-				data: this.lineTitle
+				data: stats.map(function (v) {
+					if (v.hour != null) {
+						return v.hour
+					}
+					return v.day
+				})
 			},
 			yAxis: {
-                // name: 'GB',
-                min:0, // 设置y轴刻度的最小值
-                // max:8,  // 设置y轴刻度的最大值
-                splitNumber:4,  // 设置y轴刻度间隔个数
-                // axisLine: {
-                //     lineStyle: {
-                //         // 设置y轴颜色
-                //         color: '#fff'
-                //     }
-                // },
-            },
+				axisLabel: {
+					formatter: function (v) {
+						return v + axis.unit
+					}
+				}
+			},
 			tooltip: {
-				trigger: "axis",
+				show: true,
+				trigger: "item",
+				formatter: tooltipFunc
+			},
+			grid: {
+				left: 50,
+				top: 40,
+				right: 20,
+				bottom: 20
 			},
 			series: [
 				{
-                    name: this.attCountData.ddosAtt.name,
-                    type: "line",
-                    data: this.attCountData.ddosAtt.value,
-                    itemStyle: {
-						color: "#2698fb"
+					name: "总流量",
+					type: "line",
+					data: stats.map(function (v) {
+						return v.bytes / axis.divider;
+					}),
+					itemStyle: {
+						color: "#9DD3E8"
 					},
-                    lineStyle: {
-                        color: "#2698fb"
-                    }
-                },
-				{
-                    name: this.attCountData.webAtt.name,
-                    type: "line",
-                    data: this.attCountData.webAtt.value,
-                    itemStyle: {
-						color: "#26c4c3"
+					lineStyle: {
+						color: "#9DD3E8"
 					},
-                    lineStyle: {
-                        color: "#26c4c3"
-                    }
-                },
+					areaStyle: {
+						color: "#9DD3E8"
+					},
+					smooth: true
+				},
 				{
-                    name: this.attCountData.netAtt.name,
-                    type: "line",
-                    data: this.attCountData.netAtt.value,
-                    itemStyle: {
-                        color: "#26c46f"
-                    },
-                    lineStyle: {
-                        color: "#26c46f"
-                    }
-                },
+					name: "缓存流量",
+					type: "line",
+					data: stats.map(function (v) {
+						return v.cachedBytes / axis.divider;
+					}),
+					itemStyle: {
+						color: "#61A0A8"
+					},
+					lineStyle: {
+						color: "#61A0A8"
+					},
+					areaStyle: {},
+					smooth: true
+				},
 				{
-                    name: this.attCountData.hostAtt.name,
-                    type: "line",
-                    data: this.attCountData.hostAtt.value,
-                    itemStyle: {
-                        color: "#ffce51"
-                    },
-                    lineStyle: {
-                        color: "#ffce51"
-                    }
-                },
+					name: "攻击流量",
+					type: "line",
+					data: stats.map(function (v) {
+						return v.attackBytes / axis.divider;
+					}),
+					itemStyle: {
+						color: "#F39494"
+					},
+					areaStyle: {
+						color: "#F39494"
+					},
+					smooth: true
+				}
 			],
+			legend: {
+				data: ["总流量", "缓存流量", "攻击流量"]
+			},
 			animation: false
 		}
 		chart.setOption(option)
 		chart.resize()
 	}
 
-	
-	this.lineTitle = ["2点","4点","6点","8点","10点","12点","14点","16点"]
-	this.attCountData = {
-		ddosAtt:{
-			name:"DDos攻击",
-			value:[20,25,36,11,25,30,12,40],
-		},
-		webAtt:{
-			name:"WEB攻击",
-			value:[30,45,46,41,35,40,32,30],
-		},
-		netAtt:{
-			name:"网络入侵",
-			value:[10,15,26,31,45,10,22,20],
-		},
-		hostAtt:{
-			name:"主机入侵",
-			value:[40,35,16,21,15,20,42,10],
+
+	// 域名排行
+	this.reloadTopDomainsChart = function () {
+		let axis = teaweb.countAxis(this.topDomainStats, function (v) {
+			return v.countRequests
+		})
+		teaweb.renderBarChart({
+			id: "top-domains-chart",
+			name: "域名",
+			values: this.topDomainStats,
+			x: function (v) {
+				return v.domain
+			},
+			tooltip: function (args, stats) {
+				return stats[args.dataIndex].domain + "<br/>请求数：" + " " + teaweb.formatNumber(stats[args.dataIndex].countRequests) + "<br/>流量：" + teaweb.formatBytes(stats[args.dataIndex].bytes)
+			},
+			value: function (v) {
+				return v.countRequests / axis.divider;
+			},
+			axis: axis,
+			click: function (args, stats) {
+				let index = args.dataIndex
+				window.location = "/servers/server?serverId=" + stats[index].serverId
+			}
+		})
+	}
+
+	/**
+	 * 升级提醒
+	 */
+	this.closeMessage = function (e) {
+		let target = e.target
+		while (true) {
+			target = target.parentNode
+			if (target.tagName.toUpperCase() == "DIV") {
+				target.style.cssText = "display: none"
+				break
+			}
 		}
 	}
-		
-	
-	
-	this.tableData = [
-		{id:1,name:"DDos攻击",value:1222,url:""},
-		{id:2,name:"WEB攻击",value:122222,url:""},
-		{id:3,name:"网络入侵",value:12225,url:""},
-		{id:4,name:"主机入侵",value:125555,url:""},
-	]
 })

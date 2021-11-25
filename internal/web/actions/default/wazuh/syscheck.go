@@ -24,25 +24,25 @@ func (this *SysCheckAction) RunGet(params struct {
 }) {
 	this.Data["event"] = params.Event
 	this.Data["filePath"] = params.File
+	this.Data["syschecks"] = []map[string]string{}
+	this.Data["agents"] = []map[string]string{}
+	this.Data["agent"] = params.Agent
+	defer this.Show()
 	err := InitAPIServer()
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMsg"] = err.Error()
 		return
 	}
 	agent, err := server.AgentList(&agents.ListReq{
 		AdminUserId: this.AdminId(),
 	})
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMsg"] = err.Error()
 		return
 	}
 
 	if len(agent.AffectedItems) == 0 {
 		this.Data["errorMsg"] = "请先添加资产"
-		this.Data["syschecks"] = []map[string]string{}
-		this.Data["agents"] = []map[string]string{}
-		this.Data["agent"] = params.Agent
-		this.Show()
 		return
 	}
 	if params.Agent == "" {
@@ -58,7 +58,7 @@ func (this *SysCheckAction) RunGet(params struct {
 			//Start: 1630982235, End: 1631068635,
 		})
 		if err != nil {
-			this.ErrorPage(err)
+			this.Data["errorMsg"] = err.Error()
 			return
 		}
 
@@ -72,7 +72,7 @@ func (this *SysCheckAction) RunGet(params struct {
 			File:   params.File,
 		})
 		if err != nil {
-			this.ErrorPage(err)
+			this.Data["errorMsg"] = err.Error()
 			return
 		}
 		this.Data["syschecks"] = list.AffectedItems
@@ -80,8 +80,6 @@ func (this *SysCheckAction) RunGet(params struct {
 		this.Data["agents"] = agent.AffectedItems
 
 		this.Data["agent"] = params.Agent
-
-		this.Show()
 		return
 	}
 
@@ -95,7 +93,7 @@ func (this *SysCheckAction) RunGet(params struct {
 		//Start: 1630982235, End: 1631068635,
 	})
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMsg"] = err.Error()
 		return
 	}
 
@@ -112,7 +110,7 @@ func (this *SysCheckAction) RunGet(params struct {
 		//Start: 1630982235, End: 1631068635,
 	})
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMsg"] = err.Error()
 		return
 	}
 	this.Data["syschecks"] = list.Hits
@@ -121,5 +119,4 @@ func (this *SysCheckAction) RunGet(params struct {
 
 	this.Data["agent"] = params.Agent
 
-	this.Show()
 }

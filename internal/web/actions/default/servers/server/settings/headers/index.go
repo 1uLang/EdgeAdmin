@@ -6,6 +6,7 @@ import (
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/shared"
+	"github.com/iwind/TeaGo/types"
 )
 
 type IndexAction struct {
@@ -20,6 +21,18 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	ServerId int64
 }) {
+	// 服务分组设置
+	groupResp, err := this.RPC().ServerGroupRPC().FindEnabledServerGroupConfigInfo(this.AdminContext(), &pb.FindEnabledServerGroupConfigInfoRequest{
+		ServerId: params.ServerId,
+	})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	this.Data["hasGroupRequestConfig"] = groupResp.HasRequestHeadersConfig
+	this.Data["hasGroupResponseConfig"] = groupResp.HasResponseHeadersConfig
+	this.Data["groupSettingURL"] = "/servers/groups/group/settings/headers?groupId=" + types.String(groupResp.ServerGroupId)
+
 	webConfig, err := dao.SharedHTTPWebDAO.FindWebConfigWithServerId(this.AdminContext(), params.ServerId)
 	if err != nil {
 		this.ErrorPage(err)
@@ -46,7 +59,7 @@ func (this *IndexAction) RunGet(params struct {
 			return
 		}
 		_, err = this.RPC().HTTPWebRPC().UpdateHTTPWebRequestHeader(this.AdminContext(), &pb.UpdateHTTPWebRequestHeaderRequest{
-			WebId:      webId,
+			HttpWebId:  webId,
 			HeaderJSON: refJSON,
 		})
 		if err != nil {
@@ -73,7 +86,7 @@ func (this *IndexAction) RunGet(params struct {
 			return
 		}
 		_, err = this.RPC().HTTPWebRPC().UpdateHTTPWebResponseHeader(this.AdminContext(), &pb.UpdateHTTPWebResponseHeaderRequest{
-			WebId:      webId,
+			HttpWebId:  webId,
 			HeaderJSON: refJSON,
 		})
 		if err != nil {

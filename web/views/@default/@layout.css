@@ -57,6 +57,12 @@
 .left-box.without-tabbar {
   top: 3em;
 }
+.left-box.with-menu {
+  top: 10em;
+}
+.left-box.without-menu {
+  top: 6em;
+}
 .right-box {
   position: fixed;
   top: 7.5em;
@@ -67,6 +73,9 @@
   padding-bottom: 2em;
   overflow-y: auto;
 }
+body.expanded .right-box {
+  left: 10em;
+}
 .right-box.tiny {
   top: 10.4em;
   left: 26.5em;
@@ -76,6 +85,12 @@
 }
 .right-box.without-tabbar {
   top: 3em;
+}
+.right-box.with-menu {
+  top: 10em;
+}
+.right-box.without-menu {
+  top: 6em;
 }
 .main.without-footer .left-box {
   bottom: 0.2em;
@@ -171,6 +186,9 @@ div.margin,
 p.margin {
   margin-top: 1em;
 }
+.opacity-mask {
+  opacity: 0.3;
+}
 /** 操作按钮容器 **/
 .op.one {
   width: 4em;
@@ -201,6 +219,9 @@ p.margin {
 .main-menu .ui.labeled.icon.menu .item {
   font-size: 0.9em;
 }
+.main-menu .ui.menu {
+  padding-bottom: 3em;
+}
 .main-menu .ui.menu .item .subtitle {
   display: none;
 }
@@ -218,11 +239,19 @@ p.margin {
 }
 .main-menu .ui.menu .sub-items .item {
   padding-left: 2.8em !important;
+  padding-right: 0.4em !important;
 }
 .main-menu .ui.menu .sub-items .item .icon {
   position: absolute;
   left: 1.1em;
   top: 0.93em;
+}
+.main-menu .ui.menu .sub-items .item .label {
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0.4em;
+  padding-right: 0.4em;
+  min-width: 2em;
 }
 @media screen and (max-width: 512px) {
   .main-menu .ui.menu .sub-items .item {
@@ -305,6 +334,12 @@ body.expanded .main {
 .top-nav.theme3 {
   background: #007D9C !important;
 }
+.top-nav.theme4 {
+  background: #A12568 !important;
+}
+.top-nav.theme5 {
+  background: #1C7947 !important;
+}
 .top-nav::-webkit-scrollbar {
   height: 2px;
 }
@@ -347,6 +382,9 @@ body.expanded .main {
   .main {
     left: 4em;
   }
+  .main .main-box {
+    display: block;
+  }
 }
 .main.without-menu {
   left: 9em;
@@ -384,6 +422,9 @@ body.expanded .main {
   font-weight: normal;
   font-style: normal;
   font-size: 0.9em;
+}
+.main table td em.grey {
+  color: grey;
 }
 .main h3 {
   font-weight: normal;
@@ -441,6 +482,18 @@ body.expanded .main {
 }
 .main-menu.theme3 .menu {
   background: #007D9C !important;
+}
+.main-menu.theme4 {
+  background: #A12568 !important;
+}
+.main-menu.theme4 .menu {
+  background: #A12568 !important;
+}
+.main-menu.theme5 {
+  background: #1C7947 !important;
+}
+.main-menu.theme5 .menu {
+  background: #1C7947 !important;
 }
 .main-menu::-webkit-scrollbar {
   width: 2px;
@@ -701,6 +754,10 @@ td {
 }
 input.error {
   border: 1px #e0b4b4 solid !important;
+}
+textarea.wide-code {
+  font-family: Menlo, Monaco, "Courier New", monospace !important;
+  line-height: 1.6 !important;
 }
 /*# sourceMappingURL=@layout.css.map */
 

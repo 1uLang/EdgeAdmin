@@ -52,9 +52,7 @@ func (this *LocationHelper) BeforeAction(actionPtr actions.ActionWrapper) {
 }
 
 func (this *LocationHelper) createMenus(serverIdString string, locationIdString string, secondMenuItem string, locationConfig *serverconfigs.HTTPLocationConfig) []maps.Map {
-	menuItems := []maps.Map{
-
-	}
+	menuItems := []maps.Map{}
 	menuItems = append(menuItems, maps.Map{
 		"name":     "基本信息",
 		"url":      "/servers/server/settings/locations/location?serverId=" + serverIdString + "&locationId=" + locationIdString,
@@ -100,7 +98,7 @@ func (this *LocationHelper) createMenus(serverIdString string, locationIdString 
 		"name":     "缓存",
 		"url":      "/servers/server/settings/locations/cache?serverId=" + serverIdString + "&locationId=" + locationIdString,
 		"isActive": secondMenuItem == "cache",
-		"isOn":     locationConfig != nil && locationConfig.Web != nil && locationConfig.Web.Cache != nil && locationConfig.Web.Cache.IsPrior && locationConfig.Web.Cache.IsOn && len(locationConfig.Web.Cache.CacheRefs) > 0,
+		"isOn":     locationConfig != nil && locationConfig.Web != nil && locationConfig.Web.Cache != nil && locationConfig.Web.Cache.IsPrior && locationConfig.Web.Cache.IsOn,
 	})
 	menuItems = append(menuItems, maps.Map{
 		"name":     "访问控制",
@@ -127,10 +125,10 @@ func (this *LocationHelper) createMenus(serverIdString string, locationIdString 
 		"isOn":     locationConfig != nil && locationConfig.Web != nil && locationConfig.Web.StatRef != nil && locationConfig.Web.StatRef.IsPrior,
 	})
 	menuItems = append(menuItems, maps.Map{
-		"name":     "Gzip压缩",
-		"url":      "/servers/server/settings/locations/gzip?serverId=" + serverIdString + "&locationId=" + locationIdString,
-		"isActive": secondMenuItem == "gzip",
-		"isOn":     locationConfig != nil && locationConfig.Web != nil && locationConfig.Web.GzipRef != nil && locationConfig.Web.GzipRef.IsPrior,
+		"name":     "内容压缩",
+		"url":      "/servers/server/settings/locations/compression?serverId=" + serverIdString + "&locationId=" + locationIdString,
+		"isActive": secondMenuItem == "compression",
+		"isOn":     locationConfig != nil && locationConfig.Web != nil && locationConfig.Web.Compression != nil && locationConfig.Web.Compression.IsPrior,
 	})
 	menuItems = append(menuItems, maps.Map{
 		"name":     "特殊页面",
@@ -151,10 +149,29 @@ func (this *LocationHelper) createMenus(serverIdString string, locationIdString 
 		"isOn":     locationConfig != nil && locationConfig.Web != nil && locationConfig.Web.WebsocketRef != nil && locationConfig.Web.WebsocketRef.IsPrior,
 	})
 	menuItems = append(menuItems, maps.Map{
+		"name":     "WebP",
+		"url":      "/servers/server/settings/locations/webp?serverId=" + serverIdString + "&locationId=" + locationIdString,
+		"isActive": secondMenuItem == "webp",
+		"isOn":     locationConfig != nil && locationConfig.Web != nil && locationConfig.Web.WebP != nil && locationConfig.Web.WebP.IsPrior,
+	})
+	menuItems = append(menuItems, maps.Map{
 		"name":     "Fastcgi",
 		"url":      "/servers/server/settings/locations/fastcgi?serverId=" + serverIdString + "&locationId=" + locationIdString,
 		"isActive": secondMenuItem == "fastcgi",
 		"isOn":     locationConfig != nil && locationConfig.Web != nil && locationConfig.Web.FastcgiRef != nil && locationConfig.Web.FastcgiRef.IsPrior,
+	})
+
+	menuItems = append(menuItems, maps.Map{
+		"name":     "-",
+		"url":      "",
+		"isActive": false,
+	})
+
+	menuItems = append(menuItems, maps.Map{
+		"name":     "访客IP地址",
+		"url":      "/servers/server/settings/locations/remoteAddr?serverId=" + serverIdString + "&locationId=" + locationIdString,
+		"isActive": secondMenuItem == "remoteAddr",
+		"isOn":     locationConfig != nil && locationConfig.Web != nil && locationConfig.Web.RemoteAddr != nil && locationConfig.Web.RemoteAddr.IsOn,
 	})
 
 	return menuItems

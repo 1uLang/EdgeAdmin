@@ -20,13 +20,13 @@ func (this *UpdateAction) RunGet(params struct {
 	NodeId int64
 }) {
 	nodeResp, err := this.RPC().MonitorNodeRPC().FindEnabledMonitorNode(this.AdminContext(), &pb.FindEnabledMonitorNodeRequest{
-		NodeId: params.NodeId,
+		MonitorNodeId: params.NodeId,
 	})
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	node := nodeResp.Node
+	node := nodeResp.MonitorNode
 	if node == nil {
 		this.WriteString("要操作的节点不存在")
 		return
@@ -56,10 +56,10 @@ func (this *UpdateAction) RunPost(params struct {
 		Require("请输入告警节点名称")
 
 	_, err := this.RPC().MonitorNodeRPC().UpdateMonitorNode(this.AdminContext(), &pb.UpdateMonitorNodeRequest{
-		NodeId:      params.NodeId,
-		Name:        params.Name,
-		Description: params.Description,
-		IsOn:        params.IsOn,
+		MonitorNodeId: params.NodeId,
+		Name:          params.Name,
+		Description:   params.Description,
+		IsOn:          params.IsOn,
 	})
 	if err != nil {
 		this.ErrorPage(err)

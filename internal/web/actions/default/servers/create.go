@@ -8,6 +8,7 @@ import (
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/firewallconfigs"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/sslconfigs"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/logs"
@@ -56,14 +57,26 @@ func (this *CreateAction) RunGet(params struct{}) {
 	// 服务类型
 	this.Data["serverTypes"] = serverconfigs.AllServerTypes()
 
+	// 检查是否有用户
+	countUsersResp, err := this.RPC().UserRPC().CountAllEnabledUsers(this.AdminContext(), &pb.CountAllEnabledUsersRequest{})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	this.Data["hasUsers"] = countUsersResp.Count > 0
+
 	this.Show()
 }
 
 func (this *CreateAction) RunPost(params struct {
 	Name        string
 	Description string
-	ClusterId   int64
-	GroupIds    []int64
+
+	UserId     int64
+	UserPlanId int64
+	ClusterId  int64
+
+	GroupIds []int64
 
 	ServerType  string
 	Addresses   string
@@ -71,8 +84,11 @@ func (this *CreateAction) RunPost(params struct {
 	CertIdsJSON []byte
 	Origins     string
 
-	AccessLogIsOn bool
-	WebsocketIsOn bool
+	AccessLogIsOn  bool
+	WebsocketIsOn  bool
+	CacheIsOn      bool
+	WafIsOn        bool
+	RemoteAddrIsOn bool
 
 	WebRoot string
 
@@ -82,11 +98,24 @@ func (this *CreateAction) RunPost(params struct {
 		Field("name", params.Name).
 		Require("请输入服务名称")
 
-	if params.ClusterId <= 0 {
-		this.Fail("请选择部署的集群")
+	var clusterId = params.ClusterId
+
+	// 用户
+	var userId = params.UserId
+	if userId > 0 {
+		clusterIdResp, err := this.RPC().UserRPC().FindUserNodeClusterId(this.AdminContext(), &pb.FindUserNodeClusterIdRequest{UserId: userId})
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+		clusterId = clusterIdResp.NodeClusterId
+		if clusterId <= 0 {
+			this.Fail("请选择部署的集群")
+		}
 	}
 
-	// TODO 验证集群ID
+	// 套餐
+	var userPlanId = params.UserPlanId
 
 	// 端口地址
 	var httpConfig *serverconfigs.HTTPProtocolConfig = nil
@@ -256,7 +285,7 @@ func (this *CreateAction) RunPost(params struct {
 		if len(allServerNames) > 0 {
 			dupResp, err := this.RPC().ServerRPC().CheckServerNameDuplicationInNodeCluster(this.AdminContext(), &pb.CheckServerNameDuplicationInNodeClusterRequest{
 				ServerNames:   allServerNames,
-				NodeClusterId: params.ClusterId,
+				NodeClusterId: clusterId,
 			})
 			if err != nil {
 				this.ErrorPage(err)
@@ -335,7 +364,7 @@ func (this *CreateAction) RunPost(params struct {
 			this.ErrorPage(err)
 			return
 		}
-		webId = webResp.WebId
+		webId = webResp.HttpWebId
 	}
 
 	// 包含条件
@@ -355,13 +384,14 @@ func (this *CreateAction) RunPost(params struct {
 	}
 
 	req := &pb.CreateServerRequest{
-		UserId:           0,
+		UserId:           userId,
+		UserPlanId:       userPlanId,
 		AdminId:          this.AdminId(),
 		Type:             params.ServerType,
 		Name:             params.Name,
 		ServerNamesJON:   []byte(params.ServerNames),
 		Description:      params.Description,
-		NodeClusterId:    params.ClusterId,
+		NodeClusterId:    clusterId,
 		IncludeNodesJSON: includeNodesJSON,
 		ExcludeNodesJSON: excludeNodesJSON,
 		WebId:            webId,
@@ -432,7 +462,7 @@ func (this *CreateAction) RunPost(params struct {
 			// 访问日志
 			if params.AccessLogIsOn {
 				_, err = this.RPC().HTTPWebRPC().UpdateHTTPWebAccessLog(this.AdminContext(), &pb.UpdateHTTPWebAccessLogRequest{
-					WebId: webConfig.Id,
+					HttpWebId: webConfig.Id,
 					AccessLogJSON: []byte(`{
 			"isPrior": false,
 			"isOn": true,
@@ -471,7 +501,7 @@ func (this *CreateAction) RunPost(params struct {
 				} else {
 					websocketId := createWebSocketResp.WebsocketId
 					_, err = this.RPC().HTTPWebRPC().UpdateHTTPWebWebsocket(this.AdminContext(), &pb.UpdateHTTPWebWebsocketRequest{
-						WebId: webConfig.Id,
+						HttpWebId: webConfig.Id,
 						WebsocketJSON: []byte(` {
 				"isPrior": false,
 				"isOn": true,
@@ -482,6 +512,75 @@ func (this *CreateAction) RunPost(params struct {
 						logs.Error(err)
 					}
 				}
+			}
+
+			// cache
+			if params.CacheIsOn {
+				var cacheConfig = &serverconfigs.HTTPCacheConfig{
+					IsPrior:         false,
+					IsOn:            true,
+					AddStatusHeader: true,
+					PurgeIsOn:       false,
+					PurgeKey:        "",
+					CacheRefs:       []*serverconfigs.HTTPCacheRef{},
+				}
+				cacheConfigJSON, err := json.Marshal(cacheConfig)
+				if err != nil {
+					this.ErrorPage(err)
+					return
+				}
+				_, err = this.RPC().HTTPWebRPC().UpdateHTTPWebCache(this.AdminContext(), &pb.UpdateHTTPWebCacheRequest{
+					HttpWebId: webConfig.Id,
+					CacheJSON: cacheConfigJSON,
+				})
+				if err != nil {
+					this.ErrorPage(err)
+					return
+				}
+			}
+
+			// waf
+			if params.WafIsOn {
+				var firewallRef = &firewallconfigs.HTTPFirewallRef{
+					IsPrior:          false,
+					IsOn:             true,
+					FirewallPolicyId: 0,
+				}
+				firewallRefJSON, err := json.Marshal(firewallRef)
+				if err != nil {
+					this.ErrorPage(err)
+					return
+				}
+				_, err = this.RPC().HTTPWebRPC().UpdateHTTPWebFirewall(this.AdminContext(), &pb.UpdateHTTPWebFirewallRequest{
+					HttpWebId:    webConfig.Id,
+					FirewallJSON: firewallRefJSON,
+				})
+				if err != nil {
+					this.ErrorPage(err)
+					return
+				}
+			}
+
+			// remoteAddr
+			var remoteAddrConfig = &serverconfigs.HTTPRemoteAddrConfig{
+				IsOn:  true,
+				Value: "${rawRemoteAddr}",
+			}
+			if params.RemoteAddrIsOn {
+				remoteAddrConfig.Value = "${remoteAddr}"
+			}
+			remoteAddrConfigJSON, err := json.Marshal(remoteAddrConfig)
+			if err != nil {
+				this.ErrorPage(err)
+				return
+			}
+			_, err = this.RPC().HTTPWebRPC().UpdateHTTPWebRemoteAddr(this.AdminContext(), &pb.UpdateHTTPWebRemoteAddrRequest{
+				HttpWebId:      webConfig.Id,
+				RemoteAddrJSON: remoteAddrConfigJSON,
+			})
+			if err != nil {
+				this.ErrorPage(err)
+				return
 			}
 		}
 	}

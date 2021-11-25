@@ -2,11 +2,13 @@ package cluster
 
 import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/clusters/cluster/boards"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/clusters/cluster/groups"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/clusters/cluster/node"
-	nodeboards "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/clusters/cluster/node/boards"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/clusters/cluster/node/thresholds"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/clusters/cluster/node/settings/cache"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/clusters/cluster/node/settings/dns"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/clusters/cluster/node/settings/ssh"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/clusters/cluster/node/settings/system"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/clusters/cluster/node/settings/thresholds"
 	clusters "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/clusters/clusterutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/helpers"
 	"github.com/iwind/TeaGo"
@@ -16,7 +18,8 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
-			Helper(clusters.NewClusterHelper()).Data("teaMenu", "waf").
+			Helper(clusters.NewClusterHelper()).
+			Data("teaMenu", "waf").
 			Prefix("/clusters/cluster").
 			Get("", new(IndexAction)).
 			Get("/nodes", new(NodesAction)).
@@ -27,9 +30,11 @@ func init() {
 			Post("/upgradeStatus", new(UpgradeStatusAction)).
 			GetPost("/delete", new(DeleteAction)).
 			GetPost("/createNode", new(CreateNodeAction)).
+			Post("/createNodeInstall", new(CreateNodeInstallAction)).
 			GetPost("/createBatch", new(CreateBatchAction)).
 			GetPost("/updateNodeSSH", new(UpdateNodeSSHAction)).
 			GetPost("/installManual", new(InstallManualAction)).
+			Post("/suggestLoginPorts", new(SuggestLoginPortsAction)).
 
 			// 节点相关
 			Prefix("/clusters/cluster/node").
@@ -42,9 +47,14 @@ func init() {
 			Post("/start", new(node.StartAction)).
 			Post("/stop", new(node.StopAction)).
 			Post("/up", new(node.UpAction)).
-			Get("/thresholds", new(thresholds.IndexAction)).
 			Get("/detail", new(node.DetailAction)).
-			GetPost("/boards", new(nodeboards.IndexAction)).
+			GetPost("/updateDNSPopup", new(node.UpdateDNSPopupAction)).
+			Post("/syncDomain", new(node.SyncDomainAction)).
+			GetPost("/settings/cache", new(cache.IndexAction)).
+			GetPost("/settings/dns", new(dns.IndexAction)).
+			GetPost("/settings/system", new(system.IndexAction)).
+			GetPost("/settings/ssh", new(ssh.IndexAction)).
+			GetPost("/settings/thresholds", new(thresholds.IndexAction)).
 
 			// 分组相关
 			Prefix("/clusters/cluster/groups").
@@ -54,11 +64,6 @@ func init() {
 			Post("/delete", new(groups.DeleteAction)).
 			Post("/sort", new(groups.SortAction)).
 			GetPost("/selectPopup", new(groups.SelectPopupAction)).
-
-			// 看板相关
-			Prefix("/clusters/cluster/boards").
-			Get("", new(boards.IndexAction)).
-
 			EndAll()
 	})
 }

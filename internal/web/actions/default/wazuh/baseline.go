@@ -18,23 +18,23 @@ func (this *BaseLineAction) Init() {
 
 func (this *BaseLineAction) RunGet(params struct{}) {
 
+	this.Data["baselines"] = []map[string]string{}
+	this.Data["agents"] = []map[string]string{}
+	defer this.Show()
 	err := InitAPIServer()
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMsg"] = err.Error()
 		return
 	}
 	agent, err := server.AgentList(&agents.ListReq{
 		AdminUserId: this.AdminId(),
 	})
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMsg"] = err.Error()
 		return
 	}
 	if len(agent.AffectedItems) == 0 {
 		this.Data["errorMsg"] = "请先添加资产"
-		this.Data["baselines"] = []map[string]string{}
-		this.Data["agents"] = []map[string]string{}
-		this.Show()
 		return
 	}
 	baselines := agents.SCAListResp{}
@@ -43,7 +43,7 @@ func (this *BaseLineAction) RunGet(params struct{}) {
 			Agent: v.ID,
 		})
 		if err != nil {
-			this.ErrorPage(err)
+			this.Data["errorMsg"] = err.Error()
 			return
 		}
 		for k := range list.AffectedItems {
@@ -57,7 +57,6 @@ func (this *BaseLineAction) RunGet(params struct{}) {
 
 	this.Data["agents"] = agent.AffectedItems
 
-	this.Show()
 }
 
 type BaseLineDetailsAction struct {

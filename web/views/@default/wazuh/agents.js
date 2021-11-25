@@ -3,6 +3,15 @@ Tea.context(function () {
     this.hanleOpen = function () {
         teaweb.popup(Tea.url("/hids/agents/create"), {height: '23em', width: '50em'});
     };
+
+
+    this.$delay(function () {
+
+        if (this.errorMessage !== "" && this.errorMessage !== undefined) {
+            teaweb.warn(this.errorMessage, function () {
+            })
+        }
+    })
     this.onDelete = function (agent) {
 
         teaweb.confirm("确定要删除所选资产吗？", function () {

@@ -85,9 +85,12 @@ Vue.component("origin-list-table", {
 		</tr>	
 	</thead>
 	<tr v-for="origin in vOrigins">
-		<td :class="{disabled:!origin.isOn}">{{origin.addr}}
+		<td :class="{disabled:!origin.isOn}"><a href="" @click.prevent="updateOrigin(origin.id)">{{origin.addr}} &nbsp;<i class="icon clone outline small"></i></a>
 			<div v-if="origin.name.length > 0" style="margin-top: 0.5em">
 				<tiny-basic-label>{{origin.name}}</tiny-basic-label>
+			</div>
+			<div v-if="origin.domains != null && origin.domains.length > 0">
+				<grey-label v-for="domain in origin.domains">{{domain}}</grey-label>
 			</div>
 		</td>
 		<td :class="{disabled:!origin.isOn}">{{origin.weight}}</td>

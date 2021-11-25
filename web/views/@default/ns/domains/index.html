@@ -20,7 +20,9 @@
                 <input type="text" name="keyword" v-model="keyword" placeholder="域名..."/>
             </div>
             <div class="ui field">
-                <button class="ui button" style="background-color: #1b6aff;" type="submit">搜索</button>
+                 <button class="ui button" style="background-color: #1b6aff;" type="submit">搜索</button>
+                &nbsp;
+                <a :href="Tea.url('.')" v-if="clusterId > 0 || userId > 0 || keyword.length > 0">[清除条件]</a>
             </div>
         </div>
     </form>
@@ -42,7 +44,9 @@
             </tr>
         </thead>
         <tr v-for="domain in domains">
-            <td><keyword :v-word="keyword">{{domain.name}}</keyword></td>
+            <td>
+                <a :href="'/ns/domains/domain?domainId=' + domain.id"><keyword :v-word="keyword">{{domain.name}}</keyword></a>
+            </td>
             <td>
                 {{domain.cluster.name}}<link-icon :href="'/ns/clusters/cluster?clusterId=' + domain.cluster.id"></link-icon>
             </td>

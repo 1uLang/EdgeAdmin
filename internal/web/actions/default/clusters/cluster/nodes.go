@@ -41,6 +41,15 @@ func (this *NodesAction) RunGet(params struct {
 	this.Data["activeState"] = params.ActiveState
 	this.Data["keyword"] = params.Keyword
 
+	// 集群是否已经设置了线路
+	clusterDNSResp, err := this.RPC().NodeClusterRPC().FindEnabledNodeClusterDNS(this.AdminContext(), &pb.FindEnabledNodeClusterDNSRequest{NodeClusterId: params.ClusterId})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	this.Data["hasClusterDNS"] = clusterDNSResp.Domain != nil
+
+	// 数量
 	countAllResp, err := this.RPC().NodeRPC().CountAllEnabledNodesMatch(this.AdminContext(), &pb.CountAllEnabledNodesMatchRequest{
 		NodeClusterId: params.ClusterId,
 	})
@@ -114,7 +123,7 @@ func (this *NodesAction) RunGet(params struct {
 		}
 
 		// IP
-		ipAddressesResp, err := this.RPC().NodeIPAddressRPC().FindAllEnabledIPAddressesWithNodeId(this.AdminContext(), &pb.FindAllEnabledIPAddressesWithNodeIdRequest{
+		ipAddressesResp, err := this.RPC().NodeIPAddressRPC().FindAllEnabledNodeIPAddressesWithNodeId(this.AdminContext(), &pb.FindAllEnabledNodeIPAddressesWithNodeIdRequest{
 			NodeId: node.Id,
 			Role:   nodeconfigs.NodeRoleNode,
 		})
@@ -123,12 +132,14 @@ func (this *NodesAction) RunGet(params struct {
 			return
 		}
 		ipAddresses := []maps.Map{}
-		for _, addr := range ipAddressesResp.Addresses {
+		for _, addr := range ipAddressesResp.NodeIPAddresses {
 			ipAddresses = append(ipAddresses, maps.Map{
 				"id":        addr.Id,
 				"name":      addr.Name,
 				"ip":        addr.Ip,
 				"canAccess": addr.CanAccess,
+				"isUp":      addr.IsUp,
+				"isOn":      addr.IsOn,
 			})
 		}
 
@@ -193,12 +204,6 @@ func (this *NodesAction) RunGet(params struct {
 				"id":   node.NodeCluster.Id,
 				"name": node.NodeCluster.Name,
 			},
-			//"isSynced":      isSynced,
-			//"ipAddresses":   ipAddresses,
-			//"group":         groupMap,
-			//"region":        regionMap,
-			//"dnsRouteNames": dnsRouteNames,
-
 			"secondaryClusters": secondaryClusterMaps,
 			"isSynced":          isSynced,
 			"ipAddresses":       ipAddresses,

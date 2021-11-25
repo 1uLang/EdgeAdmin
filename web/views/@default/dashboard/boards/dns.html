@@ -4,11 +4,11 @@
 
 <div class="ui four columns grid">
     <div class="ui column">
-        <h4>域名<link-icon href="/ns"></link-icon></h4>
+        <h4>域名<link-icon href="/ns/domains"></link-icon></h4>
         <div class="value"><span>{{board.countDomains}}</span>个</div>
     </div>
     <div class="ui column">
-        <h4>记录<link-icon href="/ns"></link-icon></h4>
+        <h4>记录<link-icon href="/ns/domains"></link-icon></h4>
         <div class="value"><span>{{board.countRecords}}</span>个</div>
     </div>
     <div class="ui column">
@@ -18,7 +18,9 @@
     <div class="ui column no-border">
         <h4>节点<link-icon href="/ns/clusters"></link-icon></h4>
         <div class="value"><span>{{board.countNodes}}</span>
-            <span v-if="board.countOfflineNodes > 0" class="red" style="font-size: 1em">{{board.countOfflineNodes}}离线</span>
+            <span v-if="board.countOfflineNodes > 0" style="font-size: 1em">
+                / <a href="/ns/clusters"><span class="red" style="font-size: 1em">{{board.countOfflineNodes}}离线</span></a>
+            </span>
             <span v-else style="font-size: 1em">个</span>
         </div>
     </div>

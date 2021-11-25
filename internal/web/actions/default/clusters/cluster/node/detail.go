@@ -7,6 +7,7 @@ import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/utils/numberutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/clusters/grants/grantutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/nodes/ipAddresses/ipaddressutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/nodeconfigs"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/iwind/TeaGo/maps"
@@ -68,7 +69,7 @@ func (this *DetailAction) RunGet(params struct {
 	}
 
 	// IP地址
-	ipAddressesResp, err := this.RPC().NodeIPAddressRPC().FindAllEnabledIPAddressesWithNodeId(this.AdminContext(), &pb.FindAllEnabledIPAddressesWithNodeIdRequest{
+	ipAddressesResp, err := this.RPC().NodeIPAddressRPC().FindAllEnabledNodeIPAddressesWithNodeId(this.AdminContext(), &pb.FindAllEnabledNodeIPAddressesWithNodeIdRequest{
 		NodeId: params.NodeId,
 		Role:   nodeconfigs.NodeRoleNode,
 	})
@@ -76,52 +77,27 @@ func (this *DetailAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	var ipAddresses = ipAddressesResp.Addresses
+	var ipAddresses = ipAddressesResp.NodeIPAddresses
 	ipAddressMaps := []maps.Map{}
-	for _, addr := range ipAddressesResp.Addresses {
+	for _, addr := range ipAddressesResp.NodeIPAddresses {
+		thresholds, err := ipaddressutils.InitNodeIPAddressThresholds(this.Parent(), addr.Id)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+
 		ipAddressMaps = append(ipAddressMaps, maps.Map{
-			"id":        addr.Id,
-			"name":      addr.Name,
-			"ip":        addr.Ip,
-			"canAccess": addr.CanAccess,
+			"id":         addr.Id,
+			"name":       addr.Name,
+			"ip":         addr.Ip,
+			"canAccess":  addr.CanAccess,
+			"isOn":       addr.IsOn,
+			"isUp":       addr.IsUp,
+			"thresholds": thresholds,
 		})
 	}
 
 	// DNS相关
-	//dnsInfoResp, err := this.RPC().NodeRPC().FindEnabledNodeDNS(this.AdminContext(), &pb.FindEnabledNodeDNSRequest{NodeId: params.NodeId})
-	//if err != nil {
-	//	this.ErrorPage(err)
-	//	return
-	//}
-	//dnsRouteMaps := []maps.Map{}
-	//recordName := ""
-	//recordValue := ""
-	//if dnsInfoResp.Node != nil {
-	//	recordName = dnsInfoResp.Node.NodeClusterDNSName + "." + dnsInfoResp.Node.DnsDomainName
-	//	recordValue = dnsInfoResp.Node.IpAddr
-	//	for _, dnsInfo := range dnsInfoResp.Node.Routes {
-	//		dnsRouteMaps = append(dnsRouteMaps, maps.Map{
-	//			"name": dnsInfo.Name,
-	//			"code": dnsInfo.Code,
-	//		})
-	//	}
-	//}
-	//if len(dnsRouteMaps) == 0 {
-	//	dnsRouteMaps = append(dnsRouteMaps, maps.Map{
-	//		"name": "",
-	//		"code": "",
-	//	})
-	//}
-	//this.Data["dnsRoutes"] = dnsRouteMaps
-	//this.Data["dnsRecordName"] = recordName
-	//this.Data["dnsRecordValue"] = recordValue
-	//
-	//// 登录信息
-	//var loginMap maps.Map = nil
-	//if node.Login != nil {
-	//	loginParams := maps.Map{}
-	//	if len(node.Login.Params) > 0 {
-	//		err = json.Unmarshal(node.Login.Params, &loginParams)
 	var clusters = []*pb.NodeCluster{node.NodeCluster}
 	clusters = append(clusters, node.SecondaryNodeClusters...)
 	var recordMaps = []maps.Map{}
@@ -155,7 +131,7 @@ func (this *DetailAction) RunGet(params struct {
 		}
 
 		for _, addr := range ipAddresses {
-			if !addr.CanAccess {
+			if !addr.CanAccess || !addr.IsUp || !addr.IsOn {
 				continue
 			}
 			for _, route := range dnsInfo.Routes {
@@ -199,6 +175,7 @@ func (this *DetailAction) RunGet(params struct {
 					"name":       grantResp.NodeGrant.Name,
 					"method":     grantResp.NodeGrant.Method,
 					"methodName": grantutils.FindGrantMethodName(grantResp.NodeGrant.Method),
+					"username":   grantResp.NodeGrant.Username,
 				}
 			}
 		}

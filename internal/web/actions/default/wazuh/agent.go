@@ -17,22 +17,22 @@ func (this *AgentsAction) Init() {
 }
 
 func (this *AgentsAction) RunGet(params struct{}) {
-
+	defer this.Show()
+	this.Data["agents"] = []int64{}
 	err := InitAPIServer()
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = err.Error()
 		return
 	}
-
 	list, err := server.AgentList(&agents.ListReq{
 		AdminUserId: this.AdminId(),
 	})
 	if err != nil {
-		this.ErrorPage(err)
+		this.Data["errorMessage"] = err.Error()
 		return
 	}
 	this.Data["agents"] = list.AffectedItems
-	this.Show()
+
 }
 
 func (this *AgentsAction) RunPost(params struct {

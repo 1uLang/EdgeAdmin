@@ -12,6 +12,7 @@ Tea.context(function () {
 
 	this.updateNode = function (clusterId, nodeId) {
 		teaweb.popup("/dns/issues/updateNodePopup?clusterId=" + clusterId + "&nodeId=" + nodeId, {
+			width: "46em",
 			height: "26em",
 			callback: function () {
 				teaweb.success("保存成功", function () {
@@ -36,6 +37,19 @@ Tea.context(function () {
 					teaweb.success("同步成功", function () {
 						teaweb.reload()
 					})
+				})
+		})
+	}
+
+	this.deleteTask = function (taskId) {
+		let that = this
+		teaweb.confirm("确定要删除这个任务吗？", function () {
+			that.$post("/dns/tasks/delete")
+				.params({
+					taskId: taskId
+				})
+				.success(function () {
+					teaweb.reload()
 				})
 		})
 	}

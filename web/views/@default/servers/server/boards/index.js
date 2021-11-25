@@ -1,4 +1,7 @@
 Tea.context(function () {
+	this.isLoading = true
+	this.metricCharts = []
+
 	this.formatCount = function (count) {
 		if (count < 1000) {
 			return count.toString()
@@ -15,10 +18,27 @@ Tea.context(function () {
 	this.trafficTab = "hourly"
 
 	this.$delay(function () {
-		this.reloadHourlyTrafficChart()
-		this.reloadHourlyRequestsChart()
-		this.reloadTopDomainsChart()
+		this.load()
 	})
+
+	this.load = function () {
+		this.$post("$")
+			.params({
+				serverId: this.server.id
+			})
+			.success(function (resp) {
+				for (let k in resp.data) {
+					this[k] = resp.data[k]
+				}
+				this.isLoading = false
+
+				this.$delay(function () {
+					this.reloadHourlyTrafficChart()
+					this.reloadHourlyRequestsChart()
+					this.reloadTopDomainsChart()
+				})
+			})
+	}
 
 	this.selectTrafficTab = function (tab) {
 		this.trafficTab = tab
@@ -113,7 +133,8 @@ Tea.context(function () {
 					},
 					areaStyle: {
 						color: "#9DD3E8"
-					}
+					},
+					smooth: true
 				},
 				{
 					name: "缓存流量",
@@ -126,7 +147,8 @@ Tea.context(function () {
 					},
 					areaStyle: {
 						color: "#61A0A8"
-					}
+					},
+					smooth: true
 				},
 				{
 					name: "攻击流量",
@@ -137,9 +159,10 @@ Tea.context(function () {
 					itemStyle: {
 						color: "#F39494"
 					},
-					lineStyle: {
+					areaStyle: {
 						color: "#F39494"
-					}
+					},
+					smooth: true
 				}
 			],
 			legend: {
@@ -252,7 +275,8 @@ Tea.context(function () {
 					},
 					areaStyle: {
 						color: "#9DD3E8"
-					}
+					},
+					smooth: true
 				},
 				{
 					name: "缓存请求数",
@@ -265,7 +289,8 @@ Tea.context(function () {
 					},
 					areaStyle: {
 						color: "#61A0A8"
-					}
+					},
+					smooth: true
 				},
 				{
 					name: "攻击请求数",
@@ -276,9 +301,10 @@ Tea.context(function () {
 					itemStyle: {
 						color: "#F39494"
 					},
-					lineStyle: {
+					areaStyle: {
 						color: "#F39494"
-					}
+					},
+					smooth: true
 				}
 			],
 			legend: {

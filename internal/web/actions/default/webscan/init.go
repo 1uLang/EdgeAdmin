@@ -25,6 +25,7 @@ func init() {
 var ServerUrl = "" //"https://scan-web.zhiannet.com"
 var Key = ""
 var NessusServerUrl = ""
+
 func InitAPIServer() error {
 
 	info, err := server.GetWebScan()

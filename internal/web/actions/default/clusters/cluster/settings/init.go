@@ -20,7 +20,7 @@ import (
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
-			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
+			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeNode)).
 			Helper(clusters.NewClusterHelper()).
 			Prefix("/clusters/cluster/settings").
 			GetPost("", new(IndexAction)).
@@ -73,7 +73,6 @@ func init() {
 			Get("", new(metrics.IndexAction)).
 			GetPost("/createPopup", new(metrics.CreatePopupAction)).
 			Post("/delete", new(metrics.DeleteAction)).
-
 			EndAll()
 	})
 }

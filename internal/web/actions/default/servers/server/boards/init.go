@@ -12,11 +12,8 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
 			Helper(serverutils.NewServerHelper()).
-
-			//Data("teaMenu", "waf").
-			//Prefix("/servers/server/board").
 			Prefix("/servers/server/boards").
-			Get("", new(IndexAction)).
+			GetPost("", new(IndexAction)).
 			EndAll()
 	})
 }

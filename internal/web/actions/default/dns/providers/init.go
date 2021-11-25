@@ -13,14 +13,13 @@ func init() {
 			// 服务商
 			Prefix("/dns/providers").
 			Data("teaMenu", "providers").
-			Data("teaSubMenu", "providers").
+			//Data("teaSubMenu", "providers").
 			Get("", new(IndexAction)).
 			GetPost("/createPopup", new(CreatePopupAction)).
 			GetPost("/updatePopup", new(UpdatePopupAction)).
 			Post("/delete", new(DeleteAction)).
 			Get("/provider", new(ProviderAction)).
 			EndData().
-
 			EndAll()
 	})
 }

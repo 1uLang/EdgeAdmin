@@ -79,20 +79,21 @@ func (this *CreateNodeAction) RunPost(params struct {
 	nodeId := createResp.NsNodeId
 
 	// IP地址
-	for _, address := range ipAddresses {
-		addressId := address.GetInt64("id")
+	for _, addrMap := range ipAddresses {
+		addressId := addrMap.GetInt64("id")
 		if addressId > 0 {
 			_, err = this.RPC().NodeIPAddressRPC().UpdateNodeIPAddressNodeId(this.AdminContext(), &pb.UpdateNodeIPAddressNodeIdRequest{
-				AddressId: addressId,
-				NodeId:    nodeId,
+				NodeIPAddressId: addressId,
+				NodeId:          nodeId,
 			})
 		} else {
 			_, err = this.RPC().NodeIPAddressRPC().CreateNodeIPAddress(this.AdminContext(), &pb.CreateNodeIPAddressRequest{
 				NodeId:    nodeId,
 				Role:      nodeconfigs.NodeRoleDNS,
-				Name:      address.GetString("name"),
-				Ip:        address.GetString("ip"),
-				CanAccess: address.GetBool("canAccess"),
+				Name:      addrMap.GetString("name"),
+				Ip:        addrMap.GetString("ip"),
+				CanAccess: addrMap.GetBool("canAccess"),
+				IsUp:      addrMap.GetBool("isUp"),
 			})
 		}
 		if err != nil {

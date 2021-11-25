@@ -12,6 +12,7 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
 			Helper(clusterutils.NewClustersHelper()).
+			Data("teaMenu", "clusters").
 			Prefix("/clusters").
 			Get("", new(IndexAction)).
 			GetPost("/create", new(CreateAction)).
@@ -20,7 +21,6 @@ func init() {
 			EndHelpers().
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeCommon)).
 			Post("/options", new(OptionsAction)).
-
 			GetPost("/selectPopup", new(SelectPopupAction)).
 			EndAll()
 	})

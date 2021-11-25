@@ -11,6 +11,7 @@ import (
 	"github.com/iwind/TeaGo/maps"
 	"net"
 	"net/http"
+	"net/url"
 	"reflect"
 	"strings"
 	"time"
@@ -135,9 +136,9 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 	if !action.Data.Has("teaMenu") {
 		action.Data["teaMenu"] = ""
 	}
-
-	action.Data["teaModules"] = this.modules(adminId)
-
+	action.Data["teaModules"] = this.modules(
+		//actionPtr,
+		adminId)
 	action.Data["teaSubMenus"] = []map[string]interface{}{}
 	action.Data["teaTabbar"] = []map[string]interface{}{}
 	if len(config.Version) == 0 {
@@ -187,7 +188,39 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 }
 
 // 菜单配置
-func (this *userMustAuth) modules(adminId int64) []maps.Map {
+func (this *userMustAuth) modules(
+	//actionPtr actions.ActionWrapper,
+	adminId int64) []maps.Map {
+
+	//var countUnreadNodeLogs int64 = 0
+	//var nodeLogsType = ""
+	//
+	//// 父级动作
+	//parentAction, ok := actionPtr.(actionutils.ActionInterface)
+	//if ok {
+	//	var action = actionPtr.Object()
+	//
+	//	// 未读日志数
+	//	if action.Data.GetString("teaMenu") == "clusters" {
+	//		countNodeLogsResp, err := parentAction.RPC().NodeLogRPC().CountNodeLogs(parentAction.AdminContext(), &pb.CountNodeLogsRequest{
+	//			Role:     nodeconfigs.NodeRoleNode,
+	//			IsUnread: true,
+	//		})
+	//		if err != nil {
+	//			logs.Error(err)
+	//		} else {
+	//			var countNodeLogs = countNodeLogsResp.Count
+	//			if countNodeLogs > 0 {
+	//				countUnreadNodeLogs = countNodeLogs
+	//				if countUnreadNodeLogs >= 1000 {
+	//					countUnreadNodeLogs = 999
+	//				}
+	//				nodeLogsType = "unread"
+	//			}
+	//		}
+	//	}
+	//}
+
 	leftMaps := []maps.Map{
 		{
 			"code":   "dashboard",
@@ -843,7 +876,7 @@ func (this *userMustAuth) modules(adminId int64) []maps.Map {
 
 // 跳转到登录页
 func (this *userMustAuth) login(action *actions.ActionObject) {
-	action.RedirectURL("/")
+	action.RedirectURL("/?from=" + url.QueryEscape(action.Request.RequestURI))
 }
 
 func (this *userMustAuth) FirstMenuUrl(adminId int64) string {

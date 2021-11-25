@@ -24,11 +24,10 @@ func (this *IndexAction) RunGet(params struct {
 }) {
 	this.Data["nodeErr"] = ""
 	this.Data["reports"] = make([]interface{}, 0)
+	defer this.Show()
 	err := webscan.InitAPIServer()
 	if err != nil {
-		//this.ErrorPage(err)
-		this.Data["nodeErr"] = "web漏洞扫描节点错误"
-		this.Show()
+		this.Data["nodeErr"] = err.Error()
 		return
 	}
 	if params.PageNo < 0 {
@@ -38,25 +37,24 @@ func (this *IndexAction) RunGet(params struct {
 		params.PageSize = 20
 	}
 	list, err := reports_server.List(&reports.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, AdminUserId: uint64(this.AdminId())})
-	//if err != nil && list == nil {
-	//	this.ErrorPage(err)
-	//	return
-	//}
+	if err != nil && list == nil {
+		this.Data["nodeErr"] = err.Error()
+		return
+	}
 	var reports []interface{}
 	if lists, ok := list["reports"]; ok {
 		reports = lists.([]interface{})
 	}
 	nessus_list, err := nessus_scans_server.ListReport(&nessus_scans_model.ScansListReq{AdminUserId: uint64(this.AdminId())})
-	//if err != nil {
-	//	this.ErrorPage(err)
-	//	return
-	//}
+	if err != nil {
+		this.Data["nodeErr"] = err.Error()
+		return
+	}
 	reports = append(reports, nessus_list...)
 
 	if len(nessus_list) > 0 || len(reports) > 0 {
 		this.Data["reports"] = reports
 	}
-	this.Show()
 }
 
 func (this *IndexAction) RunPost(params struct {

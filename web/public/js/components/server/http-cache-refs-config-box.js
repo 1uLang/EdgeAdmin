@@ -1,5 +1,5 @@
 Vue.component("http-cache-refs-config-box", {
-	props: ["v-cache-refs", "v-cache-config"],
+	props: ["v-cache-refs", "v-cache-config", "v-cache-policy-id"],
 	mounted: function () {
 		let that = this
 		sortTable(function (ids) {
@@ -12,6 +12,7 @@ Vue.component("http-cache-refs-config-box", {
 				})
 			})
 			that.updateRefs(newRefs)
+			that.change()
 		})
 	},
 	data: function () {
@@ -73,6 +74,8 @@ Vue.component("http-cache-refs-config-box", {
 					} else {
 						that.refs.push(newRef)
 					}
+
+					that.change()
 				}
 			})
 		},
@@ -97,6 +100,8 @@ Vue.component("http-cache-refs-config-box", {
 
 					// 通知子组件更新
 					that.$refs.cacheRef[index].notifyChange()
+
+					that.change()
 				}
 			})
 		},
@@ -104,6 +109,7 @@ Vue.component("http-cache-refs-config-box", {
 			let that = this
 			teaweb.confirm("确定要删除此缓存设置吗？", function () {
 				that.refs.$remove(index)
+				that.change()
 			})
 		},
 		updateRefs: function (newRefs) {
@@ -128,6 +134,17 @@ Vue.component("http-cache-refs-config-box", {
 					return "周 "
 			}
 			return unit
+		},
+		change: function () {
+			// 自动保存
+			if (this.vCachePolicyId != null && this.vCachePolicyId > 0) {
+				Tea.action("/servers/components/cache/updateRefs")
+					.params({
+						cachePolicyId: this.vCachePolicyId,
+						refsJSON: JSON.stringify(this.refs)
+					})
+					.post()
+			}
 		}
 	},
 	template: `<div>
@@ -139,7 +156,7 @@ Vue.component("http-cache-refs-config-box", {
 			<thead>
 				<tr>
 					<th style="width:1em"></th>
-					<th>条件</th>
+					<th>缓存条件</th>
 					<th class="two wide">分组关系</th>
 					<th class="width10">缓存时间</th>
 					<th class="two op">操作</th>
@@ -150,6 +167,12 @@ Vue.component("http-cache-refs-config-box", {
 					<td style="text-align: center;"><i class="icon bars handle grey"></i> </td>
 					<td :class="{'color-border': cacheRef.conds.connector == 'and'}" :style="{'border-left':cacheRef.isReverse ? '1px #db2828 solid' : ''}">
 						<http-request-conds-view :v-conds="cacheRef.conds" ref="cacheRef"></http-request-conds-view>
+						<grey-label v-if="cacheRef.minSize != null && cacheRef.minSize.count > 0">
+							{{cacheRef.minSize.count}}{{cacheRef.minSize.unit}}
+							<span v-if="cacheRef.maxSize != null && cacheRef.maxSize.count > 0">- {{cacheRef.maxSize.count}}{{cacheRef.maxSize.unit}}</span>
+						</grey-label>
+						<grey-label v-else-if="cacheRef.maxSize != null && cacheRef.maxSize.count > 0">0 - {{cacheRef.maxSize.count}}{{cacheRef.maxSize.unit}}</grey-label>
+						<grey-label v-if="cacheRef.status != null && cacheRef.status.length > 0 && (cacheRef.status.length > 1 || cacheRef.status[0] != 200)">状态码：{{cacheRef.status.map(function(v) {return v.toString()}).join(", ")}}</grey-label>
 					</td>
 					<td>
 						<span v-if="cacheRef.conds.connector == 'and'">和</span>

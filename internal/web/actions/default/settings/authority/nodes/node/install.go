@@ -19,12 +19,12 @@ func (this *InstallAction) RunGet(params struct {
 	NodeId int64
 }) {
 	// 认证节点信息
-	nodeResp, err := this.RPC().AuthorityNodeRPC().FindEnabledAuthorityNode(this.AdminContext(), &pb.FindEnabledAuthorityNodeRequest{NodeId: params.NodeId})
+	nodeResp, err := this.RPC().AuthorityNodeRPC().FindEnabledAuthorityNode(this.AdminContext(), &pb.FindEnabledAuthorityNodeRequest{AuthorityNodeId: params.NodeId})
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	node := nodeResp.Node
+	node := nodeResp.AuthorityNode
 	if node == nil {
 		this.NotFound("authorityNode", params.NodeId)
 		return
@@ -43,7 +43,7 @@ func (this *InstallAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	apiNodes := apiNodesResp.Nodes
+	apiNodes := apiNodesResp.ApiNodes
 	apiEndpoints := []string{}
 	for _, apiNode := range apiNodes {
 		if !apiNode.IsOn {

@@ -10,7 +10,7 @@
 	<script type="text/javascript" src="/js/md5.min.js"></script>
 	<script type="text/javascript" src="/js/utils.js"></script>
 	<script type="text/javascript" src="/js/sweetalert2/dist/sweetalert2.all.min.js"></script>
-	<script type="text/javascript" src="/ui/components.js"></script>
+	<script type="text/javascript" src="/js/components.js"></script>
 	<link rel="stylesheet" href="/_/@default/@layout.css"/>
 </head>
 <body>
@@ -149,13 +149,14 @@
 					<tr>
 						<td class="title">MySQL主机地址 *</td>
 						<td>
-							<input type="text" name="host" maxlength="100" placeholder="比如 192.168.1.100" style="width:16em" ref="dbHost"/>
+							<input type="text" name="host" maxlength="100" placeholder="比如 192.168.1.100" style="width:16em" ref="dbHost" v-model="localDB.host"/>
+                            <p class="comment" v-if="localDBHost.length > 0 && localDBHost == localDB.host"><span class="blue">已经自动填入从当前服务器发现的MySQL数据库信息。</span></p>
 						</td>
 					</tr>
 					<tr>
 						<td>数据库连接端口 *</td>
 						<td>
-							<input type="text" name="port" maxlength="5" placeholder="比如 3306" style="width:7em"/>
+							<input type="text" name="port" maxlength="5" placeholder="比如 3306" style="width:7em" v-model="localDB.port"/>
 						</td>
 					</tr>
 					<tr>
@@ -168,14 +169,14 @@
 					<tr>
 						<td>连接用户名 *</td>
 						<td>
-							<input type="text" name="username" style="width:16em" maxlength="100"/>
+							<input type="text" name="username" style="width:16em" maxlength="100" v-model="localDB.username"/>
 							<p class="comment">此用户需要可以在数据库中有操作数据和创建数据表的权限。</p>
 						</td>
 					</tr>
 					<tr>
 						<td>连接密码</td>
 						<td>
-							<input type="password" name="password" style="width:16em" maxlength="100"/>
+							<input type="password" name="password" style="width:16em" maxlength="100" v-model="localDB.password"/>
 							<p class="comment">连接数据库所需密码，没有密码的话就不需要填写。</p>
 						</td>
 					</tr>
@@ -183,10 +184,10 @@
                         <td>访问日志保留天数</td>
                         <td>
                             <div class="ui input right labeled">
-                                <input type="number" name="accessLogKeepDays" style="width: 5em" maxlength="4" value="30"/>
+                                <input type="number" name="accessLogKeepDays" style="width: 5em" maxlength="4" value="14"/>
                                 <span class="ui label">天</span>
                             </div>
-                            <p class="comment">网站等服务记录的访问日志保留天数，防止无限制地占用数据库空间。</p>
+                            <p class="comment">网站等服务记录的访问日志保留天数，防止无限制地占用数据库空间，如果你的数据库空间比较小，请适当调小此值。</p>
                         </td>
                     </tr>
 				</table>
@@ -211,14 +212,14 @@
 				<tr>
 					<td class="title">登录用户名 *</td>
 					<td>
-						<input type="text" name="adminUsername" style="width:16em" maxlength="100" value="admin"/>
+						<input type="text" name="adminUsername" style="width:16em" maxlength="100" value="admin" tabindex="1"/>
 						<p class="comment">只能是英文、数字和下划线的组合。</p>
 					</td>
 				</tr>
 				<tr>
 					<td>登录密码 *</td>
 					<td>
-						<input type="password" name="adminPassword" maxlength="100" style="width:16em" v-model="adminPassword" v-show="!adminPasswordVisible"/>
+						<input type="password" name="adminPassword" maxlength="100" style="width:16em" v-model="adminPassword" v-show="!adminPasswordVisible" tabindex="2"/>
 						<input type="text" value="" v-model="adminPassword" style="width:16em" v-show="adminPasswordVisible"/>
 						<p class="comment">只能是英文、数字和下划线的组合 <a href="" title="显示明文密码" @click.prevent="showAdminPassword"><i class="icon eye grey"></i></a>。</p>
 					</td>
@@ -226,7 +227,7 @@
 				<tr>
 					<td>确认密码 *</td>
 					<td>
-						<input type="password" name="adminPassword2" maxlength="100" style="width:16em" v-model="adminPassword2" v-show="!adminPasswordVisible"/>
+						<input type="password" name="adminPassword2" maxlength="100" style="width:16em" v-model="adminPassword2" v-show="!adminPasswordVisible" tabindex="3"/>
 						<input type="text" value="" v-model="adminPassword2" style="width:16em" v-show="adminPasswordVisible"/>
 						<p class="comment">再次输入密码以便于确认  <a href="" title="显示明文密码" @click.prevent="showAdminPassword"><i class="icon eye grey"></i></a>。</p>
 					</td>
@@ -349,9 +350,11 @@
 
 			<div class="button-group">
 				<div class="ui divider"></div>
+                <div class="status-box"><span class="blue">{{statusText}}</span></div>
+
 				<button class="ui button" type="button" @click.prevent="goBackAdmin"><i class="icon long arrow left"></i>上一步</button>
 				<button class="ui button primary" type="submit" v-if="!isInstalling">确认并开始安装</button>
-				<button class="ui button primary" type="button" v-if="isInstalling">安装中...</button>
+				<button class="ui button disabled" type="button" v-if="isInstalling">安装中请耐心等待...</button>
 			</div>
 		</form>
 	</div>

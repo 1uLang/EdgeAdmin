@@ -14,12 +14,14 @@ func init() {
 			Data("teaSubMenu", "iplist").
 			Prefix("/servers/iplists").
 			Get("", new(IndexAction)).
+			Get("/lists", new(ListsAction)).
 			GetPost("/createPopup", new(CreatePopupAction)).
 			Get("/list", new(ListAction)).
 			GetPost("/import", new(ImportAction)).
 			GetPost("/export", new(ExportAction)).
 			Get("/exportData", new(ExportDataAction)).
 			Post("/delete", new(DeleteAction)).
+			Post("/deleteItems", new(DeleteItemsAction)).
 			GetPost("/test", new(TestAction)).
 			GetPost("/update", new(UpdateAction)).
 			Get("/items", new(ItemsAction)).
@@ -38,7 +40,6 @@ func init() {
 
 			// 选项数据
 			Post("/levelOptions", new(LevelOptionsAction)).
-
 			EndAll()
 	})
 }

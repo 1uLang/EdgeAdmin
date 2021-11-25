@@ -1,11 +1,25 @@
 Tea.context(function () {
+	this.isLoading = true
 	this.trafficTab = "hourly"
+	this.metricCharts = []
+	this.plusExpireDay = ""
 
 	this.$delay(function () {
-		this.reloadHourlyTrafficChart()
-		this.reloadHourlyRequestsChart()
-		this.reloadTopDomainsChart()
-		this.reloadTopNodesChart()
+		this.$post("$")
+			.success(function (resp) {
+				for (let k in resp.data) {
+					this[k] = resp.data[k]
+				}
+
+				this.isLoading = false
+
+				this.$delay(function () {
+					this.reloadHourlyTrafficChart()
+					this.reloadHourlyRequestsChart()
+					this.reloadTopDomainsChart()
+					this.reloadTopNodesChart()
+				})
+			})
 	})
 
 	this.selectTrafficTab = function (tab) {
@@ -24,15 +38,15 @@ Tea.context(function () {
 	this.reloadHourlyTrafficChart = function () {
 		let stats = this.hourlyTrafficStats
 		this.reloadTrafficChart("hourly-traffic-chart-box", stats, function (args) {
-				let index = args.dataIndex
-				let cachedRatio = 0
-				let attackRatio = 0
-				if (stats[index].bytes > 0) {
-					cachedRatio = Math.round(stats[index].cachedBytes * 10000 / stats[index].bytes) / 100
-					attackRatio = Math.round(stats[index].attackBytes * 10000 / stats[index].bytes) / 100
-				}
+			let index = args.dataIndex
+			let cachedRatio = 0
+			let attackRatio = 0
+			if (stats[index].bytes > 0) {
+				cachedRatio = Math.round(stats[index].cachedBytes * 10000 / stats[index].bytes) / 100
+				attackRatio = Math.round(stats[index].attackBytes * 10000 / stats[index].bytes) / 100
+			}
 
-				return stats[index].day + " " + stats[index].hour  + "时<br/>总流量：" + teaweb.formatBytes(stats[index].bytes) + "<br/>缓存流量：" + teaweb.formatBytes(stats[index].cachedBytes) + "<br/>缓存命中率：" + cachedRatio + "%<br/>拦截攻击流量：" + teaweb.formatBytes(stats[index].attackBytes) + "<br/>拦截比例：" + attackRatio + "%"
+			return stats[index].day + " " + stats[index].hour + "时<br/>总流量：" + teaweb.formatBytes(stats[index].bytes) + "<br/>缓存流量：" + teaweb.formatBytes(stats[index].cachedBytes) + "<br/>缓存命中率：" + cachedRatio + "%<br/>拦截攻击流量：" + teaweb.formatBytes(stats[index].attackBytes) + "<br/>拦截比例：" + attackRatio + "%"
 		})
 	}
 
@@ -100,7 +114,8 @@ Tea.context(function () {
 					},
 					areaStyle: {
 						color: "#9DD3E8"
-					}
+					},
+					smooth: true
 				},
 				{
 					name: "缓存流量",
@@ -113,7 +128,9 @@ Tea.context(function () {
 					},
 					lineStyle: {
 						color: "#61A0A8"
-					}
+					},
+					areaStyle: {},
+					smooth: true
 				},
 				{
 					name: "攻击流量",
@@ -124,9 +141,10 @@ Tea.context(function () {
 					itemStyle: {
 						color: "#F39494"
 					},
-					lineStyle: {
+					areaStyle: {
 						color: "#F39494"
-					}
+					},
+					smooth: true
 				}
 			],
 			legend: {
@@ -239,7 +257,8 @@ Tea.context(function () {
 					},
 					areaStyle: {
 						color: "#9DD3E8"
-					}
+					},
+					smooth: true
 				},
 				{
 					name: "缓存请求数",
@@ -252,7 +271,8 @@ Tea.context(function () {
 					},
 					areaStyle: {
 						color: "#61A0A8"
-					}
+					},
+					smooth: true
 				},
 				{
 					name: "攻击请求数",
@@ -263,9 +283,10 @@ Tea.context(function () {
 					itemStyle: {
 						color: "#F39494"
 					},
-					lineStyle: {
+					areaStyle: {
 						color: "#F39494"
-					}
+					},
+					smooth: true
 				}
 			],
 			legend: {

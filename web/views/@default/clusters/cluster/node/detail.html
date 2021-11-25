@@ -2,7 +2,6 @@
 
 	{$template "node_menu"}
 
-	<h3>节点详情</h3>
 	<table class="ui table definition selectable">
 		<tr>
 			<td class="title">节点名称</td>
@@ -27,6 +26,9 @@
                             <span v-if="address.ip.indexOf(':') > -1" class="grey">[IPv6]</span> {{address.ip}}
 							<span class="small grey" v-if="address.name.length > 0">（{{address.name}}<span v-if="!address.canAccess">，不可访问</span>）</span>
 							<span class="small grey" v-if="address.name.length == 0 && !address.canAccess">（不可访问）</span>
+                            <span class="small red" v-if="!address.isOn">[off]</span>
+                            <span class="small red" v-if="!address.isUp">[down]</span>
+                            <span class="small" v-if="address.thresholds != null && address.thresholds.length > 0">[阈值]</span>
 						</div>
 					</div>
 				</div>
@@ -113,7 +115,7 @@
 				<td>SSH登录认证</td>
 				<td>
 					<div v-if="node.login != null && node.login.grant != null && node.login.grant.id > 0">
-						<a :href="'/clusters/grants/grant?grantId=' + node.login.grant.id">{{node.login.grant.name}}<span class="small">（{{node.login.grant.methodName}}）</span></a>
+						<a :href="'/clusters/grants/grant?grantId=' + node.login.grant.id">{{node.login.grant.name}}<span class="small grey">（{{node.login.grant.methodName}}）</span><span class="small grey" v-if="node.login.grant.username.length > 0">（{{node.login.grant.username}}）</span></a>
 					</div>
 					<span v-else class="disabled">
 						尚未设置

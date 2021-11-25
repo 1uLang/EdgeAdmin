@@ -3,6 +3,15 @@ Tea.context(function () {
 
     this.pageState = 1
 
+
+    this.$delay(function () {
+
+        if (this.errorMessage !== "" && this.errorMessage !== undefined) {
+            teaweb.warn(this.errorMessage, function () {
+            })
+        }
+    })
+
     this.onChangeState = function (state) {
         if (this.pageState != state) {
             this.pageState = state

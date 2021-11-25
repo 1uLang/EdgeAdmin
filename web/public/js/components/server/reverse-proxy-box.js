@@ -1,43 +1,51 @@
 Vue.component("reverse-proxy-box", {
-    props: ["v-reverse-proxy-ref", "v-reverse-proxy-config", "v-is-location", "v-family"],
-    data: function () {
-        let reverseProxyRef = this.vReverseProxyRef
-        if (reverseProxyRef == null) {
-            reverseProxyRef = {
-                isPrior: false,
-                isOn: false,
-                reverseProxyId: 0
-            }
-        }
+	props: ["v-reverse-proxy-ref", "v-reverse-proxy-config", "v-is-location", "v-is-group", "v-family"],
+	data: function () {
+		let reverseProxyRef = this.vReverseProxyRef
+		if (reverseProxyRef == null) {
+			reverseProxyRef = {
+				isPrior: false,
+				isOn: false,
+				reverseProxyId: 0
+			}
+		}
 
-        let reverseProxyConfig = this.vReverseProxyConfig
-        if (reverseProxyConfig == null) {
-            reverseProxyConfig = {
-                requestPath: "",
-                stripPrefix: "",
-                requestURI: "",
-                requestHost: "",
-                requestHostType: 0,
-                addHeaders: [],
-                connTimeout: {count: 0, unit: "second"},
-                readTimeout: {count: 0, unit: "second"},
-                idleTimeout: {count: 0, unit: "second"},
-                maxConns: 0,
-                maxIdleConns: 0
-            }
-        }
-        if (reverseProxyConfig.addHeaders == null) {
-            reverseProxyConfig.addHeaders = []
-        }
-        if (reverseProxyConfig.connTimeout == null) {
-            reverseProxyConfig.connTimeout = {count: 0, unit: "second"}
-        }
-        if (reverseProxyConfig.readTimeout == null) {
-            reverseProxyConfig.readTimeout = {count: 0, unit: "second"}
-        }
-        if (reverseProxyConfig.idleTimeout == null) {
-            reverseProxyConfig.idleTimeout = {count: 0, unit: "second"}
-        }
+		let reverseProxyConfig = this.vReverseProxyConfig
+		if (reverseProxyConfig == null) {
+			reverseProxyConfig = {
+				requestPath: "",
+				stripPrefix: "",
+				requestURI: "",
+				requestHost: "",
+				requestHostType: 0,
+				addHeaders: [],
+				connTimeout: {count: 0, unit: "second"},
+				readTimeout: {count: 0, unit: "second"},
+				idleTimeout: {count: 0, unit: "second"},
+				maxConns: 0,
+				maxIdleConns: 0
+			}
+		}
+		if (reverseProxyConfig.addHeaders == null) {
+			reverseProxyConfig.addHeaders = []
+		}
+		if (reverseProxyConfig.connTimeout == null) {
+			reverseProxyConfig.connTimeout = {count: 0, unit: "second"}
+		}
+		if (reverseProxyConfig.readTimeout == null) {
+			reverseProxyConfig.readTimeout = {count: 0, unit: "second"}
+		}
+		if (reverseProxyConfig.idleTimeout == null) {
+			reverseProxyConfig.idleTimeout = {count: 0, unit: "second"}
+		}
+
+		if (reverseProxyConfig.proxyProtocol == null) {
+			// 如果直接赋值Vue将不会触发变更通知
+			Vue.set(reverseProxyConfig, "proxyProtocol", {
+				isOn: false,
+				version: 1
+			})
+		}
 
         let forwardHeaders = [
             {
@@ -65,79 +73,89 @@ Vue.component("reverse-proxy-box", {
             v.isChecked = reverseProxyConfig.addHeaders.$contains(v.name)
         })
 
-        return {
-            reverseProxyRef: reverseProxyRef,
-            reverseProxyConfig: reverseProxyConfig,
-            advancedVisible: false,
-            family: this.vFamily,
-            forwardHeaders: forwardHeaders
-        }
-    },
-    watch: {
-        "reverseProxyConfig.requestHostType": function (v) {
-            let requestHostType = parseInt(v)
-            if (isNaN(requestHostType)) {
-                requestHostType = 0
-            }
-            this.reverseProxyConfig.requestHostType = requestHostType
-        },
-        "reverseProxyConfig.connTimeout.count": function (v) {
-            let count = parseInt(v)
-            if (isNaN(count) || count < 0) {
-                count = 0
-            }
-            this.reverseProxyConfig.connTimeout.count = count
-        },
-        "reverseProxyConfig.readTimeout.count": function (v) {
-            let count = parseInt(v)
-            if (isNaN(count) || count < 0) {
-                count = 0
-            }
-            this.reverseProxyConfig.readTimeout.count = count
-        },
-        "reverseProxyConfig.idleTimeout.count": function (v) {
-            let count = parseInt(v)
-            if (isNaN(count) || count < 0) {
-                count = 0
-            }
-            this.reverseProxyConfig.idleTimeout.count = count
-        },
-        "reverseProxyConfig.maxConns": function (v) {
-            let maxConns = parseInt(v)
-            if (isNaN(maxConns) || maxConns < 0) {
-                maxConns = 0
-            }
-            this.reverseProxyConfig.maxConns = maxConns
-        },
-        "reverseProxyConfig.maxIdleConns": function (v) {
-            let maxIdleConns = parseInt(v)
-            if (isNaN(maxIdleConns) || maxIdleConns < 0) {
-                maxIdleConns = 0
-            }
-            this.reverseProxyConfig.maxIdleConns = maxIdleConns
-        },
-    },
-    methods: {
-        isOn: function () {
-            return (!this.vIsLocation || this.reverseProxyRef.isPrior) && this.reverseProxyRef.isOn
-        },
-        changeAdvancedVisible: function (v) {
-            this.advancedVisible = v
-        },
-        changeAddHeader: function () {
-            this.reverseProxyConfig.addHeaders = this.forwardHeaders.filter(function (v) {
-                return v.isChecked
-            }).map(function (v) {
-                return v.name
-            })
-        }
-    },
-    template: `<div>
+		return {
+			reverseProxyRef: reverseProxyRef,
+			reverseProxyConfig: reverseProxyConfig,
+			advancedVisible: false,
+			family: this.vFamily,
+			forwardHeaders: forwardHeaders
+		}
+	},
+	watch: {
+		"reverseProxyConfig.requestHostType": function (v) {
+			let requestHostType = parseInt(v)
+			if (isNaN(requestHostType)) {
+				requestHostType = 0
+			}
+			this.reverseProxyConfig.requestHostType = requestHostType
+		},
+		"reverseProxyConfig.connTimeout.count": function (v) {
+			let count = parseInt(v)
+			if (isNaN(count) || count < 0) {
+				count = 0
+			}
+			this.reverseProxyConfig.connTimeout.count = count
+		},
+		"reverseProxyConfig.readTimeout.count": function (v) {
+			let count = parseInt(v)
+			if (isNaN(count) || count < 0) {
+				count = 0
+			}
+			this.reverseProxyConfig.readTimeout.count = count
+		},
+		"reverseProxyConfig.idleTimeout.count": function (v) {
+			let count = parseInt(v)
+			if (isNaN(count) || count < 0) {
+				count = 0
+			}
+			this.reverseProxyConfig.idleTimeout.count = count
+		},
+		"reverseProxyConfig.maxConns": function (v) {
+			let maxConns = parseInt(v)
+			if (isNaN(maxConns) || maxConns < 0) {
+				maxConns = 0
+			}
+			this.reverseProxyConfig.maxConns = maxConns
+		},
+		"reverseProxyConfig.maxIdleConns": function (v) {
+			let maxIdleConns = parseInt(v)
+			if (isNaN(maxIdleConns) || maxIdleConns < 0) {
+				maxIdleConns = 0
+			}
+			this.reverseProxyConfig.maxIdleConns = maxIdleConns
+		},
+		"reverseProxyConfig.proxyProtocol.version": function (v) {
+			let version = parseInt(v)
+			if (isNaN(version)) {
+				version = 1
+			}
+			this.reverseProxyConfig.proxyProtocol.version = version
+		}
+	},
+	methods: {
+		isOn: function () {
+			if (this.vIsLocation || this.vIsGroup) {
+				return this.reverseProxyRef.isPrior && this.reverseProxyRef.isOn
+			}
+			return this.reverseProxyRef.isOn
+		},
+		changeAdvancedVisible: function (v) {
+			this.advancedVisible = v
+		},
+		changeAddHeader: function () {
+			this.reverseProxyConfig.addHeaders = this.forwardHeaders.filter(function (v) {
+				return v.isChecked
+			}).map(function (v) {
+				return v.name
+			})
+		}
+	},
+	template: `<div>
 	<input type="hidden" name="reverseProxyRefJSON" :value="JSON.stringify(reverseProxyRef)"/>
 	<input type="hidden" name="reverseProxyJSON" :value="JSON.stringify(reverseProxyConfig)"/>
 	<table class="ui table selectable definition">
-		<prior-checkbox :v-config="reverseProxyRef" v-if="vIsLocation"></prior-checkbox>
-		<tbody v-show="!vIsLocation || reverseProxyRef.isPrior">
+		<prior-checkbox :v-config="reverseProxyRef" v-if="vIsLocation || vIsGroup"></prior-checkbox>
+		<tbody v-show="(!vIsLocation && !vIsGroup) || reverseProxyRef.isPrior">
 			<tr>
 				<td class="title">是否启用反向代理</td>
 				<td>
@@ -191,7 +209,7 @@ Vue.component("reverse-proxy-box", {
 					<p class="comment">可以把请求的路径部分前缀去除后再查找文件，比如把 <span class="ui label tiny">/web/app/index.html</span> 去除前缀 <span class="ui label tiny">/web</span> 后就变成 <span class="ui label tiny">/app/index.html</span>。 </p>
 				</td>
 			</tr>
-			<tr>
+			<tr v-if="family == null || family == 'http'">
 				<td>是否自动刷新缓存区<em>（AutoFlush）</em></td>
 				<td>
 					<div class="ui checkbox">
@@ -202,7 +220,7 @@ Vue.component("reverse-proxy-box", {
 				</td>
 			</tr>
 			<tr v-if="family == null || family == 'http'">
-                <td class="color-border">源站默认连接失败超时时间</td>
+                <td class="color-border">源站连接失败超时时间</td>
                 <td>
                     <div class="ui fields inline">
                         <div class="ui field">
@@ -230,7 +248,7 @@ Vue.component("reverse-proxy-box", {
                 </td>
             </tr>
             <tr v-if="family == null || family == 'http'">
-                <td class="color-border">源站默认最大并发连接数</td>
+                <td class="color-border">源站最大并发连接数</td>
                 <td>
                     <div class="ui fields inline">
                         <div class="ui field">
@@ -241,7 +259,7 @@ Vue.component("reverse-proxy-box", {
                 </td>
             </tr>
             <tr v-if="family == null || family == 'http'">
-                <td class="color-border">源站默认最大空闲连接数</td>
+                <td class="color-border">源站最大空闲连接数</td>
                 <td>
                     <div class="ui fields inline">
                         <div class="ui field">
@@ -252,7 +270,7 @@ Vue.component("reverse-proxy-box", {
                 </td>
             </tr>
             <tr v-if="family == null || family == 'http'">
-                <td class="color-border">源站默认最大空闲超时时间</td>
+                <td class="color-border">源站最大空闲超时时间</td>
                 <td>
                     <div class="ui fields inline">
                         <div class="ui field">
@@ -265,6 +283,24 @@ Vue.component("reverse-proxy-box", {
                     <p class="comment">源站保持等待的空闲超时时间，0表示使用默认时间。</p>
                 </td>
             </tr>
+            <tr v-show="family != 'unix'">
+            	<td>PROXY Protocol</td>
+            	<td>
+            		<checkbox name="proxyProtocolIsOn" v-model="reverseProxyConfig.proxyProtocol.isOn"></checkbox>
+            		<p class="comment">选中后表示启用PROXY Protocol，每次连接源站时都会在头部写入客户端地址信息。</p>
+				</td>
+			</tr>
+			<tr v-show="family != 'unix' && reverseProxyConfig.proxyProtocol.isOn">
+				<td>PROXY Protocol版本</td>
+				<td>
+					<select class="ui dropdown auto-width" name="proxyProtocolVersion" v-model="reverseProxyConfig.proxyProtocol.version">
+						<option value="1">1</option>
+						<option value="2">2</option>
+					</select>
+					<p class="comment" v-if="reverseProxyConfig.proxyProtocol.version == 1">发送类似于<code-label>PROXY TCP4 192.168.1.1 192.168.1.10 32567 443</code-label>的头部信息。</p>
+					<p class="comment" v-if="reverseProxyConfig.proxyProtocol.version == 2">发送二进制格式的头部信息。</p>
+				</td>
+			</tr>
 		</tbody>
 	</table>
 	<div class="margin"></div>

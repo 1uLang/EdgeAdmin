@@ -4,6 +4,7 @@ import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/firewallconfigs"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
 )
@@ -36,9 +37,11 @@ func (this *IndexAction) RunGet(params struct {
 	}
 	if firewallPolicy != nil {
 		this.Data["firewallPolicy"] = maps.Map{
-			"id":   firewallPolicy.Id,
-			"name": firewallPolicy.Name,
-			"isOn": firewallPolicy.IsOn,
+			"id":       firewallPolicy.Id,
+			"name":     firewallPolicy.Name,
+			"isOn":     firewallPolicy.IsOn,
+			"mode":     firewallPolicy.Mode,
+			"modeInfo": firewallconfigs.FindFirewallMode(firewallPolicy.Mode),
 		}
 	} else {
 		this.Data["firewallPolicy"] = nil
@@ -58,7 +61,7 @@ func (this *IndexAction) RunPost(params struct {
 	// TODO 检查配置
 
 	_, err := this.RPC().HTTPWebRPC().UpdateHTTPWebFirewall(this.AdminContext(), &pb.UpdateHTTPWebFirewallRequest{
-		WebId:        params.WebId,
+		HttpWebId:    params.WebId,
 		FirewallJSON: params.FirewallJSON,
 	})
 	if err != nil {

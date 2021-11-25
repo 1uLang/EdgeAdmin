@@ -20,21 +20,32 @@ func (this *SelectPopupAction) Init() {
 
 func (this *SelectPopupAction) RunGet(params struct {
 	SelectedClusterIds string
+	Keyword            string
+	PageSize           int64
 }) {
+	this.Data["keyword"] = params.Keyword
+
 	var selectedIds = utils.SplitNumbers(params.SelectedClusterIds)
 
-	countResp, err := this.RPC().NodeClusterRPC().CountAllEnabledNodeClusters(this.AdminContext(), &pb.CountAllEnabledNodeClustersRequest{})
+	countResp, err := this.RPC().NodeClusterRPC().CountAllEnabledNodeClusters(this.AdminContext(), &pb.CountAllEnabledNodeClustersRequest{
+		Keyword: params.Keyword,
+	})
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
 	var count = countResp.Count
 	var page = this.NewPage(count)
+	page.Size = 6
+	if params.PageSize > 0 {
+		page.Size = params.PageSize
+	}
 	this.Data["page"] = page.AsHTML()
 
 	clustersResp, err := this.RPC().NodeClusterRPC().ListEnabledNodeClusters(this.AdminContext(), &pb.ListEnabledNodeClustersRequest{
-		Offset: page.Offset,
-		Size:   page.Size,
+		Keyword: params.Keyword,
+		Offset:  page.Offset,
+		Size:    page.Size,
 	})
 	if err != nil {
 		this.ErrorPage(err)

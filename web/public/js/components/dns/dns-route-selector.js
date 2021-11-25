@@ -5,18 +5,33 @@ Vue.component("dns-route-selector", {
 		if (routes == null) {
 			routes = []
 		}
+		routes.$sort(function (v1, v2) {
+			if (v1.domainId == v2.domainId) {
+				return v1.code < v2.code
+			}
+			return (v1.domainId < v2.domainId) ? 1 : -1
+		})
 		return {
 			routes: routes,
 			routeCodes: routes.$map(function (k, v) {
 				return v.code + "@" + v.domainId
 			}),
 			isAdding: false,
-			routeCode: ""
+			routeCode: "",
+			keyword: "",
+			searchingRoutes: this.vAllRoutes.$copy()
 		}
 	},
 	methods: {
 		add: function () {
 			this.isAdding = true
+			this.keyword = ""
+			this.routeCode = ""
+
+			let that = this
+			setTimeout(function () {
+				that.$refs.keywordRef.focus()
+			}, 200)
 		},
 		cancel: function () {
 			this.isAdding = false
@@ -40,6 +55,13 @@ Vue.component("dns-route-selector", {
 			this.routeCodes.push(this.routeCode)
 			this.routes.push(route)
 
+			this.routes.$sort(function (v1, v2) {
+				if (v1.domainId == v2.domainId) {
+					return v1.code < v2.code
+				}
+				return (v1.domainId < v2.domainId) ? 1 : -1
+			})
+
 			this.routeCode = ""
 			this.isAdding = false
 		},
@@ -48,6 +70,23 @@ Vue.component("dns-route-selector", {
 			this.routes.$removeIf(function (k, v) {
 				return v.code + "@" + v.domainId == route.code + "@" + route.domainId
 			})
+		}
+	},
+	watch: {
+		keyword: function (keyword) {
+			if (keyword.length == 0) {
+				this.searchingRoutes = this.vAllRoutes.$copy()
+				this.routeCode = ""
+				return
+			}
+			this.searchingRoutes = this.vAllRoutes.filter(function (route) {
+				return teaweb.match(route.name, keyword) || teaweb.match(route.domainName, keyword)
+			})
+			if (this.searchingRoutes.length > 0) {
+				this.routeCode = this.searchingRoutes[0].code + "@" + this.searchingRoutes[0].domainId
+			} else {
+				this.routeCode = ""
+			}
 		}
 	},
 	template: `<div>
@@ -62,16 +101,20 @@ Vue.component("dns-route-selector", {
 	<div v-if="isAdding">
 		<div class="ui fields inline">
 			<div class="ui field">
-				<select class="ui dropdown auto-width" v-model="routeCode">
-					<option value="">[请选择]</option>
-					<option v-for="route in vAllRoutes" :value="route.code + '@' + route.domainId">{{route.name}}（{{route.domainName}}）</option>
+				<select class="ui dropdown" style="width: 18em" v-model="routeCode">
+					<option value="" v-if="keyword.length == 0">[请选择]</option>
+					<option v-for="route in searchingRoutes" :value="route.code + '@' + route.domainId">{{route.name}}（{{route.domainName}}）</option>
 				</select>
 			</div>
 			<div class="ui field">
-				<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="confirm">确定</button>
+				<input type="text" placeholder="搜索..." size="10" v-model="keyword" ref="keywordRef" @keyup.enter="confirm" @keypress.enter.prevent="1"/>
+			</div>
+			
+			<div class="ui field">
+				<button class="ui button tiny" style="background-color: #1b6aff;" type="button" @click.prevent="confirm">确定</button>
 			</div>
 			<div class="ui field">
-				<a href="" @click.prevent="cancel()"><i class="icon remove"></i></a>
+				<a href="" @click.prevent="cancel()"><i class="icon remove small"></i></a>
 			</div>
 		</div>
 	</div>

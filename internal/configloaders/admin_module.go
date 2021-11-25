@@ -1,6 +1,7 @@
 package configloaders
 
 import (
+	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
 	"github.com/TeaOSLab/EdgeAdmin/internal/rpc"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/systemconfigs"
@@ -19,6 +20,7 @@ const (
 	AdminModuleCodeAdmin     AdminModuleCode = "config"    // 系统用户
 	AdminModuleCodeUser      AdminModuleCode = "user"      // 平台用户
 	AdminModuleCodeFinance   AdminModuleCode = "finance"   // 财务
+	AdminModuleCodePlan      AdminModuleCode = "plan"      // 套餐
 	AdminModuleCodeLog       AdminModuleCode = "log"       // 日志
 	AdminModuleCodeSetting   AdminModuleCode = "setting"   // 设置
 	AdminModuleCodeAssembly  AdminModuleCode = "assembly"  // 只要登录就可以访问的模块
@@ -40,8 +42,6 @@ const (
 )
 
 var sharedAdminModuleMapping = map[int64]*AdminModuleList{} // adminId => AdminModuleList
-
-var HIDSType = "safedog"
 
 func loadAdminModuleMapping() (map[int64]*AdminModuleList, error) {
 	if len(sharedAdminModuleMapping) > 0 {
@@ -201,13 +201,13 @@ func AllModuleMaps() []maps.Map {
 			"url":  "/apt/logs",
 		},
 	}
-	//if teaconst.IsPlus {
-	//	m = append(m, maps.Map{
-	//		"name": "自建DNS",
-	//		"code": AdminModuleCodeNS,
-	//		"url":  "/ns",
-	//	})
-	//}
+	if teaconst.IsPlus {
+		m = append(m, maps.Map{
+			"name": "智能DNS",
+			"code": AdminModuleCodeNS,
+			"url":  "/ns",
+		})
+	}
 	m = append(m, []maps.Map{
 		{
 			"name": "WAF服务",

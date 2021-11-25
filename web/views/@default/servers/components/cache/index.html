@@ -14,7 +14,9 @@
             <input type="text" name="keyword" v-model="keyword" placeholder="策略名称..."/>
         </div>
         <div class="ui field">
-            <button style="background-color: #1b6aff;" type="submit" class="ui button">搜索</button>
+                        <button style="background-color: #1b6aff;" type="submit" class="ui button">搜索</button>
+            &nbsp;
+            <a :href="Tea.url('.')" v-if="keyword.length > 0">[清除条件]</a>
         </div>
     </div>
 </form>
@@ -33,7 +35,7 @@
         </tr>
     </thead>
     <tr v-for="(policy, index) in cachePolicies">
-        <td><keyword :v-word="keyword">{{policy.name}}</keyword></td>
+        <td><a :href="'/servers/components/cache/policy?cachePolicyId=' + policy.id"><keyword :v-word="keyword">{{policy.name}}</keyword></a></td>
         <td>{{infos[index].typeName}} <span class="small">（{{policy.type}}）</span></td>
         <td>
             <span v-if="policy.capacity != null && policy.capacity.count > 0">{{policy.capacity.count}}{{policy.capacity.unit.toUpperCase()}}</span>

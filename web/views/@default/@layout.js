@@ -315,15 +315,21 @@ window.NotifyPopup = function (resp) {
 };
 
 window.ChangePageSize = function (size) {
-    let url = window.location.toString();
-    if (url.indexOf("pageSize") > 0) {
-        url = url.replace(/pageSize=\d+/g, "pageSize=" + size);
-    } else {
-        if (url.indexOf("?") > 0) {
-            url += "&pageSize=" + size;
-        } else {
-            url += "?pageSize=" + size;
-        }
-    }
-    window.location = url;
+	let url = window.location.toString();
+	url = url.replace(/page=\d+/g, "page=1")
+	if (url.indexOf("pageSize") > 0) {
+		url = url.replace(/pageSize=\d+/g, "pageSize=" + size)
+	} else {
+		if (url.indexOf("?") > 0) {
+			let anchorIndex = url.indexOf("#")
+			if (anchorIndex < 0) {
+				url += "&pageSize=" + size;
+			} else {
+				url = url.substring(0, anchorIndex) + "&pageSize=" + size + url.substr(anchorIndex);
+			}
+		} else {
+			url += "?pageSize=" + size;
+		}
+	}
+	window.location = url;
 };
