@@ -4,6 +4,7 @@ import (
 	"fmt"
 	ag_ser "github.com/1uLang/zhiannet-api/agent/server"
 	"github.com/1uLang/zhiannet-api/common/cache"
+	"github.com/1uLang/zhiannet-api/common/cron"
 	"github.com/1uLang/zhiannet-api/common/server"
 	nc_model "github.com/1uLang/zhiannet-api/nextcloud/model"
 	"github.com/TeaOSLab/EdgeAdmin/internal/apps"
@@ -11,9 +12,9 @@ import (
 	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
 	"github.com/TeaOSLab/EdgeAdmin/internal/gen"
 	"github.com/TeaOSLab/EdgeAdmin/internal/nodes"
-	"github.com/TeaOSLab/EdgeAdmin/internal/utils"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/wazuh"
+	"github.com/iwind/TeaGo/Tea"
 	_ "github.com/iwind/TeaGo/bootstrap"
 	"github.com/iwind/gosock/pkg/gosock"
 )
@@ -87,14 +88,13 @@ func main() {
 	app.Run(func() {
 
 		//初始化 第三方包的配置文件
-		server.SetApiDbPath(utils.Path() + "/build/configs/api_db.yaml")
+		server.SetApiDbPath(Tea.ConfigFile("api_db.yaml"))
 		server.InitMysqlLink()
 		// 初始化agengt和nextcloud配置
-		ag_ser.AgentInit(server.GetApiDbPath())
+		ag_ser.AgentInit(Tea.ConfigFile("api_db.yaml"))
 		nc_model.InitialAdminUser()
-		cache.ApiDbPath = utils.Path() + "/build/configs/api_db.yaml"
 		cache.InitClient()
-		//cron.InitCron()
+		cron.InitCron()
 		wazuh.InitAPIServer()
 
 		adminNode := nodes.NewAdminNode()
