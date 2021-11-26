@@ -2102,6 +2102,14 @@ window.Tea.versionCompare = function compare(a, b) {
 };
 
 
+//打开和关闭等待框 value close:none  open:block
+window.Tea.dialogBoxEnabled = function (enabled) {
+    let dialogBox = document.getElementById("waitting-dialog")
+    if(dialogBox){
+        dialogBox.style.display=enabled
+    }
+}
+
 /**
  * 延时执行
  *
@@ -2109,12 +2117,14 @@ window.Tea.versionCompare = function compare(a, b) {
  * @param ms 延时长度
  */
 window.Tea.delay = function (fn, ms) {
-	if (typeof (ms) === "undefined") {
-		ms = 10;
-	}
-	setTimeout(function () {
-		fn.call(Tea.Vue);
-	}, ms);
+    if (typeof(ms) === "undefined") {
+        ms = 10;
+    }
+    setTimeout(function () {
+        fn.call(Tea.Vue);
+        //关闭等待框
+        Tea.dialogBoxEnabled("none")
+    }, ms);
 };
 
 /**
@@ -2125,17 +2135,19 @@ window.Tea.delay = function (fn, ms) {
  * @constructor
  */
 window.Tea.Action = function (action, params) {
-	var _action = action;
-	var _params = params;
-	var _successFn;
-	var _failFn;
-	var _errorFn;
-	var _doneFn;
-	var _method = "POST";
-	var _timeout = 30;
-	var _delay = 0;
-	var _progressFn;
-	var _refresh = false;
+
+    var _action = action;
+    var _params = params;
+    var _successFn;
+    var _failFn;
+    var _errorFn;
+    var _doneFn;
+    var _method = "POST";
+    var _timeout = 60;
+    var _delay = 0;
+    var _progressFn;
+    var _refresh = false;
+    var _showDialog = false;
 
 	this.params = function (params) {
 		_params = params;
@@ -2201,8 +2213,14 @@ window.Tea.Action = function (action, params) {
 		return this;
 	};
 
-	this._post = function () {
-		var params = _params;
+    this.showDialog = function (showDialog) {
+        _showDialog = showDialog;
+        return this;
+    }
+    
+
+    this._post = function () {
+        var params = _params;
 
 		// 参数配置：https://github.com/axios/axios#request-config
 		var config = {
@@ -2305,17 +2323,21 @@ window.Tea.Action = function (action, params) {
 			.catch(function (error) {
 				console.log(error);
 
-				if (typeof (_errorFn) === "function") {
-					_errorFn.call(Tea.Vue, { message: error.message });
-				}
-			})
-			.then(function () {
-				// console.log("done");
-				if (typeof (_doneFn) == "function") {
-					_doneFn.call(Tea.Vue, {});
-				}
-			});
-	};
+                if (typeof(_errorFn) === "function") {
+                    _errorFn.call(Tea.Vue, {});
+                }
+            })
+            .then(function () {
+                if(_showDialog){
+                    Tea.dialogBoxEnabled("none")
+                }
+                
+                // console.log("done");
+                if (typeof(_doneFn) == "function") {
+                    _doneFn.call(Tea.Vue, {});
+                }
+            });
+    };
 };
 
 /**
@@ -2706,18 +2728,20 @@ function TeaElementObjects(elements) {
  * @returns {*}
  */
 window.Tea.element = function (selector, parent) {
-	var elements = [];
-	if (typeof (selector) === "object" && /(function|object) \w+Element\b/.test(selector.constructor.toString())) {
-		elements = [selector];
-	} else if (typeof (selector) === "object" && /function TeaElementObjects/.test(TeaElementObjects.constructor.toString())) {
-		return selector;
-	} else if (typeof (selector) === "string") {
-		if (typeof (parent) === "object") {
-			elements = Array.from(parent.querySelectorAll(selector));
-		} else {
-			elements = Array.from(document.querySelectorAll(selector));
-		}
-	}
+    var elements = [];
+    if (typeof(selector) === "object" && /(function|object) \w+Element\b/.test(selector.constructor.toString())) {
+        elements = [selector];
+    }
+    else if (typeof(selector) === "object" && /function TeaElementObjects/.test(TeaElementObjects.constructor.toString())) {
+        return selector;
+    }
+    else if (typeof(selector) === "string") {
+        if (typeof(parent) === "object") {
+            elements = Array.from(parent.querySelectorAll(selector));
+        } else {
+            elements = Array.from(document.querySelectorAll(selector));
+        }
+    }
 
 	return new TeaElementObjects(elements);
 };

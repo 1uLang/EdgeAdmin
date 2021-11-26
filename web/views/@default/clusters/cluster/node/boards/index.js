@@ -85,7 +85,7 @@ Tea.context(function () {
 			.done(function () {
 				this.$delay(function () {
 					this.refreshBoard()
-				}, 30000)
+				}, 60000)
 			})
 	}
 
