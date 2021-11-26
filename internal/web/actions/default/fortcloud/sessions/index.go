@@ -29,7 +29,7 @@ func (this *IndexAction) RunGet(params struct {
 	defer this.Show()
 	req, err := this.checkAndNewServerRequest()
 	if err != nil {
-		this.Data["errorMessage"] = err.Error()
+		this.Data["nodeErr"] = err.Error()
 		return
 	}
 	online, err := req.Session.List(&session_model.ListReq{
@@ -39,7 +39,7 @@ func (this *IndexAction) RunGet(params struct {
 		PageIndex:   1,
 	})
 	if err != nil {
-		this.Data["errorMessage"] = err.Error()
+		this.Data["nodeErr"] = err.Error()
 		return
 	}
 	this.Data["online"] = online
