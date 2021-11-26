@@ -2,19 +2,18 @@ package main
 
 import (
 	"fmt"
-	"github.com/1uLang/zhiannet-api/common/server"
-	"github.com/TeaOSLab/EdgeAdmin/internal/gen"
-	"github.com/TeaOSLab/EdgeAdmin/internal/utils"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/wazuh"
-
 	ag_ser "github.com/1uLang/zhiannet-api/agent/server"
 	"github.com/1uLang/zhiannet-api/common/cache"
+	"github.com/1uLang/zhiannet-api/common/server"
 	nc_model "github.com/1uLang/zhiannet-api/nextcloud/model"
 	"github.com/TeaOSLab/EdgeAdmin/internal/apps"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configs"
 	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
+	"github.com/TeaOSLab/EdgeAdmin/internal/gen"
 	"github.com/TeaOSLab/EdgeAdmin/internal/nodes"
+	"github.com/TeaOSLab/EdgeAdmin/internal/utils"
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/wazuh"
 	_ "github.com/iwind/TeaGo/bootstrap"
 	"github.com/iwind/gosock/pkg/gosock"
 )
@@ -85,18 +84,19 @@ func main() {
 			return
 		}
 	})
-
-	//初始化 第三方包的配置文件
-	server.SetApiDbPath(utils.Path() + "/build/configs/api_db.yaml")
-	server.InitMysqlLink()
-	// 初始化agengt和nextcloud配置
-	ag_ser.AgentInit(server.GetApiDbPath())
-	nc_model.InitialAdminUser()
-	cache.ApiDbPath = utils.Path() + "/build/configs/api_db.yaml"
-	cache.InitClient()
-	//cron.InitCron()
-	wazuh.InitAPIServer()
 	app.Run(func() {
+
+		//初始化 第三方包的配置文件
+		server.SetApiDbPath(utils.Path() + "/build/configs/api_db.yaml")
+		server.InitMysqlLink()
+		// 初始化agengt和nextcloud配置
+		ag_ser.AgentInit(server.GetApiDbPath())
+		nc_model.InitialAdminUser()
+		cache.ApiDbPath = utils.Path() + "/build/configs/api_db.yaml"
+		cache.InitClient()
+		//cron.InitCron()
+		wazuh.InitAPIServer()
+
 		adminNode := nodes.NewAdminNode()
 		adminNode.Run()
 	})
