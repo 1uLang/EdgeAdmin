@@ -31,7 +31,7 @@
 			<label-on :v-is-on="admin.isOn"></label-on>
 		</td>
 		<td>
-			<a :href="'/admins/admin?adminId=' + admin.id">详情</a> &nbsp; <a href="" @click.prevent="deleteAdmin(admin.id)">删除</a>
+			<a :href="'/admins/admin?adminId=' + admin.id">详情</a> &nbsp; <a style="color: #db2828" href="" @click.prevent="deleteAdmin(admin.id)">删除</a>
 		</td>
 	</tr>
 </table>

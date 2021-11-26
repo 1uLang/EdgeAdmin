@@ -184,14 +184,14 @@ Vue.component("http-cache-refs-config-box", {
 					</td>
 					<td>
 						<a href="" @click.prevent="updateRef(index, cacheRef)">修改</a> &nbsp;
-						<a href="" @click.prevent="removeRef(index)">删除</a>
+						<a href="" style="color: #db2828" @click.prevent="removeRef(index)">删除</a>
 					</td>
 				</tr>
 			</tbody>
 		</table>
 		<p class="comment" v-if="refs.length > 1">所有条件匹配顺序为从上到下，可以拖动左侧的<i class="icon bars"></i>排序。</p>
 		
-		<button class="ui button tiny" @click.prevent="addRef(false)">+添加缓存设置</button> &nbsp; &nbsp; <a href="" @click.prevent="addRef(true)">+添加不缓存设置</a>
+		<button style="background-color: #1b6aff;" class="ui button tiny" @click.prevent="addRef(false)">+添加缓存设置</button> &nbsp; &nbsp; <a href="" @click.prevent="addRef(true)">+添加不缓存设置</a>
 	</div>
 	<div class="margin"></div>
 </div>`

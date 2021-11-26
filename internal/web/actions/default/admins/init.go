@@ -10,7 +10,7 @@ import (
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
-			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeAdmin)).
+			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeConfig)).
 			Data("teaMenu", "admins").
 			Prefix("/admins").
 			Get("", new(IndexAction)).
@@ -27,8 +27,6 @@ func init() {
 			GetPost("/createPopup", new(accesskeys.CreatePopupAction)).
 			Post("/delete", new(accesskeys.DeleteAction)).
 			Post("/updateIsOn", new(accesskeys.UpdateIsOnAction)).
-
-
 			EndAll()
 	})
 }

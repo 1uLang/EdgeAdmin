@@ -2,7 +2,6 @@ package settingutils
 
 import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
-	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/actions"
 )
@@ -23,7 +22,7 @@ func (this *Helper) BeforeAction(actionPtr actions.ActionWrapper) (goNext bool) 
 	action := actionPtr.Object()
 
 	// 左侧菜单
-	action.Data["teaMenu"] = "settings"
+	action.Data["teaMenu"] = "server"
 
 	// 标签栏
 	tabbar := actionutils.NewTabbar()
@@ -32,14 +31,14 @@ func (this *Helper) BeforeAction(actionPtr actions.ActionWrapper) (goNext bool) 
 	if configloaders.AllowModule(adminId, configloaders.AdminModuleCodeSetting) {
 		tabbar.Add("Web服务", "", "/settings/server", "", this.tab == "server")
 		tabbar.Add("管理界面设置", "", "/settings/ui", "", this.tab == "ui")
-		if teaconst.IsPlus {
-			tabbar.Add("用户界面设置", "", "/settings/user-ui", "", this.tab == "userUI")
-		}
-		tabbar.Add("安全设置", "", "/settings/security", "", this.tab == "security")
+		tabbar.Add("用户界面设置", "", "/settings/user-ui", "", this.tab == "userUI")
+		tabbar.Add("访问设置", "", "/settings/security", "", this.tab == "security")
 		tabbar.Add("IP库", "", "/settings/ip-library", "", this.tab == "ipLibrary")
 	}
 	tabbar.Add("个人资料", "", "/settings/profile", "", this.tab == "profile")
 	tabbar.Add("登录设置", "", "/settings/login", "", this.tab == "login")
+	tabbar.Add("安全策略", "", "/settings/strategy", "", this.tab == "strategy")
+	//tabbar.Add("备份", "", "/settings/platform-backup", "", this.tab == "platform-backup")
 	actionutils.SetTabbar(actionPtr, tabbar)
 
 	return

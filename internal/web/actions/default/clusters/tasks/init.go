@@ -10,14 +10,14 @@ import (
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
-			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeNode)).
+			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
 			Helper(clusterutils.NewClustersHelper()).
+			Data("teaMenu", "waf").
 			Prefix("/clusters/tasks").
 			GetPost("/listPopup", new(ListPopupAction)).
-			Post("/check", new(CheckAction)).
+			GetPost("/check", new(CheckAction)).
 			Post("/delete", new(DeleteAction)).
 			Post("/deleteBatch", new(DeleteBatchAction)).
-
 			EndAll()
 	})
 }

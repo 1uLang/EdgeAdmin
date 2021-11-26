@@ -12,13 +12,14 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
-			Helper(serverutils.NewServerHelper()).
+			Helper(serverutils.NewServerHelper()).Data("teaMenu", "waf").
 			Prefix("/servers/server/settings/waf").
 			GetPost("", new(IndexAction)).
 			Get("/ipadmin/allowList", new(ipadmin.AllowListAction)).
 			Get("/ipadmin/denyList", new(ipadmin.DenyListAction)).
 			GetPost("/ipadmin/countries", new(ipadmin.CountriesAction)).
 			GetPost("/ipadmin/provinces", new(ipadmin.ProvincesAction)).
+			GetPost("/ipadmin/createIPPopup", new(ipadmin.CreateIPPopupAction)).
 			GetPost("/ipadmin/updateIPPopup", new(ipadmin.UpdateIPPopupAction)).
 			Post("/ipadmin/deleteIP", new(ipadmin.DeleteIPAction)).
 			GetPost("/ipadmin/test", new(ipadmin.TestAction)).

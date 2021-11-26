@@ -13,16 +13,32 @@ type AdminModuleCode = string
 const (
 	AdminModuleCodeDashboard AdminModuleCode = "dashboard" // 看板
 	AdminModuleCodeServer    AdminModuleCode = "server"    // 网站
+	AdminModuleCodeCerts     AdminModuleCode = "certs"     // 证书服务
 	AdminModuleCodeNode      AdminModuleCode = "node"      // 节点
 	AdminModuleCodeDNS       AdminModuleCode = "dns"       // DNS
 	AdminModuleCodeNS        AdminModuleCode = "ns"        // 域名服务
-	AdminModuleCodeAdmin     AdminModuleCode = "admin"     // 系统用户
+	AdminModuleCodeAdmin     AdminModuleCode = "config"    // 系统用户
 	AdminModuleCodeUser      AdminModuleCode = "user"      // 平台用户
 	AdminModuleCodeFinance   AdminModuleCode = "finance"   // 财务
 	AdminModuleCodePlan      AdminModuleCode = "plan"      // 套餐
 	AdminModuleCodeLog       AdminModuleCode = "log"       // 日志
 	AdminModuleCodeSetting   AdminModuleCode = "setting"   // 设置
+	AdminModuleCodeAssembly  AdminModuleCode = "assembly"  // 只要登录就可以访问的模块
 	AdminModuleCodeCommon    AdminModuleCode = "common"    // 只要登录就可以访问的模块
+	AdminModuleCodeConfig    AdminModuleCode = "config"    // 平台管理
+	AdminModuleCodeClusters  AdminModuleCode = "clusters"  // 边缘节点
+
+	AdminModuleCodeDdos     AdminModuleCode = "ddos"      // ddos
+	AdminModuleCodeWebScan  AdminModuleCode = "webscan"   // webscan
+	AdminModuleCodeHids     AdminModuleCode = "hids"      // hids 主机防护
+	AdminModuleCodeNfw      AdminModuleCode = "nfw"       // 下一代防火墙
+	AdminModuleCodeMaltrail AdminModuleCode = "apt"       // apt检测
+	AdminModuleCodeMonitor  AdminModuleCode = "monitor"   //监控告警
+	AdminModuleCodeWAF      AdminModuleCode = "waf"       //web防火墙
+	AdminModuleCodeAudit    AdminModuleCode = "audit"     //审计系统
+	AdminModuleCodeFort     AdminModuleCode = "fortcloud" //堡垒机
+	AdminModuleCodeBackup   AdminModuleCode = "backup"    //数据备份
+	AdminModuleCodeHostlist AdminModuleCode = "hostlist"  //主机列表
 )
 
 var sharedAdminModuleMapping = map[int64]*AdminModuleList{} // adminId => AdminModuleList
@@ -161,24 +177,29 @@ func UpdateAdminTheme(adminId int64, theme string) {
 func AllModuleMaps() []maps.Map {
 	m := []maps.Map{
 		{
-			"name": "看板",
+			"name": "业务概览",
 			"code": AdminModuleCodeDashboard,
 			"url":  "/dashboard",
 		},
 		{
-			"name": "网站服务",
-			"code": AdminModuleCodeServer,
-			"url":  "/servers",
+			"name": "平台管理",
+			"code": AdminModuleCodeConfig,
+			"url":  "/assembly",
 		},
 		{
-			"name": "边缘节点",
-			"code": AdminModuleCodeNode,
-			"url":  "/clusters",
+			"name": "DDoS防护",
+			"code": AdminModuleCodeDdos,
+			"url":  "/ddos/host",
 		},
 		{
-			"name": "域名解析",
-			"code": AdminModuleCodeDNS,
-			"url":  "/dns",
+			"name": "云防火墙",
+			"code": AdminModuleCodeNfw,
+			"url":  "/nfw/nat",
+		},
+		{
+			"name": "APT检测",
+			"code": AdminModuleCodeMaltrail,
+			"url":  "/apt/logs",
 		},
 	}
 	if teaconst.IsPlus {
@@ -190,34 +211,54 @@ func AllModuleMaps() []maps.Map {
 	}
 	m = append(m, []maps.Map{
 		{
-			"name": "平台用户",
-			"code": AdminModuleCodeUser,
-			"url":  "/users",
+			"name": "WAF服务",
+			"code": AdminModuleCodeServer,
+			"url":  "/servers",
 		},
 		{
-			"name": "系统用户",
-			"code": AdminModuleCodeAdmin,
-			"url":  "/admins",
+			"name": "证书服务",
+			"code": AdminModuleCodeCerts,
+			"url":  "/servers/certs",
 		},
 		{
-			"name": "财务管理",
-			"code": AdminModuleCodeFinance,
-			"url":  "/finance",
+			"name": "主机防护",
+			"code": AdminModuleCodeHids,
+			"url":  "/hids/examine",
 		},
 		{
-			"name": "套餐管理",
-			"code": AdminModuleCodePlan,
-			"url":  "/plans",
+			"name": "端点防护",
+			"code": "nhids",
+			"url":  "/hids/agents",
 		},
 		{
-			"name": "日志审计",
-			"code": AdminModuleCodeLog,
-			"url":  "/log",
+			"name": "漏洞扫描",
+			"code": AdminModuleCodeWebScan,
+			"url":  "/webscan/targets",
 		},
+		{
+			"name": "云堡垒机",
+			"code": AdminModuleCodeFort,
+			"url":  "/fortcloud/assets",
+		},
+		{
+			"name": "安全审计",
+			"code": AdminModuleCodeAudit,
+			"url":  "/audit/db",
+		},
+		{
+			"name": "数据备份",
+			"code": AdminModuleCodeBackup,
+			"url":  "/databackup",
+		},
+		//{
+		//	"name": "监控告警",
+		//	"code": AdminModuleCodeMonitor,
+		//	"url":  "/monitor",
+		//},
 		{
 			"name": "系统设置",
 			"code": AdminModuleCodeSetting,
-			"url":  "/settings",
+			"url":  "/settings/server",
 		},
 	}...)
 	return m

@@ -12028,6 +12028,74 @@ Vue.component("grant-selector", {
 </div>`
 })
 
+Vue.component("assembly-http-selector", {
+	mounted: function () {
+		let that = this
+
+		// Tea.action("/assembly/options")
+		// 	.post()
+		// 	.success(function (resp) {
+		// 		that.assemblys = resp.data.assemblys
+		// 	})
+	},
+	props: ["v-argeement"],
+	data: function () {
+		let argeement = this.vArgeement
+		if (argeement == null) {
+			argeement = 0
+		}
+		argeements = [
+			{"id":0,"name":"http"},
+			{"id":1,"name":"https"},
+		]
+		return {
+			assemblys: argeements,
+			argeement: argeement,
+		}
+	},
+	template: `<div>
+	<select class="ui dropdown auto-width" name="argeement" v-model="argeement">
+<!--		<option value="-1">[网络协议]</option>-->
+		<option v-for="assembly in assemblys" :value="assembly.id">{{assembly.name}}</option>
+	</select>
+</div>`
+})
+Vue.component("assembly-selector", {
+	mounted: function () {
+		let that = this
+
+		Tea.action("/assembly/options")
+			.post()
+			.success(function (resp) {
+				that.assemblys = resp.data.assemblys
+			})
+	},
+	props: ["v-assembly-id"],
+	data: function () {
+		let assemblyType = this.vAssemblyId
+		if (assemblyType == null) {
+			assemblyType = -1
+		}
+		return {
+			assemblys: [],
+			assemblyType: assemblyType,
+		}
+	},
+	watch:{
+		assemblyType:function (){
+			if (Tea.Vue != null) {
+				Tea.Vue.showAPIAUTHVisible = this.assemblyType
+			}
+		}
+	},
+	template: `<div>
+	<select class="ui dropdown auto-width" name="assemblyType" v-model="assemblyType">
+		<option value="-1">[选择节点类型]</option>
+		<option v-for="assembly in assemblys" :value="assembly.id">{{assembly.name}}</option>
+	</select>
+</div>`
+})
+
 window.REQUEST_COND_COMPONENTS = [{"type":"url-extension","name":"URL扩展名","description":"根据URL中的文件路径扩展名进行过滤","component":"http-cond-url-extension","paramsTitle":"扩展名列表","isRequest":true},{"type":"url-prefix","name":"URL前缀","description":"根据URL中的文件路径前缀进行过滤","component":"http-cond-url-prefix","paramsTitle":"URL前缀","isRequest":true},{"type":"url-eq","name":"URL精准匹配","description":"检查URL中的文件路径是否一致","component":"http-cond-url-eq","paramsTitle":"URL完整路径","isRequest":true},{"type":"url-regexp","name":"URL正则匹配","description":"使用正则表达式检查URL中的文件路径是否一致","component":"http-cond-url-regexp","paramsTitle":"正则表达式","isRequest":true},{"type":"params","name":"参数匹配","description":"根据参数值进行匹配","component":"http-cond-params","paramsTitle":"参数配置","isRequest":true},{"type":"url-not-prefix","name":"排除：URL前缀","description":"根据URL中的文件路径前缀进行过滤","component":"http-cond-url-not-prefix","paramsTitle":"URL前缀","isRequest":true},{"type":"url-not-eq","name":"排除：URL精准匹配","description":"检查URL中的文件路径是否一致","component":"http-cond-url-not-eq","paramsTitle":"URL完整路径","isRequest":true},{"type":"url-not-regexp","name":"排除：URL正则匹配","description":"使用正则表达式检查URL中的文件路径是否一致，如果一致，则不匹配","component":"http-cond-url-not-regexp","paramsTitle":"正则表达式","isRequest":true},{"type":"mime-type","name":"内容MimeType","description":"根据服务器返回的内容的MimeType进行过滤。注意：当用于缓存条件时，此条件需要结合别的请求条件使用。","component":"http-cond-mime-type","paramsTitle":"MimeType列表","isRequest":false}]
 
 window.REQUEST_COND_OPERATORS = [{"description":"判断是否正则表达式匹配","name":"正则表达式匹配","op":"regexp"},{"description":"判断是否正则表达式不匹配","name":"正则表达式不匹配","op":"not regexp"},{"description":"使用字符串对比参数值是否相等于某个值","name":"字符串等于","op":"eq"},{"description":"参数值包含某个前缀","name":"字符串前缀","op":"prefix"},{"description":"参数值包含某个后缀","name":"字符串后缀","op":"suffix"},{"description":"参数值包含另外一个字符串","name":"字符串包含","op":"contains"},{"description":"参数值不包含另外一个字符串","name":"字符串不包含","op":"not contains"},{"description":"使用字符串对比参数值是否不相等于某个值","name":"字符串不等于","op":"not"},{"description":"判断参数值在某个列表中","name":"在列表中","op":"in"},{"description":"判断参数值不在某个列表中","name":"不在列表中","op":"not in"},{"description":"判断小写的扩展名（不带点）在某个列表中","name":"扩展名","op":"file ext"},{"description":"判断MimeType在某个列表中，支持类似于image/*的语法","name":"MimeType","op":"mime type"},{"description":"判断版本号在某个范围内，格式为version1,version2","name":"版本号范围","op":"version range"},{"description":"将参数转换为整数数字后进行对比","name":"整数等于","op":"eq int"},{"description":"将参数转换为可以有小数的浮点数字进行对比","name":"浮点数等于","op":"eq float"},{"description":"将参数转换为数字进行对比","name":"数字大于","op":"gt"},{"description":"将参数转换为数字进行对比","name":"数字大于等于","op":"gte"},{"description":"将参数转换为数字进行对比","name":"数字小于","op":"lt"},{"description":"将参数转换为数字进行对比","name":"数字小于等于","op":"lte"},{"description":"对整数参数值取模，除数为10，对比值为余数","name":"整数取模10","op":"mod 10"},{"description":"对整数参数值取模，除数为100，对比值为余数","name":"整数取模100","op":"mod 100"},{"description":"对整数参数值取模，对比值格式为：除数,余数，比如10,1","name":"整数取模","op":"mod"},{"description":"将参数转换为IP进行对比","name":"IP等于","op":"eq ip"},{"description":"将参数转换为IP进行对比","name":"IP大于","op":"gt ip"},{"description":"将参数转换为IP进行对比","name":"IP大于等于","op":"gte ip"},{"description":"将参数转换为IP进行对比","name":"IP小于","op":"lt ip"},{"description":"将参数转换为IP进行对比","name":"IP小于等于","op":"lte ip"},{"description":"IP在某个范围之内，范围格式可以是英文逗号分隔的ip1,ip2，或者CIDR格式的ip/bits","name":"IP范围","op":"ip range"},{"description":"对IP参数值取模，除数为10，对比值为余数","name":"IP取模10","op":"ip mod 10"},{"description":"对IP参数值取模，除数为100，对比值为余数","name":"IP取模100","op":"ip mod 100"},{"description":"对IP参数值取模，对比值格式为：除数,余数，比如10,1","name":"IP取模","op":"ip mod"},{"description":"判断参数值解析后的文件是否存在","name":"文件存在","op":"file exist"},{"description":"判断参数值解析后的文件是否不存在","name":"文件不存在","op":"file not exist"}]

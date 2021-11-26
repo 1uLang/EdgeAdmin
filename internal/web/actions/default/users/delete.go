@@ -1,6 +1,7 @@
 package users
 
 import (
+	nc_req "github.com/1uLang/zhiannet-api/nextcloud/request"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 )
@@ -17,6 +18,12 @@ func (this *DeleteAction) RunPost(params struct {
 	// TODO 检查用户是否有未完成的业务
 
 	_, err := this.RPC().UserRPC().DeleteUser(this.AdminContext(), &pb.DeleteUserRequest{UserId: params.UserId})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+
+	err = nc_req.DeleteUser(params.UserId, 0)
 	if err != nil {
 		this.ErrorPage(err)
 		return

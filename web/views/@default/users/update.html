@@ -20,8 +20,8 @@
                 </div>
 
                 <div v-show="passwordEditing" style="margin-top: 0.6em">
-                    <input type="password" name="pass1" maxlength="100"/>
-                    <p class="comment">留空表示不修改。</p>
+                    <input type="password" name="pass1" maxlength="100"  autocomplete="off"/>
+                    <p class="comment">留空表示不修改。密码规则：8-30个字符,必须包含大小写字母、数字、特殊字符</p>
                 </div>
             </td>
         </tr>
@@ -39,10 +39,24 @@
             </td>
         </tr>
         <tr>
+            <td>所属渠道</td>
+            <td>
+                <channels-selector :v-channel-id="user.channelId"></channels-selector>
+                <p class="comment">非渠道用户不选择此项。</p>
+            </td>
+        </tr>
+        <tr>
             <td>关联集群 *</td>
             <td>
                 <cluster-selector :v-cluster-id="clusterId"></cluster-selector>
                 <p class="comment">用户发布的网站服务会自动部署到此集群，修改此选项会同步修改当前用户下的所有服务。</p>
+            </td>
+        </tr>
+        <tr>
+            <td>OTP认证</td>
+            <td>
+                <checkbox name="otpOn" v-model="user.otpLoginIsOn">启用OTP</checkbox>
+                <p class="comment">启用OTP认证后，在用户登录的时候需要同时填写OTP动态密码。</p>
             </td>
         </tr>
         <tr>

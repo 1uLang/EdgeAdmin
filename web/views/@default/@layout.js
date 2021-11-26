@@ -1,6 +1,9 @@
 Tea.context(function () {
 	this.moreOptionsVisible = false
 	this.globalMessageBadge = 0
+    this.showAPIAUTHVisible = -1
+
+    this.curSelectCode = sessionStorage.getItem("leftSelectCode")? sessionStorage.getItem("leftSelectCode"):"dashboard"
 
 	if (typeof this.leftMenuItemIsDisabled == "undefined") {
 		this.leftMenuItemIsDisabled = false
@@ -11,7 +14,18 @@ Tea.context(function () {
 			this.$refs.focus.focus()
 		}
 
-		if (!window.IS_POPUP) {
+        // let curSelectValue = sessionStorage.getItem("topSelctMenuId")
+        // if( !curSelectValue){
+        //     curSelectValue = 1
+        // }
+        // let curSelectDropValue = sessionStorage.getItem("topSelctMenuDropId")
+        // this.onSelectTopMenu(curSelectValue,curSelectDropValue)
+
+        let curSelectCode = sessionStorage.getItem("leftSelectCode")
+        if(curSelectCode){
+            this.onSetLeftTouchCode(curSelectCode)
+        }
+
 			// 检查消息
 			this.checkMessages()
 
@@ -20,9 +34,44 @@ Tea.context(function () {
 
 			// 检查DNS同步
 			this.loadDNSTasks()
-		}
-	})
 
+    })
+
+    this.onChangeUrl = function (url,code) {
+        let tempUrl = url
+        if(tempUrl){
+            if(tempUrl.indexOf("nfw") != -1){
+                let curSelectNode = localStorage.getItem("nfwSelectNodeId");
+                if(curSelectNode){
+                    tempUrl = tempUrl+"?nodeId="+curSelectNode
+                }
+            }else if(tempUrl.indexOf("ddos") != -1){
+                let curSelectNode = localStorage.getItem("ddosSelectNodeId");
+                if(curSelectNode){
+                    tempUrl = tempUrl+"?nodeId="+curSelectNode
+                }
+            }else if(tempUrl.indexOf("hids") != -1){
+                let agent = localStorage.getItem("hidsSelectAgentId");
+                if(agent){
+                    tempUrl = tempUrl+"?agent="+agent
+                }
+            }
+        }
+
+        return tempUrl
+		}
+
+    this.onSetLeftTouchCode = function (code) {
+        if(this.curSelectCode!=code){
+            this.curSelectCode = code
+        }
+        // this.onOpenDialog()
+        sessionStorage.setItem("leftSelectCode",this.curSelectCode)
+    }
+
+    this.onOpenDialog = function () {
+        Tea.dialogBoxEnabled("block")
+    }
 	/**
 	 * 切换模板
 	 */
@@ -73,7 +122,7 @@ Tea.context(function () {
 	}
 
 	this.checkMessagesOnce = function () {
-		this.$post("/messages/badge")
+        this.$get("/messages/badge")
 			.params({})
 			.success(function (resp) {
 				this.globalMessageBadge = resp.data.count
@@ -117,7 +166,7 @@ Tea.context(function () {
 		if (!Tea.Vue.teaCheckNodeTasks) {
 			return
 		}
-		this.$post("/clusters/tasks/check")
+        this.$get("/clusters/tasks/check")
 			.success(function (resp) {
 				this.doingNodeTasks.isDoing = resp.data.isDoing
 				this.doingNodeTasks.hasError = resp.data.hasError
@@ -150,7 +199,7 @@ Tea.context(function () {
 		if (!Tea.Vue.teaCheckDNSTasks) {
 			return
 		}
-		this.$post("/dns/tasks/check")
+        this.$get("/dns/tasks/check")
 			.success(function (resp) {
 				this.doingDNSTasks.isDoing = resp.data.isDoing
 				this.doingDNSTasks.hasError = resp.data.hasError
@@ -169,6 +218,67 @@ Tea.context(function () {
 			width: "50em"
 		})
 	}
+
+
+    this.selectTopMenuId = 1    //选择顶部导航id
+    this.selectLeftMenuId = 1   //选择左侧的菜单id
+    this.selectDropName = ""
+    this.letfMenuData = []
+
+    this.getLeftData = function (id) {
+        for(var i=0;i<this.mainMenuData.length;i++){
+            if(this.mainMenuData[i].id==id){
+                return this.mainMenuData[i].leftMenu
+            }
+        }
+        return null
+    }
+
+    this.getDropLeftData = function (id,dropId) {
+        for(var i=0;i<this.mainMenuData.length;i++){
+            if(this.mainMenuData[i].id==id){
+                if(this.mainMenuData[i].dropItem && this.mainMenuData[i].dropItem.length>0){
+                    for(var j=0;j<this.mainMenuData[i].dropItem.length;j++){
+                        if(this.mainMenuData[i].dropItem[j].id==dropId){
+                            this.selectDropName=this.mainMenuData[i].dropItem[j].dropName
+                            return this.mainMenuData[i].dropItem[j].leftMenu
+                        }
+                    }
+                }
+            }
+        }
+        return null
+    }
+
+    this.onSelectTopMenu=function (menuId,dropId) {
+
+        if(this.selectTopMenuId !=menuId){
+            this.selectTopMenuId = menuId
+            this.selectDropName = ""
+        }
+        if(dropId && dropId>0){
+            this.letfMenuData = this.getDropLeftData(menuId,dropId)
+
+        }else{
+            this.letfMenuData = this.getLeftData(menuId)
+        }
+
+        if(this.letfMenuData){
+            this.onSelectLeftMenu(this.letfMenuData[0].id)
+        }
+        sessionStorage.setItem("topSelctMenuId", this.selectTopMenuId);
+        sessionStorage.setItem("topSelctMenuDropId",dropId)
+    }
+
+    this.getBoolenValue = function (menuId) {
+        return this.selectTopMenuId==menuId
+      }
+
+    this.onSelectLeftMenu=function (leftMenuId) {
+        if(this.selectLeftMenuId !=leftMenuId){
+            this.selectLeftMenuId = leftMenuId
+        }
+    }
 });
 
 window.NotifySuccess = function (message, url, params) {

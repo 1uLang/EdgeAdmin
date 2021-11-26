@@ -101,7 +101,7 @@ Vue.component("http-pages-and-shutdown-box", {
 				<div class="ui divider"></div>
 			</div>
 			<div>
-				<button class="ui button small" type="button" @click.prevent="addPage()">+</button>
+				<button style="background-color: #1b6aff;" class="ui button small" type="button" @click.prevent="addPage()">+</button>
 			</div>
 			<p class="comment">根据响应状态码返回一些特殊页面，比如404，500等错误页面。</p>
 		</td>

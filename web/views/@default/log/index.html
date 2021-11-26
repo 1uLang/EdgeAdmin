@@ -23,7 +23,7 @@
             </select>
         </div>
 		<div class="ui field">
-			<button type="submit" class="ui button">查询</button>
+			<button type="submit" style="background-color: #1b6aff;" class="ui button">查询</button>
 		</div>
 		<div class="ui field" v-if="dayFrom.length > 0 || dayTo.length > 0 || keyword.length > 0">
 			<a href="/log">[清除条件]</a>
@@ -44,7 +44,7 @@
 		<td class="log-row">{{log.createdTime}} <span class="grey"> <span
                 v-if="log.userName.length > 0">| <span v-if="log.userId>0">用户 &nbsp;|&nbsp;</span> {{log.userName}}</span> | <keyword :v-word="keyword">{{log.ip}}</keyword><span
 						v-if="log.region.length > 0"> | {{log.region}}</span> &nbsp; <a href="" @click.prevent="showMore(log)" title="显示更多">...</a> &nbsp;<span v-if="log.moreVisible">{{log.action}}</span></span>
-			<span class="buttons"><a v-if="logConfig.canDelete" href="" title="删除" @click.prevent="deleteLog(log.id)"><i class="icon remove small"></i></a> </span>
+			<span class="buttons"><a v-if="logConfig.canDelete" href="" style="color: #db2828" title="删除" @click.prevent="deleteLog(log.id)"><i class="icon remove small"></i></a> </span>
 		</td>
 	</tr>
 	<tr :class="{error: log.level == 'error', warning: log.level == 'warn'}">

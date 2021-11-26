@@ -1,0 +1,358 @@
+<!-- 云主机列表 -->
+{$layout}
+{$var "header"}
+{$end}
+<div v-if="pageState==1" @click="onMore(-1)">
+    <div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
+        <div style="cursor: pointer;margin-top: 10px;" @click="onChangeState(2)">[添加云主机]</div>
+    </div>
+    <p class="comment" v-if="tableData == null || tableData.length === 0 ">暂时还没有数据。</p>
+    <div style="width: 100%;height: 650px;margin-top: 10px;overflow-x: auto; overflow-y: auto;" v-else>
+        <table  class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <thead>
+            <tr align="center">
+                <th class='table-head-bg' style="width: 200px;">名称</th>
+                <th class='table-head-bg' style="width: 100px;">CPU</th>
+                <th class='table-head-bg' style="width: 100px;">内存</th>
+                <th class='table-head-bg' style="width: 150px;">默认IP</th>
+                <th class='table-head-bg' style="width: 150px;">物理机IP</th>
+                <th class='table-head-bg' style="width: 120px;">状态</th>
+                <th class='table-head-bg' style="width: 200px;">创建日期</th>
+                <th class='table-head-bg' style="width: 150px;">操作</th>
+            </tr>
+            </thead>
+            <tbody >
+            <tr align="center" style="height: 40px;" v-for="(item,index) in tableData">
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.name}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.cpu}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.memory}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.ip}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.physicsIP}}
+                    </div>
+                </td>
+                <td>
+                    <div :class="{'status-open':item.status=='Running','status-close':item.status=='Stopped','status-blue':item.status!='Running' && item.status!='Stopped'}">
+                        {{getStatus(item.status)}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{onChangeTimeFormat(item.createTime)}}
+                    </div>
+                </td>
+                <td>
+                    <div style="display: flex;justify-content: space-around;padding: 4px 0;">
+                        <div :class="{'edit_btn':item.status!='Running','disabled_btn':item.status=='Running'}" @click="onOpen(item)">启用</div>
+                        <div :class="{'edit_btn':item.status!='Stopped','disabled_btn':item.status=='Stopped'}" @click="onStop(item)">停用</div>
+                        <div class="edit_btn" style="position: relative;" @click.stop="onMore(item.uuid)">更多&#9660;
+                            <div v-if="nSelectId == item.uuid"
+                                style="position: absolute;width: 90px;height: auto;background-color: #fff;right: 0px;z-index: 999;
+                                display: flex;flex-direction: column;justify-content: start;border: 1px solid #d7d7d7;cursor: default;"
+                                @click.stop>
+                                <div @mouseenter="mouseEnter(1)" @mouseleave="mouseLeave()"
+                                    style="height: 36px;cursor: pointer;color: #333;line-height: 36px;text-align: center;" @click="onRestartPower(item)"
+                                    :style="{'color':item.status == 'Running' ? '#333':'#999','background-color':nMoreBtnSelet==1 ? '#f6f6f6':'#fff'}">重启电源</div>
+                                <div @mouseenter="mouseEnter(2)" @mouseleave="mouseLeave()"
+                                style="height: 36px;cursor: pointer;color: #333;line-height: 36px;text-align: center;" @click="onPausePower(item)"
+                                :style="{'color':item.status == 'Running' ? '#333':'#999','background-color':nMoreBtnSelet==2 ? '#f6f6f6':'#fff'}" >暂停电源</div>
+                                <div @mouseenter="mouseEnter(3)" @mouseleave="mouseLeave()"
+                                    style="height: 36px;cursor: pointer;color: #333;line-height: 36px;text-align: center;" @click="onRebackPower(item)"
+                                    :style="{'color':item.status == 'Paused' ? '#333':'#999','background-color':nMoreBtnSelet==3 ? '#f6f6f6':'#fff'}" >恢复电源</div>
+                                <!--v-if="!item.prohibitMigrating"-->
+                                <div  @mouseenter="mouseEnter(4)" @mouseleave="mouseLeave()"
+                                    style="height: 36px;cursor: pointer;color: #333;line-height: 36px;text-align: center;" @click="onMoveHost(item)"
+                                    :style="{'color':(item.status != 'Stopping' && item.status != 'Rebooting' && item.status != 'Migrating' && !item.prohibitMigrating) ? '#333':'#999',
+                                            'background-color':nMoreBtnSelet==4 ? '#f6f6f6':'#fff'}">迁移主机</div>
+                                <div  @mouseenter="mouseEnter(6)" @mouseleave="mouseLeave()"
+                                      style="height: 36px;cursor: pointer;color: #333;line-height: 36px;text-align: center;" @click="onEditHost(item)"
+                                      :style="{'color':(item.status == 'Stopped') ? '#333':'#999',
+                                            'background-color':nMoreBtnSelet==6 ? '#f6f6f6':'#fff'}">修改规格</div>
+                                <div @mouseenter="mouseEnter(5)" @mouseleave="mouseLeave()"
+                                    style="height: 36px;cursor: pointer;color: #333;line-height: 36px;text-align: center;" @click="onDeleteHost(item)"
+                                    :style="{'background-color':nMoreBtnSelet==5 ? '#f6f6f6':'#fff'}">删除主机</div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div v-else>
+    <div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;margin-top: 10px;">
+        <div style="cursor: pointer;" @click="onChangeState(1)">主机列表</div>
+        <div style="margin-left: 20px;color: #1b6aff;">[添加云主机]</div>
+    </div>
+
+    <div>
+        <form class="ui form">
+            <table class="ui table definition selectable">
+                <tr>
+                    <td class="title">名称*</td>
+                    <td>
+                        <input type="text" v-model="inputName" style="height: 30px;line-height: 30px;border: 1px solid #d7d7d7;border-radius: 5px;"></input>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">计算机规格*</td>
+                    <td>
+                        <div class="contain-style">
+                            <div style="margin-left: 10px;">{{hostRule}}</div>
+                            <div class="add-btn">+</div>
+                            <div class="click-contain-style" @click="onOpenHostRule"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">镜像*</td>
+                    <td>
+                        <div class="contain-style">
+                            <div style="margin-left: 10px;">{{mirrorRule}}</div>
+                            <div class="add-btn">+</div>
+                            <div class="click-contain-style" @click="onOpenMirrorRule"></div>
+                        </div>
+                    </td>
+                </tr>
+                </tr>
+                <tr>
+                    <td class="title">根云盘*</td>
+                    <td>
+                        <div class="contain-style">
+                            <div style="margin-left: 10px;">{{diskRule}}</div>
+                            <div class="add-btn">+</div>
+                            <div class="click-contain-style" @click="onOpenDiskRule"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">网络*</td>
+                    <td>
+                        <div class="contain-style">
+                            <div style="margin-left: 10px;">{{gridRule}}</div>
+                            <div class="add-btn">+</div>
+                            <div class="click-contain-style" @click="onOpenGridRule"></div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <div style="width: 100%;display: flex;align-items: center;margin-top: 5px;justify-content: center;">
+                <div style="background-color: #1b6aff;color: #ffffff" class="save-btn" @click="onSave">保存</div>
+            </div>
+            
+        </form>
+    </div>
+</div>
+
+<div v-if="bShowDialog" class="dialog-style" @click.stop>
+    <div class="dialog-bg-style">
+        <div v-if="nShowRuleType==1" style="width: 100%;height: 100%;">
+            <div style="width: 100%;;display: flex;justify-content: space-between;align-items: center;border-bottom: 1px solid #d7d7d7;">
+                <div style="margin:10px;font-weight: 700;">选择计算机规格</div>
+                <div style="padding:10px;cursor: pointer;" @click="onCloseRule">X</div>
+            </div>
+            <div style="margin-top: 10px;min-height: 295px;overflow-x: auto; overflow-y: auto;">
+                <table class="ui table selectable" frame=hsides border rules=rows style="border-collapse: collapse;">
+                    <thead>
+                        <tr align="center">
+                            <th class='table-head-bg' style="width: 200px;">名称</th>
+                            <th class='table-head-bg' style="width: 100px;">CPU</th>
+                            <th class='table-head-bg' style="width: 100px;">内存</th>
+                            <th class='table-head-bg' style="width: 200px;">创建日期</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        <tr align="center" style="height: 40px;" v-for="(item,index) in hostRuleData" @click="onSelectHostRule(item.uuid)">
+                            <td>
+                                <div style="display: flex;flex-direction: row;align-items: center;">
+                                    <img :src="nSelectHostRule == item.uuid ? '/images/select_select.png':'/images/select_box.png'" width="12px" height="12px" style="margin: 0px 10px;">
+                                    <span>{{item.name}}</span>
+                                </div>
+                            </td>
+                            <td>{{item.cpu}}</td>
+                            <td>{{item.memory}}</td>
+                            <td>{{onChangeTimeFormat(item.createTime)}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="width: 100%;display: flex;align-items: center;justify-content: center;border-top: 1px solid #d7d7d7;padding-top: 10px;">
+                <div class="clean-btn" @click="onCloseRule">取消</div>
+                <div class="save-btn" @click="onSaveHostRuleSelect">确定</div>
+            </div>
+        </div>
+        <div v-if="nShowRuleType==2" style="width: 100%;height: 100%;">
+            <div style="width: 100%;;display: flex;justify-content: space-between;align-items: center;border-bottom: 1px solid #d7d7d7;">
+                <div style="margin:10px;font-weight: 700;">选择镜像</div>
+                <div style="padding:10px;cursor: pointer;" @click="onCloseRule">X</div>
+            </div>
+            <div style="margin-top: 10px;min-height: 295px;overflow-x: auto; overflow-y: auto;">
+                <table class="ui table selectable" frame=hsides border rules=rows style="border-collapse: collapse;">
+                    <thead>
+                        <tr align="center">
+                            <th class='table-head-bg' style="width: 200px;">名称</th>
+                            <th class='table-head-bg' style="width: 100px;">镜像类型</th>
+                            <th class='table-head-bg' style="width: 100px;">镜像格式</th>
+                            <th class='table-head-bg' style="width: 100px;">平台</th>
+                            <th class='table-head-bg' style="width: 100px;">容量</th>
+                            <th class='table-head-bg' style="width: 200px;">创建日期</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        <tr align="center" style="height: 40px;" v-for="(item,index) in mirrorRuleData" @click="onSelectMirrorRule(item.uuid)">
+                            <td>
+                                <div style="display: flex;flex-direction: row;align-items: center;">
+                                    <img :src="nSelectMirrorRule == item.uuid ? '/images/select_select.png':'/images/select_box.png'" width="12px" height="12px" style="margin: 0px 10px;">
+                                    <span>{{item.name}}</span>
+                                </div>
+                            </td>
+                            <td>{{item.mirrorType}}</td>
+                            <td>{{item.mirrorFormat}}</td>
+                            <td>{{item.platform}}</td>
+                            <td>{{item.size}}</td>
+                            <td>{{onChangeTimeFormat(item.createTime)}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="width: 100%;display: flex;align-items: center;justify-content: center;border-top: 1px solid #d7d7d7;padding-top: 10px;">
+                <div class="clean-btn" @click="onCloseRule">取消</div>
+                <div class="save-btn" @click="onSaveMirrorRuleSelect">确定</div>
+            </div>
+        </div>
+        <div v-if="nShowRuleType==5" style="width: 100%;height: 100%;">
+            <div style="width: 100%;;display: flex;justify-content: space-between;align-items: center;border-bottom: 1px solid #d7d7d7;">
+                <div style="margin:10px;font-weight: 700;">选择根云盘</div>
+                <div style="padding:10px;cursor: pointer;" @click="onCloseRule">X</div>
+            </div>
+            <div style="margin-top: 10px;min-height: 295px;overflow-x: auto; overflow-y: auto;">
+                <table class="ui table selectable" frame=hsides border rules=rows style="border-collapse: collapse;">
+                    <thead>
+                    <tr align="center">
+                        <th class='table-head-bg' style="width: 200px;">名称</th>
+                        <th class='table-head-bg' style="width: 100px;">容量</th>
+                        <th class='table-head-bg' style="width: 200px;">创建日期</th>
+                    </tr>
+                    </thead>
+                    <tbody >
+                    <tr align="center" style="height: 40px;" v-for="(item,index) in diskRuleData" @click="onSelectDiskRule(item.uuid)">
+                        <td>
+                            <div style="display: flex;flex-direction: row;align-items: center;">
+                                <img :src="nSelectDiskRule == item.uuid ? '/images/select_select.png':'/images/select_box.png'" width="12px" height="12px" style="margin: 0px 10px;">
+                                <span>{{item.name}}</span>
+                            </div>
+                        </td>
+                        <td>{{item.size}}</td>
+                        <td>{{onChangeTimeFormat(item.createTime)}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="width: 100%;display: flex;align-items: center;justify-content: center;border-top: 1px solid #d7d7d7;padding-top: 10px;">
+                <div class="clean-btn" @click="onCloseRule">取消</div>
+                <div class="save-btn" @click="onSaveDiskRuleSelect">确定</div>
+            </div>
+        </div>
+        <div v-if="nShowRuleType==3" style="width: 100%;height: 100%;">
+            <div style="width: 100%;;display: flex;justify-content: space-between;align-items: center;border-bottom: 1px solid #d7d7d7;">
+                <div style="margin:10px;font-weight: 700;">选择网络</div>
+                <div style="padding:10px;cursor: pointer;" @click="onCloseRule">X</div>
+            </div>
+            <div style="width: 161px;display: flex;flex-direction: row;border: 1px solid #d7d7d7;margin-top: 10px;margin-left: 15px;">
+                <div style="width: 80px;height: 30px;line-height: 30px;text-align: center;cursor: pointer;" 
+                    :style="{'background-color':nSelectGridRuleDataType==1 ? '#d0e8ff':'#fff'}" @click="onChangeGridRuleData(1)">共有网络</div>
+                <div style="height: 100%;width: 1px;background-color: #d7d7d7;"></div>
+                <div style="width: 80px;height: 30px;line-height: 30px;text-align: center;cursor: pointer;" 
+                    :style="{'background-color':nSelectGridRuleDataType==2 ? '#d0e8ff':'#fff'}" @click="onChangeGridRuleData(2)">私有网络</div>
+            </div>
+            <div style="margin-top: 10px;min-height: 260px;overflow-x: auto; overflow-y: auto;">
+                <table class="ui table selectable" frame=hsides border rules=rows style="border-collapse: collapse;">
+                    <thead>
+                        <tr align="center">
+                            <th class='table-head-bg' style="width: 200px;"  @click="onSelectAll">
+                                <div style="width: 100%;height: 100%;display: flex;flex-direction: row;align-items: center;">
+                                    <img :src="getShowImageName()" width="12px" height="12px" style="margin: 0px 10px;">
+                                    <span>名称</span>
+                                </div>
+                            </th>
+                            <th class='table-head-bg' style="width: 100px;">网络类型</th>
+                            <th class='table-head-bg' style="width: 150px;">CIDR</th>
+                            <th class='table-head-bg' style="width: 150px;">IP地址类型</th>
+                            <th class='table-head-bg' style="width: 150px;">IP可用量(IPv4)</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        <tr align="center" style="height: 40px;" v-for="(item,index) in sShowGridData" @click="onSelectGridRule(item.uuid)">
+                            <td>
+                                <div style="display: flex;flex-direction: row;align-items: center;">
+                                    <img :src="getItemShowImageName(item.uuid)" width="12px" height="12px" style="margin: 0px 10px;">
+                                    <span>{{item.name}}</span>
+                                </div>
+                            </td>
+                            <td>{{item.netType}}</td>
+                            <td>{{item.ip}}</td>
+                            <td>{{item.ipType}}</td>
+                            <td>{{item.ipUse}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="width: 100%;display: flex;align-items: center;justify-content: center;border-top: 1px solid #d7d7d7;padding-top: 10px;">
+                <div class="clean-btn" @click="onCloseRule">取消</div>
+                <div class="save-btn" @click="onSaveGridRuleSelect">确定</div>
+            </div>
+        </div>
+        <div v-if="nShowRuleType==4" style="width: 100%;height: 100%;">
+            <div style="width: 100%;;display: flex;justify-content: space-between;align-items: center;border-bottom: 1px solid #d7d7d7;">
+                <div style="margin:10px;font-weight: 700;">选择物理机</div>
+                <div style="padding:10px;cursor: pointer;" @click="onCloseRule">X</div>
+            </div>
+            <div style="margin-top: 10px;min-height: 295px;overflow-x: auto; overflow-y: auto;">
+                <table class="ui table selectable" frame=hsides border rules=rows style="border-collapse: collapse;">
+                    <thead>
+                        <tr align="center">
+                            <th class='table-head-bg' style="width: 200px;">名称</th>
+                            <th class='table-head-bg' style="width: 200px;">IP</th>
+                            <th class='table-head-bg' style="width: 200px;">虚拟化技术</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        <tr align="center" style="height: 40px;" v-for="(item,index) in physicsHost" @click="onSelectPhysics(item.uuid)">
+                            <td>
+                                <div style="display: flex;flex-direction: row;align-items: center;">
+                                    <img :src="nPhysicsSelect == item.uuid ? '/images/select_select.png':'/images/select_box.png'" width="12px" height="12px" style="margin: 0px 10px;">
+                                    <span>{{item.name}}</span>
+                                </div>
+                            </td>
+                            <td>{{item.ip}}</td>
+                            <td>{{item.vrSkill}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="width: 100%;display: flex;align-items: center;justify-content: center;border-top: 1px solid #d7d7d7;padding-top: 10px;">
+                <div class="clean-btn" @click="onCloseRule">取消</div>
+                <div class="save-btn" @click="onSavePhysicsSelect">确定</div>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -78,7 +78,7 @@ Vue.component("http-web-root-box", {
 						</div>
 						<div class="ui divider"></div>
 					</div>
-					<button class="ui button tiny" type="button" @click.prevent="addIndex()">+</button>
+					<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="addIndex()">+</button>
 					<p class="comment">在URL中只有目录没有文件名时默认查找的首页文件。</p>
 				</td>
 			</tr>

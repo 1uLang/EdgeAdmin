@@ -9,7 +9,7 @@ import (
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
-			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeLog)).
+			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeConfig)).
 			Helper(new(Helper)).
 			Prefix("/log").
 			Get("", new(IndexAction)).
@@ -17,7 +17,6 @@ func init() {
 			Post("/delete", new(DeleteAction)).
 			GetPost("/clean", new(CleanAction)).
 			GetPost("/settings", new(SettingsAction)).
-
 			EndAll()
 	})
 }

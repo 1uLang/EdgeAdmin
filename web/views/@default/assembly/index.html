@@ -1,0 +1,66 @@
+{$layout}
+
+<first-menu>
+    <menu-item @click.prevent="createNode">添加组件</menu-item>
+</first-menu>
+
+<p class="comment" v-if="list.length == 0">暂时还没有组件。</p>
+<div style="width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;margin-top: 15px;">
+    <table class="ui table selectable celled" v-if="list.length > 0">
+        <thead>
+        <tr align="center">
+            <th>组件名称</th>
+            <!-- <th>组件地址</th> -->
+            <th>协议</th>
+            <th>组件类型</th>
+            <th>数据中心</th>
+            <!--                <th class="center width10">是否可用</th>-->
+            <th class="center width10">状态</th>
+            <th class="two op">操作</th>
+        </tr>
+        </thead>
+        <tr align="center" v-for="node in list">
+            <td>
+                <div style="padding: 3px 0;">
+                    {{node.name}}
+                </div>
+            </td>
+            <!-- <td>
+                <div style="padding: 3px 0;">
+                    {{node.addr}}
+                </div>
+            </td> -->
+            <td>
+                <div style="padding: 3px 0;">
+                    <div v-show="node.is_ssl==1" >https</div>
+                    <div v-show="node.is_ssl==0" >http</div>
+                </div>
+            </td>
+            <td>
+                <div style="padding: 3px 0;">
+                    {{node.type_name}}
+                </div>
+            </td>
+            <td>
+                <div style="padding: 3px 0;">
+                    {{node.idc}}
+                </div>
+            </td>
+            <td class="center">
+                <label-on-conn :v-is-conn="node.conn_state"></label-on-conn>
+            </td>
+            <!--            <td class="center">-->
+            <!--                <label-on :v-is-on="node.state"></label-on>-->
+            <!--            </td>-->
+            <td>
+                <div style="padding: 3px 0;">
+                    <a @click.prevent="updateNode(node.id)" style="cursor: pointer;">修改</a> &nbsp;
+                    <a href="" style="cursor: pointer;color: #db2828" @click.prevent="deleteNode(node.id)">删除</a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+<div class="page" v-html="page"></div>

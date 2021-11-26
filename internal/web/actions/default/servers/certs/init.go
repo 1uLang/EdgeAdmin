@@ -12,8 +12,9 @@ import (
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
-			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
+			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeCerts)).
 			Helper(NewHelper()).
+			Data("teaMenu", "certs").
 			Data("teaSubMenu", "cert").
 			Prefix("/servers/certs").
 			Data("leftMenuItem", "cert").

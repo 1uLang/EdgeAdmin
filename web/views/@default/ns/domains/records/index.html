@@ -21,7 +21,7 @@
             <input type="text" placeholder="记录名、备注..." name="keyword" v-model="keyword"/>
         </div>
         <div class="ui field">
-            <button type="submit" class="ui button">搜索</button>
+            <button type="submit" style="background-color: #1b6aff;" class="ui button">搜索</button>
         </div>
     </div>
 </form>
@@ -54,7 +54,7 @@
         <td><label-on :v-is-on="record.isOn"></label-on></td>
         <td>
             <a href="" @click.prevent="updateRecord(record.id)">修改</a> &nbsp;
-            <a href="" @click.prevent="deleteRecord(record.id)">删除</a>
+            <a href="" style="color: #db2828" @click.prevent="deleteRecord(record.id)">删除</a>
         </td>
     </tr>
 </table>

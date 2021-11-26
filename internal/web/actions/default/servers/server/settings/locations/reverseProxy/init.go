@@ -14,7 +14,7 @@ func init() {
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
 			Helper(locationutils.NewLocationHelper()).
 			Helper(serverutils.NewServerHelper()).
-			Data("mainTab", "setting").
+			Data("mainTab", "setting").Data("teaMenu", "waf").
 			Data("tinyMenuItem", "reverseProxy").
 			Prefix("/servers/server/settings/locations/reverseProxy").
 			Get("", new(IndexAction)).

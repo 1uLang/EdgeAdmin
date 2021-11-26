@@ -18,11 +18,11 @@ func (this *Helper) BeforeAction(action *actions.ActionObject) {
 		return
 	}
 
-	action.Data["teaMenu"] = "servers"
+	action.Data["teaMenu"] = "certs"
 
 	action.Data["leftMenuItems"] = []maps.Map{
 		{
-			"name":     "证书",
+			"name":     "证书列表",
 			"url":      "/servers/certs",
 			"isActive": action.Data.GetString("leftMenuItem") == "cert",
 		},

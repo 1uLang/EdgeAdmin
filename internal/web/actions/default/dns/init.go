@@ -13,9 +13,10 @@ import (
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
-			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeDNS)).
-			Helper(new(Helper)).
+			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
+			//Helper(new(Helper)).
 			Prefix("/dns").
+			Data("teaMenu", "dns").
 			Get("", new(IndexAction)).
 			GetPost("/updateClusterPopup", new(UpdateClusterPopupAction)).
 			Post("/providerOptions", new(ProviderOptionsAction)).
@@ -29,6 +30,7 @@ func init() {
 			// 服务商
 			Prefix("/dns/providers").
 			Data("teaSubMenu", "provider").
+			Data("teaMenu", "providers").
 			Get("", new(providers.IndexAction)).
 			GetPost("/createPopup", new(providers.CreatePopupAction)).
 			GetPost("/updatePopup", new(providers.UpdatePopupAction)).

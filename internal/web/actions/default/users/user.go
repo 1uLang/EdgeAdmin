@@ -1,6 +1,8 @@
 package users
 
 import (
+	"encoding/json"
+	"github.com/1uLang/zhiannet-api/common/server/edge_logins_server"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/users/userutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
@@ -63,6 +65,23 @@ func (this *UserAction) RunGet(params struct {
 		"cluster":         clusterMap,
 		"countAccessKeys": countAccessKeys,
 	}
-
+	this.Data["otp"] = nil
+	info, err := edge_logins_server.GetInfoByUid(uint64(params.UserId))
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	if info != nil && info.IsOn == 1 {
+		loginParams := maps.Map{}
+		err = json.Unmarshal([]byte(info.Params), &loginParams)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+		this.Data["otp"] = maps.Map{
+			"isOn":   true,
+			"params": loginParams,
+		}
+	}
 	this.Show()
 }

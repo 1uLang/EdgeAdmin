@@ -1,10 +1,16 @@
 package users
 
 import (
+	"github.com/1uLang/zhiannet-api/common/model/edge_logins"
+	"github.com/1uLang/zhiannet-api/common/server/edge_logins_server"
+	"github.com/1uLang/zhiannet-api/common/server/edge_users_server"
 	"github.com/TeaOSLab/EdgeAdmin/internal/utils/numberutils"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/dlclark/regexp2"
 	"github.com/iwind/TeaGo/actions"
+	"github.com/iwind/TeaGo/maps"
+	"github.com/xlzd/gotp"
 )
 
 type CreatePopupAction struct {
@@ -29,6 +35,8 @@ func (this *CreatePopupAction) RunPost(params struct {
 	Email     string
 	Remark    string
 	ClusterId int64
+	OtpOn     bool
+	ChannelId uint64
 
 	Must *actions.Must
 	CSRF *actionutils.CSRF
@@ -57,6 +65,15 @@ func (this *CreatePopupAction) RunPost(params struct {
 		Require("请再次输入确认密码").
 		Equal(params.Pass1, "两次输入的密码不一致")
 
+	reg, err := regexp2.Compile(
+		`^(?![A-z0-9]+$)(?=.[^%&',;=?$\x22])(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,30}$`, 0)
+	if err != nil {
+		this.FailField("pass1", "密码格式不正确")
+	}
+	if match, err := reg.FindStringMatch(params.Pass1); err != nil || match == nil {
+		this.FailField("pass1", "密码格式不正确")
+	}
+
 	params.Must.
 		Field("fullname", params.Fullname).
 		Require("请输入全名")
@@ -76,6 +93,55 @@ func (this *CreatePopupAction) RunPost(params struct {
 			Email("请输入正确的电子邮箱")
 	}
 
+	// 创建nextcloud账号，并写入数据库
+	//adminToken := nc_req.GetAdminToken()
+	//// userPwd := `adminAd#@2021`
+	//userPwd := params.Pass2
+	//err = nc_req.CreateUserV2(adminToken, params.Username, userPwd)
+	//if err != nil {
+	//	this.ErrorPage(err)
+	//	return
+	//}
+	//// 生成token
+	//gtReq := &model.LoginReq{
+	//	User:     params.Username,
+	//	Password: userPwd,
+	//}
+	//ncToken := nc_req.GenerateToken(gtReq)
+	//// 写入数据库
+	//err = model.StoreNCToken(params.Username, ncToken)
+	//if err != nil {
+	//	this.ErrorPage(err)
+	//	return
+	//}
+
+	//创建审计系统的账号
+	//{
+	//auditResp, auditErr := user.AddUser(&user.AddUserReq{
+	//	User:        &request.UserReq{AdminUserId: uint64(this.AdminId())},
+	//	Email:       params.Email,
+	//	IsAdmin:     1,
+	//	NickName:    params.Username,
+	//	Opt:         1,
+	//	Password:    params.Pass1,
+	//	Phonenumber: params.Mobile,
+	//	RoleIds:     []uint64{},
+	//	RoleName:    "平台管理员",
+	//	Sex:         1,
+	//	Status:      1,
+	//	UserName:    params.Username,
+	//})
+	//if auditErr != nil || auditResp == nil {
+	//	this.ErrorPage(fmt.Errorf("创建账号失败"))
+	//	return
+	//}
+	//if auditResp.Code != 0 {
+	//	this.ErrorPage(fmt.Errorf(auditResp.Msg))
+	//	return
+	//}
+
+	//}
+
 	createResp, err := this.RPC().UserRPC().CreateUser(this.AdminContext(), &pb.CreateUserRequest{
 		Username:      params.Username,
 		Password:      params.Pass1,
@@ -91,7 +157,48 @@ func (this *CreatePopupAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
+	if params.ChannelId > 0 { //修改渠道ID
+		edge_users_server.UpdateChannel(uint64(createResp.UserId), params.ChannelId)
+	}
 	defer this.CreateLogInfo("创建用户 %d", createResp.UserId)
 
+	//关联账号
+	//_, err = audit_user_relation.Add(&audit_user_relation.AuditReq{
+	//	UserId:      uint64(createResp.UserId),
+	//	AuditUserId: uint64(auditResp.Data.Id),
+	//})
+	//if err != nil {
+	//	this.ErrorPage(err)
+	//	return
+	//}
+	// 用户账号和nextcloud账号进行关联
+	// 因为用户名是唯一的，所以加入用户名字段，减少脏数据的产生
+	//err = model.BindNCTokenAndUID(params.Username, createResp.UserId)
+	//if err != nil {
+	//	this.ErrorPage(err)
+	//	return
+	//}
+	//更新密码修改时间
+	edge_users_server.UpdatePwdAt(uint64(createResp.UserId))
+	//otp
+	if params.OtpOn {
+		otpLogin := &edge_logins.EdgeLogins{
+			Id:   0,
+			Type: "otp",
+			Params: string(maps.Map{
+				"secret": gotp.RandomSecret(16), // TODO 改成可以设置secret长度
+			}.AsJSON()),
+			IsOn:    1,
+			AdminId: 0,
+			UserId:  uint64(createResp.UserId),
+			State:   1,
+		}
+
+		_, err = edge_logins_server.Save(otpLogin)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+	}
 	this.Success()
 }

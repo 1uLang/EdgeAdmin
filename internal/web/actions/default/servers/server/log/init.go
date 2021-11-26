@@ -12,6 +12,7 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
 			Helper(serverutils.NewServerHelper()).
+			Data("teaMenu", "waf").
 			Prefix("/servers/server/log").
 			GetPost("", new(IndexAction)).
 			GetPost("/today", new(TodayAction)).

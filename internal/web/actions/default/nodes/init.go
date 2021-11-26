@@ -10,7 +10,7 @@ import (
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
-			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeNode)).
+			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeServer)).
 			Helper(new(Helper)).
 			Prefix("/nodes").
 			Post("/delete", new(DeleteAction)).
@@ -18,7 +18,6 @@ func init() {
 			// IP地址
 			GetPost("/ipAddresses/createPopup", new(ipAddresses.CreatePopupAction)).
 			GetPost("/ipAddresses/updatePopup", new(ipAddresses.UpdatePopupAction)).
-
 			EndAll()
 	})
 }

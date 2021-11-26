@@ -1,0 +1,14 @@
+.table-head-bg{
+    height: 32px;
+    background: #f0f0f0;
+}
+
+.edit_btn{
+    color: #1b6aff;
+    cursor: pointer;
+}
+
+.red-edit-btn{
+    color: #db2828;
+    cursor: pointer;
+}
