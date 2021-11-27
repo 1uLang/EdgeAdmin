@@ -1,4 +1,4 @@
-let sourceCodeBoxIndex = 0
+var sourceCodeBoxIndex = 0
 
 Vue.component("source-code-box", {
 	props: ["name", "type", "id", "read-only"],

@@ -48,7 +48,6 @@ func (this *IndexAction) RunGet(params struct {
 		return
 	}
 	this.Data["gateways"] = list
-	this.Show()
 }
 
 func (this *IndexAction) RunPost(params struct {

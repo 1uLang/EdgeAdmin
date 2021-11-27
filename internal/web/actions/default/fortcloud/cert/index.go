@@ -36,7 +36,6 @@ func (this *IndexAction) RunGet() {
 		AdminUserId: uint64(this.AdminId()),
 	})
 	this.Data["certs"] = list
-	this.Show()
 }
 
 func (this *IndexAction) RunPost(params struct {

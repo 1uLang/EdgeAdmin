@@ -43,5 +43,5 @@ func (this *IndexAction) RunGet(params struct {
 		return
 	}
 	this.Data["online"] = online
-	this.Show()
+
 }

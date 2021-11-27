@@ -1,4 +1,4 @@
-let radioId = 0
+var radioId = 0
 Vue.component("radio", {
 	props: ["name", "value", "v-value", "id"],
 	data: function () {

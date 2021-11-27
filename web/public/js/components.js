@@ -3058,93 +3058,6 @@ Vue.component("http-cache-config-box", {
 </div>`
 })
 
-// 通用Header长度
-let defaultGeneralHeaders = ["Cache-Control", "Connection", "Date", "Pragma", "Trailer", "Transfer-Encoding", "Upgrade", "Via", "Warning"]
-Vue.component("http-cond-general-header-length", {
-	props: ["v-checkpoint"],
-	data: function () {
-		let headers = null
-		let length = null
-
-		if (window.parent.UPDATING_RULE != null) {
-			let options = window.parent.UPDATING_RULE.checkpointOptions
-			if (options.headers != null && Array.$isArray(options.headers)) {
-				headers = options.headers
-			}
-			if (options.length != null) {
-				length = options.length
-			}
-		}
-
-
-		if (headers == null) {
-			headers = defaultGeneralHeaders
-		}
-
-		if (length == null) {
-			length = 128
-		}
-
-		let that = this
-		setTimeout(function () {
-			that.change()
-		}, 100)
-
-		return {
-			headers: headers,
-			length: length
-		}
-	},
-	watch: {
-		length: function (v) {
-			let len = parseInt(v)
-			if (isNaN(len)) {
-				len = 0
-			}
-			if (len < 0) {
-				len = 0
-			}
-			this.length = len
-			this.change()
-		}
-	},
-	methods: {
-		change: function () {
-			this.vCheckpoint.options = [
-				{
-					code: "headers",
-					value: this.headers
-				},
-				{
-					code: "length",
-					value: this.length
-				}
-			]
-		}
-	},
-	template: `<div>
-	<table class="ui table">
-		<tr>
-			<td class="title">通用Header列表</td>
-			<td>
-				<values-box :values="headers" :placeholder="'Header'" @change="change"></values-box>
-				<p class="comment">需要检查的Header列表。</p>
-			</td>
-		</tr>
-		<tr>
-			<td>Header值超出长度</td>
-			<td>
-				<div class="ui input right labeled">
-					<input type="text" name="" style="width: 5em" v-model="length" maxlength="6"/>
-					<span class="ui label">字节</span>
-				</div>
-				<p class="comment">超出此长度认为匹配成功，0表示不限制。</p>
-			</td>
-		</tr>
-	</table>
-</div>`
-})
-
 // CC
 Vue.component("http-firewall-checkpoint-cc", {
 	props: ["v-checkpoint"],
@@ -10167,50 +10080,6 @@ Vue.component("warning-message", {
 	template: `<div class="ui icon message warning"><i class="icon warning circle"></i><div class="content"><slot></slot></div></div>`
 })
 
-let checkboxId = 0
-Vue.component("checkbox", {
-	props: ["name", "value", "v-value", "id", "checked"],
-	data: function () {
-		checkboxId++
-		let elementId = this.id
-		if (elementId == null) {
-			elementId = "checkbox" + checkboxId
-		}
-
-		let elementValue = this.vValue
-		if (elementValue == null) {
-			elementValue = "1"
-		}
-
-		let checkedValue = this.value
-        if (checkedValue == null && this.checked == "checked") {
-            checkedValue = elementValue
-        }
-
-		return {
-			elementId: elementId,
-			elementValue: elementValue,
-			newValue: checkedValue
-		}
-	},
-	methods: {
-		change: function () {
-			this.$emit("input", this.newValue)
-		}
-	},
-    watch: {
-	    value: function (v) {
-	        if (typeof v == "boolean") {
-	            this.newValue = v
-            }
-        }
-    },
-	template: `<div class="ui checkbox">
-	<input type="checkbox" :name="name" :value="elementValue" :id="elementId" @change="change" v-model="newValue"/>
-	<label :for="elementId" style="font-size: 0.85em!important;"><slot></slot></label>
-</div>`
-})
-
 Vue.component("network-addresses-view", {
 	props: ["v-addresses"],
 	template: `<div>
@@ -10409,30 +10278,6 @@ Vue.component("labeled-input", {
 </div>'
 });
 
-let radioId = 0
-Vue.component("radio", {
-	props: ["name", "value", "v-value", "id"],
-	data: function () {
-		radioId++
-		let elementId = this.id
-		if (elementId == null) {
-			elementId = "radio" + radioId
-		}
-		return {
-			"elementId": elementId
-		}
-	},
-	methods: {
-		change: function () {
-			this.$emit("input", this.vValue)
-		}
-	},
-	template: `<div class="ui checkbox radio">
-	<input type="radio" :name="name" :value="vValue" :id="elementId" @change="change" :checked="(vValue == value)"/>
-	<label :for="elementId"><slot></slot></label>
-</div>`
-})
-
 Vue.component("copy-to-clipboard", {
 	props: ["v-target"],
 	created: function () {
@@ -10487,65 +10332,6 @@ Vue.component("node-role-name", {
 		}
 	},
 	template: `<span>{{roleName}}</span>`
-})
-
-let sourceCodeBoxIndex = 0
-
-Vue.component("source-code-box", {
-	props: ["name", "type", "id", "read-only"],
-	mounted: function () {
-		let readOnly = this.readOnly
-		if (typeof readOnly != "boolean") {
-			readOnly = true
-		}
-		let box = document.getElementById("source-code-box-" + this.index)
-		let valueBox = document.getElementById(this.valueBoxId)
-		let value = ""
-		if (valueBox.textContent != null) {
-			value = valueBox.textContent
-		} else if (valueBox.innerText != null) {
-			value = valueBox.innerText
-		}
-		let boxEditor = CodeMirror.fromTextArea(box, {
-			theme: "idea",
-			lineNumbers: true,
-			value: "",
-			readOnly: readOnly,
-			showCursorWhenSelecting: true,
-			height: "auto",
-			//scrollbarStyle: null,
-			viewportMargin: Infinity,
-			lineWrapping: true,
-			highlightFormatting: false,
-			indentUnit: 4,
-			indentWithTabs: true
-		})
-		boxEditor.setValue(value)
-
-		let info = CodeMirror.findModeByMIME(this.type)
-		if (info != null) {
-			boxEditor.setOption("mode", info.mode)
-			CodeMirror.modeURL = "/codemirror/mode/%N/%N.js"
-			CodeMirror.autoLoadMode(boxEditor, info.mode)
-		}
-	},
-	data: function () {
-		let index = sourceCodeBoxIndex++
-
-		let valueBoxId = 'source-code-box-value-' + sourceCodeBoxIndex
-		if (this.id != null) {
-			valueBoxId = this.id
-		}
-
-		return {
-			index: index,
-			valueBoxId: valueBoxId
-		}
-	},
-	template: `<div class="source-code-box">
-	<div style="display: none" :id="valueBoxId"><slot></slot></div>
-	<textarea :id="'source-code-box-' + index" :name="name"></textarea>
-</div>`
 })
 
 Vue.component("size-capacity-box", {

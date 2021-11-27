@@ -48,7 +48,6 @@ func (this *IndexAction) RunGet(params struct {
 	this.Data["percent"] = list.Percent
 	this.Data["title"] = list.DirList
 
-	this.Show()
 }
 
 func (this *IndexAction) RunPost(params struct {

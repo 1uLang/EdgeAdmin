@@ -1,4 +1,4 @@
-let checkboxId = 0
+var checkboxId = 0
 Vue.component("checkbox", {
 	props: ["name", "value", "v-value", "id", "checked"],
 	data: function () {
