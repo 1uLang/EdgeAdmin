@@ -160,50 +160,50 @@ Vue.component("node-clusters-selector", {
 })
 
 Vue.component("message-media-selector", {
-    props: ["v-media-type"],
-    mounted: function () {
-        let that = this
-        Tea.action("/admins/recipients/mediaOptions")
-            .post()
-            .success(function (resp) {
-                that.medias = resp.data.medias
+	props: ["v-media-type"],
+	mounted: function () {
+		let that = this
+		Tea.action("/admins/recipients/mediaOptions")
+			.post()
+			.success(function (resp) {
+				that.medias = resp.data.medias
 
-                // 初始化简介
-                if (that.mediaType.length > 0) {
-                    let media = that.medias.$find(function (_, media) {
-                        return media.type == that.mediaType
-                    })
-                    if (media != null) {
-                        that.description = media.description
-                    }
-                }
-            })
-    },
-    data: function () {
-        let mediaType = this.vMediaType
-        if (mediaType == null) {
-            mediaType = ""
-        }
-        return {
-            medias: [],
-            description: "",
-            mediaType: mediaType
-        }
-    },
-    watch: {
-        mediaType: function (v) {
-            let media = this.medias.$find(function (_, media) {
-                return media.type == v
-            })
-            if (media == null) {
-                this.description = ""
-            } else {
-                this.description = media.description
-            }
-            this.$emit("change", media)
-        },
-    },
-    template: `<div>
+				// 初始化简介
+				if (that.mediaType.length > 0) {
+					let media = that.medias.$find(function (_, media) {
+						return media.type == that.mediaType
+					})
+					if (media != null) {
+						that.description = media.description
+					}
+				}
+			})
+	},
+	data: function () {
+		let mediaType = this.vMediaType
+		if (mediaType == null) {
+			mediaType = ""
+		}
+		return {
+			medias: [],
+			description: "",
+			mediaType: mediaType
+		}
+	},
+	watch: {
+		mediaType: function (v) {
+			let media = this.medias.$find(function (_, media) {
+				return media.type == v
+			})
+			if (media == null) {
+				this.description = ""
+			} else {
+				this.description = media.description
+			}
+			this.$emit("change", media)
+		},
+	},
+	template: `<div>
     <select class="ui dropdown auto-width" name="mediaType" v-model="mediaType">
         <option value="">[选择媒介类型]</option>
         <option v-for="media in medias" :value="media.type">{{media.name}}</option>
@@ -272,49 +272,49 @@ Vue.component("message-receivers-box", {
 })
 
 Vue.component("message-recipient-group-selector", {
-    props: ["v-groups"],
-    data: function () {
-        let groups = this.vGroups
-        if (groups == null) {
-            groups = []
-        }
-        let groupIds = []
-        if (groups.length > 0) {
-            groupIds = groups.map(function (v) {
-                return v.id.toString()
-            }).join(",")
-        }
+	props: ["v-groups"],
+	data: function () {
+		let groups = this.vGroups
+		if (groups == null) {
+			groups = []
+		}
+		let groupIds = []
+		if (groups.length > 0) {
+			groupIds = groups.map(function (v) {
+				return v.id.toString()
+			}).join(",")
+		}
 
-        return {
-            groups: groups,
-            groupIds: groupIds
-        }
-    },
-    methods: {
-        addGroup: function () {
-            let that = this
-            teaweb.popup("/admins/recipients/groups/selectPopup?groupIds=" + this.groupIds, {
-                callback: function (resp) {
-                    that.groups.push(resp.data.group)
-                    that.update()
-                }
-            })
-        },
-        removeGroup: function (index) {
-            this.groups.$remove(index)
-            this.update()
-        },
-        update: function () {
-            let groupIds = []
-            if (this.groups.length > 0) {
-                this.groups.forEach(function (v) {
-                    groupIds.push(v.id)
-                })
-            }
-            this.groupIds = groupIds.join(",")
-        }
-    },
-    template: `<div>
+		return {
+			groups: groups,
+			groupIds: groupIds
+		}
+	},
+	methods: {
+		addGroup: function () {
+			let that = this
+			teaweb.popup("/admins/recipients/groups/selectPopup?groupIds=" + this.groupIds, {
+				callback: function (resp) {
+					that.groups.push(resp.data.group)
+					that.update()
+				}
+			})
+		},
+		removeGroup: function (index) {
+			this.groups.$remove(index)
+			this.update()
+		},
+		update: function () {
+			let groupIds = []
+			if (this.groups.length > 0) {
+				this.groups.forEach(function (v) {
+					groupIds.push(v.id)
+				})
+			}
+			this.groupIds = groupIds.join(",")
+		}
+	},
+	template: `<div>
     <input type="hidden" name="groupIds" :value="groupIds"/>
     <div v-if="groups.length > 0">
         <div>
@@ -329,56 +329,56 @@ Vue.component("message-recipient-group-selector", {
 })
 
 Vue.component("message-media-instance-selector", {
-    props: ["v-instance-id"],
-    mounted: function () {
-        let that = this
-        Tea.action("/admins/recipients/instances/options")
-            .post()
-            .success(function (resp) {
-                that.instances = resp.data.instances
+	props: ["v-instance-id"],
+	mounted: function () {
+		let that = this
+		Tea.action("/admins/recipients/instances/options")
+			.post()
+			.success(function (resp) {
+				that.instances = resp.data.instances
 
-                // 初始化简介
-                if (that.instanceId > 0) {
-                    let instance = that.instances.$find(function (_, instance) {
-                        return instance.id == that.instanceId
-                    })
-                    if (instance != null) {
-                        that.description = instance.description
-                        that.update(instance.id)
-                    }
-                }
-            })
-    },
-    data: function () {
-        let instanceId = this.vInstanceId
-        if (instanceId == null) {
-            instanceId = 0
-        }
-        return {
-            instances: [],
-            description: "",
-            instanceId: instanceId
-        }
-    },
-    watch: {
-        instanceId: function (v) {
-            this.update(v)
-        }
-    },
-    methods: {
-        update: function (v) {
-            let instance = this.instances.$find(function (_, instance) {
-                return instance.id == v
-            })
-            if (instance == null) {
-                this.description = ""
-            } else {
-                this.description = instance.description
-            }
-            this.$emit("change", instance)
-        }
-    },
-    template: `<div>
+				// 初始化简介
+				if (that.instanceId > 0) {
+					let instance = that.instances.$find(function (_, instance) {
+						return instance.id == that.instanceId
+					})
+					if (instance != null) {
+						that.description = instance.description
+						that.update(instance.id)
+					}
+				}
+			})
+	},
+	data: function () {
+		let instanceId = this.vInstanceId
+		if (instanceId == null) {
+			instanceId = 0
+		}
+		return {
+			instances: [],
+			description: "",
+			instanceId: instanceId
+		}
+	},
+	watch: {
+		instanceId: function (v) {
+			this.update(v)
+		}
+	},
+	methods: {
+		update: function (v) {
+			let instance = this.instances.$find(function (_, instance) {
+				return instance.id == v
+			})
+			if (instance == null) {
+				this.description = ""
+			} else {
+				this.description = instance.description
+			}
+			this.$emit("change", instance)
+		}
+	},
+	template: `<div>
     <select class="ui dropdown auto-width" name="instanceId" v-model="instanceId">
         <option value="0">[选择媒介]</option>
         <option v-for="instance in instances" :value="instance.id">{{instance.name}} ({{instance.media.name}})</option>
@@ -3058,6 +3058,93 @@ Vue.component("http-cache-config-box", {
 </div>`
 })
 
+// 通用Header长度
+let defaultGeneralHeaders = ["Cache-Control", "Connection", "Date", "Pragma", "Trailer", "Transfer-Encoding", "Upgrade", "Via", "Warning"]
+Vue.component("http-cond-general-header-length", {
+	props: ["v-checkpoint"],
+	data: function () {
+		let headers = null
+		let length = null
+
+		if (window.parent.UPDATING_RULE != null) {
+			let options = window.parent.UPDATING_RULE.checkpointOptions
+			if (options.headers != null && Array.$isArray(options.headers)) {
+				headers = options.headers
+			}
+			if (options.length != null) {
+				length = options.length
+			}
+		}
+
+
+		if (headers == null) {
+			headers = defaultGeneralHeaders
+		}
+
+		if (length == null) {
+			length = 128
+		}
+
+		let that = this
+		setTimeout(function () {
+			that.change()
+		}, 100)
+
+		return {
+			headers: headers,
+			length: length
+		}
+	},
+	watch: {
+		length: function (v) {
+			let len = parseInt(v)
+			if (isNaN(len)) {
+				len = 0
+			}
+			if (len < 0) {
+				len = 0
+			}
+			this.length = len
+			this.change()
+		}
+	},
+	methods: {
+		change: function () {
+			this.vCheckpoint.options = [
+				{
+					code: "headers",
+					value: this.headers
+				},
+				{
+					code: "length",
+					value: this.length
+				}
+			]
+		}
+	},
+	template: `<div>
+	<table class="ui table">
+		<tr>
+			<td class="title">通用Header列表</td>
+			<td>
+				<values-box :values="headers" :placeholder="'Header'" @change="change"></values-box>
+				<p class="comment">需要检查的Header列表。</p>
+			</td>
+		</tr>
+		<tr>
+			<td>Header值超出长度</td>
+			<td>
+				<div class="ui input right labeled">
+					<input type="text" name="" style="width: 5em" v-model="length" maxlength="6"/>
+					<span class="ui label">字节</span>
+				</div>
+				<p class="comment">超出此长度认为匹配成功，0表示不限制。</p>
+			</td>
+		</tr>
+	</table>
+</div>`
+})
+
 // CC
 Vue.component("http-firewall-checkpoint-cc", {
 	props: ["v-checkpoint"],
@@ -3889,80 +3976,80 @@ Vue.component("http-rewrite-labels-label", {
 })
 
 Vue.component("server-name-box", {
-    props: ["v-server-names"],
-    data: function () {
-        let serverNames = this.vServerNames;
-        if (serverNames == null) {
-            serverNames = []
-        }
-        return {
-            serverNames: serverNames,
-            isSearching: false,
-            keyword: ""
-        }
-    },
-    methods: {
-        addServerName: function () {
-            window.UPDATING_SERVER_NAME = null
-            let that = this
-            teaweb.popup("/servers/addServerNamePopup", {
-                callback: function (resp) {
-                    var serverName = resp.data.serverName
-                    that.serverNames.push(serverName)
-                }
-            });
-        },
+	props: ["v-server-names"],
+	data: function () {
+		let serverNames = this.vServerNames;
+		if (serverNames == null) {
+			serverNames = []
+		}
+		return {
+			serverNames: serverNames,
+			isSearching: false,
+			keyword: ""
+		}
+	},
+	methods: {
+		addServerName: function () {
+			window.UPDATING_SERVER_NAME = null
+			let that = this
+			teaweb.popup("/servers/addServerNamePopup", {
+				callback: function (resp) {
+					var serverName = resp.data.serverName
+					that.serverNames.push(serverName)
+				}
+			});
+		},
 
-        removeServerName: function (index) {
-            this.serverNames.$remove(index)
-        },
+		removeServerName: function (index) {
+			this.serverNames.$remove(index)
+		},
 
-        updateServerName: function (index, serverName) {
-            window.UPDATING_SERVER_NAME = serverName
-            let that = this
-            teaweb.popup("/servers/addServerNamePopup", {
-                callback: function (resp) {
-                    var serverName = resp.data.serverName
-                    Vue.set(that.serverNames, index, serverName)
-                }
-            });
-        },
-        showSearchBox: function () {
-            this.isSearching = !this.isSearching
-            if (this.isSearching) {
-                let that = this
-                setTimeout(function () {
-                    that.$refs.keywordRef.focus()
-                }, 200)
-            } else {
-                this.keyword = ""
-            }
-        },
-    },
-    watch: {
-        keyword: function (v) {
-            this.serverNames.forEach(function (serverName) {
-                if (v.length == 0) {
-                    serverName.isShowing = true
-                    return
-                }
-                if (serverName.subNames == null || serverName.subNames.length == 0) {
-                    if (!teaweb.match(serverName.name, v)) {
-                        serverName.isShowing = false
-                    }
-                } else {
-                    let found = false
-                    serverName.subNames.forEach(function (subName) {
-                        if (teaweb.match(subName, v)) {
-                            found = true
-                        }
-                    })
-                    serverName.isShowing = found
-                }
-            })
-        }
-    },
-    template: `<div>
+		updateServerName: function (index, serverName) {
+			window.UPDATING_SERVER_NAME = serverName
+			let that = this
+			teaweb.popup("/servers/addServerNamePopup", {
+				callback: function (resp) {
+					var serverName = resp.data.serverName
+					Vue.set(that.serverNames, index, serverName)
+				}
+			});
+		},
+		showSearchBox: function () {
+			this.isSearching = !this.isSearching
+			if (this.isSearching) {
+				let that = this
+				setTimeout(function () {
+					that.$refs.keywordRef.focus()
+				}, 200)
+			} else {
+				this.keyword = ""
+			}
+		},
+	},
+	watch: {
+		keyword: function (v) {
+			this.serverNames.forEach(function (serverName) {
+				if (v.length == 0) {
+					serverName.isShowing = true
+					return
+				}
+				if (serverName.subNames == null || serverName.subNames.length == 0) {
+					if (!teaweb.match(serverName.name, v)) {
+						serverName.isShowing = false
+					}
+				} else {
+					let found = false
+					serverName.subNames.forEach(function (subName) {
+						if (teaweb.match(subName, v)) {
+							found = true
+						}
+					})
+					serverName.isShowing = found
+				}
+			})
+		}
+	},
+	template: `<div>
 	<input type="hidden" name="serverNames" :value="JSON.stringify(serverNames)"/>
 	<div v-if="serverNames.length > 0">
 		<div v-for="(serverName, index) in serverNames" class="ui label small basic">
@@ -5150,7 +5237,7 @@ Vue.component("http-header-policy-box", {
 				responseDeletingHeaders = responsePolicy.deleteHeaders
 			}
 		}
-		
+
 		return {
 			type: type,
 			typeName: (type == "request") ? "请求" : "响应",
@@ -5778,44 +5865,44 @@ Vue.component("http-compression-config-box", {
 })
 
 Vue.component("firewall-event-level-options", {
-    props: ["v-value"],
-    mounted: function () {
-        let that = this
-        Tea.action("/ui/eventLevelOptions")
-            .post()
-            .success(function (resp) {
-                that.levels = resp.data.eventLevels
-                that.change()
-            })
-    },
-    data: function () {
-        let value = this.vValue
-        if (value == null || value.length == 0) {
-            value = "" // 不要给默认值，因为黑白名单等默认值均有不同
-        }
+	props: ["v-value"],
+	mounted: function () {
+		let that = this
+		Tea.action("/ui/eventLevelOptions")
+			.post()
+			.success(function (resp) {
+				that.levels = resp.data.eventLevels
+				that.change()
+			})
+	},
+	data: function () {
+		let value = this.vValue
+		if (value == null || value.length == 0) {
+			value = "" // 不要给默认值，因为黑白名单等默认值均有不同
+		}
 
-        return {
-            levels: [],
-            description: "",
-            level: value
-        }
-    },
-    methods: {
-        change: function () {
-            this.$emit("change")
+		return {
+			levels: [],
+			description: "",
+			level: value
+		}
+	},
+	methods: {
+		change: function () {
+			this.$emit("change")
 
-            let that = this
-            let l = this.levels.$find(function (k, v) {
-                return v.code == that.level
-            })
-            if (l != null) {
-                this.description = l.description
-            } else {
-                this.description = ""
-            }
-        }
-    },
-    template: `<div>
+			let that = this
+			let l = this.levels.$find(function (k, v) {
+				return v.code == that.level
+			})
+			if (l != null) {
+				this.description = l.description
+			} else {
+				this.description = ""
+			}
+		}
+	},
+	template: `<div>
     <select class="ui dropdown auto-width" name="eventLevel" v-model="level" @change="change">
         <option v-for="level in levels" :value="level.code">{{level.name}}</option>
     </select>
@@ -5995,7 +6082,7 @@ Vue.component("http-access-log-config-box", {
 			status4: true,
 			status5: true,
 
-            firewallOnly: false
+			firewallOnly: false
 		}
 		if (this.vAccessLogConfig != null) {
 			accessLog = this.vAccessLogConfig
@@ -8480,26 +8567,26 @@ The site traffic has exceeded the limit. Please contact with the site administra
 // TODO 支持关键词搜索
 // TODO 改成弹窗选择
 Vue.component("admin-selector", {
-    props: ["v-admin-id"],
-    mounted: function () {
-        let that = this
-        Tea.action("/admins/options")
-            .post()
-            .success(function (resp) {
-                that.admins = resp.data.admins
-            })
-    },
-    data: function () {
-        let adminId = this.vAdminId
-        if (adminId == null) {
-            adminId = 0
-        }
-        return {
-            admins: [],
-            adminId: adminId
-        }
-    },
-    template: `<div>
+	props: ["v-admin-id"],
+	mounted: function () {
+		let that = this
+		Tea.action("/admins/options")
+			.post()
+			.success(function (resp) {
+				that.admins = resp.data.admins
+			})
+	},
+	data: function () {
+		let adminId = this.vAdminId
+		if (adminId == null) {
+			adminId = 0
+		}
+		return {
+			admins: [],
+			adminId: adminId
+		}
+	},
+	template: `<div>
     <select class="ui dropdown auto-width" name="adminId" v-model="adminId">
         <option value="0">[选择系统用户]</option>
         <option v-for="admin in admins" :value="admin.id">{{admin.name}}（{{admin.username}}）</option>
@@ -8742,8 +8829,8 @@ Vue.component("ip-list-table", {
 })
 
 Vue.component("ip-item-text", {
-    props: ["v-item"],
-    template: `<span>
+	props: ["v-item"],
+	template: `<span>
     <span v-if="vItem.type == 'all'">*</span>
     <span v-if="vItem.type == 'ipv4' || vItem.type.length == 0">
         {{vItem.ipFrom}}
@@ -10080,6 +10167,50 @@ Vue.component("warning-message", {
 	template: `<div class="ui icon message warning"><i class="icon warning circle"></i><div class="content"><slot></slot></div></div>`
 })
 
+let checkboxId = 0
+Vue.component("checkbox", {
+	props: ["name", "value", "v-value", "id", "checked"],
+	data: function () {
+		checkboxId++
+		let elementId = this.id
+		if (elementId == null) {
+			elementId = "checkbox" + checkboxId
+		}
+
+		let elementValue = this.vValue
+		if (elementValue == null) {
+			elementValue = "1"
+		}
+
+		let checkedValue = this.value
+		if (checkedValue == null && this.checked == "checked") {
+			checkedValue = elementValue
+		}
+
+		return {
+			elementId: elementId,
+			elementValue: elementValue,
+			newValue: checkedValue
+		}
+	},
+	methods: {
+		change: function () {
+			this.$emit("input", this.newValue)
+		}
+	},
+	watch: {
+		value: function (v) {
+			if (typeof v == "boolean") {
+				this.newValue = v
+			}
+		}
+	},
+	template: `<div class="ui checkbox">
+	<input type="checkbox" :name="name" :value="elementValue" :id="elementId" @change="change" v-model="newValue"/>
+	<label :for="elementId" style="font-size: 0.85em!important;"><slot></slot></label>
+</div>`
+})
+
 Vue.component("network-addresses-view", {
 	props: ["v-addresses"],
 	template: `<div>
@@ -10278,6 +10409,30 @@ Vue.component("labeled-input", {
 </div>'
 });
 
+let radioId = 0
+Vue.component("radio", {
+	props: ["name", "value", "v-value", "id"],
+	data: function () {
+		radioId++
+		let elementId = this.id
+		if (elementId == null) {
+			elementId = "radio" + radioId
+		}
+		return {
+			"elementId": elementId
+		}
+	},
+	methods: {
+		change: function () {
+			this.$emit("input", this.vValue)
+		}
+	},
+	template: `<div class="ui checkbox radio">
+	<input type="radio" :name="name" :value="vValue" :id="elementId" @change="change" :checked="(vValue == value)"/>
+	<label :for="elementId"><slot></slot></label>
+</div>`
+})
+
 Vue.component("copy-to-clipboard", {
 	props: ["v-target"],
 	created: function () {
@@ -10332,6 +10487,65 @@ Vue.component("node-role-name", {
 		}
 	},
 	template: `<span>{{roleName}}</span>`
+})
+
+let sourceCodeBoxIndex = 0
+
+Vue.component("source-code-box", {
+	props: ["name", "type", "id", "read-only"],
+	mounted: function () {
+		let readOnly = this.readOnly
+		if (typeof readOnly != "boolean") {
+			readOnly = true
+		}
+		let box = document.getElementById("source-code-box-" + this.index)
+		let valueBox = document.getElementById(this.valueBoxId)
+		let value = ""
+		if (valueBox.textContent != null) {
+			value = valueBox.textContent
+		} else if (valueBox.innerText != null) {
+			value = valueBox.innerText
+		}
+		let boxEditor = CodeMirror.fromTextArea(box, {
+			theme: "idea",
+			lineNumbers: true,
+			value: "",
+			readOnly: readOnly,
+			showCursorWhenSelecting: true,
+			height: "auto",
+			//scrollbarStyle: null,
+			viewportMargin: Infinity,
+			lineWrapping: true,
+			highlightFormatting: false,
+			indentUnit: 4,
+			indentWithTabs: true
+		})
+		boxEditor.setValue(value)
+
+		let info = CodeMirror.findModeByMIME(this.type)
+		if (info != null) {
+			boxEditor.setOption("mode", info.mode)
+			CodeMirror.modeURL = "/codemirror/mode/%N/%N.js"
+			CodeMirror.autoLoadMode(boxEditor, info.mode)
+		}
+	},
+	data: function () {
+		let index = sourceCodeBoxIndex++
+
+		let valueBoxId = 'source-code-box-value-' + sourceCodeBoxIndex
+		if (this.id != null) {
+			valueBoxId = this.id
+		}
+
+		return {
+			index: index,
+			valueBoxId: valueBoxId
+		}
+	},
+	template: `<div class="source-code-box">
+	<div style="display: none" :id="valueBoxId"><slot></slot></div>
+	<textarea :id="'source-code-box-' + index" :name="name"></textarea>
+</div>`
 })
 
 Vue.component("size-capacity-box", {
@@ -11893,4 +12107,5 @@ window.METRIC_HTTP_KEYS = [{"name":"客户端地址（IP）","code":"${remoteAdd
 window.IP_ADDR_THRESHOLD_ITEMS = [{"code":"nodeAvgRequests","description":"当前节点在单位时间内接收到的平均请求数。","name":"节点平均请求数","unit":"个"},{"code":"nodeAvgTrafficOut","description":"当前节点在单位时间内发送的下行流量。","name":"节点平均下行流量","unit":"M"},{"code":"nodeAvgTrafficIn","description":"当前节点在单位时间内接收的上行流量。","name":"节点平均上行流量","unit":"M"},{"code":"nodeHealthCheck","description":"当前节点健康检查结果。","name":"节点健康检查结果","unit":""},{"code":"connectivity","description":"通过区域监控得到的当前IP地址的连通性数值，取值在0和100之间。","name":"IP连通性","unit":"%"},{"code":"groupAvgRequests","description":"当前节点所在分组在单位时间内接收到的平均请求数。","name":"分组平均请求数","unit":"个"},{"code":"groupAvgTrafficOut","description":"当前节点所在分组在单位时间内发送的下行流量。","name":"分组平均下行流量","unit":"M"},{"code":"groupAvgTrafficIn","description":"当前节点所在分组在单位时间内接收的上行流量。","name":"分组平均上行流量","unit":"M"},{"code":"clusterAvgRequests","description":"当前节点所在集群在单位时间内接收到的平均请求数。","name":"集群平均请求数","unit":"个"},{"code":"clusterAvgTrafficOut","description":"当前节点所在集群在单位时间内发送的下行流量。","name":"集群平均下行流量","unit":"M"},{"code":"clusterAvgTrafficIn","description":"当前节点所在集群在单位时间内接收的上行流量。","name":"集群平均上行流量","unit":"M"}]
 
 window.IP_ADDR_THRESHOLD_ACTIONS = [{"code":"up","description":"上线当前IP。","name":"上线"},{"code":"down","description":"下线当前IP。","name":"下线"},{"code":"notify","description":"发送已达到阈值通知。","name":"通知"},{"code":"switch","description":"在DNS中记录中将IP切换到指定的备用IP。","name":"切换"},{"code":"webHook","description":"调用外部的WebHook。","name":"WebHook"}]
+
 

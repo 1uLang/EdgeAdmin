@@ -1,4 +1,5 @@
 // Copyright 2021 Liuxiangchao iwind.liu@gmail.com. All rights reserved.
+// +build commity
 
 package boards
 
@@ -28,7 +29,7 @@ func (this *IndexAction) RunGet(params struct {
 	ClusterId int64
 	NodeId    int64
 }) {
-	err := nodeutils.InitNodeInfo(this, params.NodeId)
+	_, err := nodeutils.InitNodeInfo(this.Parent(), params.NodeId)
 	if err != nil {
 		this.ErrorPage(err)
 		return

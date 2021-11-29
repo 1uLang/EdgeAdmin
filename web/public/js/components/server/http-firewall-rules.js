@@ -1,5 +1,5 @@
 // 通用Header长度
-let defaultGeneralHeaders = ["Cache-Control", "Connection", "Date", "Pragma", "Trailer", "Transfer-Encoding", "Upgrade", "Via", "Warning"]
+var defaultGeneralHeaders = ["Cache-Control", "Connection", "Date", "Pragma", "Trailer", "Transfer-Encoding", "Upgrade", "Via", "Warning"]
 Vue.component("http-cond-general-header-length", {
 	props: ["v-checkpoint"],
 	data: function () {

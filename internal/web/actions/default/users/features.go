@@ -7,6 +7,7 @@ import (
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/lists"
 	"github.com/iwind/TeaGo/maps"
+	"strings"
 )
 
 type FeaturesAction struct {
@@ -42,18 +43,35 @@ func (this *FeaturesAction) RunGet(params struct {
 	for _, userFeature := range userFeaturesResp.Features {
 		userFeatureCodes = append(userFeatureCodes, userFeature.Code)
 	}
-
 	featureMaps := []maps.Map{}
+	selectList := []string{}
+	idx := 0
 	for _, feature := range allFeatures {
-		featureMaps = append(featureMaps, maps.Map{
+		if lists.ContainsString(userFeatureCodes, feature.Code) {
+			selectList = append(selectList, feature.Code)
+		}
+		item := maps.Map{
 			"name":        feature.Name,
 			"code":        feature.Code,
+			"bShowChild":  false,
 			"description": feature.Description,
-			"isChecked":   lists.ContainsString(userFeatureCodes, feature.Code),
-		})
-	}
-	this.Data["features"] = featureMaps
+			"children":    []maps.Map{},
+		}
+		//子菜单
+		if codes := strings.Split(feature.Code, "."); len(codes) == 2 {
 
+			subItems := featureMaps[idx-1]["children"].([]maps.Map)
+			subItems = append(subItems, item)
+			featureMaps[idx-1]["children"] = subItems
+		} else {
+			featureMaps = append(featureMaps, item)
+			idx++
+		}
+	}
+
+	this.Data["features"] = featureMaps
+	this.Data["selectList"] = selectList
+	this.Data["userId"] = params.UserId
 	this.Show()
 }
 
@@ -62,7 +80,7 @@ func (this *FeaturesAction) RunPost(params struct {
 	Codes  []string
 
 	Must *actions.Must
-	CSRF *actionutils.CSRF
+	//CSRF *actionutils.CSRF
 }) {
 	defer this.CreateLogInfo("设置用户 %d 的功能列表", params.UserId)
 
@@ -74,5 +92,10 @@ func (this *FeaturesAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
+	moduleCodes := map[string]bool{}
+	for _, code := range params.Codes {
+		moduleCodes[code] = true
+	}
+
 	this.Success()
 }
