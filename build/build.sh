@@ -58,20 +58,13 @@ function build() {
 	rm -f $(basename $EDGE_API_ZIP_FILE)
 	cd -
 
-    # generate files
-    echo "generating files ..."
-	go run  -tags $TAG $ROOT/../cmd/edge-admin/main.go generate
-
 	# build
 	echo "building "${NAME}" ..."
-	env GOOS=$OS GOARCH=$ARCH go build -tags $TAG -ldflags="-s -w" -o $DIST/bin/${NAME} $ROOT/../cmd/edge-admin/main.go
+	env GOOS=$OS GOARCH=$GOARCH go build -tags $TAG -ldflags="-s -w" -o $DIST/bin/${NAME} $ROOT/../cmd/edge-admin/main.go
 
 	# delete hidden files
 	find $DIST -name ".DS_Store" -delete
 	find $DIST -name ".gitignore" -delete
-	find $DIST -name "*.less" -delete
-	find $DIST -name "*.css.map" -delete
-	find $DIST -name "*.js.map" -delete
 
 	# zip
 	echo "zip files ..."
