@@ -36,11 +36,11 @@ func (this *RenewalAction) RunPost(params struct {
 	this.Success()
 }
 
+// Renew secret ： code,expireTm,timeout,authNum
 func Renew(secret string) error {
 
 	//判断redis 是否存在该secret
 	if v, _ := cache.GetCache(secret); v != nil && v != "" {
-		fmt.Println(v)
 		return fmt.Errorf("密钥已失效，请不要重复续订")
 	}
 	decode, err := base64.StdEncoding.DecodeString(secret)
@@ -50,7 +50,7 @@ func Renew(secret string) error {
 	sec := encrypt.MagicKeyDecode(decode)
 	//code,add_time,time
 	secrets := strings.Split(string(sec), ",")
-	if len(secrets) != 3 {
+	if len(secrets) != 3 && len(secrets) != 4 {
 		return fmt.Errorf("无效的密钥")
 	}
 	config, err := LoadServerExpireConfig()
@@ -69,6 +69,12 @@ func Renew(secret string) error {
 		return fmt.Errorf("密钥已失效")
 	}
 	renewalT, _ := strconv.ParseInt(secrets[1], 10, 64)
+	//新版授权域名个数
+	if len(secrets) == 4 {
+		num, _ := strconv.ParseInt(config.Expire.Num, 10, 64)
+		addNum, _ := strconv.ParseInt(secrets[3], 10, 64)
+		config.Expire.Num = fmt.Sprintf("%d", num+addNum)
+	}
 	//续订生效
 	if config.Expire.Time == "" {
 		expireT := time.Now().Unix() + renewalT

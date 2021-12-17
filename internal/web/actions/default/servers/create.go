@@ -2,9 +2,11 @@ package servers
 
 import (
 	"encoding/json"
+	"fmt"
 	teaconst "github.com/TeaOSLab/EdgeAdmin/internal/const"
 	"github.com/TeaOSLab/EdgeAdmin/internal/oplogs"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/index"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
@@ -100,6 +102,22 @@ func (this *CreateAction) RunPost(params struct {
 
 	var clusterId = params.ClusterId
 
+	countResp, err := this.RPC().ServerRPC().CountAllEnabledServersMatch(this.AdminContext(), &pb.CountAllEnabledServersMatchRequest{})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	count := countResp.Count
+
+	_, expire, err := index.CheckNumExpire(count)
+	if err != nil {
+		this.ErrorPage(fmt.Errorf("配置文件解析异常"))
+		return
+	}
+	if expire {
+		this.Fail("您的资产额度已用完，请及时续费！")
+		return
+	}
 	// 用户
 	var userId = params.UserId
 	if userId > 0 {
