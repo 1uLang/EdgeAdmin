@@ -361,6 +361,13 @@ func (this *userMustAuth) modules(
 			"icon":   "adn",
 		},
 		{
+			"code":   "aptnet",
+			"url":    "/apt/net",
+			"module": configloaders.AdminModuleCodeMaltrail,
+			"name":   "网络防病毒",
+			"icon":   "empire",
+		},
+		{
 			"code":   "servers",
 			"module": configloaders.AdminModuleCodeServer,
 			"name":   "WAF服务",
@@ -721,6 +728,11 @@ func (this *userMustAuth) modules(
 					"name": "应用管理",
 					"url":  "/audit/app",
 					"code": "app",
+				},
+				{
+					"name": "设备管理",
+					"url":  "/audit/device",
+					"code": "device",
 				},
 				{
 					"name": "审计日志",

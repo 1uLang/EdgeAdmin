@@ -12,8 +12,9 @@ func init() {
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeMaltrail)).
 			//Helper(settingsutils.NewHelper("virus")).
 			Data("teaMenu", "apt").
-			Prefix("/apt/logs").
-			Get("", new(IndexAction)).
+			Prefix("/apt").
+			Get("/logs", new(IndexAction)).
+			Get("/net", new(NetAction)).
 			EndAll()
 	})
 }

@@ -22,6 +22,7 @@ Tea.context(function () {
     this.dbLogList = []
     this.hostLogList = []
     this.appLogList = []
+    this.deviceLogList = []
 
     this.maxCount = 0
     this.pageCount = 20
@@ -70,6 +71,9 @@ Tea.context(function () {
                 break;
             case 3:
                 this.objName = "应用"
+                break;
+            case 4:
+                this.objName = "设备"
                 break;
         }
 
@@ -280,6 +284,9 @@ Tea.context(function () {
                             break;
                         case 3:
                             this.appLogList = resp.data.list
+                            break;
+                        case 4:
+                            this.deviceLogList = resp.data.list
                             break;
                         default:
                             this.list = []

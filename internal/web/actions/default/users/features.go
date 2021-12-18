@@ -45,6 +45,8 @@ func (this *FeaturesAction) RunGet(params struct {
 	}
 	featureMaps := []maps.Map{}
 	selectList := []string{}
+	//fmt.Println(allFeatures)
+	//return
 	idx := 0
 	for _, feature := range allFeatures {
 		if lists.ContainsString(userFeatureCodes, feature.Code) {
