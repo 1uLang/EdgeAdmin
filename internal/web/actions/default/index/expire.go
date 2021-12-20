@@ -13,12 +13,14 @@ import (
 	"time"
 )
 
+const packageNum = 5 //每套 5个域名数
+
 type ExpireConfig struct {
 	Expire struct {
 		On   bool   `yaml:"on" json:"on"`
 		Code string `yaml:"code" json:"code"`
 		Time string `yaml:"time" json:"time"` // 到期字符串
-		Num  string `yaml:"num" json:"num"`   // 授权域名数
+		Num  string `yaml:"num" json:"num"`   // 授权域名数	个数-套数
 	} `yaml:"expire" json:"expire"`
 }
 
@@ -105,7 +107,6 @@ func writeServerConfig(expireConfig *ExpireConfig) error {
 // CheckNumExpire 检测域名个数是否使用完
 func CheckNumExpire(num int64) (string, bool, error) {
 	expireConfig, err := LoadServerExpireConfig()
-	fmt.Println(num, expireConfig, err)
 	if err != nil {
 		return "", false, err
 	}
@@ -131,7 +132,7 @@ func CheckNumExpire(num int64) (string, bool, error) {
 					return "", false, err
 				}
 				//当前时间 大于 到期时间 则表示到期
-				expire = num >= Total
+				expire = num >= Total*packageNum
 			}
 		}
 		code = expireConfig.Expire.Code

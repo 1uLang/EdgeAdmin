@@ -1,7 +1,6 @@
 package reports
 
 import (
-	"fmt"
 	"github.com/1uLang/zhiannet-api/awvs/model/reports"
 	reports_server "github.com/1uLang/zhiannet-api/awvs/server/reports"
 	nessus_scans_model "github.com/1uLang/zhiannet-api/nessus/model/scans"
@@ -37,8 +36,6 @@ func (this *CreateAction) RunPost(params struct {
 	}
 	webscan_ids := []string{}
 
-	fmt.Println(params.Ids)
-	fmt.Println(params.TarIds)
 	for k, v := range params.Ids {
 		if !strings.HasSuffix(v, "-host") { //去掉主机漏洞扫描
 			webscan_ids = append(webscan_ids, v)

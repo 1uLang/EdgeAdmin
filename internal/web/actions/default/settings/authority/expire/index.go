@@ -33,6 +33,7 @@ func (this *IndexAction) RunGet(params struct {
 		"dayTo":     time.Unix(expireTime, 0).Format("2006-01-02"),
 		"name":      "CloudSafe",
 		"code":      conf.Expire.Code,
+		"package":   conf.Expire.Num,
 		"isExpired": expireTime < time.Now().Unix(),
 		"isOn":      conf.Expire.On,
 	}
