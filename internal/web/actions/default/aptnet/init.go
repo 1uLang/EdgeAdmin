@@ -1,4 +1,4 @@
-package apt
+package aptnet
 
 import (
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
@@ -11,10 +11,10 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeMaltrail)).
-			Helper(apt_helper.NewHelper("apt")).
+			Helper(apt_helper.NewHelper("net")).
 			Data("teaMenu", "apt").
 			Prefix("/apt").
-			Get("/logs", new(IndexAction)).
+			Get("/net", new(NetAction)).
 			EndAll()
 	})
 }

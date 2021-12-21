@@ -1,4 +1,4 @@
-package apt
+package aptnet
 
 import (
 	"encoding/json"

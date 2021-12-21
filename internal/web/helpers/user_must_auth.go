@@ -360,13 +360,7 @@ func (this *userMustAuth) modules(
 			"name":   "APT检测",
 			"icon":   "adn",
 		},
-		{
-			"code":   "aptnet",
-			"url":    "/apt/net",
-			"module": configloaders.AdminModuleCodeMaltrail,
-			"name":   "网络防病毒",
-			"icon":   "empire",
-		},
+
 		{
 			"code":   "servers",
 			"module": configloaders.AdminModuleCodeServer,
