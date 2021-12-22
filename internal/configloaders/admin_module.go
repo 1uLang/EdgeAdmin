@@ -197,7 +197,7 @@ func AllModuleMaps() []maps.Map {
 			"url":  "/nfw/nat",
 		},
 		{
-			"name": "APT检测",
+			"name": "APT防御",
 			"code": AdminModuleCodeMaltrail,
 			"url":  "/apt/logs",
 		},

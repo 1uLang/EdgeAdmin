@@ -185,7 +185,7 @@ func (this *CreatePopupAction) Check(AssemblyType int) {
 	case 10: //云底座
 		check := new(zstack_request.LoginReq)
 		check.Run()
-	case 11: //apt检测
+	case 11: //APT防御
 		check := new(maltrail_request.LoginReq)
 		check.Run()
 	case 12: //wazuh检测
