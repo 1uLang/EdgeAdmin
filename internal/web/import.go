@@ -191,6 +191,7 @@ import (
 
 	//apt 检测
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/apt"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/aptnet"
 
 	//监控告警
 	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/monitor"
