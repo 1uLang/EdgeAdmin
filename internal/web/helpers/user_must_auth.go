@@ -357,7 +357,7 @@ func (this *userMustAuth) modules(
 			"code":   "apt",
 			"url":    "/apt/logs",
 			"module": configloaders.AdminModuleCodeMaltrail,
-			"name":   "APT检测",
+			"name":   "APT防御",
 			"icon":   "adn",
 		},
 
