@@ -19,13 +19,15 @@ func (this *DeleteAction) RunPost(params struct {
 		this.Fail("无权限")
 		return
 	}
-
+	var err error
 	defer this.CreateLogInfo("删除系统用户 %d", params.AdminId)
-
-	_, err := this.RPC().AdminRPC().DeleteAdmin(this.AdminContext(), &pb.DeleteAdminRequest{AdminId: params.AdminId})
-	if err != nil {
-		this.ErrorPage(err)
-		return
+	UseDatabackup := false
+	if UseDatabackup {
+		_, err = this.RPC().AdminRPC().DeleteAdmin(this.AdminContext(), &pb.DeleteAdminRequest{AdminId: params.AdminId})
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
 	}
 
 	// 通知更改

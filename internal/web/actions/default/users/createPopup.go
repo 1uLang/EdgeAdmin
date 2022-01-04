@@ -94,27 +94,29 @@ func (this *CreatePopupAction) RunPost(params struct {
 			Field("email", params.Email).
 			Email("请输入正确的电子邮箱")
 	}
-
-	// 创建nextcloud账号，并写入数据库
-	adminToken := nc_req.GetAdminToken()
-	// userPwd := `adminAd#@2021`
-	userPwd := params.Pass2
-	err = nc_req.CreateUserV2(adminToken, params.Username, userPwd)
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-	// 生成token
-	gtReq := &model.LoginReq{
-		User:     params.Username,
-		Password: userPwd,
-	}
-	ncToken := nc_req.GenerateToken(gtReq)
-	// 写入数据库
-	err = model.StoreNCToken(params.Username, ncToken)
-	if err != nil {
-		this.ErrorPage(err)
-		return
+	UseDatabackup := false
+	if UseDatabackup {
+		// 创建nextcloud账号，并写入数据库
+		adminToken := nc_req.GetAdminToken()
+		// userPwd := `adminAd#@2021`
+		userPwd := params.Pass2
+		err = nc_req.CreateUserV2(adminToken, params.Username, userPwd)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+		// 生成token
+		gtReq := &model.LoginReq{
+			User:     params.Username,
+			Password: userPwd,
+		}
+		ncToken := nc_req.GenerateToken(gtReq)
+		// 写入数据库
+		err = model.StoreNCToken(params.Username, ncToken)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
 	}
 
 	createResp, err := this.RPC().UserRPC().CreateUser(this.AdminContext(), &pb.CreateUserRequest{
@@ -137,13 +139,16 @@ func (this *CreatePopupAction) RunPost(params struct {
 	}
 	defer this.CreateLogInfo("创建用户 %d", createResp.UserId)
 
-	// 用户账号和nextcloud账号进行关联
-	// 因为用户名是唯一的，所以加入用户名字段，减少脏数据的产生
-	err = model.BindNCTokenAndUID(params.Username, createResp.UserId)
-	if err != nil {
-		this.ErrorPage(err)
-		return
+	if UseDatabackup {
+		// 用户账号和nextcloud账号进行关联
+		// 因为用户名是唯一的，所以加入用户名字段，减少脏数据的产生
+		err = model.BindNCTokenAndUID(params.Username, createResp.UserId)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
 	}
+
 	//更新密码修改时间
 	edge_users_server.UpdatePwdAt(uint64(createResp.UserId))
 	//otp

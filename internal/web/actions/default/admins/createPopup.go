@@ -94,28 +94,30 @@ func (this *CreatePopupAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
-
-	// 创建nextcloud账号，并写入数据库
-	adminToken := nc_req.GetAdminToken()
-	// userPwd := `adminAd#@2021`
-	userPwd := params.Pass2
+	UseDatabackup := false
 	un := "admin_" + params.Username
-	err = nc_req.CreateUserV2(adminToken, un, userPwd)
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-	// 生成token
-	gtReq := &model.LoginReq{
-		User:     un,
-		Password: userPwd,
-	}
-	ncToken := nc_req.GenerateToken(gtReq)
-	// 写入数据库
-	err = model.StoreNCToken(un, ncToken, 1)
-	if err != nil {
-		this.ErrorPage(err)
-		return
+	if UseDatabackup {
+		// 创建nextcloud账号，并写入数据库
+		adminToken := nc_req.GetAdminToken()
+		// userPwd := `adminAd#@2021`
+		userPwd := params.Pass2
+		err = nc_req.CreateUserV2(adminToken, un, userPwd)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+		// 生成token
+		gtReq := &model.LoginReq{
+			User:     un,
+			Password: userPwd,
+		}
+		ncToken := nc_req.GenerateToken(gtReq)
+		// 写入数据库
+		err = model.StoreNCToken(un, ncToken, 1)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
 	}
 
 	//创建审计系统账号
@@ -186,12 +188,15 @@ func (this *CreatePopupAction) RunPost(params struct {
 
 	defer this.CreateLogInfo("创建系统用户 %d", createResp.AdminId)
 
-	// 用户账号和nextcloud账号进行关联
-	// 因为用户名是唯一的，所以加入用户名字段，减少脏数据的产生
-	err = model.BindNCTokenAndUID(un, createResp.AdminId, 1)
-	if err != nil {
-		this.ErrorPage(err)
-		return
+	if UseDatabackup {
+		// 用户账号和nextcloud账号进行关联
+		// 因为用户名是唯一的，所以加入用户名字段，减少脏数据的产生
+		err = model.BindNCTokenAndUID(un, createResp.AdminId, 1)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+
 	}
 
 	// 通知更改
