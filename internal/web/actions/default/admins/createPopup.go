@@ -94,7 +94,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	UseDatabackup := false
+	UseDatabackup := true
 	un := "admin_" + params.Username
 	if UseDatabackup {
 		// 创建nextcloud账号，并写入数据库

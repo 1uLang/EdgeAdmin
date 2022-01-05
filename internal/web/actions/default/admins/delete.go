@@ -21,7 +21,7 @@ func (this *DeleteAction) RunPost(params struct {
 	}
 	var err error
 	defer this.CreateLogInfo("删除系统用户 %d", params.AdminId)
-	UseDatabackup := false
+	UseDatabackup := true
 	if UseDatabackup {
 		_, err = this.RPC().AdminRPC().DeleteAdmin(this.AdminContext(), &pb.DeleteAdminRequest{AdminId: params.AdminId})
 		if err != nil {
