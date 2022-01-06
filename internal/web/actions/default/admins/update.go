@@ -147,7 +147,7 @@ func (this *UpdateAction) RunPost(params struct {
 		editPwd = true
 	}
 
-	UseDatabackup := true
+	UseDatabackup := false
 	// 修改nc密码
 	if params.AdminId != 1 && UseDatabackup {
 		pt, err := model.GetUsername(params.AdminId, 1)

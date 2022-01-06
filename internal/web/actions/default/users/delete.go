@@ -22,7 +22,7 @@ func (this *DeleteAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	UseDatabackup := true
+	UseDatabackup := false
 	if UseDatabackup {
 
 		err = nc_req.DeleteUser(params.UserId, 0)

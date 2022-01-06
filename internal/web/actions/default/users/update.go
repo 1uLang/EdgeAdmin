@@ -220,7 +220,7 @@ func (this *UpdateAction) RunPost(params struct {
 		}
 
 	}
-	UseDatabackup := true
+	UseDatabackup := false
 	if params.Pass1 != "" && UseDatabackup {
 		// 修改nc密码
 		pt, err := model.GetUsername(params.UserId, 0)
