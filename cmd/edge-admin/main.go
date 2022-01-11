@@ -99,6 +99,7 @@ func main() {
 		wazuh.InitAPIServer()
 
 		//安全审计
+		audit.ApiDbPath = Tea.ConfigFile("api_db.yaml")
 		audit.InitLogAddr()
 		adminNode := nodes.NewAdminNode()
 		adminNode.Run()
