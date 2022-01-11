@@ -4,6 +4,7 @@ import (
 	"github.com/1uLang/zhiannet-api/common/model/edge_logins"
 	"github.com/1uLang/zhiannet-api/common/server/edge_logins_server"
 	"github.com/1uLang/zhiannet-api/common/server/edge_users_server"
+	"github.com/1uLang/zhiannet-api/nextcloud"
 	"github.com/1uLang/zhiannet-api/nextcloud/model"
 	nc_req "github.com/1uLang/zhiannet-api/nextcloud/request"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
@@ -220,8 +221,7 @@ func (this *UpdateAction) RunPost(params struct {
 		}
 
 	}
-	UseDatabackup := false
-	if params.Pass1 != "" && UseDatabackup {
+	if params.Pass1 != "" && nextcloud.UseDatabackup {
 		// 修改nc密码
 		pt, err := model.GetUsername(params.UserId, 0)
 		if err != nil {

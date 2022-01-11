@@ -4,6 +4,7 @@ import (
 	"github.com/1uLang/zhiannet-api/common/model/edge_logins"
 	"github.com/1uLang/zhiannet-api/common/server/edge_logins_server"
 	"github.com/1uLang/zhiannet-api/common/server/edge_users_server"
+	"github.com/1uLang/zhiannet-api/nextcloud"
 	"github.com/1uLang/zhiannet-api/nextcloud/model"
 	nc_req "github.com/1uLang/zhiannet-api/nextcloud/request"
 	"github.com/TeaOSLab/EdgeAdmin/internal/utils/numberutils"
@@ -94,8 +95,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 			Field("email", params.Email).
 			Email("请输入正确的电子邮箱")
 	}
-	UseDatabackup := false
-	if UseDatabackup {
+	if nextcloud.UseDatabackup {
 		// 创建nextcloud账号，并写入数据库
 		adminToken := nc_req.GetAdminToken()
 		// userPwd := `adminAd#@2021`
@@ -139,7 +139,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 	}
 	defer this.CreateLogInfo("创建用户 %d", createResp.UserId)
 
-	if UseDatabackup {
+	if nextcloud.UseDatabackup {
 		// 用户账号和nextcloud账号进行关联
 		// 因为用户名是唯一的，所以加入用户名字段，减少脏数据的产生
 		err = model.BindNCTokenAndUID(params.Username, createResp.UserId)

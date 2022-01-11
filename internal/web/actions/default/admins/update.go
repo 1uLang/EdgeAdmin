@@ -3,6 +3,7 @@ package admins
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/1uLang/zhiannet-api/nextcloud"
 
 	"github.com/1uLang/zhiannet-api/common/server/edge_admins_server"
 	hids_user_model "github.com/1uLang/zhiannet-api/hids/model/user"
@@ -147,9 +148,8 @@ func (this *UpdateAction) RunPost(params struct {
 		editPwd = true
 	}
 
-	UseDatabackup := false
 	// 修改nc密码
-	if params.AdminId != 1 && UseDatabackup {
+	if params.AdminId != 1 && nextcloud.UseDatabackup {
 		pt, err := model.GetUsername(params.AdminId, 1)
 		if err != nil {
 			this.ErrorPage(err)

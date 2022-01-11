@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	ag_ser "github.com/1uLang/zhiannet-api/agent/server"
+	"github.com/1uLang/zhiannet-api/audit"
 	"github.com/1uLang/zhiannet-api/common/cache"
 	"github.com/1uLang/zhiannet-api/common/cron"
 	"github.com/1uLang/zhiannet-api/common/server"
@@ -97,6 +98,8 @@ func main() {
 		cron.InitCron()
 		wazuh.InitAPIServer()
 
+		//安全审计
+		audit.InitLogAddr()
 		adminNode := nodes.NewAdminNode()
 		adminNode.Run()
 	})

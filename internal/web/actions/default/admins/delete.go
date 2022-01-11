@@ -1,6 +1,7 @@
 package admins
 
 import (
+	"github.com/1uLang/zhiannet-api/nextcloud"
 	nc_req "github.com/1uLang/zhiannet-api/nextcloud/request"
 	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
@@ -21,8 +22,7 @@ func (this *DeleteAction) RunPost(params struct {
 	}
 	var err error
 	defer this.CreateLogInfo("删除系统用户 %d", params.AdminId)
-	UseDatabackup := false
-	if UseDatabackup {
+	if nextcloud.UseDatabackup {
 		_, err = this.RPC().AdminRPC().DeleteAdmin(this.AdminContext(), &pb.DeleteAdminRequest{AdminId: params.AdminId})
 		if err != nil {
 			this.ErrorPage(err)

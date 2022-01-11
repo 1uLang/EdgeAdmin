@@ -1,6 +1,7 @@
 package users
 
 import (
+	"github.com/1uLang/zhiannet-api/nextcloud"
 	nc_req "github.com/1uLang/zhiannet-api/nextcloud/request"
 	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
@@ -22,8 +23,7 @@ func (this *DeleteAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	UseDatabackup := false
-	if UseDatabackup {
+	if nextcloud.UseDatabackup {
 
 		err = nc_req.DeleteUser(params.UserId, 0)
 		if err != nil {
